@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hello">hello world</string>
+    <string name="app_name">Trivia</string>
+    <string name="buttonNewGameText">New Game</string>
+    <string name="textViewQuestionText">Question</string>
+    <string name="buttonAnswer1">Answer</string>
+
+</resources>

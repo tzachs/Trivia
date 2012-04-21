@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+     <style name="Button" parent="@android:style/Widget.Button">
+        
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:shadowColor">#00ccff</item>
+        <item name="android:shadowDx">1</item>
+        <item name="android:shadowDy">1</item>
+        <item name="android:shadowRadius">1</item>
+        <item name="android:textSize">20dip</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:background">@drawable/blue_button</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        
+    </style>
+    
+</resources>
