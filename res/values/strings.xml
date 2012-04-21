@@ -6,5 +6,6 @@
     <string name="buttonNewGameText">New Game</string>
     <string name="textViewQuestionText">Question</string>
     <string name="buttonAnswer1">Answer</string>
+    <string name="textViewTimeText">Time</string>
 
 </resources>
