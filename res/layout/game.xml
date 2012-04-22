@@ -14,7 +14,8 @@
     	    android:text="@string/textViewTimeText"
     	    android:textSize="20dp"
     	    />
-    	    
+    	
+     
 
         <TextView
             android:id="@+id/textViewQuestion"

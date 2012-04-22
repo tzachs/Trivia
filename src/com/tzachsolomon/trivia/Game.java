@@ -1,8 +1,10 @@
 package com.tzachsolomon.trivia;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -18,30 +20,40 @@ public class Game extends Activity implements OnClickListener {
 	private Button buttonAnswer3;
 	private Button buttonAnswer4;
 	
-	private Question m_Questions;
+	private Question[] m_Questions;
 	private TextView textViewQuestion;
+	private int m_QuestionIndex;
 
+	private TriviaDbEngine m_TriviaDb;
+	private SharedPreferences m_SharedPreferences;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.game);
 
+		m_SharedPreferences = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		
 		initializeVariables();
 		
-		m_Questions = new Question();
+
+		m_Questions = m_TriviaDb.getQuestions();
+		
+		
 
 		startNewQuestion();
+		
+		m_QuestionIndex = 0;
 
 	}
 
 	private void startNewQuestion() {
 		//
-		textViewQuestion.setText(m_Questions.getQuestion());
-		buttonAnswer1.setText(m_Questions.getAnswer1());
-		buttonAnswer2.setText(m_Questions.getAnswer2());
-		buttonAnswer3.setText(m_Questions.getAnswer3());
-		buttonAnswer4.setText(m_Questions.getAnswer4());
+		textViewQuestion.setText(m_Questions[m_QuestionIndex].getQuestion());
+		buttonAnswer1.setText(m_Questions[m_QuestionIndex].getAnswer1());
+		buttonAnswer2.setText(m_Questions[m_QuestionIndex].getAnswer2());
+		buttonAnswer3.setText(m_Questions[m_QuestionIndex].getAnswer3());
+		buttonAnswer4.setText(m_Questions[m_QuestionIndex].getAnswer4());
 		
 		m_CountDownCounter.start();
 
@@ -49,7 +61,12 @@ public class Game extends Activity implements OnClickListener {
 
 	private void initializeVariables() {
 		//
-		m_CountDownCounter = new MyCountDownCounter(5000, 1000);
+		m_TriviaDb = new TriviaDbEngine(Game.this);
+		
+		long total = m_SharedPreferences.getLong("editTextPreferenceDefaultCountDownTimer", 7);
+		total *= 1000;
+		
+		m_CountDownCounter = new MyCountDownCounter(total, 1000);
 		
 		textViewQuestion = (TextView)findViewById(R.id.textViewQuestion);
 		textViewTime = (TextView) findViewById(R.id.textViewTime);
@@ -120,7 +137,7 @@ public class Game extends Activity implements OnClickListener {
 	private void checkAnswer(int i) {
 		// 
 		StringBuilder stringBuilder =  new StringBuilder();
-		if ( m_Questions.isCorrect(i)) {
+		if ( m_Questions[m_QuestionIndex].isCorrect(i)) {
 			stringBuilder.append("correct");
 			
 		}else {
