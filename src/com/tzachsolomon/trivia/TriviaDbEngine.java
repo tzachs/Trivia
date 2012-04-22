@@ -104,9 +104,10 @@ public class TriviaDbEngine {
 
 	public Question[] getQuestions() {
 		// 
-		Question[] ret = new Question[1];
+		Question[] ret = new Question[2];
 		
 		ret[0] = new Question();
+		ret[1] = new Question();
 		
 		return ret;
 	}
