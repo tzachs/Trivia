@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    android:background="#FFE8D0A9"
+    >
 
     <Button
         android:id="@+id/buttonNewGame"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/buttonNewGameText"/>
+        android:layout_centerInParent="true"
+        android:layout_margin="4dp"
+        android:text="@string/buttonNewGameText" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/buttonUpdateDatabase"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonNewGame"
+        android:layout_margin="4dp"
+        android:text="@string/buttonUpdateDatabaseText" />
+
+</RelativeLayout>

@@ -12,15 +12,20 @@ public final class R {
     }
     public static final class drawable {
         public static final int blue_button=0x7f020000;
-        public static final int ic_launcher=0x7f020001;
+        public static final int green_button=0x7f020001;
+        public static final int ic_launcher=0x7f020002;
+        public static final int red_button=0x7f020003;
     }
     public static final class id {
-        public static final int buttonAnswer1=0x7f070002;
-        public static final int buttonAnswer2=0x7f070003;
-        public static final int buttonAnswer3=0x7f070004;
-        public static final int buttonAnswer4=0x7f070005;
-        public static final int buttonNewGame=0x7f070006;
-        public static final int textViewQuestion=0x7f070001;
+        public static final int buttonAnswer1=0x7f070004;
+        public static final int buttonAnswer2=0x7f070005;
+        public static final int buttonAnswer3=0x7f070006;
+        public static final int buttonAnswer4=0x7f070007;
+        public static final int buttonNewGame=0x7f070008;
+        public static final int buttonUpdateDatabase=0x7f070009;
+        public static final int textViewNumberOfQuestionsLeft=0x7f070001;
+        public static final int textViewQuestion=0x7f070003;
+        public static final int textViewQuestionDifficulty=0x7f070002;
         public static final int textViewTime=0x7f070000;
     }
     public static final class layout {
@@ -31,6 +36,7 @@ public final class R {
         public static final int app_name=0x7f050001;
         public static final int buttonAnswer1=0x7f050004;
         public static final int buttonNewGameText=0x7f050002;
+        public static final int buttonUpdateDatabaseText=0x7f050006;
         public static final int hello=0x7f050000;
         public static final int textViewQuestionText=0x7f050003;
         public static final int textViewTimeText=0x7f050005;

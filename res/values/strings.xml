@@ -7,5 +7,6 @@
     <string name="textViewQuestionText">Question</string>
     <string name="buttonAnswer1">Answer</string>
     <string name="textViewTimeText">Time</string>
+    <string name="buttonUpdateDatabaseText">Update database</string>
 
 </resources>
