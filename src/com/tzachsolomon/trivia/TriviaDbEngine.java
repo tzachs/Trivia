@@ -1,5 +1,6 @@
 package com.tzachsolomon.trivia;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.content.ContentValues;
@@ -8,6 +9,9 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+
+
 import android.util.Log;
 
 public class TriviaDbEngine {
@@ -33,7 +37,7 @@ public class TriviaDbEngine {
 	public static final String KEY_WRONG_FROM_DB = "colWrong";
 	public static final String KEY_CORRECT_USER = "colCorrectUser"; // the correct guesses the user did of a question
 	public static final String KEY_WRONG_USER = "colWrongUser"; // the wrong guesses the user did of a question
-	public static final String KEY_DATE_CREATED = "colDateCreated";
+	
 	public static final String KEY_LAST_UPDATE = "colLastUpdate";
 	public static final String KEY_ENABLED = "colEnabled";
 	
@@ -69,7 +73,7 @@ public class TriviaDbEngine {
 			sb.append(KEY_ANSWER3 + " TEXT NOT NULL, ");
 			sb.append(KEY_ANSWER4 + " TEXT NOT NULL, ");
 			sb.append(KEY_ANSWER_INDEX + " INTEGER NOT NULL, ");
-			sb.append(KEY_CATEGORY + " TEXT, ");
+			sb.append(KEY_CATEGORY + " INTEGER NOT NULL, ");
 			sb.append(KEY_CORRECT_FROM_DB + " INTEGER NOT NULL, ");
 			sb.append(KEY_CORRECT_USER + " INTEGER NOT NULL, ");
 			sb.append(KEY_LANGUAGE + " TEXT NOT NULL, ");
@@ -77,7 +81,7 @@ public class TriviaDbEngine {
 			sb.append(KEY_WRONG_FROM_DB + " INTEGER NOT NULL,");
 			sb.append(KEY_WRONG_USER + " INTEGER NOT NULL,");
 			sb.append(KEY_ENABLED + " BOOLEAN NOT NULL, ");
-			sb.append(KEY_DATE_CREATED + " TEXT NOT NULL, ");
+			
 			sb.append(KEY_LAST_UPDATE + " TEXT NOT NULL ");
 			sb.append(");");
 			
@@ -121,7 +125,7 @@ public class TriviaDbEngine {
 	}
 	
 	public long insertQuestion(String i_QuestionId, String i_Question, String i_Answer1, String i_Answer2,
-			String i_Answer3, String i_Answer4, int i_AnswerIndex, String i_Category, String i_SubCategory, 
+			String i_Answer3, String i_Answer4, int i_AnswerIndex, int i_Category, String i_SubCategory, 
 			String i_Language, long i_Correct, long i_Wrong, String i_DateCreated, String i_LastUpdate, boolean i_Enabled,
 			long i_CorrectUser, long i_WrongUser){
 		
@@ -139,7 +143,6 @@ public class TriviaDbEngine {
 		cv.put(KEY_CATEGORY, i_Category);
 		cv.put(KEY_CORRECT_FROM_DB, i_Correct);
 		cv.put(KEY_CORRECT_USER, i_CorrectUser);
-		cv.put(KEY_DATE_CREATED, i_DateCreated);
 		cv.put(KEY_ENABLED, i_Enabled);
 		cv.put(KEY_LANGUAGE, i_Language);
 		cv.put(KEY_LAST_UPDATE, i_LastUpdate);
@@ -162,40 +165,43 @@ public class TriviaDbEngine {
 		calendar.setTimeInMillis(System.currentTimeMillis());
 		
 		insertQuestion(Long.toString(System.currentTimeMillis()), "Answer to the universe","42","Michael Jordan", "Nothing", "Checking long answer if fit",
-				1, "Litrature", "", "English", 0, 0, calendar.getTime().toString(), calendar.getTime().toString(), true,
+				1, 1, "", "English", 0, 0, calendar.getTime().toString(), calendar.getTime().toString(), true,
 				0,0);
 		
 		
 		insertQuestion(Long.toString(System.currentTimeMillis()), "Who wrote Lord of the rings","No1","Jrr", "Shlomo Oz", "Michale Crichton",
-				2, "Litrature", "", "English", 0, 0, calendar.getTime().toString(), calendar.getTime().toString(), true,
+				2, 1, "", "English", 0, 0, calendar.getTime().toString(), calendar.getTime().toString(), true,
 				0,0);
 		
 	}
 
-	public Question[] getEnabledQuestions() {
+	public ArrayList<Question> getEnabledQuestions() {
 		//
 		ContentValues map;
 		String[] columns = { KEY_ANSWER1, KEY_ANSWER2, KEY_ANSWER3, KEY_ANSWER4, KEY_ANSWER_INDEX, KEY_CATEGORY,
-				 KEY_CORRECT_FROM_DB, KEY_CORRECT_USER, KEY_DATE_CREATED, KEY_ENABLED, KEY_LANGUAGE, KEY_LAST_UPDATE, KEY_QUESTION, KEY_QUESTIONID,
+				 KEY_CORRECT_FROM_DB, KEY_CORRECT_USER, KEY_ENABLED, KEY_LANGUAGE, KEY_LAST_UPDATE, KEY_QUESTION, KEY_QUESTIONID,
 				KEY_ROWID, KEY_SUB_CATEGORY, KEY_WRONG_FROM_DB, KEY_WRONG_USER };
 		
 		Cursor cursor;
-		int numberOfQuestions = -1;
+		
 		int i;
+		ArrayList<Question> ret;
 		this.openDbReadable();
 		
 		 map = new ContentValues();
 		cursor = ourDatabase.query(TABLE_QUESTIONS, columns, KEY_ENABLED + "=1", null, null, null, null);
-		numberOfQuestions = cursor.getCount();
 		
-		Question[] ret = new Question[numberOfQuestions];
+		
+		ret = new ArrayList<Question>();
+		
+		
 		i = 0;
 		
 		for ( cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
 			 	
 			 	DatabaseUtils.cursorRowToContentValues(cursor, map);
 			 	
-				ret[i] = new Question(map);
+			 	ret.add(new Question(map));
 				i++;
 			
 		}
@@ -305,6 +311,10 @@ public class TriviaDbEngine {
 		
 		this.closeDb();
 		
+		
+		
 	}
+	
+	
 
 }

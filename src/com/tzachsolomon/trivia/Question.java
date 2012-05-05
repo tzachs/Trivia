@@ -45,7 +45,7 @@ public class Question {
 
 	}
 
-	public int getQuestionDifficultyLevel() {
+	public String getQuestionDifficultyLevel() {
 		// question difficulty is scaled between 1 - 10
 		//
 		// questions difficulty is measured by how much time the user was
@@ -71,7 +71,7 @@ public class Question {
 			ret = wrong / ret;
 		}
 		
-		return (int) (ret*10);
+		return Integer.toString((int) (ret*10));
 
 	}
 

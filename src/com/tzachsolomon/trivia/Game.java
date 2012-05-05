@@ -1,14 +1,19 @@
 package com.tzachsolomon.trivia;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 
+
 import android.preference.PreferenceManager;
 
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -18,8 +23,7 @@ import android.widget.Toast;
 public class Game extends Activity implements OnClickListener {
 
 	public static final String TAG = Game.class.getSimpleName();
-	
-	
+
 	private MyCountDownCounter m_CountDownCounter;
 	private TextView textViewTime;
 	private Button buttonAnswer1;
@@ -27,7 +31,7 @@ public class Game extends Activity implements OnClickListener {
 	private Button buttonAnswer3;
 	private Button buttonAnswer4;
 
-	private Question[] m_Questions;
+	private ArrayList<Question> m_Questions;
 	private TextView textViewQuestion;
 	private int m_QuestionIndex;
 	private int m_QuestionLength;
@@ -38,7 +42,7 @@ public class Game extends Activity implements OnClickListener {
 
 	private Random m_Random;
 	private TextView textViewQuestionDifficulty;
-	
+	private int m_DelayBetweenQuestions;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,41 +57,72 @@ public class Game extends Activity implements OnClickListener {
 
 		m_Questions = m_TriviaDb.getEnabledQuestions();
 
-		m_QuestionLength = m_Questions.length - 1;
+		// Shuffling the order of the questions
+		Collections.shuffle(m_Questions);
+
+		m_QuestionLength = m_Questions.size() - 1;
 
 		// checking if there are questions to be asked
-		if (m_Questions.length > 0) {
+		if (m_Questions.size() > 0) {
 			m_QuestionIndex = -1;
 
-			startNewQuestion();
+			new StartNewQuestionAsync().execute(0);
 		} else {
+			Toast.makeText(this, "no questions in database", Toast.LENGTH_SHORT).show();
 			finish();
 
 		}
 
 	}
 
+	public class StartNewQuestionAsync extends AsyncTask<Integer, Void, Void> {
+
+		@Override
+		protected void onPostExecute(Void result) {
+			//
+			startNewQuestion();
+		}
+
+		@Override
+		protected Void doInBackground(Integer... params) {
+			//
+			try {
+				Thread.sleep(params[0]);
+			} catch (InterruptedException e) {
+				// 
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+	}
+
 	private void startNewQuestion() {
+
 		//
 		// setting number of questions left, must be before m_QuestionIndex+=
 		textViewNumberOfQuestionsLeft.setText(Integer.toString(m_QuestionLength
 				- m_QuestionIndex));
-		
 
 		m_QuestionIndex++;
 
+		buttonAnswer1.setBackgroundResource(R.drawable.blue_button);
+		buttonAnswer2.setBackgroundResource(R.drawable.blue_button);
+		buttonAnswer3.setBackgroundResource(R.drawable.blue_button);
+		buttonAnswer4.setBackgroundResource(R.drawable.blue_button);
+
 		// setting question difficulty
-		textViewQuestionDifficulty.setText(Double
-				.toString(m_Questions[m_QuestionIndex]
-						.getQuestionDifficultyLevel()));
+		textViewQuestionDifficulty.setText(m_Questions.get(m_QuestionIndex)
+				.getQuestionDifficultyLevel());
 
-		m_Questions[m_QuestionIndex].randomizeAnswerPlaces(m_Random);
+		m_Questions.get(m_QuestionIndex).randomizeAnswerPlaces(m_Random);
 
-		textViewQuestion.setText(m_Questions[m_QuestionIndex].getQuestion());
-		buttonAnswer1.setText(m_Questions[m_QuestionIndex].getAnswer1());
-		buttonAnswer2.setText(m_Questions[m_QuestionIndex].getAnswer2());
-		buttonAnswer3.setText(m_Questions[m_QuestionIndex].getAnswer3());
-		buttonAnswer4.setText(m_Questions[m_QuestionIndex].getAnswer4());
+		textViewQuestion
+				.setText(m_Questions.get(m_QuestionIndex).getQuestion());
+		buttonAnswer1.setText(m_Questions.get(m_QuestionIndex).getAnswer1());
+		buttonAnswer2.setText(m_Questions.get(m_QuestionIndex).getAnswer2());
+		buttonAnswer3.setText(m_Questions.get(m_QuestionIndex).getAnswer3());
+		buttonAnswer4.setText(m_Questions.get(m_QuestionIndex).getAnswer4());
 
 		m_CountDownCounter.start();
 
@@ -98,9 +133,21 @@ public class Game extends Activity implements OnClickListener {
 		m_TriviaDb = new TriviaDbEngine(Game.this);
 		// m_Random = new Random(1);
 		m_Random = new Random(System.currentTimeMillis());
+		int total = 7;
 
-		long total = m_SharedPreferences.getLong(
-				"editTextPreferenceDefaultCountDownTimer", 7);
+		try {
+			total = Integer.parseInt(m_SharedPreferences.getString(
+					"editTextPreferenceCountDownTimer", "7"));
+		} catch (ClassCastException e) {
+			Log.e(TAG, e.getMessage().toString());
+		}
+		try {
+			m_DelayBetweenQuestions = Integer.parseInt(m_SharedPreferences.getString(
+					"editTextPreferenceDelayBetweenQuestions", "500"));
+		} catch (ClassCastException e) {
+			Log.e(TAG, e.getMessage().toString());
+		}
+
 		total *= 1000;
 
 		m_CountDownCounter = new MyCountDownCounter(total, 1000);
@@ -148,7 +195,6 @@ public class Game extends Activity implements OnClickListener {
 		public void onFinish() {
 			//
 			checkAnswer(-1, null);
-
 		}
 
 	}
@@ -156,24 +202,24 @@ public class Game extends Activity implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		//
-		
+
 		switch (v.getId()) {
 		case R.id.buttonAnswer1:
 			checkAnswer(1, buttonAnswer1);
 
 			break;
 		case R.id.buttonAnswer2:
-			
+
 			checkAnswer(2, buttonAnswer2);
 
 			break;
 		case R.id.buttonAnswer3:
-			
+
 			checkAnswer(3, buttonAnswer3);
 
 			break;
 		case R.id.buttonAnswer4:
-			
+
 			checkAnswer(4, buttonAnswer4);
 
 			break;
@@ -181,49 +227,64 @@ public class Game extends Activity implements OnClickListener {
 		default:
 			break;
 		}
-		
-		
 
 	}
 
-	private void checkAnswer(int i, Button o_Button) {
+	private void setButtonRed(Button o_Button) {
+		o_Button.setBackgroundResource(R.drawable.red_button);
+	}
+
+	private void setButtonGreen(Button o_Button) {
+		o_Button.setBackgroundResource(R.drawable.green_button);
+	}
+
+	private int checkAnswer(int i, Button o_Button) {
 		//
-		StringBuilder stringBuilder = new StringBuilder();
+		StringBuilder sb = new StringBuilder();
+		int ret = 1;
+		
+		// stopping the counter in order to create a race condition where the user already click but the timer
+		// is still running 
+		
+		stopCountdownCounter();
 
 		// checking if time is up
 		if (i == -1) {
-			stringBuilder.append("Time is up!");
+			ret = -1;
+			sb.append("Time is up!");
 
 		} else {
 
-			if (m_Questions[m_QuestionIndex].isCorrect(i)) {
+			if (m_Questions.get(m_QuestionIndex).isCorrect(i)) {
+				ret = 0;
+				setButtonGreen(o_Button);
 
-				//o_Button.setBackgroundResource(R.drawable.green_button);
-				stringBuilder.append("correct");
-				m_TriviaDb.incUserCorrectCounter(m_Questions[m_QuestionIndex]
-						.getQuestionId());
+				m_TriviaDb.incUserCorrectCounter(m_Questions.get(
+						m_QuestionIndex).getQuestionId());
 
 			} else {
-				//o_Button.setBackgroundResource(R.drawable.red_button);
-				stringBuilder.append("wrong");
-				m_TriviaDb.incUserWrongCounter(m_Questions[m_QuestionIndex]
+				setButtonRed(o_Button);
+				m_TriviaDb.incUserWrongCounter(m_Questions.get(m_QuestionIndex)
 						.getQuestionId());
 			}
-			
-		}
-		// checking if we need to move to the next question
-		if (m_QuestionIndex < m_QuestionLength) {
-			
-			startNewQuestion();
-		} else {
-			// round finished
-			stopCountdownCounter();
-		}
-		
-		Toast.makeText(this, stringBuilder.toString(), Toast.LENGTH_SHORT).show();
-		
-		stringBuilder.setLength(0);
 
+		}
+
+		if (m_QuestionIndex < m_QuestionLength) {
+			// start a new question and
+			new StartNewQuestionAsync().execute(m_DelayBetweenQuestions);
+		} else {
+			sb.append("Finished Round!");
+			// TODO: how to end this
+			
+		}
+		
+		if (sb.length() > 0){
+			Toast.makeText(this, sb.toString(), Toast.LENGTH_SHORT).show();
+			sb.setLength(0);
+		}
+
+		return ret;
 
 	}
 
