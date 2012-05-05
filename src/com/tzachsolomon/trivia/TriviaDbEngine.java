@@ -10,8 +10,6 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-
-
 import android.util.Log;
 
 public class TriviaDbEngine {
@@ -19,7 +17,7 @@ public class TriviaDbEngine {
 	public static final String TAG = TriviaDbEngine.class.getSimpleName();
 
 	private static final String DATABASE_NAME = "TriviaDb";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 	private static final String TABLE_QUESTIONS = "tblQuestions";
 
 	public static final String KEY_ROWID = "_id";
@@ -35,12 +33,20 @@ public class TriviaDbEngine {
 	public static final String KEY_LANGUAGE = "colLanguage";
 	public static final String KEY_CORRECT_FROM_DB = "colCorrect";
 	public static final String KEY_WRONG_FROM_DB = "colWrong";
-	public static final String KEY_CORRECT_USER = "colCorrectUser"; // the correct guesses the user did of a question
-	public static final String KEY_WRONG_USER = "colWrongUser"; // the wrong guesses the user did of a question
-	
+	public static final String KEY_CORRECT_USER = "colCorrectUser"; // the
+																	// correct
+																	// guesses
+																	// the user
+																	// did of a
+																	// question
+	public static final String KEY_WRONG_USER = "colWrongUser"; // the wrong
+																// guesses the
+																// user did of a
+																// question
+
 	public static final String KEY_LAST_UPDATE = "colLastUpdate";
 	public static final String KEY_ENABLED = "colEnabled";
-	
+
 	private DbHelper ourHelper;
 	private Context ourContext;
 	private SQLiteDatabase ourDatabase;
@@ -61,7 +67,7 @@ public class TriviaDbEngine {
 
 		private void createTableQuestions(SQLiteDatabase db) {
 			StringBuilder sb = new StringBuilder();
-		
+
 			sb.append("CREATE TABLE ");
 			sb.append(TABLE_QUESTIONS);
 			sb.append(" (");
@@ -81,10 +87,10 @@ public class TriviaDbEngine {
 			sb.append(KEY_WRONG_FROM_DB + " INTEGER NOT NULL,");
 			sb.append(KEY_WRONG_USER + " INTEGER NOT NULL,");
 			sb.append(KEY_ENABLED + " BOOLEAN NOT NULL, ");
-			
+
 			sb.append(KEY_LAST_UPDATE + " TEXT NOT NULL ");
 			sb.append(");");
-			
+
 			Log.v(TAG, sb.toString());
 
 			db.execSQL(sb.toString());
@@ -100,41 +106,43 @@ public class TriviaDbEngine {
 		}
 
 	}
-	
-	public TriviaDbEngine (Context c){
+
+	public TriviaDbEngine(Context c) {
 		ourContext = c;
 	}
-	
-	private TriviaDbEngine openDbWritable(){
+
+	private TriviaDbEngine openDbWritable() {
 		ourHelper = new DbHelper(ourContext);
 		ourDatabase = ourHelper.getWritableDatabase();
-		
+
 		return this;
 
 	}
-	
+
 	private TriviaDbEngine openDbReadable() {
 		ourHelper = new DbHelper(ourContext);
 		ourDatabase = ourHelper.getReadableDatabase();
-		
+
 		return this;
 	}
-	
+
 	private void closeDb() {
 		ourHelper.close();
 	}
-	
-	public long insertQuestion(String i_QuestionId, String i_Question, String i_Answer1, String i_Answer2,
-			String i_Answer3, String i_Answer4, int i_AnswerIndex, int i_Category, String i_SubCategory, 
-			String i_Language, long i_Correct, long i_Wrong, String i_DateCreated, String i_LastUpdate, boolean i_Enabled,
-			long i_CorrectUser, long i_WrongUser){
-		
+
+	public long insertQuestion(String i_QuestionId, String i_Question,
+			String i_Answer1, String i_Answer2, String i_Answer3,
+			String i_Answer4, int i_AnswerIndex, int i_Category,
+			String i_SubCategory, String i_Language, long i_Correct,
+			long i_Wrong, String i_DateCreated, String i_LastUpdate,
+			boolean i_Enabled, long i_CorrectUser, long i_WrongUser) {
+
 		long ret;
-		
+
 		this.openDbWritable();
-		
+
 		ContentValues cv = new ContentValues();
-		
+
 		cv.put(KEY_ANSWER1, i_Answer1);
 		cv.put(KEY_ANSWER2, i_Answer2);
 		cv.put(KEY_ANSWER3, i_Answer3);
@@ -151,85 +159,91 @@ public class TriviaDbEngine {
 		cv.put(KEY_SUB_CATEGORY, i_SubCategory);
 		cv.put(KEY_WRONG_FROM_DB, i_Wrong);
 		cv.put(KEY_WRONG_USER, i_WrongUser);
-		
+
 		ret = ourDatabase.insert(TABLE_QUESTIONS, null, cv);
-		
+
 		this.closeDb();
-		
+
 		return ret;
 	}
-	
-	public void createSampleQuestions(){
-		
+
+	public void createSampleQuestions() {
+
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTimeInMillis(System.currentTimeMillis());
-		
-		insertQuestion(Long.toString(System.currentTimeMillis()), "Answer to the universe","42","Michael Jordan", "Nothing", "Checking long answer if fit",
-				1, 1, "", "English", 0, 0, calendar.getTime().toString(), calendar.getTime().toString(), true,
-				0,0);
-		
-		
-		insertQuestion(Long.toString(System.currentTimeMillis()), "Who wrote Lord of the rings","No1","Jrr", "Shlomo Oz", "Michale Crichton",
-				2, 1, "", "English", 0, 0, calendar.getTime().toString(), calendar.getTime().toString(), true,
-				0,0);
-		
+
+		insertQuestion(Long.toString(System.currentTimeMillis()),
+				"Answer to the universe", "42", "Michael Jordan", "Nothing",
+				"Checking long answer if fit", 1, 1, "", "English", 0, 0,
+				calendar.getTime().toString(), calendar.getTime().toString(),
+				true, 0, 0);
+
+		insertQuestion(Long.toString(System.currentTimeMillis()),
+				"Who wrote Lord of the rings", "No1", "Jrr", "Shlomo Oz",
+				"Michale Crichton", 2, 1, "", "English", 0, 0, calendar
+						.getTime().toString(), calendar.getTime().toString(),
+				true, 0, 0);
+
 	}
 
 	public ArrayList<Question> getEnabledQuestions() {
 		//
 		ContentValues map;
-		String[] columns = { KEY_ANSWER1, KEY_ANSWER2, KEY_ANSWER3, KEY_ANSWER4, KEY_ANSWER_INDEX, KEY_CATEGORY,
-				 KEY_CORRECT_FROM_DB, KEY_CORRECT_USER, KEY_ENABLED, KEY_LANGUAGE, KEY_LAST_UPDATE, KEY_QUESTION, KEY_QUESTIONID,
+		String[] columns = { KEY_ANSWER1, KEY_ANSWER2, KEY_ANSWER3,
+				KEY_ANSWER4, KEY_ANSWER_INDEX, KEY_CATEGORY,
+				KEY_CORRECT_FROM_DB, KEY_CORRECT_USER, KEY_ENABLED,
+				KEY_LANGUAGE, KEY_LAST_UPDATE, KEY_QUESTION, KEY_QUESTIONID,
 				KEY_ROWID, KEY_SUB_CATEGORY, KEY_WRONG_FROM_DB, KEY_WRONG_USER };
-		
+
 		Cursor cursor;
-		
+
 		int i;
 		ArrayList<Question> ret;
 		this.openDbReadable();
-		
-		 map = new ContentValues();
-		cursor = ourDatabase.query(TABLE_QUESTIONS, columns, KEY_ENABLED + "=1", null, null, null, null);
-		
-		
+
+		map = new ContentValues();
+		cursor = ourDatabase.query(TABLE_QUESTIONS, columns,
+				KEY_ENABLED + "=1", null, null, null, null);
+
 		ret = new ArrayList<Question>();
-		
-		
+
 		i = 0;
-		
-		for ( cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-			 	
-			 	DatabaseUtils.cursorRowToContentValues(cursor, map);
-			 	
-			 	ret.add(new Question(map));
-				i++;
-			
+
+		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+
+			DatabaseUtils.cursorRowToContentValues(cursor, map);
+
+			ret.add(new Question(map));
+			i++;
+
 		}
-		
+
 		cursor.close();
-		
+
 		this.closeDb();
-		
+
 		return ret;
 	}
 
 	public boolean isEmpty() {
-		// 
+		//
 		boolean ret = true;
-		// the column KEY_ANSWER1 doesn't matter, Just need to check if there are any rows
+		// the column KEY_ANSWER1 doesn't matter, Just need to check if there
+		// are any rows
 		// any other column could be chosen
 		String[] columns = { KEY_ANSWER1 };
-		
+
 		this.openDbReadable();
-		Cursor cursor = ourDatabase.query(TABLE_QUESTIONS, columns, null, null, null,null,null);
-		if ( cursor.getCount() > 0 ){
+		Cursor cursor = ourDatabase.query(TABLE_QUESTIONS, columns, null, null,
+				null, null, null);
+		if (cursor.getCount() > 0) {
 			ret = false;
 		}
-		
+
 		cursor.close();
-		
+
 		this.closeDb();
-		
+
 		return ret;
 	}
 
@@ -239,16 +253,15 @@ public class TriviaDbEngine {
 		openDbWritable();
 		ret = ourDatabase.delete(TABLE_QUESTIONS, null, null);
 		closeDb();
-		
+
 		return ret;
-		
-		
+
 	}
 
 	public void incUserCorrectCounter(String i_QuestionId) {
-		// 
+		//
 		StringBuilder sb = new StringBuilder();
-		
+
 		sb.append("UPDATE ");
 		sb.append(TABLE_QUESTIONS);
 		sb.append(" SET ");
@@ -260,22 +273,22 @@ public class TriviaDbEngine {
 		sb.append(" = '");
 		sb.append(i_QuestionId);
 		sb.append("'");
-		
+
 		this.openDbWritable();
-		
+
 		Log.v(TAG, "Executing " + sb.toString());
 		ourDatabase.execSQL(sb.toString());
-		
+
 		this.closeDb();
-		
+
 		sb.setLength(0);
-		
+
 	}
-	
+
 	public void incUserWrongCounter(String i_QuestionId) {
-		// 
+		//
 		StringBuilder sb = new StringBuilder();
-		
+
 		sb.append("UPDATE ");
 		sb.append(TABLE_QUESTIONS);
 		sb.append(" SET ");
@@ -287,34 +300,38 @@ public class TriviaDbEngine {
 		sb.append(" = '");
 		sb.append(i_QuestionId);
 		sb.append("'");
-		
+
 		this.openDbWritable();
-		
+
 		Log.v(TAG, "Executing " + sb.toString());
 		ourDatabase.execSQL(sb.toString());
-		
+
 		this.closeDb();
-		
+
 		sb.setLength(0);
-		
+
 	}
 
 	public void updateFromInternet(ContentValues[] values) {
-		// 
+		//
 		this.openDbWritable();
-		
-		for ( ContentValues cv : values) {
+
+		for (ContentValues cv : values) {
 			cv.put(TriviaDbEngine.KEY_CORRECT_USER, 0);
 			cv.put(TriviaDbEngine.KEY_WRONG_USER, 0);
-			 ourDatabase.insert(TABLE_QUESTIONS, null, cv);
+			try {
+				ourDatabase.insert(TABLE_QUESTIONS, null, cv);
+			} catch (Exception e) {
+				String message = e.getMessage().toString();
+				if ( message != null ){
+					Log.e(TAG, message); 
+				}
+
+			}
 		}
-		
+
 		this.closeDb();
-		
-		
-		
+
 	}
-	
-	
 
 }

@@ -92,8 +92,6 @@ public class Game extends Activity implements OnClickListener {
 		protected void onPostExecute(Void result) {
 			//
 			
-		
-			
 			startNewQuestion();
 		}
 
@@ -256,10 +254,13 @@ public class Game extends Activity implements OnClickListener {
 
 	private void buttonReportMistakeInQuestion_Clicked() {
 		//
+		
 		JSONHandler m_JSONHandler = new JSONHandler(Game.this);
 		 
 		try {
-			m_JSONHandler.reportMistakeInQuestion(m_CurrentQuestion.getQuestionId(), "no description");
+			
+			m_JSONHandler.reportMistakeInQuestionAsync(m_CurrentQuestion.getQuestionId(), "no description");
+			Toast.makeText(Game.this, "sent, thanks :)", Toast.LENGTH_SHORT).show();
 		} catch (ClientProtocolException e) {
 			// 
 			Log.e(TAG, e.getMessage().toString());

@@ -195,21 +195,26 @@ public class JSONHandler {
 		return jsonArray;
 
 	}
+	
+	public void reportMistakeInQuestionAsync(String i_QuestionId,
+			String i_Description) throws ClientProtocolException, IOException {
+		
+		new AsyncTaskReportMistakeInQuestion().execute(i_QuestionId,i_Description);
+	
+	}
 
-	public void reportMistakeInQuestion(String i_QuestionId, String i_Description
-			) throws ClientProtocolException,
-			IOException {
+	public void reportMistakeInQuestion(String i_QuestionId,
+			String i_Description) throws ClientProtocolException, IOException {
 
 		HttpEntity httpEntity;
 		String data;
 		String i_ServerUrl = "http://23.23.238.181/reportMistakeInQuestion.php";
-		List<NameValuePair> params =new ArrayList<NameValuePair>();
-		
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+
 		params.add(new BasicNameValuePair("tag", "reportMistakeInQuestion"));
 		params.add(new BasicNameValuePair("colQuestionId", i_QuestionId));
 		params.add(new BasicNameValuePair("colDescription", i_Description));
-		
-		
+
 		HttpPost httpPost = new HttpPost(i_ServerUrl);
 		httpPost.setEntity(new UrlEncodedFormEntity(params));
 		HttpResponse httpResponse = m_HttpClient.execute(httpPost);
@@ -221,6 +226,27 @@ public class JSONHandler {
 					"UTF-8");
 		} else {
 			Log.e(TAG, "status code from server is " + Integer.toString(status));
+		}
+
+	}
+
+	public class AsyncTaskReportMistakeInQuestion extends
+			AsyncTask<String, Integer, Void> {
+
+		@Override
+		protected Void doInBackground(String... params) {
+			//
+			try {
+				reportMistakeInQuestion(params[0], params[1]);
+			} catch (ClientProtocolException e) {
+				//
+				Log.e(TAG, e.getMessage().toString());
+
+			} catch (IOException e) {
+				//
+				Log.e(TAG, e.getMessage().toString());
+			}
+			return null;
 		}
 
 	}
