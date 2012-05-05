@@ -8,6 +8,10 @@
 package com.tzachsolomon.trivia;
 
 public final class R {
+    public static final class array {
+        public static final int updateMethod=0x7f050000;
+        public static final int updateMethodValues=0x7f050001;
+    }
     public static final class attr {
     }
     public static final class drawable {
@@ -17,33 +21,46 @@ public final class R {
         public static final int red_button=0x7f020003;
     }
     public static final class id {
-        public static final int buttonAnswer1=0x7f070004;
-        public static final int buttonAnswer2=0x7f070005;
-        public static final int buttonAnswer3=0x7f070006;
-        public static final int buttonAnswer4=0x7f070007;
-        public static final int buttonNewGame=0x7f070008;
-        public static final int buttonUpdateDatabase=0x7f070009;
-        public static final int textViewNumberOfQuestionsLeft=0x7f070001;
-        public static final int textViewQuestion=0x7f070003;
-        public static final int textViewQuestionDifficulty=0x7f070002;
-        public static final int textViewTime=0x7f070000;
+        public static final int buttonAnswer1=0x7f090007;
+        public static final int buttonAnswer2=0x7f090008;
+        public static final int buttonAnswer3=0x7f090009;
+        public static final int buttonAnswer4=0x7f09000a;
+        public static final int buttonNewGame=0x7f09000c;
+        public static final int buttonReportMistakeInQuestion=0x7f09000b;
+        public static final int buttonUpdateDatabase=0x7f09000d;
+        public static final int menuItemAbout=0x7f09000e;
+        public static final int menuItemExit=0x7f090010;
+        public static final int menuItemPreferences=0x7f09000f;
+        public static final int textViewNumberOfQuestionsLeft=0x7f090003;
+        public static final int textViewNumberOfQuestionsLeftTitle=0x7f090002;
+        public static final int textViewQuestion=0x7f090006;
+        public static final int textViewQuestionDifficulty=0x7f090005;
+        public static final int textViewQuestionDifficultyTitle=0x7f090004;
+        public static final int textViewTime=0x7f090001;
+        public static final int textViewTimeTitle=0x7f090000;
     }
     public static final class layout {
         public static final int game=0x7f030000;
         public static final int main=0x7f030001;
     }
+    public static final class menu {
+        public static final int main_menu=0x7f080000;
+    }
     public static final class string {
-        public static final int app_name=0x7f050001;
-        public static final int buttonAnswer1=0x7f050004;
-        public static final int buttonNewGameText=0x7f050002;
-        public static final int buttonUpdateDatabaseText=0x7f050006;
-        public static final int hello=0x7f050000;
-        public static final int textViewQuestionText=0x7f050003;
-        public static final int textViewTimeText=0x7f050005;
+        public static final int app_name=0x7f060000;
+        public static final int buttonAnswer1=0x7f060003;
+        public static final int buttonNewGameText=0x7f060001;
+        public static final int buttonReportMistakeInQuestion=0x7f060009;
+        public static final int buttonUpdateDatabaseText=0x7f060005;
+        public static final int textViewNumberOfQuestionsLeftTitle=0x7f060007;
+        public static final int textViewQuestionDifficultyTitle=0x7f060008;
+        public static final int textViewQuestionText=0x7f060002;
+        public static final int textViewTimeText=0x7f060004;
+        public static final int textViewTimeTitleText=0x7f060006;
     }
     public static final class style {
-        public static final int Button=0x7f060000;
-        public static final int CustomTheme=0x7f060001;
+        public static final int Button=0x7f070000;
+        public static final int CustomTheme=0x7f070001;
     }
     public static final class xml {
         public static final int prefs=0x7f040000;

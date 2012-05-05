@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="hello">hello world</string>
     <string name="app_name">Trivia</string>
-    <string name="buttonNewGameText">New Game</string>
-    <string name="textViewQuestionText">Question</string>
-    <string name="buttonAnswer1">Answer</string>
+    <string name="buttonNewGameText">משחק חדש</string>
+    <string name="textViewQuestionText">Example Question</string>
+    <string name="buttonAnswer1">Example Answer</string>
     <string name="textViewTimeText">Time</string>
-    <string name="buttonUpdateDatabaseText">Update database</string>
+    <string name="buttonUpdateDatabaseText">עדכן מאגר שאלות</string>
+    <string name="textViewTimeTitleText">זמן</string>
+    <string name="textViewNumberOfQuestionsLeftTitle">שאלות</string>
+    <string name="textViewQuestionDifficultyTitle">קושי</string>
+    <string name="buttonReportMistakeInQuestion">דווח שגיאה בשאילה</string>
 
 </resources>

@@ -1,12 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-<EditTextPreference 
-    	android:title="Default count down timer"
-    	android:key="editTextPreferenceDefaultCountDownTimer"
-    	android:summary="Default count down timer"
-    	android:defaultValue="7"
-    	android:inputType="number"
-    />
-    
+
+    <PreferenceCategory android:title="Server Related" >
+        <EditTextPreference
+            android:defaultValue="http://23.23.238.181/index.php"
+            android:key="editTextPreferencePrimaryServerIP"
+            android:summary="The primary database server IP"
+            android:title="Primary Server IP" />
+
+        <ListPreference
+            android:defaultValue="async"
+            android:entries="@array/updateMethod"
+            android:entryValues="@array/updateMethodValues"
+            android:key="listPreferenceUpdateMethod"
+            android:title="Update method" />
+        
+        <CheckBoxPreference 
+            android:defaultValue="true"
+            android:key="checkBoxPreferenceAllowUpdateWifi"
+            android:title="Allow Update Wifi"
+            android:summary="Allow updating using the WiFi connection"
+            />
+        <CheckBoxPreference 
+            android:defaultValue="false"
+            android:key="checkBoxPreferenceAllowUpdateMobileNetwork"
+            android:title="Allow Update Mobile Network"
+            android:summary="Allow updating using the Mobile Network connection"
+            />
+        <CheckBoxPreference 
+            android:enabled="false"
+            android:defaultValue="true"
+            android:key="checkBoxPreferenceAllowUpdateMobileNetwork3G"
+            android:title="Allow only 3G Mobile Network"
+            android:summary="Allow updating using only 3G Mobile Network connection"
+            />
+        <CheckBoxPreference 
+            android:enabled="false"
+            android:defaultValue="false"
+            android:key="checkBoxPreferenceAllowUpdateMobileNetworkRoaming"
+            android:title="Allow on Mobile Network Roaming"
+            android:summary="Allow updating when Mobile Network connection is roaming"
+            />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Game Related" >
+        <EditTextPreference
+            android:defaultValue="7"
+            android:inputType="number"
+            android:key="editTextPreferenceCountDownTimer"
+            android:summary="Count down timer"
+            android:title="Count down timer" />
+        <EditTextPreference
+            android:defaultValue="500"
+            android:inputType="number"
+            android:key="editTextPreferenceDelayBetweenQuestions"
+            android:title="Delay between questions"
+            android:summary="How much to wait between questions in milliseconds" />
+        
+    </PreferenceCategory>
 
 </PreferenceScreen>

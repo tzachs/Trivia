@@ -5,29 +5,55 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/textViewTime"
+        android:id="@+id/textViewTimeTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="right"
+        android:text="@string/textViewTimeTitleText"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/textViewTime"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewTimeTitle"
+        android:gravity="right"
         android:text="@string/textViewTimeText"
         android:textSize="20dp" />
-    
+
+    <TextView
+        android:id="@+id/textViewNumberOfQuestionsLeftTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:text="@string/textViewNumberOfQuestionsLeftTitle"
+        android:textSize="20dp" />
+
     <TextView
         android:id="@+id/textViewNumberOfQuestionsLeft"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewNumberOfQuestionsLeftTitle"
         android:gravity="left"
         android:text=""
         android:textSize="20dp" />
-    
-     <TextView
-        android:id="@+id/textViewQuestionDifficulty"
+
+    <TextView
+        android:id="@+id/textViewQuestionDifficultyTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:text="@string/textViewQuestionDifficultyTitle"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/textViewQuestionDifficulty"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewNumberOfQuestionsLeftTitle"
+        android:gravity="center"
         android:text=""
         android:textSize="20dp" />
-    
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -72,5 +98,17 @@
             android:layout_margin="4dp"
             android:text="@string/buttonAnswer1" />
     </LinearLayout>
+    
+    <Button 
+        android:id="@+id/buttonReportMistakeInQuestion"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/buttonReportMistakeInQuestion"
+        
+        />
+        
+        
+        
+        
 
 </RelativeLayout>
