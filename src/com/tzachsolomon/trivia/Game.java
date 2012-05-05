@@ -1,15 +1,20 @@
 package com.tzachsolomon.trivia;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+
 import java.util.Random;
+
+
+import org.apache.http.client.ClientProtocolException;
+
 
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-
 
 import android.preference.PreferenceManager;
 
@@ -30,8 +35,10 @@ public class Game extends Activity implements OnClickListener {
 	private Button buttonAnswer2;
 	private Button buttonAnswer3;
 	private Button buttonAnswer4;
+	private Button buttonReportMistakeInQuestion;
 
 	private ArrayList<Question> m_Questions;
+	private Question m_CurrentQuestion;
 	private TextView textViewQuestion;
 	private int m_QuestionIndex;
 	private int m_QuestionLength;
@@ -43,6 +50,9 @@ public class Game extends Activity implements OnClickListener {
 	private Random m_Random;
 	private TextView textViewQuestionDifficulty;
 	private int m_DelayBetweenQuestions;
+
+
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +78,8 @@ public class Game extends Activity implements OnClickListener {
 
 			new StartNewQuestionAsync().execute(0);
 		} else {
-			Toast.makeText(this, "no questions in database", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "no questions in database", Toast.LENGTH_SHORT)
+					.show();
 			finish();
 
 		}
@@ -80,6 +91,9 @@ public class Game extends Activity implements OnClickListener {
 		@Override
 		protected void onPostExecute(Void result) {
 			//
+			
+		
+			
 			startNewQuestion();
 		}
 
@@ -89,7 +103,7 @@ public class Game extends Activity implements OnClickListener {
 			try {
 				Thread.sleep(params[0]);
 			} catch (InterruptedException e) {
-				// 
+				//
 				e.printStackTrace();
 			}
 			return null;
@@ -99,30 +113,34 @@ public class Game extends Activity implements OnClickListener {
 
 	private void startNewQuestion() {
 
-		//
+		// initialize button color to blue
+		buttonAnswer1.setBackgroundResource(R.drawable.blue_button);
+		buttonAnswer2.setBackgroundResource(R.drawable.blue_button);
+		buttonAnswer3.setBackgroundResource(R.drawable.blue_button);
+		buttonAnswer4.setBackgroundResource(R.drawable.blue_button);
+		
 		// setting number of questions left, must be before m_QuestionIndex+=
 		textViewNumberOfQuestionsLeft.setText(Integer.toString(m_QuestionLength
 				- m_QuestionIndex));
 
 		m_QuestionIndex++;
+		
+		// getting reference to the current question
+		m_CurrentQuestion = m_Questions.get(m_QuestionIndex);
 
-		buttonAnswer1.setBackgroundResource(R.drawable.blue_button);
-		buttonAnswer2.setBackgroundResource(R.drawable.blue_button);
-		buttonAnswer3.setBackgroundResource(R.drawable.blue_button);
-		buttonAnswer4.setBackgroundResource(R.drawable.blue_button);
+		
 
 		// setting question difficulty
-		textViewQuestionDifficulty.setText(m_Questions.get(m_QuestionIndex)
-				.getQuestionDifficultyLevel());
+		textViewQuestionDifficulty.setText(m_CurrentQuestion.getQuestionDifficultyLevel());
 
-		m_Questions.get(m_QuestionIndex).randomizeAnswerPlaces(m_Random);
+		// randomize answer places (indices)
+		m_CurrentQuestion.randomizeAnswerPlaces(m_Random);
 
-		textViewQuestion
-				.setText(m_Questions.get(m_QuestionIndex).getQuestion());
-		buttonAnswer1.setText(m_Questions.get(m_QuestionIndex).getAnswer1());
-		buttonAnswer2.setText(m_Questions.get(m_QuestionIndex).getAnswer2());
-		buttonAnswer3.setText(m_Questions.get(m_QuestionIndex).getAnswer3());
-		buttonAnswer4.setText(m_Questions.get(m_QuestionIndex).getAnswer4());
+		textViewQuestion.setText(m_CurrentQuestion.getQuestion());
+		buttonAnswer1.setText(m_CurrentQuestion.getAnswer1());
+		buttonAnswer2.setText(m_CurrentQuestion.getAnswer2());
+		buttonAnswer3.setText(m_CurrentQuestion.getAnswer3());
+		buttonAnswer4.setText(m_CurrentQuestion.getAnswer4());
 
 		m_CountDownCounter.start();
 
@@ -142,8 +160,9 @@ public class Game extends Activity implements OnClickListener {
 			Log.e(TAG, e.getMessage().toString());
 		}
 		try {
-			m_DelayBetweenQuestions = Integer.parseInt(m_SharedPreferences.getString(
-					"editTextPreferenceDelayBetweenQuestions", "500"));
+			m_DelayBetweenQuestions = Integer
+					.parseInt(m_SharedPreferences.getString(
+							"editTextPreferenceDelayBetweenQuestions", "500"));
 		} catch (ClassCastException e) {
 			Log.e(TAG, e.getMessage().toString());
 		}
@@ -164,10 +183,14 @@ public class Game extends Activity implements OnClickListener {
 		buttonAnswer3 = (Button) findViewById(R.id.buttonAnswer3);
 		buttonAnswer4 = (Button) findViewById(R.id.buttonAnswer4);
 
+		buttonReportMistakeInQuestion = (Button) findViewById(R.id.buttonReportMistakeInQuestion);
+
 		buttonAnswer1.setOnClickListener(this);
 		buttonAnswer2.setOnClickListener(this);
 		buttonAnswer3.setOnClickListener(this);
 		buttonAnswer4.setOnClickListener(this);
+
+		buttonReportMistakeInQuestion.setOnClickListener(this);
 	}
 
 	private void initializeTextViews() {
@@ -204,28 +227,45 @@ public class Game extends Activity implements OnClickListener {
 		//
 
 		switch (v.getId()) {
+
+		case R.id.buttonReportMistakeInQuestion:
+			buttonReportMistakeInQuestion_Clicked();
+			break;
+
 		case R.id.buttonAnswer1:
 			checkAnswer(1, buttonAnswer1);
-
 			break;
+
 		case R.id.buttonAnswer2:
-
 			checkAnswer(2, buttonAnswer2);
-
 			break;
+
 		case R.id.buttonAnswer3:
-
 			checkAnswer(3, buttonAnswer3);
-
 			break;
+
 		case R.id.buttonAnswer4:
-
 			checkAnswer(4, buttonAnswer4);
-
 			break;
 
 		default:
 			break;
+		}
+
+	}
+
+	private void buttonReportMistakeInQuestion_Clicked() {
+		//
+		JSONHandler m_JSONHandler = new JSONHandler(Game.this);
+		 
+		try {
+			m_JSONHandler.reportMistakeInQuestion(m_CurrentQuestion.getQuestionId(), "no description");
+		} catch (ClientProtocolException e) {
+			// 
+			Log.e(TAG, e.getMessage().toString());
+		} catch (IOException e) {
+			// 
+			Log.e(TAG, e.getMessage().toString());
 		}
 
 	}
@@ -242,10 +282,11 @@ public class Game extends Activity implements OnClickListener {
 		//
 		StringBuilder sb = new StringBuilder();
 		int ret = 1;
-		
-		// stopping the counter in order to create a race condition where the user already click but the timer
-		// is still running 
-		
+
+		// stopping the counter in order to create a race condition where the
+		// user already click but the timer
+		// is still running
+
 		stopCountdownCounter();
 
 		// checking if time is up
@@ -255,17 +296,16 @@ public class Game extends Activity implements OnClickListener {
 
 		} else {
 
-			if (m_Questions.get(m_QuestionIndex).isCorrect(i)) {
+			if (m_CurrentQuestion.isCorrect(i)) {
 				ret = 0;
 				setButtonGreen(o_Button);
 
-				m_TriviaDb.incUserCorrectCounter(m_Questions.get(
-						m_QuestionIndex).getQuestionId());
+				m_TriviaDb.incUserCorrectCounter(m_CurrentQuestion.getQuestionId());
 
 			} else {
 				setButtonRed(o_Button);
-				m_TriviaDb.incUserWrongCounter(m_Questions.get(m_QuestionIndex)
-						.getQuestionId());
+				m_TriviaDb.incUserWrongCounter(m_CurrentQuestion.getQuestionId());
+						
 			}
 
 		}
@@ -276,10 +316,10 @@ public class Game extends Activity implements OnClickListener {
 		} else {
 			sb.append("Finished Round!");
 			// TODO: how to end this
-			
+
 		}
-		
-		if (sb.length() > 0){
+
+		if (sb.length() > 0) {
 			Toast.makeText(this, sb.toString(), Toast.LENGTH_SHORT).show();
 			sb.setLength(0);
 		}

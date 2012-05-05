@@ -10,6 +10,6 @@
     <string name="textViewTimeTitleText">זמן</string>
     <string name="textViewNumberOfQuestionsLeftTitle">שאלות</string>
     <string name="textViewQuestionDifficultyTitle">קושי</string>
-    <string name="buttonReportMistakeInQuestion">דווח שגיאה בשאילה</string>
+    <string name="buttonReportMistakeInQuestion">דווח שגיאה</string>
 
 </resources>
