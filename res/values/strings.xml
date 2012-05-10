@@ -11,5 +11,17 @@
     <string name="textViewNumberOfQuestionsLeftTitle">שאלות</string>
     <string name="textViewQuestionDifficultyTitle">קושי</string>
     <string name="buttonReportMistakeInQuestion">דווח שגיאה</string>
+    <string name="editTextPreferenceDelayBetweenQuestionsSummary">כמה זמן לחכות בין שאלות במילי שניות</string>
+    <string name="editTextPreferenceDelayBetweenQuestionsTitle">השהיה בין שאלות</string>
+    <string name="checkBoxPreferenceAllowUpdateMobileNetworkRoamingSummary">Allow updating when Mobile Network connection is roaming</string>
+    <string name="checkBoxPreferenceAllowUpdateMobileNetworkRoamingTitle">Allow on Mobile Network Roaming</string>
+    <string name="checkBoxPreferenceAllowUpdateMobileNetwork3GTitle">Allow only 3G Mobile Network</string>
+    <string name="checkBoxPreferenceAllowUpdateMobileNetwork3GSummary">Allow updating using only 3G Mobile Network connection</string>
+    <string name="checkBoxPreferenceAllowUpdateMobileNetworkTitle">Allow Update Mobile Network</string>
+    <string name="checkBoxPreferenceAllowUpdateMobileNetworkSummary">Allow updating using the Mobile Network connection</string>
+    <string name="checkBoxPreferenceAllowUpdateWifiTitle">Allow Update Wifi</string>
+    <string name="checkBoxPreferenceAllowUpdateWifiSummary">Allow updating using the WiFi connection</string>
+    <string name="checkBoxPreferenceShowReportQuestionSummary">Show report question</string>
+    <string name="checkBoxPreferenceShowReportQuestionTitle">Show report question</string>
 
 </resources>

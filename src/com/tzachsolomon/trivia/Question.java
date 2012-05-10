@@ -6,9 +6,12 @@ import java.util.Collections;
 import java.util.Random;
 
 import android.content.ContentValues;
+import android.util.Log;
 
 public class Question {
 
+	public static final String TAG = Question.class.getSimpleName();
+	
 	private String m_QuestionId;
 	private String m_Question;
 	private ArrayList<String> m_Answers;
@@ -56,20 +59,27 @@ public class Question {
 
 		correct = m_Correct.doubleValue();
 		wrong = m_Wrong.doubleValue();
+		
+		Log.v(TAG, "correct " + correct);
+		Log.v(TAG, "wrong " + wrong);
 
 		ret = correct + wrong;
-
-		// checking if this question was ever answered
-		if (correct == 0 || wrong == 0) {
-			if (wrong == 0) {
-				ret = 1;
-
-			} else {
-				ret = 10;
-			}
-		} else {
+		
+		if ( ret == 0 ){
+			// the question never been answer, thus we are assuming it's easy
+			ret = 0.1;
+		}else if ( correct == 0 && wrong >= 1){
+			// the question always got a wrong answer, thus assuming its hard
+			ret = 1;
+		}else if ( correct >= 1 && wrong == 0){
+			// the question always got a correct answer, thus assuming its easy
+			ret = 0.1;
+		}else {
+			// calculating the difficulty
 			ret = wrong / ret;
 		}
+				
+		Log.v(TAG, "difficulty is " + ret);
 		
 		return Integer.toString((int) (ret*10));
 

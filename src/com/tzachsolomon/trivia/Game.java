@@ -189,7 +189,11 @@ public class Game extends Activity implements OnClickListener {
 		buttonAnswer4.setOnClickListener(this);
 
 		buttonReportMistakeInQuestion.setOnClickListener(this);
+		
+		
+			
 	}
+	
 
 	private void initializeTextViews() {
 		textViewQuestion = (TextView) findViewById(R.id.textViewQuestion);
@@ -332,6 +336,20 @@ public class Game extends Activity implements OnClickListener {
 	private void stopCountdownCounter() {
 		//
 		m_CountDownCounter.cancel();
+	}
+	
+	@Override
+	protected void onResume() {
+		// 
+		super.onResume();
+		
+		// checking if to show the report question button
+		if ( m_SharedPreferences.getBoolean("checkBoxPreferenceShowReportQuestion", false)){
+			
+			buttonReportMistakeInQuestion.setVisibility(View.VISIBLE);
+		}else{
+			buttonReportMistakeInQuestion.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
