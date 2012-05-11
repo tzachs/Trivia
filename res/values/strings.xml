@@ -22,6 +22,5 @@
     <string name="checkBoxPreferenceAllowUpdateWifiTitle">Allow Update Wifi</string>
     <string name="checkBoxPreferenceAllowUpdateWifiSummary">Allow updating using the WiFi connection</string>
     <string name="checkBoxPreferenceShowReportQuestionSummary">Show report question</string>
-    <string name="checkBoxPreferenceShowReportQuestionTitle">Show report question</string>
 
 </resources>

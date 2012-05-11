@@ -59,7 +59,7 @@
             android:defaultValue="false"
             android:key="checkBoxPreferenceShowReportQuestion"
             android:summary="@string/checkBoxPreferenceShowReportQuestionSummary"
-            android:title="@string/checkBoxPreferenceShowReportQuestionTitle" />
+            android:title="Show report question" />
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -3,6 +3,7 @@ package com.tzachsolomon.trivia;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -10,6 +11,7 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 public class TriviaDbEngine {
@@ -250,9 +252,9 @@ public class TriviaDbEngine {
 	public int deleteQuestions() {
 		//
 		int ret;
-		openDbWritable();
+		this.openDbWritable();
 		ret = ourDatabase.delete(TABLE_QUESTIONS, null, null);
-		closeDb();
+		this.closeDb();
 
 		return ret;
 
@@ -312,9 +314,12 @@ public class TriviaDbEngine {
 
 	}
 
-	public void updateFromInternet(ContentValues[] values) {
+	public void updateFromInternetSync(ContentValues[] values) {
 		//
+		
 		this.openDbWritable();
+		
+		ourDatabase.delete(TABLE_QUESTIONS, null, null);
 
 		for (ContentValues cv : values) {
 			cv.put(TriviaDbEngine.KEY_CORRECT_USER, 0);
@@ -332,6 +337,76 @@ public class TriviaDbEngine {
 
 		this.closeDb();
 
+	}
+	
+	public void updateFromInternetAsync(ContentValues[] values) {
+		//
+		new UpdateFromInternetAsyncTask().execute(values);
+
+	}
+	
+	public class UpdateFromInternetAsyncTask extends AsyncTask<ContentValues, Integer, Void>{
+
+		private ProgressDialog m_ProgressDialog;
+		
+		@Override
+		protected void onPreExecute() {
+			// 
+			m_ProgressDialog = new ProgressDialog(ourContext);
+			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			m_ProgressDialog.setTitle("inserting questions to DB");
+			m_ProgressDialog.show();
+			
+			
+
+		}
+		
+		@Override
+		protected void onPostExecute(Void result) {
+			// 
+			m_ProgressDialog.dismiss();
+			
+		}
+		
+		@Override
+		protected Void doInBackground(ContentValues... params) {
+			// 
+			ourHelper = new DbHelper(ourContext);
+			ourDatabase = ourHelper.getWritableDatabase();
+			
+			ourDatabase.delete(TABLE_QUESTIONS, null, null);
+			
+			int i = 0;
+			
+			m_ProgressDialog.setMax(params.length);
+			
+
+			for (ContentValues cv : params) {
+				cv.put(TriviaDbEngine.KEY_CORRECT_USER, 0);
+				cv.put(TriviaDbEngine.KEY_WRONG_USER, 0);
+				try {
+					ourDatabase.insert(TABLE_QUESTIONS, null, cv);
+					i++;
+					publishProgress(i);
+				} catch (Exception e) {
+					String message = e.getMessage().toString();
+					if ( message != null ){
+						Log.e(TAG, message); 
+					}
+
+				}
+			}
+
+			ourHelper.close();
+			return null;
+		}
+		
+		@Override
+		protected void onProgressUpdate(Integer... values) {
+			//
+			m_ProgressDialog.setProgress(values[0]);
+		}
+		
 	}
 
 }

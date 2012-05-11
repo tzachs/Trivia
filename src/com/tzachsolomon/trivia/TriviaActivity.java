@@ -21,6 +21,14 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class TriviaActivity extends Activity implements OnClickListener {
+	
+	// TODO: different game options
+	// TODO: update only part of the database
+	// TODO: check of updates
+	// TODO: update questions correct/wrong to the database
+	// TODO: highest score
+
+	
 	private Button buttonNewGame;
 
 	private TriviaDbEngine m_TriviaDb;
@@ -48,7 +56,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 	private void checkIfFirstTime() {
 		//
 		if (m_TriviaDb.isEmpty()) {
-			updateDatabaseFromInternetDisplauQuestion("It seems this is the first time you are running Trivia.\n"
+			updateDatabaseFromInternetDisplayQuestion("It seems this is the first time you are running Trivia.\n"
 					+ "You must once update the datatable.\n"
 					+ "Update Now? (This requires internet connection)");
 		}
@@ -66,9 +74,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 		} else {
 
-			m_TriviaDb.deleteQuestions();
-
-			m_JSONHandler.setServerUrl(serverUrl);
+			
 
 			// getting the desired update method
 			updateMethod = m_SharedPreferences.getString(
@@ -80,7 +86,8 @@ public class TriviaActivity extends Activity implements OnClickListener {
 					Toast.makeText(this, "Error updating from server",
 							Toast.LENGTH_SHORT).show();
 				} else {
-					m_TriviaDb.updateFromInternet(values);
+					
+					m_TriviaDb.updateFromInternetSync(values);
 				}
 
 			} else {
@@ -91,7 +98,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 	}
 
-	private void updateDatabaseFromInternetDisplauQuestion(String i_Message) {
+	private void updateDatabaseFromInternetDisplayQuestion(String i_Message) {
 
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(i_Message);
@@ -155,7 +162,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 	private void buttonUpdateDatabase_Clicked() {
 		//
-		updateDatabaseFromInternetDisplauQuestion("Update Now? (This requires internet connection)");
+		updateDatabaseFromInternetDisplayQuestion("Update Now? (This requires internet connection)");
 
 	}
 
@@ -213,7 +220,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 	}
 
 	private void menuItemAbout_Clicked() {
-		// TODO Auto-generated method stub
+		// 
 
 	}
 

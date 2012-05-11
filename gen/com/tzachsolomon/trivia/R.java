@@ -61,7 +61,6 @@ public final class R {
         public static final int checkBoxPreferenceAllowUpdateWifiSummary=0x7f060013;
         public static final int checkBoxPreferenceAllowUpdateWifiTitle=0x7f060012;
         public static final int checkBoxPreferenceShowReportQuestionSummary=0x7f060014;
-        public static final int checkBoxPreferenceShowReportQuestionTitle=0x7f060015;
         public static final int editTextPreferenceDelayBetweenQuestionsSummary=0x7f06000a;
         public static final int editTextPreferenceDelayBetweenQuestionsTitle=0x7f06000b;
         public static final int textViewNumberOfQuestionsLeftTitle=0x7f060007;

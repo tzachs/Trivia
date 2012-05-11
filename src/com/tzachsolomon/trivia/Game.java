@@ -30,28 +30,29 @@ public class Game extends Activity implements OnClickListener {
 	public static final String TAG = Game.class.getSimpleName();
 
 	private MyCountDownCounter m_CountDownCounter;
-	private TextView textViewTime;
+	
 	private Button buttonAnswer1;
 	private Button buttonAnswer2;
 	private Button buttonAnswer3;
 	private Button buttonAnswer4;
 	private Button buttonReportMistakeInQuestion;
+	
+	private TextView textViewTime;
+	private TextView textViewQuestion;
+	private TextView textViewNumberOfQuestionsLeft;
 
 	private ArrayList<Question> m_Questions;
 	private Question m_CurrentQuestion;
-	private TextView textViewQuestion;
+	
 	private int m_QuestionIndex;
 	private int m_QuestionLength;
 
 	private TriviaDbEngine m_TriviaDb;
 	private SharedPreferences m_SharedPreferences;
-	private TextView textViewNumberOfQuestionsLeft;
-
+	
 	private Random m_Random;
 	private TextView textViewQuestionDifficulty;
 	private int m_DelayBetweenQuestions;
-
-
 	
 
 	@Override
