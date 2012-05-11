@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory android:title="Server Related" >
+    <PreferenceCategory
+        android:key="preferenceCategoryDatabaseServer" 
+        android:title="@string/preferenceCategoryDatabaseServerTitle" >
         <EditTextPreference
             android:defaultValue="http://23.23.238.181/index.php"
             android:key="editTextPreferencePrimaryServerIP"
-            android:summary="The primary database server IP"
-            android:title="Primary Server IP" />
+            android:summary="@string/editTextPreferencePrimaryServerIPSummary"
+            android:title="@string/editTextPreferencePrimaryServerIPTitle" />
 
         <ListPreference
             android:defaultValue="async"
             android:entries="@array/updateMethod"
             android:entryValues="@array/updateMethodValues"
             android:key="listPreferenceUpdateMethod"
-            android:title="Update method" />
+            android:title="@string/listPreferenceUpdateMethodTitle" 
+            android:summary="@string/listPreferenceUpdateMethodSummary"
+            />
+        	
         
         <CheckBoxPreference 
             android:defaultValue="true"
@@ -47,8 +52,8 @@
             android:defaultValue="7"
             android:inputType="number"
             android:key="editTextPreferenceCountDownTimer"
-            android:summary="Count down timer"
-            android:title="Count down timer" />
+            android:summary="@string/editTextPreferenceCountDownTimerSummary"
+            android:title="@string/editTextPreferenceCountDownTimerTitle" />
         <EditTextPreference
             android:defaultValue="500"
             android:inputType="number"
@@ -59,7 +64,7 @@
             android:defaultValue="false"
             android:key="checkBoxPreferenceShowReportQuestion"
             android:summary="@string/checkBoxPreferenceShowReportQuestionSummary"
-            android:title="Show report question" />
+            android:title="@string/checkBoxPreferenceShowReportQuestionTitle" />
     </PreferenceCategory>
 
 </PreferenceScreen>

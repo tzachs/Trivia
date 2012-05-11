@@ -2,6 +2,7 @@ package com.tzachsolomon.trivia;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 
 import android.content.ContentValues;
 
@@ -9,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import android.preference.PreferenceManager;
@@ -21,14 +23,13 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class TriviaActivity extends Activity implements OnClickListener {
-	
+
 	// TODO: different game options
 	// TODO: update only part of the database
 	// TODO: check of updates
 	// TODO: update questions correct/wrong to the database
 	// TODO: highest score
 
-	
 	private Button buttonNewGame;
 
 	private TriviaDbEngine m_TriviaDb;
@@ -42,8 +43,8 @@ public class TriviaActivity extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		
-		PreferenceManager.setDefaultValues(this, R.xml.prefs,true);
+
+		PreferenceManager.setDefaultValues(this, R.xml.prefs, true);
 
 		m_SharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
@@ -70,11 +71,11 @@ public class TriviaActivity extends Activity implements OnClickListener {
 				"editTextPreferencePrimaryServerIP", "");
 
 		if (serverUrl.contentEquals("")) {
-			Toast.makeText(this, "Error finding server URL, please check preferneces", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this,
+					"Error finding server URL, please check preferneces",
+					Toast.LENGTH_SHORT).show();
 
 		} else {
-
-			
 
 			// getting the desired update method
 			updateMethod = m_SharedPreferences.getString(
@@ -86,7 +87,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 					Toast.makeText(this, "Error updating from server",
 							Toast.LENGTH_SHORT).show();
 				} else {
-					
+
 					m_TriviaDb.updateFromInternetSync(values);
 				}
 
@@ -162,7 +163,14 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 	private void buttonUpdateDatabase_Clicked() {
 		//
-		updateDatabaseFromInternetDisplayQuestion("Update Now? (This requires internet connection)");
+		uploadCorrectWrong();
+		
+
+	}
+
+	private void uploadCorrectWrong() {
+		//
+		new UpdateCorrectWrongAsync().execute(null);
 
 	}
 
@@ -220,7 +228,65 @@ public class TriviaActivity extends Activity implements OnClickListener {
 	}
 
 	private void menuItemAbout_Clicked() {
-		// 
+		//
+
+	}
+
+	public class UpdateCorrectWrongAsync extends AsyncTask<Void, Integer, Void> {
+
+		boolean enabled;
+		ContentValues[] wrongCorrectStat;
+		private ProgressDialog m_ProgressDialog;
+
+		@Override
+		protected void onPreExecute() {
+			//
+			enabled = true; // TODO: change to shared preferences
+
+			if (enabled) {
+
+				m_ProgressDialog = new ProgressDialog(TriviaActivity.this);
+				m_ProgressDialog
+						.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+				m_ProgressDialog.setTitle("Uploading correct wrong statistics");
+				m_ProgressDialog.show();
+			}
+
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			//
+			if (enabled) {
+				m_ProgressDialog.dismiss();
+			}
+			updateDatabaseFromInternetDisplayQuestion("Update Now? (This requires internet connection)");
+
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			//
+			if (enabled) {
+				int i = 0;
+				wrongCorrectStat = m_TriviaDb.getWrongCorrectStat();
+				m_ProgressDialog.setMax(wrongCorrectStat.length);
+				for (ContentValues cv : wrongCorrectStat) {
+					if ( m_JSONHandler.uploadCorrectWrongStatistics(cv))
+					{
+						m_TriviaDb.clearUserCorrectWrongStat(cv.getAsString(TriviaDbEngine.KEY_QUESTIONID));
+					}
+					publishProgress(++i);
+				}
+			}
+			return null;
+		}
+
+		@Override
+		protected void onProgressUpdate(Integer... values) {
+			//
+			m_ProgressDialog.setProgress(values[0]);
+		}
 
 	}
 

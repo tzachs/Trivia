@@ -51,6 +51,8 @@ public class JSONHandler {
 
 	private static final String TAG_UPDATE_FROM_DB = "updateFromDb";
 	private static final String TAG_REPORT_QUESTION = "reportMistakeInQuestion";
+	private static final String TAG_UPDATE_WRONG_CORRECT = "updateWrongCorrectStat";
+	
 
 	private HttpClient m_HttpClient;
 	private String m_ServerUrl;
@@ -213,13 +215,11 @@ public class JSONHandler {
 				params.add(new BasicNameValuePair("tag", TAG_UPDATE_FROM_DB));
 
 				jsonArray = getJSONArrayFromUrl(m_ServerUrl, params);
-				if ( !jsonArray.getJSONObject(0).has(RESULT_SUCCESS)){
-					jsonArray=null;
+				if (jsonArray != null) {
+					if (!jsonArray.getJSONObject(0).has(RESULT_SUCCESS)) {
+						jsonArray = null;
+					}
 				}
-					
-				
-				
-
 
 			} else {
 				Toast.makeText(m_ActivityContext, detailedResult.toString(),
@@ -240,7 +240,7 @@ public class JSONHandler {
 				i_Description);
 
 	}
-	
+
 	/**
 	 * Function tries to retrieve the JSON object from i_URL
 	 * 
@@ -266,13 +266,13 @@ public class JSONHandler {
 				httpEntity = httpResponse.getEntity();
 				data = new String(EntityUtils.toString(httpEntity).getBytes(),
 						"UTF-8");
-				
+
 				Log.v(TAG, "the raw JSON response is " + data);
 
 				// try parse the string to a JSON object
 				try {
 					ret = new JSONObject(data);
-					
+
 				} catch (JSONException e) {
 					Log.e("JSON Parser", "Error parsing data " + e.toString());
 				}
@@ -297,7 +297,7 @@ public class JSONHandler {
 
 		return ret;
 	}
-	
+
 	/**
 	 * Function tries to retrieve the JSON object from i_URL
 	 * 
@@ -323,15 +323,13 @@ public class JSONHandler {
 				httpEntity = httpResponse.getEntity();
 				data = new String(EntityUtils.toString(httpEntity).getBytes(),
 						"UTF-8");
-				
-				Log.v(TAG, "the raw JSON response is " + data);
-				
-				
 
-				// try parse the string to a JSON object
+				Log.v(TAG, "the raw JSON response is " + data);
+
+				// try parse the string to a JSON array
 				try {
 					ret = new JSONArray(data);
-					
+
 				} catch (JSONException e) {
 					Log.e("JSON Parser", "Error parsing data " + e.toString());
 				}
@@ -519,7 +517,7 @@ public class JSONHandler {
 			if (result != null) {
 				TriviaDbEngine dbEngine = new TriviaDbEngine(m_ActivityContext);
 				dbEngine.updateFromInternetAsync(result);
-				//dbEngine.updateFromInternetSync(result);
+				// dbEngine.updateFromInternetSync(result);
 			} else {
 				Toast.makeText(m_ActivityContext,
 						"Error while trying to update from server",
@@ -539,10 +537,10 @@ public class JSONHandler {
 				jsonArray = getQuestionAsJSONArray();
 				try {
 					if (jsonArray != null) {
-						
+
 						jsonObject = jsonArray.getJSONObject(0);
 						numberOfRows = jsonObject.getInt("number_of_rows");
-						
+
 						params = new ContentValues[numberOfRows];
 						Log.v(TAG, "Number of rows to parse: " + numberOfRows);
 						m_ProgressDialog.setMax(numberOfRows);
@@ -570,6 +568,27 @@ public class JSONHandler {
 			//
 			m_ProgressDialog.setProgress(values[0]);
 		}
+	}
+
+	public boolean uploadCorrectWrongStatistics(ContentValues cv) {
+		//
+		boolean ret = false;
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		
+		params.add(new BasicNameValuePair("tag",TAG_UPDATE_WRONG_CORRECT));
+		params.add(new BasicNameValuePair("colQuestionId", cv.getAsString(TriviaDbEngine.KEY_QUESTIONID)));
+		params.add(new BasicNameValuePair("colWrongCounter", cv.getAsString(TriviaDbEngine.KEY_WRONG_USER)));
+		params.add(new BasicNameValuePair("colCorrectCounter", cv.getAsString(TriviaDbEngine.KEY_CORRECT_USER)));
+		JSONObject response = getJSONObjectFromUrl(m_ServerUrl, params);
+		
+		if ( response != null ){
+			if ( response.has(RESULT_SUCCESS)){
+				ret = true;
+			}
+		}
+		
+		return ret;
+
 	}
 
 }

@@ -6,9 +6,7 @@ import java.util.Collections;
 
 import java.util.Random;
 
-
 import org.apache.http.client.ClientProtocolException;
-
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -30,30 +28,29 @@ public class Game extends Activity implements OnClickListener {
 	public static final String TAG = Game.class.getSimpleName();
 
 	private MyCountDownCounter m_CountDownCounter;
-	
+
 	private Button buttonAnswer1;
 	private Button buttonAnswer2;
 	private Button buttonAnswer3;
 	private Button buttonAnswer4;
 	private Button buttonReportMistakeInQuestion;
-	
+
 	private TextView textViewTime;
 	private TextView textViewQuestion;
 	private TextView textViewNumberOfQuestionsLeft;
 
 	private ArrayList<Question> m_Questions;
 	private Question m_CurrentQuestion;
-	
+
 	private int m_QuestionIndex;
 	private int m_QuestionLength;
 
 	private TriviaDbEngine m_TriviaDb;
 	private SharedPreferences m_SharedPreferences;
-	
+
 	private Random m_Random;
 	private TextView textViewQuestionDifficulty;
 	private int m_DelayBetweenQuestions;
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +89,7 @@ public class Game extends Activity implements OnClickListener {
 		@Override
 		protected void onPostExecute(Void result) {
 			//
-			
+
 			startNewQuestion();
 		}
 
@@ -117,31 +114,33 @@ public class Game extends Activity implements OnClickListener {
 		buttonAnswer2.setBackgroundResource(R.drawable.blue_button);
 		buttonAnswer3.setBackgroundResource(R.drawable.blue_button);
 		buttonAnswer4.setBackgroundResource(R.drawable.blue_button);
-		
+
 		// setting number of questions left, must be before m_QuestionIndex+=
 		textViewNumberOfQuestionsLeft.setText(Integer.toString(m_QuestionLength
 				- m_QuestionIndex));
 
-		m_QuestionIndex++;
-		
-		// getting reference to the current question
-		m_CurrentQuestion = m_Questions.get(m_QuestionIndex);
+		if (m_QuestionIndex < m_QuestionLength) {
 
-		
+			m_QuestionIndex++;
 
-		// setting question difficulty
-		textViewQuestionDifficulty.setText(m_CurrentQuestion.getQuestionDifficultyLevel());
+			// getting reference to the current question
+			m_CurrentQuestion = m_Questions.get(m_QuestionIndex);
 
-		// randomize answer places (indices)
-		m_CurrentQuestion.randomizeAnswerPlaces(m_Random);
+			// setting question difficulty
+			textViewQuestionDifficulty.setText(m_CurrentQuestion
+					.getQuestionDifficultyLevel());
 
-		textViewQuestion.setText(m_CurrentQuestion.getQuestion());
-		buttonAnswer1.setText(m_CurrentQuestion.getAnswer1());
-		buttonAnswer2.setText(m_CurrentQuestion.getAnswer2());
-		buttonAnswer3.setText(m_CurrentQuestion.getAnswer3());
-		buttonAnswer4.setText(m_CurrentQuestion.getAnswer4());
+			// randomize answer places (indices)
+			m_CurrentQuestion.randomizeAnswerPlaces(m_Random);
 
-		m_CountDownCounter.start();
+			textViewQuestion.setText(m_CurrentQuestion.getQuestion());
+			buttonAnswer1.setText(m_CurrentQuestion.getAnswer1());
+			buttonAnswer2.setText(m_CurrentQuestion.getAnswer2());
+			buttonAnswer3.setText(m_CurrentQuestion.getAnswer3());
+			buttonAnswer4.setText(m_CurrentQuestion.getAnswer4());
+
+			m_CountDownCounter.start();
+		}
 
 	}
 
@@ -190,11 +189,8 @@ public class Game extends Activity implements OnClickListener {
 		buttonAnswer4.setOnClickListener(this);
 
 		buttonReportMistakeInQuestion.setOnClickListener(this);
-		
-		
-			
+
 	}
-	
 
 	private void initializeTextViews() {
 		textViewQuestion = (TextView) findViewById(R.id.textViewQuestion);
@@ -259,18 +255,20 @@ public class Game extends Activity implements OnClickListener {
 
 	private void buttonReportMistakeInQuestion_Clicked() {
 		//
-		
+
 		JSONHandler m_JSONHandler = new JSONHandler(Game.this);
-		 
+
 		try {
-			
-			m_JSONHandler.reportMistakeInQuestionAsync(m_CurrentQuestion.getQuestionId(), "no description");
-			Toast.makeText(Game.this, "sent, thanks :)", Toast.LENGTH_SHORT).show();
+
+			m_JSONHandler.reportMistakeInQuestionAsync(
+					m_CurrentQuestion.getQuestionId(), "no description");
+			Toast.makeText(Game.this, "sent, thanks :)", Toast.LENGTH_SHORT)
+					.show();
 		} catch (ClientProtocolException e) {
-			// 
+			//
 			Log.e(TAG, e.getMessage().toString());
 		} catch (IOException e) {
-			// 
+			//
 			Log.e(TAG, e.getMessage().toString());
 		}
 
@@ -306,12 +304,14 @@ public class Game extends Activity implements OnClickListener {
 				ret = 0;
 				setButtonGreen(o_Button);
 
-				m_TriviaDb.incUserCorrectCounter(m_CurrentQuestion.getQuestionId());
+				m_TriviaDb.incUserCorrectCounter(m_CurrentQuestion
+						.getQuestionId());
 
 			} else {
 				setButtonRed(o_Button);
-				m_TriviaDb.incUserWrongCounter(m_CurrentQuestion.getQuestionId());
-						
+				m_TriviaDb.incUserWrongCounter(m_CurrentQuestion
+						.getQuestionId());
+
 			}
 
 		}
@@ -338,17 +338,18 @@ public class Game extends Activity implements OnClickListener {
 		//
 		m_CountDownCounter.cancel();
 	}
-	
+
 	@Override
 	protected void onResume() {
-		// 
+		//
 		super.onResume();
-		
+
 		// checking if to show the report question button
-		if ( m_SharedPreferences.getBoolean("checkBoxPreferenceShowReportQuestion", false)){
-			
+		if (m_SharedPreferences.getBoolean(
+				"checkBoxPreferenceShowReportQuestion", false)) {
+
 			buttonReportMistakeInQuestion.setVisibility(View.VISIBLE);
-		}else{
+		} else {
 			buttonReportMistakeInQuestion.setVisibility(View.GONE);
 		}
 	}

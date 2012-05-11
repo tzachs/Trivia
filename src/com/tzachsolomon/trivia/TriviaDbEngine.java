@@ -316,9 +316,9 @@ public class TriviaDbEngine {
 
 	public void updateFromInternetSync(ContentValues[] values) {
 		//
-		
+
 		this.openDbWritable();
-		
+
 		ourDatabase.delete(TABLE_QUESTIONS, null, null);
 
 		for (ContentValues cv : values) {
@@ -328,8 +328,8 @@ public class TriviaDbEngine {
 				ourDatabase.insert(TABLE_QUESTIONS, null, cv);
 			} catch (Exception e) {
 				String message = e.getMessage().toString();
-				if ( message != null ){
-					Log.e(TAG, message); 
+				if (message != null) {
+					Log.e(TAG, message);
 				}
 
 			}
@@ -338,74 +338,122 @@ public class TriviaDbEngine {
 		this.closeDb();
 
 	}
-	
+
+	public ContentValues[] getWrongCorrectStat() {
+		//
+		ContentValues[] ret = null;
+		String[] columns = { KEY_CORRECT_USER, KEY_QUESTIONID, KEY_WRONG_USER };
+		Cursor cursor;
+		int i;
+
+		this.openDbReadable();
+
+		cursor = ourDatabase.query(TABLE_QUESTIONS, columns,
+				KEY_CORRECT_USER + ">0 OR " + KEY_WRONG_USER + ">0", null, null, null, null);
+
+		ret = new ContentValues[cursor.getCount()];
+
+		i = 0;
+
+		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+
+			ret[i] = new ContentValues();
+			DatabaseUtils.cursorRowToContentValues(cursor, ret[i]);
+
+			i++;
+
+		}
+
+		cursor.close();
+
+		this.closeDb();
+
+		return ret;
+	}
+
 	public void updateFromInternetAsync(ContentValues[] values) {
 		//
 		new UpdateFromInternetAsyncTask().execute(values);
 
 	}
-	
-	public class UpdateFromInternetAsyncTask extends AsyncTask<ContentValues, Integer, Void>{
+
+	public class UpdateFromInternetAsyncTask extends
+			AsyncTask<ContentValues, Integer, Void> {
 
 		private ProgressDialog m_ProgressDialog;
-		
+
 		@Override
 		protected void onPreExecute() {
-			// 
+			//
 			m_ProgressDialog = new ProgressDialog(ourContext);
 			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			m_ProgressDialog.setTitle("inserting questions to DB");
 			m_ProgressDialog.show();
-			
-			
 
 		}
-		
+
 		@Override
 		protected void onPostExecute(Void result) {
-			// 
+			//
 			m_ProgressDialog.dismiss();
-			
+
 		}
-		
+
 		@Override
 		protected Void doInBackground(ContentValues... params) {
-			// 
+			//
 			ourHelper = new DbHelper(ourContext);
 			ourDatabase = ourHelper.getWritableDatabase();
-			
-			ourDatabase.delete(TABLE_QUESTIONS, null, null);
-			
-			int i = 0;
-			
-			m_ProgressDialog.setMax(params.length);
-			
 
-			for (ContentValues cv : params) {
-				cv.put(TriviaDbEngine.KEY_CORRECT_USER, 0);
-				cv.put(TriviaDbEngine.KEY_WRONG_USER, 0);
-				try {
-					ourDatabase.insert(TABLE_QUESTIONS, null, cv);
-					i++;
-					publishProgress(i);
-				} catch (Exception e) {
-					String message = e.getMessage().toString();
-					if ( message != null ){
-						Log.e(TAG, message); 
+			if (params != null) {
+
+				ourDatabase.delete(TABLE_QUESTIONS, null, null);
+
+				int i = 0;
+
+				m_ProgressDialog.setMax(params.length);
+
+				for (ContentValues cv : params) {
+					cv.put(TriviaDbEngine.KEY_CORRECT_USER, 0);
+					cv.put(TriviaDbEngine.KEY_WRONG_USER, 0);
+					try {
+						ourDatabase.insert(TABLE_QUESTIONS, null, cv);
+						i++;
+						publishProgress(i);
+					} catch (Exception e) {
+						String message = e.getMessage().toString();
+						if (message != null) {
+							Log.e(TAG, message);
+						}
+
 					}
-
 				}
+			}else {
+				Log.e(TAG, "params are null, database wasn't updated");
 			}
 
 			ourHelper.close();
 			return null;
 		}
-		
+
 		@Override
 		protected void onProgressUpdate(Integer... values) {
 			//
 			m_ProgressDialog.setProgress(values[0]);
 		}
+
+	}
+
+	public void clearUserCorrectWrongStat(String i_QuestionId) {
+		// 
+		this.openDbWritable();
+		ContentValues values = new ContentValues();
+		values.put(KEY_WRONG_USER, 0);
+		values.put(KEY_CORRECT_USER, 0);
+		
+		ourDatabase.update(TABLE_QUESTIONS, values, KEY_QUESTIONID + "=?", new String[] { i_QuestionId});
+		
+		this.closeDb();
 		
 	}
 
