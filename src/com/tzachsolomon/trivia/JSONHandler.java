@@ -52,7 +52,7 @@ public class JSONHandler {
 	private static final String TAG_UPDATE_FROM_DB = "updateFromDb";
 	private static final String TAG_REPORT_QUESTION = "reportMistakeInQuestion";
 	private static final String TAG_UPDATE_WRONG_CORRECT = "updateWrongCorrectStat";
-	
+	private static final String TAG_GET_LAST_UPDATE = "getLastUpdate";
 
 	private HttpClient m_HttpClient;
 	private String m_ServerUrl;
@@ -400,7 +400,7 @@ public class JSONHandler {
 
 	}
 
-	private boolean isInternetAvailable(StringBuilder i_DetailedResult) {
+	public boolean isInternetAvailable(StringBuilder i_DetailedResult) {
 		//
 		boolean ret = false;
 		NetworkInfo info;
@@ -574,21 +574,43 @@ public class JSONHandler {
 		//
 		boolean ret = false;
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		
-		params.add(new BasicNameValuePair("tag",TAG_UPDATE_WRONG_CORRECT));
-		params.add(new BasicNameValuePair("colQuestionId", cv.getAsString(TriviaDbEngine.KEY_QUESTIONID)));
-		params.add(new BasicNameValuePair("colWrongCounter", cv.getAsString(TriviaDbEngine.KEY_WRONG_USER)));
-		params.add(new BasicNameValuePair("colCorrectCounter", cv.getAsString(TriviaDbEngine.KEY_CORRECT_USER)));
+
+		params.add(new BasicNameValuePair("tag", TAG_UPDATE_WRONG_CORRECT));
+		params.add(new BasicNameValuePair("colQuestionId", cv
+				.getAsString(TriviaDbEngine.KEY_QUESTIONID)));
+		params.add(new BasicNameValuePair("colWrongCounter", cv
+				.getAsString(TriviaDbEngine.KEY_WRONG_USER)));
+		params.add(new BasicNameValuePair("colCorrectCounter", cv
+				.getAsString(TriviaDbEngine.KEY_CORRECT_USER)));
 		JSONObject response = getJSONObjectFromUrl(m_ServerUrl, params);
-		
-		if ( response != null ){
-			if ( response.has(RESULT_SUCCESS)){
+
+		if (response != null) {
+			if (response.has(RESULT_SUCCESS)) {
 				ret = true;
 			}
 		}
-		
+
 		return ret;
 
+	}
+
+	public boolean isUpdateAvailable(long lastUpdate) {
+		//
+		boolean ret = false;
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+
+		params.add(new BasicNameValuePair("tag", TAG_GET_LAST_UPDATE));
+
+		JSONObject obj = getJSONObjectFromUrl(m_ServerUrl, params);
+
+		if (obj.has(RESULT_SUCCESS)) {
+			long lastUpdateFromDb = obj.optLong("max");
+
+			ret = (lastUpdateFromDb > lastUpdate) ? true : false;
+
+		}
+
+		return ret;
 	}
 
 }

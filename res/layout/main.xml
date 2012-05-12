@@ -21,5 +21,13 @@
         android:layout_below="@id/buttonNewGame"
         android:layout_margin="4dp"
         android:text="@string/buttonUpdateDatabaseText" />
+    
+    <Button
+        android:id="@+id/buttonPreferences"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonUpdateDatabase"
+        android:layout_margin="4dp"
+        android:text="@string/buttonPreferencesText" />
 
 </RelativeLayout>

@@ -11,6 +11,7 @@ import android.content.Intent;
 
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+
 import android.os.Bundle;
 
 import android.preference.PreferenceManager;
@@ -26,8 +27,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 	// TODO: different game options
 	// TODO: update only part of the database
-	// TODO: check of updates
-	// TODO: update questions correct/wrong to the database
+	// TODO: improve update wrong/correct statistics from the user
 	// TODO: highest score
 
 	private Button buttonNewGame;
@@ -37,6 +37,8 @@ public class TriviaActivity extends Activity implements OnClickListener {
 	private Button buttonUpdateDatabase;
 
 	private SharedPreferences m_SharedPreferences;
+
+	private Button buttonPreferences;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -52,6 +54,24 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		initializeVariables();
 
 		checkIfFirstTime();
+		
+		checkIsUpdateAvailable();
+
+	}
+
+	/**
+	 * Function receives the max between question id and last update columns.
+	 * The max value is the last update that was made from the database
+	 */
+	private void checkIsUpdateAvailable() {
+		// 
+		long lastUpdate = m_TriviaDb.getLastUpdate();
+		
+		if ( m_JSONHandler.isUpdateAvailable(lastUpdate)){
+			updateDatabaseFromInternetDisplayQuestion("Update is available.\nUpdate database?");
+					
+		}
+		
 	}
 
 	private void checkIfFirstTime() {
@@ -72,7 +92,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 		if (serverUrl.contentEquals("")) {
 			Toast.makeText(this,
-					"Error finding server URL, please check preferneces",
+					"Error finding server URL, please check prefereneces",
 					Toast.LENGTH_SHORT).show();
 
 		} else {
@@ -101,30 +121,40 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 	private void updateDatabaseFromInternetDisplayQuestion(String i_Message) {
 
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage(i_Message);
-		builder.setCancelable(false);
-		builder.setPositiveButton("Update",
-				new DialogInterface.OnClickListener() {
+		StringBuilder detailedResult = new StringBuilder();
+		long lastUpdate = m_TriviaDb.getLastUpdate();
 
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						//
+		if (m_JSONHandler.isInternetAvailable(detailedResult) && m_JSONHandler.isUpdateAvailable(lastUpdate)) {
 
-						updateDatabaseFromInternet();
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage(i_Message);
+			builder.setCancelable(false);
+			builder.setPositiveButton("Update",
+					new DialogInterface.OnClickListener() {
 
-					}
-				});
-		builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							//
 
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				//
+							updateDatabaseFromInternet();
 
-			}
-		});
+						}
+					});
+			builder.setNegativeButton("No",
+					new DialogInterface.OnClickListener() {
 
-		builder.show();
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							//
+
+						}
+					});
+
+			builder.show();
+		} else {
+			Toast.makeText(TriviaActivity.this, detailedResult.toString(),
+					Toast.LENGTH_SHORT).show();
+		}
 
 	}
 
@@ -142,9 +172,17 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		//
 		buttonNewGame = (Button) findViewById(R.id.buttonNewGame);
 		buttonUpdateDatabase = (Button) findViewById(R.id.buttonUpdateDatabase);
+		buttonPreferences = (Button) findViewById(R.id.buttonPreferences);
 
 		buttonNewGame.setOnClickListener(this);
 		buttonUpdateDatabase.setOnClickListener(this);
+		buttonPreferences.setOnClickListener(this);
+		
+		// checking if the device is with API 10 and earlier, 
+		// if so, hide the preferences button since it can be done through menu option
+		if ( android.os.Build.VERSION.SDK_INT < 10 ){
+			buttonPreferences.setVisibility(View.GONE);
+		}
 
 	}
 
@@ -157,20 +195,30 @@ public class TriviaActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.buttonUpdateDatabase:
 			buttonUpdateDatabase_Clicked();
+			break;
+
+		case R.id.buttonPreferences:
+			buttonPreferences_Clicked();
+			break;
 		}
+
+	}
+
+	private void buttonPreferences_Clicked() {
+		//
+		menuItemPreferences_Clicked();
 
 	}
 
 	private void buttonUpdateDatabase_Clicked() {
 		//
 		uploadCorrectWrong();
-		
 
 	}
 
 	private void uploadCorrectWrong() {
 		//
-		new UpdateCorrectWrongAsync().execute(null);
+		new UpdateCorrectWrongAsync().execute();
 
 	}
 
@@ -240,8 +288,11 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 		@Override
 		protected void onPreExecute() {
+			StringBuilder detailedResult = new StringBuilder();
 			//
-			enabled = true; // TODO: change to shared preferences
+			enabled = m_SharedPreferences.getBoolean(
+					"checkBoxPreferenceUploadCorrectWrongUserStat", true)
+					&& m_JSONHandler.isInternetAvailable(detailedResult);
 
 			if (enabled) {
 
@@ -250,8 +301,8 @@ public class TriviaActivity extends Activity implements OnClickListener {
 						.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 				m_ProgressDialog.setTitle("Uploading correct wrong statistics");
 				m_ProgressDialog.show();
-			}
-
+			} // ignoring checking if isInternetAvailable returned false
+			// since it updateFromDatabase will show that error. 
 		}
 
 		@Override
@@ -272,9 +323,9 @@ public class TriviaActivity extends Activity implements OnClickListener {
 				wrongCorrectStat = m_TriviaDb.getWrongCorrectStat();
 				m_ProgressDialog.setMax(wrongCorrectStat.length);
 				for (ContentValues cv : wrongCorrectStat) {
-					if ( m_JSONHandler.uploadCorrectWrongStatistics(cv))
-					{
-						m_TriviaDb.clearUserCorrectWrongStat(cv.getAsString(TriviaDbEngine.KEY_QUESTIONID));
+					if (m_JSONHandler.uploadCorrectWrongStatistics(cv)) {
+						m_TriviaDb.clearUserCorrectWrongStat(cv
+								.getAsString(TriviaDbEngine.KEY_QUESTIONID));
 					}
 					publishProgress(++i);
 				}

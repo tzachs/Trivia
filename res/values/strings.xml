@@ -13,8 +13,8 @@
     <string name="buttonReportMistakeInQuestion">דווח שגיאה</string>
     <string name="editTextPreferenceDelayBetweenQuestionsSummary">כמה זמן לחכות בין שאלות במילי שניות</string>
     <string name="editTextPreferenceDelayBetweenQuestionsTitle">השהיה בין שאלות</string>
-    <string name="checkBoxPreferenceAllowUpdateMobileNetworkRoamingSummary"></string>
-    <string name="checkBoxPreferenceAllowUpdateMobileNetworkRoamingTitle">הרשה עדכונים בזמן נדידה (לא מומלץ)</string>
+    <string name="checkBoxPreferenceAllowUpdateMobileNetworkRoamingSummary">הרשה עדכונים בזמן נדידה (לא מומלץ)</string>
+    <string name="checkBoxPreferenceAllowUpdateMobileNetworkRoamingTitle">הרשה עדכונים בזמן נדידה </string>
     <string name="checkBoxPreferenceAllowUpdateMobileNetwork3GTitle">הרשה רשת דור שלישי בלבד</string>
     <string name="checkBoxPreferenceAllowUpdateMobileNetwork3GSummary">הרשה עדכונים דרך רשת סלולר דור שלישי ומעלה בלבד</string>
     <string name="checkBoxPreferenceAllowUpdateMobileNetworkTitle">הרשה עדכונים דרך רשת סלולר</string>
@@ -23,13 +23,17 @@
     <string name="checkBoxPreferenceAllowUpdateWifiSummary">הרשה עדכונים דרך חיבור WIFI</string>
     <string name="checkBoxPreferenceShowReportQuestionTitle">אפשר דווח שגיאה</string>
     <string name="checkBoxPreferenceShowReportQuestionSummary">הראה כפתור דווח שגיאה בשאלה</string>
-    <string name="preferenceCategoryDatabaseServerTitle">הגדרות שרת</string>
+    <string name="preferenceCategoryDatabaseServerAdvancedTitle">הגדרות שרת מתקדם</string>
     <string name="editTextPreferencePrimaryServerIPSummary">כתובת IP של השרת</string>
     <string name="editTextPreferencePrimaryServerIPTitle">כתובת שרת</string>
     <string name="listPreferenceUpdateMethodTitle">שיטת עבודה</string>
     <string name="listPreferenceUpdateMethodSummary">שיטת עבודה עם השרת, אסינכרונית או סינכרונית</string>
     <string name="editTextPreferenceCountDownTimerSummary">מספר השניות לכל שאלה</string>
     <string name="editTextPreferenceCountDownTimerTitle">מספר שניות לשאלה</string>
+    <string name="buttonPreferencesText">הגדרות</string>
+    <string name="preferenceCategoryDatabaseServerTitle">הגדרות שרת</string>
+    <string name="checkBoxPreferenceUploadCorrectWrongUserStatSummary">העלה מידע על שאלות בהן המשתמש צדק או טעה</string>
+    <string name="checkBoxPreferenceUploadCorrectWrongUserStatTitle">העלה סטטיסטיקות</string>
     
 
 </resources>

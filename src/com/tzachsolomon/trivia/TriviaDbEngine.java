@@ -19,7 +19,7 @@ public class TriviaDbEngine {
 	public static final String TAG = TriviaDbEngine.class.getSimpleName();
 
 	private static final String DATABASE_NAME = "TriviaDb";
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 4;
 	private static final String TABLE_QUESTIONS = "tblQuestions";
 
 	public static final String KEY_ROWID = "_id";
@@ -90,7 +90,7 @@ public class TriviaDbEngine {
 			sb.append(KEY_WRONG_USER + " INTEGER NOT NULL,");
 			sb.append(KEY_ENABLED + " BOOLEAN NOT NULL, ");
 
-			sb.append(KEY_LAST_UPDATE + " TEXT NOT NULL ");
+			sb.append(KEY_LAST_UPDATE + " INTEGER NOT NULL ");
 			sb.append(");");
 
 			Log.v(TAG, sb.toString());
@@ -348,8 +348,8 @@ public class TriviaDbEngine {
 
 		this.openDbReadable();
 
-		cursor = ourDatabase.query(TABLE_QUESTIONS, columns,
-				KEY_CORRECT_USER + ">0 OR " + KEY_WRONG_USER + ">0", null, null, null, null);
+		cursor = ourDatabase.query(TABLE_QUESTIONS, columns, KEY_CORRECT_USER
+				+ ">0 OR " + KEY_WRONG_USER + ">0", null, null, null, null);
 
 		ret = new ContentValues[cursor.getCount()];
 
@@ -428,7 +428,7 @@ public class TriviaDbEngine {
 
 					}
 				}
-			}else {
+			} else {
 				Log.e(TAG, "params are null, database wasn't updated");
 			}
 
@@ -445,16 +445,47 @@ public class TriviaDbEngine {
 	}
 
 	public void clearUserCorrectWrongStat(String i_QuestionId) {
-		// 
+		//
 		this.openDbWritable();
 		ContentValues values = new ContentValues();
 		values.put(KEY_WRONG_USER, 0);
 		values.put(KEY_CORRECT_USER, 0);
-		
-		ourDatabase.update(TABLE_QUESTIONS, values, KEY_QUESTIONID + "=?", new String[] { i_QuestionId});
-		
+
+		ourDatabase.update(TABLE_QUESTIONS, values, KEY_QUESTIONID + "=?",
+				new String[] { i_QuestionId });
+
 		this.closeDb();
-		
+
+	}
+
+	public long getLastUpdate() {
+		//
+		String[] columns = new String[] { "MAX("+KEY_QUESTIONID+")", "MAX("+KEY_LAST_UPDATE+")" };
+		long ret = 0;
+		int columnIndex0, columnIndex1;
+		long qid,qlastupdate;
+		this.openDbReadable();
+
+		Cursor cursor = ourDatabase.query(TABLE_QUESTIONS, columns, null, null, null, null, null);
+
+		if (cursor.getCount() > 0) {
+
+			columnIndex0 = cursor.getColumnIndex(columns[0]);
+			columnIndex1 = cursor.getColumnIndex(columns[1]);
+			
+			cursor.moveToFirst();
+			
+			qid = cursor.getLong(columnIndex0);
+			qlastupdate = cursor.getLong(columnIndex1);
+			
+			ret = ( qid >= qlastupdate ) ? qid : qlastupdate; 
+			
+		}
+
+		cursor.close();
+
+		this.closeDb();
+		return ret;
 	}
 
 }

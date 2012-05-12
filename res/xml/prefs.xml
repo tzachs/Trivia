@@ -1,52 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory
-        android:key="preferenceCategoryDatabaseServer" 
-        android:title="@string/preferenceCategoryDatabaseServerTitle" >
-        <EditTextPreference
-            android:defaultValue="http://23.23.238.181/index.php"
-            android:key="editTextPreferencePrimaryServerIP"
-            android:summary="@string/editTextPreferencePrimaryServerIPSummary"
-            android:title="@string/editTextPreferencePrimaryServerIPTitle" />
-
-        <ListPreference
-            android:defaultValue="async"
-            android:entries="@array/updateMethod"
-            android:entryValues="@array/updateMethodValues"
-            android:key="listPreferenceUpdateMethod"
-            android:title="@string/listPreferenceUpdateMethodTitle" 
-            android:summary="@string/listPreferenceUpdateMethodSummary"
-            />
-        	
-        
-        <CheckBoxPreference 
-            android:defaultValue="true"
-            android:key="checkBoxPreferenceAllowUpdateWifi"
-            android:title="@string/checkBoxPreferenceAllowUpdateWifiTitle"
-            android:summary="@string/checkBoxPreferenceAllowUpdateWifiSummary"
-            />
-        <CheckBoxPreference 
-            android:defaultValue="false"
-            android:key="checkBoxPreferenceAllowUpdateMobileNetwork"
-            android:title="@string/checkBoxPreferenceAllowUpdateMobileNetworkTitle"
-            android:summary="@string/checkBoxPreferenceAllowUpdateMobileNetworkSummary"
-            />
-        <CheckBoxPreference 
-            android:enabled="false"
-            android:defaultValue="true"
-            android:key="checkBoxPreferenceAllowUpdateMobileNetwork3G"
-            android:title="@string/checkBoxPreferenceAllowUpdateMobileNetwork3GTitle"
-            android:summary="@string/checkBoxPreferenceAllowUpdateMobileNetwork3GSummary"
-            />
-        <CheckBoxPreference 
-            android:enabled="false"
-            android:defaultValue="false"
-            android:key="checkBoxPreferenceAllowUpdateMobileNetworkRoaming"
-            android:title="@string/checkBoxPreferenceAllowUpdateMobileNetworkRoamingTitle"
-            android:summary="@string/checkBoxPreferenceAllowUpdateMobileNetworkRoamingSummary"
-            />
-    </PreferenceCategory>
     <PreferenceCategory android:title="Game Related" >
         <EditTextPreference
             android:defaultValue="7"
@@ -58,13 +12,63 @@
             android:defaultValue="500"
             android:inputType="number"
             android:key="editTextPreferenceDelayBetweenQuestions"
-            android:title="@string/editTextPreferenceDelayBetweenQuestionsTitle"
-            android:summary="@string/editTextPreferenceDelayBetweenQuestionsSummary" />
+            android:summary="@string/editTextPreferenceDelayBetweenQuestionsSummary"
+            android:title="@string/editTextPreferenceDelayBetweenQuestionsTitle" />
+
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="checkBoxPreferenceShowReportQuestion"
             android:summary="@string/checkBoxPreferenceShowReportQuestionSummary"
             android:title="@string/checkBoxPreferenceShowReportQuestionTitle" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="preferenceCategoryDatabaseServer"
+        android:title="@string/preferenceCategoryDatabaseServerTitle" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="checkBoxPreferenceUploadCorrectWrongUserStat"
+            android:summary="@string/checkBoxPreferenceUploadCorrectWrongUserStatSummary"
+            android:title="@string/checkBoxPreferenceUploadCorrectWrongUserStatTitle" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="preferenceCategoryDatabaseServerAdvanced"
+        android:title="@string/preferenceCategoryDatabaseServerAdvancedTitle" >
+        <EditTextPreference
+            android:defaultValue="http://23.23.238.181/index.php"
+            android:key="editTextPreferencePrimaryServerIP"
+            android:summary="@string/editTextPreferencePrimaryServerIPSummary"
+            android:title="@string/editTextPreferencePrimaryServerIPTitle" />
+
+        <ListPreference
+            android:defaultValue="async"
+            android:entries="@array/updateMethod"
+            android:entryValues="@array/updateMethodValues"
+            android:key="listPreferenceUpdateMethod"
+            android:summary="@string/listPreferenceUpdateMethodSummary"
+            android:title="@string/listPreferenceUpdateMethodTitle" />
+
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="checkBoxPreferenceAllowUpdateWifi"
+            android:summary="@string/checkBoxPreferenceAllowUpdateWifiSummary"
+            android:title="@string/checkBoxPreferenceAllowUpdateWifiTitle" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="checkBoxPreferenceAllowUpdateMobileNetwork"
+            android:summary="@string/checkBoxPreferenceAllowUpdateMobileNetworkSummary"
+            android:title="@string/checkBoxPreferenceAllowUpdateMobileNetworkTitle" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:enabled="false"
+            android:key="checkBoxPreferenceAllowUpdateMobileNetwork3G"
+            android:summary="@string/checkBoxPreferenceAllowUpdateMobileNetwork3GSummary"
+            android:title="@string/checkBoxPreferenceAllowUpdateMobileNetwork3GTitle" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:enabled="false"
+            android:key="checkBoxPreferenceAllowUpdateMobileNetworkRoaming"
+            android:summary="@string/checkBoxPreferenceAllowUpdateMobileNetworkRoamingSummary"
+            android:title="@string/checkBoxPreferenceAllowUpdateMobileNetworkRoamingTitle" />
     </PreferenceCategory>
 
 </PreferenceScreen>
