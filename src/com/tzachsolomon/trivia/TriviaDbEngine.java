@@ -319,13 +319,24 @@ public class TriviaDbEngine {
 
 		this.openDbWritable();
 
-		ourDatabase.delete(TABLE_QUESTIONS, null, null);
-
 		for (ContentValues cv : values) {
-			cv.put(TriviaDbEngine.KEY_CORRECT_USER, 0);
-			cv.put(TriviaDbEngine.KEY_WRONG_USER, 0);
+
 			try {
-				ourDatabase.insert(TABLE_QUESTIONS, null, cv);
+
+				// if the questions exits then it only updates
+				String questionId = cv.getAsString(KEY_QUESTIONID);
+				if (isQuestionExist(questionId)) {
+					ourDatabase.update(TABLE_QUESTIONS, cv, KEY_QUESTIONID
+							+ "='?'", new String[] { questionId });
+				} else {
+					// only if its a new question then insert the wrong correct
+					// user statistics to the database
+					// this isn't insert in update process since this is taken
+					// care in function uploadCorrectWrong
+					cv.put(TriviaDbEngine.KEY_CORRECT_USER, 0);
+					cv.put(TriviaDbEngine.KEY_WRONG_USER, 0);
+					ourDatabase.insert(TABLE_QUESTIONS, null, cv);
+				}
 			} catch (Exception e) {
 				String message = e.getMessage().toString();
 				if (message != null) {
@@ -337,6 +348,22 @@ public class TriviaDbEngine {
 
 		this.closeDb();
 
+	}
+
+	private boolean isQuestionExist(String i_QuestionId) {
+		//
+		boolean ret = false;
+		String query = String.format("SELECT 1 FROM %1$s WHERE %2$s =%3$s",TABLE_QUESTIONS, KEY_QUESTIONID,i_QuestionId);
+		
+		Log.v(TAG, "isQuestionExist " + query);
+
+		Cursor cursor = ourDatabase.rawQuery(query,null);
+				
+				
+		ret = (cursor.getCount() > 0);
+		cursor.close();
+
+		return ret;
 	}
 
 	public ContentValues[] getWrongCorrectStat() {
@@ -387,7 +414,7 @@ public class TriviaDbEngine {
 			//
 			m_ProgressDialog = new ProgressDialog(ourContext);
 			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			m_ProgressDialog.setTitle("inserting questions to DB");
+			m_ProgressDialog.setTitle("Inserting questions to DB");
 			m_ProgressDialog.show();
 
 		}
@@ -407,19 +434,31 @@ public class TriviaDbEngine {
 
 			if (params != null) {
 
-				ourDatabase.delete(TABLE_QUESTIONS, null, null);
-
 				int i = 0;
 
 				m_ProgressDialog.setMax(params.length);
 
 				for (ContentValues cv : params) {
-					cv.put(TriviaDbEngine.KEY_CORRECT_USER, 0);
-					cv.put(TriviaDbEngine.KEY_WRONG_USER, 0);
+
 					try {
-						ourDatabase.insert(TABLE_QUESTIONS, null, cv);
-						i++;
-						publishProgress(i);
+
+						// if the questions exits then it only updates
+						String questionId = cv.getAsString(KEY_QUESTIONID);
+						if (isQuestionExist(questionId)) {
+							ourDatabase.update(TABLE_QUESTIONS, cv,	KEY_QUESTIONID + "=?",
+									new String[] { questionId });
+						} else {
+							// only if its a new question then insert the wrong
+							// correct
+							// user statistics to the database
+							// this isn't insert in update process since this is
+							// taken
+							// care in function uploadCorrectWrong
+							cv.put(TriviaDbEngine.KEY_CORRECT_USER, 0);
+							cv.put(TriviaDbEngine.KEY_WRONG_USER, 0);
+							ourDatabase.insert(TABLE_QUESTIONS, null, cv);
+						}
+
 					} catch (Exception e) {
 						String message = e.getMessage().toString();
 						if (message != null) {
@@ -427,6 +466,9 @@ public class TriviaDbEngine {
 						}
 
 					}
+
+					i++;
+					publishProgress(i);
 				}
 			} else {
 				Log.e(TAG, "params are null, database wasn't updated");
@@ -460,26 +502,28 @@ public class TriviaDbEngine {
 
 	public long getLastUpdate() {
 		//
-		String[] columns = new String[] { "MAX("+KEY_QUESTIONID+")", "MAX("+KEY_LAST_UPDATE+")" };
+		String[] columns = new String[] { "MAX(" + KEY_QUESTIONID + ")",
+				"MAX(" + KEY_LAST_UPDATE + ")" };
 		long ret = 0;
 		int columnIndex0, columnIndex1;
-		long qid,qlastupdate;
+		long qid, qlastupdate;
 		this.openDbReadable();
 
-		Cursor cursor = ourDatabase.query(TABLE_QUESTIONS, columns, null, null, null, null, null);
+		Cursor cursor = ourDatabase.query(TABLE_QUESTIONS, columns, null, null,
+				null, null, null);
 
 		if (cursor.getCount() > 0) {
 
 			columnIndex0 = cursor.getColumnIndex(columns[0]);
 			columnIndex1 = cursor.getColumnIndex(columns[1]);
-			
+
 			cursor.moveToFirst();
-			
+
 			qid = cursor.getLong(columnIndex0);
 			qlastupdate = cursor.getLong(columnIndex1);
-			
-			ret = ( qid >= qlastupdate ) ? qid : qlastupdate; 
-			
+
+			ret = (qid >= qlastupdate) ? qid : qlastupdate;
+
 		}
 
 		cursor.close();

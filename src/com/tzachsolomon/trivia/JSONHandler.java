@@ -89,8 +89,11 @@ public class JSONHandler {
 	 * Function starts an asynchronous worker thread to receive update from the
 	 * database server
 	 */
-	public void updateFromInternetAsync() {
-		ContentValues[] ret = null;
+	public void updateFromInternetAsync(long i_LastUserUpdate) {
+		ContentValues[] ret = new ContentValues[1];
+		
+		ret[0] = new ContentValues();
+		ret[0].put("lastUserUpdate", i_LastUserUpdate);
 
 		new GetQuestionFromServerAsyncTask().execute(ret);
 
@@ -102,11 +105,11 @@ public class JSONHandler {
 	 * 
 	 * @return Array of content values, null in case error occurred
 	 */
-	public ContentValues[] updateFromInternetSync() {
+	public ContentValues[] updateFromInternetSync(long i_LastUserUpdate) {
 		ContentValues[] ret = null;
 
 		try {
-			ret = handleRead();
+			ret = handleRead(i_LastUserUpdate);
 		} catch (ClientProtocolException e) {
 
 			Log.e(TAG, e.getMessage().toString());
@@ -131,7 +134,7 @@ public class JSONHandler {
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	private ContentValues[] handleRead() throws ClientProtocolException,
+	private ContentValues[] handleRead(long i_LastUserUpdate) throws ClientProtocolException,
 			IOException, JSONException {
 		ContentValues[] ret = null;
 
@@ -140,7 +143,7 @@ public class JSONHandler {
 		int numberOfRows, i;
 
 		try {
-			jsonArray = getQuestionAsJSONArray();
+			jsonArray = getQuestionAsJSONArray(i_LastUserUpdate);
 			// checking if the wasn't any errors while getting the JSON array
 			if (jsonArray != null) {
 				// getting the first object
@@ -204,15 +207,19 @@ public class JSONHandler {
 	 * 
 	 * @return
 	 */
-	private JSONArray getQuestionAsJSONArray() {
+	private JSONArray getQuestionAsJSONArray(long i_LastUpdate) {
 		JSONArray jsonArray = null;
 		StringBuilder detailedResult = new StringBuilder();
+		
 
 		try {
 			if (isInternetAvailable(detailedResult)) {
 
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
 				params.add(new BasicNameValuePair("tag", TAG_UPDATE_FROM_DB));
+				params.add(new BasicNameValuePair("lastUserUpdate", Long.toString(i_LastUpdate)));
+				
+				
 
 				jsonArray = getJSONArrayFromUrl(m_ServerUrl, params);
 				if (jsonArray != null) {
@@ -263,11 +270,12 @@ public class JSONHandler {
 
 			if (status == 200) {
 				httpEntity = httpResponse.getEntity();
-				httpEntity = httpResponse.getEntity();
+				
 				data = new String(EntityUtils.toString(httpEntity).getBytes(),
 						"UTF-8");
 
 				Log.v(TAG, "the raw JSON response is " + data);
+				
 
 				// try parse the string to a JSON object
 				try {
@@ -276,12 +284,16 @@ public class JSONHandler {
 				} catch (JSONException e) {
 					Log.e("JSON Parser", "Error parsing data " + e.toString());
 				}
+				
+				
 
 			} else {
 				Log.e(TAG,
 						"status code from server is "
 								+ Integer.toString(status));
 			}
+			
+			
 
 		} catch (UnsupportedEncodingException e) {
 
@@ -533,8 +545,14 @@ public class JSONHandler {
 				JSONArray jsonArray;
 				JSONObject jsonObject;
 				int numberOfRows, i;
+				long lastUserUpdate = 0;
+				
+				if ( params.length > 0){
+					lastUserUpdate = params[0].getAsLong("lastUserUpdate");
+				}
+				
 
-				jsonArray = getQuestionAsJSONArray();
+				jsonArray = getQuestionAsJSONArray(lastUserUpdate);
 				try {
 					if (jsonArray != null) {
 
@@ -594,23 +612,24 @@ public class JSONHandler {
 
 	}
 
-	public boolean isUpdateAvailable(long lastUpdate) {
+	public int isUpdateAvailable(long lastUpdate) {
 		//
-		boolean ret = false;
+		int ret = -1;
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 
 		params.add(new BasicNameValuePair("tag", TAG_GET_LAST_UPDATE));
+		params.add(new BasicNameValuePair("lastUserUpdate", Long.toString(lastUpdate)));
 
 		JSONObject obj = getJSONObjectFromUrl(m_ServerUrl, params);
 
-		if (obj.has(RESULT_SUCCESS)) {
-			long lastUpdateFromDb = obj.optLong("max");
+		if (obj != null) {
 
-			ret = (lastUpdateFromDb > lastUpdate) ? true : false;
+			if (obj.has(RESULT_SUCCESS)) {
+				 ret = obj.optInt("number");
 
+			}
 		}
 
 		return ret;
 	}
-
 }
