@@ -29,6 +29,11 @@ public class TriviaActivity extends Activity implements OnClickListener {
 	// TODO: different game options
 	// TODO: highest score
 	// TODO: create levels
+	// TODO: Delete database
+	// TODO: play categories
+	// TODO: play till you die
+	// TODO: play in increasing levels
+	// TODO: create service to update the database daily
 
 	public static final String TAG = TriviaActivity.class.getSimpleName();
 
@@ -41,6 +46,8 @@ public class TriviaActivity extends Activity implements OnClickListener {
 	private SharedPreferences m_SharedPreferences;
 
 	private Button buttonPreferences;
+
+	private Button buttonNewGameLevels;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -213,10 +220,12 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		buttonNewGame = (Button) findViewById(R.id.buttonNewGame);
 		buttonUpdateDatabase = (Button) findViewById(R.id.buttonUpdateDatabase);
 		buttonPreferences = (Button) findViewById(R.id.buttonPreferences);
+		buttonNewGameLevels = (Button)findViewById(R.id.buttonNewGameLevels);
 
 		buttonNewGame.setOnClickListener(this);
 		buttonUpdateDatabase.setOnClickListener(this);
 		buttonPreferences.setOnClickListener(this);
+		buttonNewGameLevels.setOnClickListener(this);
 
 		// checking if the device is with API 11 and earlier,
 		// if so, hide the preferences button since it can be done through menu
@@ -234,6 +243,12 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		case R.id.buttonNewGame:
 			buttonNewGame_Clicked();
 			break;
+			
+		case R.id.buttonNewGameLevels:
+			buttonNewGameLevels_Clicked();
+			break;
+			
+			
 		case R.id.buttonUpdateDatabase:
 			buttonUpdateDatabase_Clicked();
 			break;
@@ -243,6 +258,13 @@ public class TriviaActivity extends Activity implements OnClickListener {
 			break;
 		}
 
+	}
+
+	private void buttonNewGameLevels_Clicked() {
+		// 
+		startNewGame(Game.KEY_GAMETYPE_LEVELS);
+		// TODO: add start level, max level; 
+		
 	}
 
 	private void buttonPreferences_Clicked() {
@@ -265,9 +287,19 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 	private void buttonNewGame_Clicked() {
 		//
-		Intent intent = new Intent(this, Game.class);
-		startActivity(intent);
+		startNewGame(Game.KEY_GAMETYPE_ALL_QUESTIONS);
+		
 
+	}
+
+	private void startNewGame(int i_GameType) {
+		// 
+		
+		Intent intent = new Intent(this, Game.class);
+		intent.putExtra("GameType",i_GameType);
+		
+		startActivity(intent);
+		
 	}
 
 	@Override

@@ -20,12 +20,15 @@ public class Question {
 	private String m_Category;
 	private String m_SubCategory;
 	private String m_Language;
+	private int m_QuestionLevel;
 	private Long m_Correct; // number of times user answered this question
 							// correctly
 	private Long m_Wrong; // number of times user answer this question wrong
 
 	public Question(ContentValues i_Value) {
 
+		m_QuestionLevel = -1;
+		
 		m_Answers = new ArrayList<String>();
 
 		m_QuestionId = i_Value.getAsString(TriviaDbEngine.KEY_QUESTIONID);
@@ -47,8 +50,8 @@ public class Question {
 		m_Wrong += i_Value.getAsLong(TriviaDbEngine.KEY_WRONG_FROM_DB);
 
 	}
-
-	public String getQuestionDifficultyLevel() {
+	
+	public void calcQuestionLevel(){
 		// question difficulty is scaled between 1 - 10
 		//
 		// questions difficulty is measured by how much time the user was
@@ -60,8 +63,8 @@ public class Question {
 		correct = m_Correct.doubleValue();
 		wrong = m_Wrong.doubleValue();
 		
-		Log.v(TAG, "correct " + correct);
-		Log.v(TAG, "wrong " + wrong);
+		//Log.v(TAG, "correct " + correct);
+		//Log.v(TAG, "wrong " + wrong);
 
 		ret = correct + wrong;
 		
@@ -79,10 +82,24 @@ public class Question {
 			ret = wrong / ret;
 		}
 				
-		Log.v(TAG, "difficulty is " + ret);
+		//Log.v(TAG, "difficulty is " + ret);
 		
-		return Integer.toString((int) (ret*10));
+		m_QuestionLevel = ((int) (ret*10));
 
+		
+	}
+
+	public int getQuestionLevel() {
+		
+		Log.v(TAG,"getQuestionLevel(): Question level is "+ m_QuestionLevel);
+
+		return m_QuestionLevel;
+
+	}
+	
+	public int calcAndGetQuestionLevel(){
+		calcQuestionLevel();
+		return getQuestionLevel();
 	}
 
 	public String getQuestion() {

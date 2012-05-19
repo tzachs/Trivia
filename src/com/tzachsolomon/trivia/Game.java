@@ -52,6 +52,18 @@ public class Game extends Activity implements OnClickListener {
 	private TextView textViewQuestionDifficulty;
 	private int m_DelayBetweenQuestions;
 
+	private int m_CurrentGameType;
+
+	private int m_CurrentQuestionInThisLevel;
+	private int m_MaxNumberOfQuestionInLevel;
+	private int m_NumberOfLevels;
+
+	private int m_CurrentLevel;
+
+	public static final int KEY_GAMETYPE_ALL_QUESTIONS = 1;
+	public static final int KEY_GAMETYPE_LEVELS = 2;
+	public static final int KEY_GAMETYPE_CATEGORIES = 3;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//
@@ -63,6 +75,82 @@ public class Game extends Activity implements OnClickListener {
 
 		initializeVariables();
 
+		Bundle extras = getIntent().getExtras();
+
+		parseGameSetupAndStart(extras);
+
+	}
+
+	private void parseGameSetupAndStart(Bundle extras) {
+		//
+		m_CurrentGameType = extras.getInt("GameType");
+		switch (m_CurrentGameType) {
+		case KEY_GAMETYPE_ALL_QUESTIONS:
+			startGameAllQuestions();
+			break;
+		case KEY_GAMETYPE_CATEGORIES:
+
+			break;
+		case KEY_GAMETYPE_LEVELS:
+			startGameLevels();
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
+	private void startGameLevels() {
+		//
+		m_Questions = m_TriviaDb.getEnabledQuestions();
+
+		m_QuestionLength = m_Questions.size();
+
+		// checking if there are questions to be asked
+		if (m_Questions.size() > 0) {
+			// calculating the question level
+			for (Question c : m_Questions) {
+				c.calcQuestionLevel();
+			}
+
+			// Shuffling the order of the questions
+			Collections.shuffle(m_Questions);
+
+			m_CurrentLevel = 0;
+			m_NumberOfLevels = 10;
+			m_MaxNumberOfQuestionInLevel = 10;
+
+			startNewRoundGameLevels();
+
+		} else {
+			Toast.makeText(this, "no questions in database", Toast.LENGTH_SHORT)
+					.show();
+			finish();
+
+		}
+
+	}
+
+	private void startNewRoundGameLevels() {
+
+		m_CurrentLevel++;
+
+		if (m_CurrentLevel <= m_NumberOfLevels) {
+			m_QuestionIndex = 0;
+			m_CurrentQuestionInThisLevel = 0;
+
+			Toast.makeText(this, "starting level " + m_CurrentLevel,
+					Toast.LENGTH_SHORT).show();
+
+			new StartNewQuestionAsync().execute(0);
+		} else {
+			Toast.makeText(this, "game over levels", Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	private void startGameAllQuestions() {
+		//
 		m_Questions = m_TriviaDb.getEnabledQuestions();
 
 		// Shuffling the order of the questions
@@ -115,6 +203,96 @@ public class Game extends Activity implements OnClickListener {
 		buttonAnswer3.setBackgroundResource(R.drawable.blue_button);
 		buttonAnswer4.setBackgroundResource(R.drawable.blue_button);
 
+		switch (m_CurrentGameType) {
+		case KEY_GAMETYPE_ALL_QUESTIONS:
+			startNewQuestionAllQuestions();
+			break;
+		case KEY_GAMETYPE_LEVELS:
+
+			startNewQuestionLevels();
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
+	private void startNewQuestionLevels() {
+		//
+		m_CurrentQuestionInThisLevel++;
+
+		if (m_CurrentQuestionInThisLevel < m_MaxNumberOfQuestionInLevel) {
+
+			// getting reference to the current question
+			m_CurrentQuestion = getNextQuestionInLevel();
+
+			// checking if we are out of questions for this level before the
+			// level has ended
+
+			if (m_CurrentQuestion == null) {
+				// no more questions in this level
+				// going to next level
+				startNewRoundGameLevels();
+
+			} else {
+				textViewNumberOfQuestionsLeft.setText(Integer
+						.toString(m_MaxNumberOfQuestionInLevel
+								- m_CurrentQuestionInThisLevel));
+
+				// setting question difficulty
+				textViewQuestionDifficulty.setText(Integer
+						.toString(m_CurrentQuestion.getQuestionLevel()));
+
+				// randomize answer places (indices)
+				m_CurrentQuestion.randomizeAnswerPlaces(m_Random);
+
+				textViewQuestion.setText(m_CurrentQuestion.getQuestion());
+				buttonAnswer1.setText(m_CurrentQuestion.getAnswer1());
+				buttonAnswer2.setText(m_CurrentQuestion.getAnswer2());
+				buttonAnswer3.setText(m_CurrentQuestion.getAnswer3());
+				buttonAnswer4.setText(m_CurrentQuestion.getAnswer4());
+
+				m_CountDownCounter.start();
+
+			}
+
+		} else {
+			// level ended
+			startNewRoundGameLevels();
+
+		}
+
+	}
+
+	private Question getNextQuestionInLevel() {
+		//
+		boolean foundQuestion = false;
+		Question ret = null;
+		
+		Log.v(TAG, "Current level is " + m_CurrentLevel);
+
+		while (m_QuestionIndex < m_QuestionLength && !foundQuestion) {
+
+			ret = m_Questions.get(m_QuestionIndex);
+
+			
+
+			if (ret.getQuestionLevel() == m_CurrentLevel) {
+				foundQuestion = true;
+			}
+			m_QuestionIndex++;
+		}
+		
+		if ( !foundQuestion){ 
+			ret = null;
+		}
+
+		return ret;
+	}
+
+	private void startNewQuestionAllQuestions() {
+
 		// setting number of questions left, must be before m_QuestionIndex+=
 		textViewNumberOfQuestionsLeft.setText(Integer.toString(m_QuestionLength
 				- m_QuestionIndex));
@@ -127,8 +305,8 @@ public class Game extends Activity implements OnClickListener {
 			m_CurrentQuestion = m_Questions.get(m_QuestionIndex);
 
 			// setting question difficulty
-			textViewQuestionDifficulty.setText(m_CurrentQuestion
-					.getQuestionDifficultyLevel());
+			textViewQuestionDifficulty.setText(Integer
+					.toString(m_CurrentQuestion.getQuestionLevel()));
 
 			// randomize answer places (indices)
 			m_CurrentQuestion.randomizeAnswerPlaces(m_Random);
@@ -146,6 +324,7 @@ public class Game extends Activity implements OnClickListener {
 
 	private void initializeVariables() {
 		//
+
 		m_TriviaDb = new TriviaDbEngine(Game.this);
 		// m_Random = new Random(1);
 		m_Random = new Random(System.currentTimeMillis());
@@ -168,6 +347,8 @@ public class Game extends Activity implements OnClickListener {
 		total *= 1000;
 
 		m_CountDownCounter = new MyCountDownCounter(total, 1000);
+
+		m_CurrentGameType = -1;
 
 		initializeTextViews();
 
@@ -320,9 +501,11 @@ public class Game extends Activity implements OnClickListener {
 			// start a new question and
 			new StartNewQuestionAsync().execute(m_DelayBetweenQuestions);
 		} else {
-			sb.append("Finished Round!");
-			// TODO: how to end this
+			if (m_CurrentGameType == KEY_GAMETYPE_ALL_QUESTIONS) {
 
+				sb.append("Finished Round!");
+				// TODO: how to end this
+			}
 		}
 
 		if (sb.length() > 0) {

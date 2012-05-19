@@ -3,7 +3,7 @@
 
     <PreferenceCategory android:title="Game Related" >
         <EditTextPreference
-            android:defaultValue="7"
+            android:defaultValue="8"
             android:inputType="number"
             android:key="editTextPreferenceCountDownTimer"
             android:summary="@string/editTextPreferenceCountDownTimerSummary"
@@ -14,7 +14,6 @@
             android:key="editTextPreferenceDelayBetweenQuestions"
             android:summary="@string/editTextPreferenceDelayBetweenQuestionsSummary"
             android:title="@string/editTextPreferenceDelayBetweenQuestionsTitle" />
-
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="checkBoxPreferenceShowReportQuestion"

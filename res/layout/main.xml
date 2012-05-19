@@ -7,6 +7,14 @@
     >
 
     <Button
+        android:id="@+id/buttonNewGameLevels"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonNewGame"
+        android:layout_margin="4dp"
+        android:text="@string/buttonNewGameLevelsText" />
+    
+    <Button
         android:id="@+id/buttonNewGame"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
