@@ -61,13 +61,21 @@ public class TriviaActivity extends Activity implements OnClickListener {
 				.getDefaultSharedPreferences(getBaseContext());
 
 		initializeVariables();
-		
-		//m_TriviaDb.deleteQuestions();
+
+		m_TriviaDb.deleteQuestions();
 
 		if (!checkIfFirstTime()) {
-			checkIsUpdateAvailable(false);
+			if (m_SharedPreferences.getBoolean(
+					"checkBoxPreferenceCheckUpdateOnStartup", true)) {
+				checkIsUpdateAvailableAsync(false);
+			}
+
 		}
 
+	}
+
+	private void checkIsUpdateAvailableAsync(boolean i_DisplayInfoIfNoUpdate) {
+		new CheckUpdateIsAvailableAsyncTask().execute(i_DisplayInfoIfNoUpdate);
 	}
 
 	/**
@@ -86,10 +94,11 @@ public class TriviaActivity extends Activity implements OnClickListener {
 						+ Integer.toString(numberOfQuestionsToUpdate)
 						+ " questions.\nUpdate database?");
 
-			}else if ( i_DisplayInfoIfNoUpdate){
-				Toast.makeText(TriviaActivity.this, "No updates", Toast.LENGTH_LONG).show();
+			} else if (i_DisplayInfoIfNoUpdate) {
+				Toast.makeText(TriviaActivity.this, "No updates",
+						Toast.LENGTH_LONG).show();
 			}
-				
+
 		} catch (Exception e) {
 			String msg = e.getMessage().toString();
 			if (msg != null) {
@@ -220,7 +229,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		buttonNewGame = (Button) findViewById(R.id.buttonNewGame);
 		buttonUpdateDatabase = (Button) findViewById(R.id.buttonUpdateDatabase);
 		buttonPreferences = (Button) findViewById(R.id.buttonPreferences);
-		buttonNewGameLevels = (Button)findViewById(R.id.buttonNewGameLevels);
+		buttonNewGameLevels = (Button) findViewById(R.id.buttonNewGameLevels);
 
 		buttonNewGame.setOnClickListener(this);
 		buttonUpdateDatabase.setOnClickListener(this);
@@ -243,12 +252,11 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		case R.id.buttonNewGame:
 			buttonNewGame_Clicked();
 			break;
-			
+
 		case R.id.buttonNewGameLevels:
 			buttonNewGameLevels_Clicked();
 			break;
-			
-			
+
 		case R.id.buttonUpdateDatabase:
 			buttonUpdateDatabase_Clicked();
 			break;
@@ -261,10 +269,10 @@ public class TriviaActivity extends Activity implements OnClickListener {
 	}
 
 	private void buttonNewGameLevels_Clicked() {
-		// 
+		//
 		startNewGame(Game.KEY_GAMETYPE_LEVELS);
-		// TODO: add start level, max level; 
-		
+		// TODO: add start level, max level;
+
 	}
 
 	private void buttonPreferences_Clicked() {
@@ -288,18 +296,17 @@ public class TriviaActivity extends Activity implements OnClickListener {
 	private void buttonNewGame_Clicked() {
 		//
 		startNewGame(Game.KEY_GAMETYPE_ALL_QUESTIONS);
-		
 
 	}
 
 	private void startNewGame(int i_GameType) {
-		// 
-		
+		//
+
 		Intent intent = new Intent(this, Game.class);
-		intent.putExtra("GameType",i_GameType);
-		
+		intent.putExtra("GameType", i_GameType);
+
 		startActivity(intent);
-		
+
 	}
 
 	@Override
@@ -365,17 +372,26 @@ public class TriviaActivity extends Activity implements OnClickListener {
 			StringBuilder detailedResult = new StringBuilder();
 			//
 			enabled = m_SharedPreferences.getBoolean(
-					"checkBoxPreferenceUploadCorrectWrongUserStat", true)
-					&& m_JSONHandler.isInternetAvailable(detailedResult);
+					"checkBoxPreferenceUploadCorrectWrongUserStat", true);
 
 			if (enabled) {
-				m_ProgressDialog = new ProgressDialog(TriviaActivity.this);
-				m_ProgressDialog
-						.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-				m_ProgressDialog.setTitle("Uploading correct wrong statistics");
-				m_ProgressDialog.show();
-			} // ignoring checking if isInternetAvailable returned false
-				// since it updateFromDatabase will show that error.
+				enabled = m_JSONHandler.isInternetAvailable(detailedResult);
+				if (enabled) {
+
+					m_ProgressDialog = new ProgressDialog(TriviaActivity.this);
+					m_ProgressDialog
+							.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+					m_ProgressDialog
+							.setTitle("Uploading correct wrong statistics");
+					m_ProgressDialog.show();
+				} else {
+					Toast.makeText(TriviaActivity.this,
+							detailedResult.toString(), Toast.LENGTH_LONG)
+							.show();
+				}
+			}
+
+			detailedResult.setLength(0);
 		}
 
 		@Override
@@ -389,9 +405,8 @@ public class TriviaActivity extends Activity implements OnClickListener {
 			if (enabled) {
 				m_ProgressDialog.dismiss();
 			}
-			
+
 			checkIsUpdateAvailable(true);
-			//updateDatabaseFromInternetDisplayQuestion("Update Now? (This requires internet connection)");
 
 		}
 
@@ -431,6 +446,37 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		protected void onProgressUpdate(Integer... values) {
 			//
 			m_ProgressDialog.setProgress(values[0]);
+		}
+
+	}
+
+	private class CheckUpdateIsAvailableAsyncTask extends
+			AsyncTask<Boolean, Integer, Boolean> {
+
+		private ProgressDialog m_ProgressDialog;
+
+		@Override
+		protected void onPreExecute() {
+			//
+			m_ProgressDialog = new ProgressDialog(TriviaActivity.this);
+			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+			m_ProgressDialog.setTitle("Checking for updates...");
+			m_ProgressDialog.setCancelable(true);
+			m_ProgressDialog.show();
+
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			//
+			m_ProgressDialog.dismiss();
+		}
+
+		@Override
+		protected Boolean doInBackground(Boolean... params) {
+			//
+			checkIsUpdateAvailable(params[0]);
+			return true;
 		}
 
 	}

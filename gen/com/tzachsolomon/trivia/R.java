@@ -64,6 +64,8 @@ public final class R {
         public static final int checkBoxPreferenceAllowUpdateMobileNetworkTitle=0x7f060010;
         public static final int checkBoxPreferenceAllowUpdateWifiSummary=0x7f060013;
         public static final int checkBoxPreferenceAllowUpdateWifiTitle=0x7f060012;
+        public static final int checkBoxPreferenceCheckUpdateOnStartupSummary=0x7f060023;
+        public static final int checkBoxPreferenceCheckUpdateOnStartupTitle=0x7f060024;
         public static final int checkBoxPreferenceShowReportQuestionSummary=0x7f060015;
         public static final int checkBoxPreferenceShowReportQuestionTitle=0x7f060014;
         public static final int checkBoxPreferenceUploadCorrectWrongUserStatSummary=0x7f06001f;
@@ -78,6 +80,7 @@ public final class R {
         public static final int listPreferenceUpdateMethodTitle=0x7f060019;
         public static final int preferenceCategoryDatabaseServerAdvancedTitle=0x7f060016;
         public static final int preferenceCategoryDatabaseServerTitle=0x7f06001e;
+        public static final int preferenceCategoryGameRelatedTitle=0x7f060022;
         public static final int textViewNumberOfQuestionsLeftTitle=0x7f060007;
         public static final int textViewQuestionDifficultyTitle=0x7f060008;
         public static final int textViewQuestionText=0x7f060002;

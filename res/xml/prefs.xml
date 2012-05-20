@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <PreferenceCategory android:title="Game Related" >
+    <PreferenceCategory 
+        android:key="preferenceCategoryGameRelated"
+        android:title="@string/preferenceCategoryGameRelatedTitle" >
         <EditTextPreference
             android:defaultValue="8"
             android:inputType="number"
@@ -28,6 +30,11 @@
             android:key="checkBoxPreferenceUploadCorrectWrongUserStat"
             android:summary="@string/checkBoxPreferenceUploadCorrectWrongUserStatSummary"
             android:title="@string/checkBoxPreferenceUploadCorrectWrongUserStatTitle" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="checkBoxPreferenceCheckUpdateOnStartup"
+            android:summary="@string/checkBoxPreferenceCheckUpdateOnStartupSummary"
+            android:title="@string/checkBoxPreferenceCheckUpdateOnStartupTitle" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="preferenceCategoryDatabaseServerAdvanced"
@@ -69,5 +76,7 @@
             android:summary="@string/checkBoxPreferenceAllowUpdateMobileNetworkRoamingSummary"
             android:title="@string/checkBoxPreferenceAllowUpdateMobileNetworkRoamingTitle" />
     </PreferenceCategory>
+    
+   
 
 </PreferenceScreen>

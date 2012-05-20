@@ -91,11 +91,11 @@ public class JSONHandler {
 	 */
 	public void updateFromInternetAsync(long i_LastUserUpdate) {
 		ContentValues[] ret = new ContentValues[1];
-		
+
 		ret[0] = new ContentValues();
 		ret[0].put("lastUserUpdate", i_LastUserUpdate);
 
-		new GetQuestionFromServerAsyncTask().execute(ret);
+		new AsyncTaskGetQuestionFromServer().execute(ret);
 
 	}
 
@@ -134,8 +134,8 @@ public class JSONHandler {
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	private ContentValues[] handleRead(long i_LastUserUpdate) throws ClientProtocolException,
-			IOException, JSONException {
+	private ContentValues[] handleRead(long i_LastUserUpdate)
+			throws ClientProtocolException, IOException, JSONException {
 		ContentValues[] ret = null;
 
 		JSONArray jsonArray;
@@ -210,16 +210,14 @@ public class JSONHandler {
 	private JSONArray getQuestionAsJSONArray(long i_LastUpdate) {
 		JSONArray jsonArray = null;
 		StringBuilder detailedResult = new StringBuilder();
-		
 
 		try {
 			if (isInternetAvailable(detailedResult)) {
 
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
 				params.add(new BasicNameValuePair("tag", TAG_UPDATE_FROM_DB));
-				params.add(new BasicNameValuePair("lastUserUpdate", Long.toString(i_LastUpdate)));
-				
-				
+				params.add(new BasicNameValuePair("lastUserUpdate", Long
+						.toString(i_LastUpdate)));
 
 				jsonArray = getJSONArrayFromUrl(m_ServerUrl, params);
 				if (jsonArray != null) {
@@ -270,12 +268,11 @@ public class JSONHandler {
 
 			if (status == 200) {
 				httpEntity = httpResponse.getEntity();
-				
+
 				data = new String(EntityUtils.toString(httpEntity).getBytes(),
 						"UTF-8");
 
 				Log.v(TAG, "the raw JSON response is " + data);
-				
 
 				// try parse the string to a JSON object
 				try {
@@ -284,16 +281,12 @@ public class JSONHandler {
 				} catch (JSONException e) {
 					Log.e("JSON Parser", "Error parsing data " + e.toString());
 				}
-				
-				
 
 			} else {
 				Log.e(TAG,
 						"status code from server is "
 								+ Integer.toString(status));
 			}
-			
-			
 
 		} catch (UnsupportedEncodingException e) {
 
@@ -452,35 +445,43 @@ public class JSONHandler {
 							.append("WiFi connection is disabled, please check preferences");
 				}
 			} else if (netType == ConnectivityManager.TYPE_MOBILE) {
-				// checking if 3G connection
+				// Checking if the device found is mobile network device
 				if (allowUpdateMobile) {
+					// checking if user wants only to allow 3g connection
 					if (allowOnlyUpdate3G) {
 						if ((netSubType == TelephonyManager.NETWORK_TYPE_UMTS || netSubType == TelephonyManager.NETWORK_TYPE_HSDPA)) {
 							ret = info.isConnected();
 							if (!ret) {
 								i_DetailedResult
-										.append("3G mobile network connection isn't available");
+										.append("Mobile network found but only 3G mobile network connection is allowed,");
+								i_DetailedResult
+								.append("check preferencs to allow slow networks");
 							}
 						}
 					} else {
 						ret = info.isConnected();
 					}
 
-					// checking if the user allow update when roaming
-					if (!allowUpdateRoaming) {
-						ret = info.isConnected()
-								&& !m_TelephonyManager.isNetworkRoaming();
+					// checking if connection is roaming
+					if (m_TelephonyManager.isNetworkRoaming()) {
+						// the connection is roaming, checking if the user allow update on roaming
+						if (allowUpdateRoaming) {
+							ret = true;
+						} else {
+							i_DetailedResult.append("Mobile connection was found but it is in roaming");
+						}
+
 					}
+
 				} else {
 					i_DetailedResult
-							.append("Mobile connection is disabled, please check preferences");
+							.append("Mobile device is online but option is disabled, please check preferences");
 				}
-
 			}
 
 		} else {
 			i_DetailedResult
-					.append("No connections available, check your WiFi or Mobile Network connection");
+					.append("No network devices are available, check your WiFi or Mobile Network connection");
 
 		}
 
@@ -491,7 +492,7 @@ public class JSONHandler {
 	 * @author Tzach Solomon
 	 * 
 	 */
-	public class GetQuestionFromServerAsyncTask extends
+	public class AsyncTaskGetQuestionFromServer extends
 			AsyncTask<ContentValues, Integer, ContentValues[]> {
 
 		private ProgressDialog m_ProgressDialog;
@@ -546,11 +547,10 @@ public class JSONHandler {
 				JSONObject jsonObject;
 				int numberOfRows, i;
 				long lastUserUpdate = 0;
-				
-				if ( params.length > 0){
+
+				if (params.length > 0) {
 					lastUserUpdate = params[0].getAsLong("lastUserUpdate");
 				}
-				
 
 				jsonArray = getQuestionAsJSONArray(lastUserUpdate);
 				try {
@@ -618,14 +618,15 @@ public class JSONHandler {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 
 		params.add(new BasicNameValuePair("tag", TAG_GET_LAST_UPDATE));
-		params.add(new BasicNameValuePair("lastUserUpdate", Long.toString(lastUpdate)));
+		params.add(new BasicNameValuePair("lastUserUpdate", Long
+				.toString(lastUpdate)));
 
 		JSONObject obj = getJSONObjectFromUrl(m_ServerUrl, params);
 
 		if (obj != null) {
 
 			if (obj.has(RESULT_SUCCESS)) {
-				 ret = obj.optInt("number");
+				ret = obj.optInt("number");
 
 			}
 		}

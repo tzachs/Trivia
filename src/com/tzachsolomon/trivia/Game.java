@@ -9,6 +9,8 @@ import java.util.Random;
 import org.apache.http.client.ClientProtocolException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -59,6 +61,8 @@ public class Game extends Activity implements OnClickListener {
 	private int m_NumberOfLevels;
 
 	private int m_CurrentLevel;
+	private int m_CurrentWrongAnswersCounter;
+	private int m_MaxWrongAnswersAllowed;
 
 	public static final int KEY_GAMETYPE_ALL_QUESTIONS = 1;
 	public static final int KEY_GAMETYPE_LEVELS = 2;
@@ -120,6 +124,8 @@ public class Game extends Activity implements OnClickListener {
 			m_CurrentLevel = 0;
 			m_NumberOfLevels = 10;
 			m_MaxNumberOfQuestionInLevel = 10;
+			m_MaxWrongAnswersAllowed = 3;
+			m_CurrentWrongAnswersCounter = 0;
 
 			startNewRoundGameLevels();
 
@@ -137,13 +143,27 @@ public class Game extends Activity implements OnClickListener {
 		m_CurrentLevel++;
 
 		if (m_CurrentLevel <= m_NumberOfLevels) {
-			m_QuestionIndex = 0;
-			m_CurrentQuestionInThisLevel = 0;
 
-			Toast.makeText(this, "starting level " + m_CurrentLevel,
-					Toast.LENGTH_SHORT).show();
+			AlertDialog.Builder alertDialog = new AlertDialog.Builder(Game.this);
 
-			new StartNewQuestionAsync().execute(0);
+			alertDialog.setTitle("Starting level " + m_CurrentLevel);
+			alertDialog.setPositiveButton("Start",
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							//
+
+							m_QuestionIndex = 0;
+							m_CurrentQuestionInThisLevel = 0;
+
+							new StartNewQuestionAsync().execute(0);
+
+						}
+					});
+			
+			alertDialog.show();
+
 		} else {
 			Toast.makeText(this, "game over levels", Toast.LENGTH_SHORT).show();
 		}
@@ -233,6 +253,7 @@ public class Game extends Activity implements OnClickListener {
 			if (m_CurrentQuestion == null) {
 				// no more questions in this level
 				// going to next level
+				Toast.makeText(Game.this, "No more questions in this level, going to next level :)", Toast.LENGTH_LONG).show();
 				startNewRoundGameLevels();
 
 			} else {
@@ -269,22 +290,20 @@ public class Game extends Activity implements OnClickListener {
 		//
 		boolean foundQuestion = false;
 		Question ret = null;
-		
+
 		Log.v(TAG, "Current level is " + m_CurrentLevel);
 
 		while (m_QuestionIndex < m_QuestionLength && !foundQuestion) {
 
 			ret = m_Questions.get(m_QuestionIndex);
 
-			
-
 			if (ret.getQuestionLevel() == m_CurrentLevel) {
 				foundQuestion = true;
 			}
 			m_QuestionIndex++;
 		}
-		
-		if ( !foundQuestion){ 
+
+		if (!foundQuestion) {
 			ret = null;
 		}
 
@@ -306,7 +325,7 @@ public class Game extends Activity implements OnClickListener {
 
 			// setting question difficulty
 			textViewQuestionDifficulty.setText(Integer
-					.toString(m_CurrentQuestion.getQuestionLevel()));
+					.toString(m_CurrentQuestion.calcAndGetQuestionLevel()));
 
 			// randomize answer places (indices)
 			m_CurrentQuestion.randomizeAnswerPlaces(m_Random);
@@ -478,6 +497,8 @@ public class Game extends Activity implements OnClickListener {
 		if (i == -1) {
 			ret = -1;
 			sb.append("Time is up!");
+			incCurrentWrongAnswersCounter();
+			
 
 		} else {
 
@@ -492,6 +513,7 @@ public class Game extends Activity implements OnClickListener {
 				setButtonRed(o_Button);
 				m_TriviaDb.incUserWrongCounter(m_CurrentQuestion
 						.getQuestionId());
+				incCurrentWrongAnswersCounter();
 
 			}
 
@@ -515,6 +537,12 @@ public class Game extends Activity implements OnClickListener {
 
 		return ret;
 
+	}
+
+	private void incCurrentWrongAnswersCounter() {
+		// 
+		m_CurrentWrongAnswersCounter++;
+		
 	}
 
 	private void stopCountdownCounter() {

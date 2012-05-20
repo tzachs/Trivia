@@ -3,9 +3,9 @@
 
     <string name="app_name">Trivia</string>
     <string name="buttonNewGameText">עד שנמאס</string>
-    <string name="textViewQuestionText">Example Question</string>
-    <string name="buttonAnswer1">Example Answer</string>
-    <string name="textViewTimeText">זמן נותר</string>
+    <string name="textViewQuestionText"></string>
+    <string name="buttonAnswer1"></string>
+    <string name="textViewTimeText">0</string>
     <string name="buttonUpdateDatabaseText">עדכן מאגר שאלות</string>
     <string name="textViewTimeTitleText">זמן</string>
     <string name="textViewNumberOfQuestionsLeftTitle">שאלות</string>
@@ -31,10 +31,13 @@
     <string name="editTextPreferenceCountDownTimerSummary">מספר השניות לכל שאלה</string>
     <string name="editTextPreferenceCountDownTimerTitle">מספר שניות לשאלה</string>
     <string name="buttonPreferencesText">הגדרות</string>
-    <string name="preferenceCategoryDatabaseServerTitle">הגדרות שרת</string>
+    <string name="preferenceCategoryDatabaseServerTitle">הגדרות מאגר נתונים</string>
     <string name="checkBoxPreferenceUploadCorrectWrongUserStatSummary">העלה מידע על שאלות בהן המשתמש צדק או טעה</string>
     <string name="checkBoxPreferenceUploadCorrectWrongUserStatTitle">העלה סטטיסטיקות</string>
     <string name="buttonNewGameLevelsText">שלבים</string>
+    <string name="preferenceCategoryGameRelatedTitle">הגדרות משחק</string>
+    <string name="checkBoxPreferenceCheckUpdateOnStartupSummary">בדוק עדכון בעלייה</string>
+    <string name="checkBoxPreferenceCheckUpdateOnStartupTitle">בדוק עדכון בעלייה</string>
     
 
 </resources>
