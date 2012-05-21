@@ -186,11 +186,11 @@ public class JSONHandler {
 				TriviaDbEngine.KEY_ANSWER2, TriviaDbEngine.KEY_ANSWER3,
 				TriviaDbEngine.KEY_ANSWER4, TriviaDbEngine.KEY_ANSWER_INDEX,
 				TriviaDbEngine.KEY_CATEGORY,
-				TriviaDbEngine.KEY_CORRECT_FROM_DB, TriviaDbEngine.KEY_ENABLED,
+				TriviaDbEngine.KEY_CORRECT_WRONG_RATIO, TriviaDbEngine.KEY_ENABLED,
 				TriviaDbEngine.KEY_LANGUAGE, TriviaDbEngine.KEY_LAST_UPDATE,
 				TriviaDbEngine.KEY_QUESTION, TriviaDbEngine.KEY_QUESTIONID,
-				TriviaDbEngine.KEY_SUB_CATEGORY,
-				TriviaDbEngine.KEY_WRONG_FROM_DB
+				TriviaDbEngine.KEY_SUB_CATEGORY
+				
 
 		};
 		int i = keys.length - 1;

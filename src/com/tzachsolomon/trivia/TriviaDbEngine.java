@@ -1,7 +1,7 @@
 package com.tzachsolomon.trivia;
 
 import java.util.ArrayList;
-import java.util.Calendar;
+
 
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -19,7 +19,7 @@ public class TriviaDbEngine {
 	public static final String TAG = TriviaDbEngine.class.getSimpleName();
 
 	private static final String DATABASE_NAME = "TriviaDb";
-	private static final int DATABASE_VERSION = 4;
+	private static final int DATABASE_VERSION = 5;
 	private static final String TABLE_QUESTIONS = "tblQuestions";
 
 	public static final String KEY_ROWID = "_id";
@@ -33,8 +33,7 @@ public class TriviaDbEngine {
 	public static final String KEY_CATEGORY = "colCategory";
 	public static final String KEY_SUB_CATEGORY = "colSubCategory";
 	public static final String KEY_LANGUAGE = "colLanguage";
-	public static final String KEY_CORRECT_FROM_DB = "colCorrect";
-	public static final String KEY_WRONG_FROM_DB = "colWrong";
+	public static final String KEY_CORRECT_WRONG_RATIO = "colCorrectWrongRatio";
 	public static final String KEY_CORRECT_USER = "colCorrectUser"; // the
 																	// correct
 																	// guesses
@@ -82,11 +81,11 @@ public class TriviaDbEngine {
 			sb.append(KEY_ANSWER4 + " TEXT NOT NULL, ");
 			sb.append(KEY_ANSWER_INDEX + " INTEGER NOT NULL, ");
 			sb.append(KEY_CATEGORY + " INTEGER NOT NULL, ");
-			sb.append(KEY_CORRECT_FROM_DB + " INTEGER NOT NULL, ");
+			sb.append(KEY_CORRECT_WRONG_RATIO + " INTEGER NOT NULL, ");
 			sb.append(KEY_CORRECT_USER + " INTEGER NOT NULL, ");
 			sb.append(KEY_LANGUAGE + " TEXT NOT NULL, ");
 			sb.append(KEY_SUB_CATEGORY + " TEXT, ");
-			sb.append(KEY_WRONG_FROM_DB + " INTEGER NOT NULL,");
+			
 			sb.append(KEY_WRONG_USER + " INTEGER NOT NULL,");
 			sb.append(KEY_ENABLED + " BOOLEAN NOT NULL, ");
 
@@ -135,8 +134,8 @@ public class TriviaDbEngine {
 	public long insertQuestion(String i_QuestionId, String i_Question,
 			String i_Answer1, String i_Answer2, String i_Answer3,
 			String i_Answer4, int i_AnswerIndex, int i_Category,
-			String i_SubCategory, String i_Language, long i_Correct,
-			long i_Wrong, String i_DateCreated, String i_LastUpdate,
+			String i_SubCategory, String i_Language, double i_CorrectWrongRatio,
+			 String i_DateCreated, String i_LastUpdate,
 			boolean i_Enabled, long i_CorrectUser, long i_WrongUser) {
 
 		long ret;
@@ -151,7 +150,7 @@ public class TriviaDbEngine {
 		cv.put(KEY_ANSWER4, i_Answer4);
 		cv.put(KEY_ANSWER_INDEX, i_AnswerIndex);
 		cv.put(KEY_CATEGORY, i_Category);
-		cv.put(KEY_CORRECT_FROM_DB, i_Correct);
+		cv.put(KEY_CORRECT_WRONG_RATIO, i_CorrectWrongRatio);
 		cv.put(KEY_CORRECT_USER, i_CorrectUser);
 		cv.put(KEY_ENABLED, i_Enabled);
 		cv.put(KEY_LANGUAGE, i_Language);
@@ -159,7 +158,7 @@ public class TriviaDbEngine {
 		cv.put(KEY_QUESTION, i_Question);
 		cv.put(KEY_QUESTIONID, i_QuestionId);
 		cv.put(KEY_SUB_CATEGORY, i_SubCategory);
-		cv.put(KEY_WRONG_FROM_DB, i_Wrong);
+		
 		cv.put(KEY_WRONG_USER, i_WrongUser);
 
 		ret = ourDatabase.insert(TABLE_QUESTIONS, null, cv);
@@ -169,33 +168,16 @@ public class TriviaDbEngine {
 		return ret;
 	}
 
-	public void createSampleQuestions() {
-
-		Calendar calendar = Calendar.getInstance();
-		calendar.setTimeInMillis(System.currentTimeMillis());
-
-		insertQuestion(Long.toString(System.currentTimeMillis()),
-				"Answer to the universe", "42", "Michael Jordan", "Nothing",
-				"Checking long answer if fit", 1, 1, "", "English", 0, 0,
-				calendar.getTime().toString(), calendar.getTime().toString(),
-				true, 0, 0);
-
-		insertQuestion(Long.toString(System.currentTimeMillis()),
-				"Who wrote Lord of the rings", "No1", "Jrr", "Shlomo Oz",
-				"Michale Crichton", 2, 1, "", "English", 0, 0, calendar
-						.getTime().toString(), calendar.getTime().toString(),
-				true, 0, 0);
-
-	}
+	
 
 	public ArrayList<Question> getEnabledQuestions() {
 		//
 		ContentValues map;
 		String[] columns = { KEY_ANSWER1, KEY_ANSWER2, KEY_ANSWER3,
 				KEY_ANSWER4, KEY_ANSWER_INDEX, KEY_CATEGORY,
-				KEY_CORRECT_FROM_DB, KEY_CORRECT_USER, KEY_ENABLED,
+				KEY_CORRECT_WRONG_RATIO, KEY_CORRECT_USER, KEY_ENABLED,
 				KEY_LANGUAGE, KEY_LAST_UPDATE, KEY_QUESTION, KEY_QUESTIONID,
-				KEY_ROWID, KEY_SUB_CATEGORY, KEY_WRONG_FROM_DB, KEY_WRONG_USER };
+				KEY_ROWID, KEY_SUB_CATEGORY, KEY_WRONG_USER };
 
 		Cursor cursor;
 
@@ -456,6 +438,7 @@ public class TriviaDbEngine {
 							// care in function uploadCorrectWrong
 							cv.put(TriviaDbEngine.KEY_CORRECT_USER, 0);
 							cv.put(TriviaDbEngine.KEY_WRONG_USER, 0);
+							//Log.v(TAG, cv.getAsString(TriviaDbEngine.KEY_WRONG_USER));
 							ourDatabase.insert(TABLE_QUESTIONS, null, cv);
 						}
 

@@ -20,14 +20,13 @@ public class Question {
 	private String m_Category;
 	private String m_SubCategory;
 	private String m_Language;
-	private int m_QuestionLevel;
-	private Long m_Correct; // number of times user answered this question
-							// correctly
-	private Long m_Wrong; // number of times user answer this question wrong
+	
+
+	private int m_CorrectWrongRatio;
 
 	public Question(ContentValues i_Value) {
 
-		m_QuestionLevel = -1;
+		m_CorrectWrongRatio = -1;
 		
 		m_Answers = new ArrayList<String>();
 
@@ -42,65 +41,28 @@ public class Question {
 				.getAsInteger(TriviaDbEngine.KEY_ANSWER_INDEX);
 
 		m_Category = i_Value.getAsString(TriviaDbEngine.KEY_CATEGORY);
-
-		m_Correct = i_Value.getAsLong(TriviaDbEngine.KEY_CORRECT_USER);
-		m_Correct += i_Value.getAsLong(TriviaDbEngine.KEY_CORRECT_FROM_DB);
-
-		m_Wrong = i_Value.getAsLong(TriviaDbEngine.KEY_WRONG_USER);
-		m_Wrong += i_Value.getAsLong(TriviaDbEngine.KEY_WRONG_FROM_DB);
-
-	}
-	
-	public void calcQuestionLevel(){
-		// question difficulty is scaled between 1 - 10
-		//
-		// questions difficulty is measured by how much time the user was
-		// correct divided by how much this question was answer
-		// 
-		double ret;
-		double correct, wrong;
-
-		correct = m_Correct.doubleValue();
-		wrong = m_Wrong.doubleValue();
 		
-		//Log.v(TAG, "correct " + correct);
-		//Log.v(TAG, "wrong " + wrong);
+		double x = i_Value.getAsDouble(TriviaDbEngine.KEY_CORRECT_WRONG_RATIO);
+		
+		
+		x *= 10;
+		x = Math.floor(x + 0.5);
+		
+		// 10 is the number of levels
+		m_CorrectWrongRatio = (int)(x);
+		
 
-		ret = correct + wrong;
-		
-		if ( ret == 0 ){
-			// the question never been answer, thus we are assuming it's easy
-			ret = 0.1;
-		}else if ( correct == 0 && wrong >= 1){
-			// the question always got a wrong answer, thus assuming its hard
-			ret = 1;
-		}else if ( correct >= 1 && wrong == 0){
-			// the question always got a correct answer, thus assuming its easy
-			ret = 0.1;
-		}else {
-			// calculating the difficulty
-			ret = wrong / ret;
-		}
-				
-		//Log.v(TAG, "difficulty is " + ret);
-		
-		m_QuestionLevel = ((int) (ret*10));
-
-		
 	}
 
 	public int getQuestionLevel() {
 		
-		Log.v(TAG,"getQuestionLevel(): Question level is "+ m_QuestionLevel);
+		Log.v(TAG,"getQuestionLevel(): Question level is "+ m_CorrectWrongRatio);
 
-		return m_QuestionLevel;
+		
+		return m_CorrectWrongRatio;
 
 	}
 	
-	public int calcAndGetQuestionLevel(){
-		calcQuestionLevel();
-		return getQuestionLevel();
-	}
 
 	public String getQuestion() {
 		//

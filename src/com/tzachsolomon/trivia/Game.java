@@ -113,10 +113,6 @@ public class Game extends Activity implements OnClickListener {
 
 		// checking if there are questions to be asked
 		if (m_Questions.size() > 0) {
-			// calculating the question level
-			for (Question c : m_Questions) {
-				c.calcQuestionLevel();
-			}
 
 			// Shuffling the order of the questions
 			Collections.shuffle(m_Questions);
@@ -161,6 +157,8 @@ public class Game extends Activity implements OnClickListener {
 
 						}
 					});
+			alertDialog.setCancelable(false);
+			
 			
 			alertDialog.show();
 
@@ -325,7 +323,7 @@ public class Game extends Activity implements OnClickListener {
 
 			// setting question difficulty
 			textViewQuestionDifficulty.setText(Integer
-					.toString(m_CurrentQuestion.calcAndGetQuestionLevel()));
+					.toString(m_CurrentQuestion.getQuestionLevel()));
 
 			// randomize answer places (indices)
 			m_CurrentQuestion.randomizeAnswerPlaces(m_Random);

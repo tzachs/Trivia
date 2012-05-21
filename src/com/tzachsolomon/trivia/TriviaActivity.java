@@ -62,7 +62,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 		initializeVariables();
 
-		m_TriviaDb.deleteQuestions();
+		// m_TriviaDb.deleteQuestions();
 
 		if (!checkIfFirstTime()) {
 			if (m_SharedPreferences.getBoolean(
@@ -400,6 +400,10 @@ public class TriviaActivity extends Activity implements OnClickListener {
 			if (result.length() > 0) {
 				Toast.makeText(TriviaActivity.this, result, Toast.LENGTH_LONG)
 						.show();
+			} else {
+				Toast.makeText(TriviaActivity.this,
+						"Thank you for making this trivia better! :)",
+						Toast.LENGTH_SHORT).show();
 			}
 
 			if (enabled) {
@@ -470,13 +474,33 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		protected void onPostExecute(Boolean result) {
 			//
 			m_ProgressDialog.dismiss();
+			if (result) {
+				checkIsUpdateAvailable(true);
+			}
 		}
 
 		@Override
 		protected Boolean doInBackground(Boolean... params) {
 			//
-			checkIsUpdateAvailable(params[0]);
-			return true;
+			boolean ret = false;
+			try {
+				long lastUpdate = m_TriviaDb.getLastUpdate();
+				int numberOfQuestionsToUpdate = m_JSONHandler
+						.isUpdateAvailable(lastUpdate);
+
+				if (numberOfQuestionsToUpdate > 0) {
+					ret = true;
+				}
+
+			} catch (Exception e) {
+				String msg = e.getMessage().toString();
+				if (msg != null) {
+					Log.v(TAG, msg);
+				}
+
+			}
+
+			return ret;
 		}
 
 	}
