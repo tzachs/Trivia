@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/wizard_setup_1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textViewWizardSetupNetwork"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="4dp"
+        android:text="@string/textViewWizardSetupNetworkText"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/textViewWizardSetupNetworkHint"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewWizardSetupNetwork"
+        android:layout_marginBottom="20dp"
+        android:text="@string/textViewWizardSetupNetworkHintText" />
+
+    <CheckBox
+        android:id="@+id/checkBoxAllowUpdateUsingWifi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewWizardSetupNetworkHint"
+        android:checked="true"
+        android:text="@string/checkBoxAllowUpdateUsingWifiText" />
+
+    <CheckBox
+        android:id="@+id/checkBoxAllowUpdateUsingMobileNetwork"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/checkBoxAllowUpdateUsingWifi"
+        android:checked="false"
+        android:text="@string/checkBoxAllowUpdateUsingMobileNetworkText" />
+
+    <CheckBox
+        android:id="@+id/checkBoxAllowUpdateUsing3GOnly"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/checkBoxAllowUpdateUsingMobileNetwork"
+        android:checked="false"
+        android:enabled="false"
+        android:text="@string/checkBoxAllowUpdateUsing3GOnlyText" />
+
+</RelativeLayout>

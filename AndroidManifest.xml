@@ -31,6 +31,11 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
+            android:name="WizardSetup"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
             android:name=".Prefs"
             android:label="@string/app_name" >
             <intent-filter>

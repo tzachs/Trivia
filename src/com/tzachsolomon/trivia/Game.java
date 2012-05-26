@@ -63,10 +63,12 @@ public class Game extends Activity implements OnClickListener {
 	private int m_CurrentLevel;
 	private int m_CurrentWrongAnswersCounter;
 	private int m_MaxWrongAnswersAllowed;
+	
+	private boolean m_GameOver;
 
-	public static final int KEY_GAMETYPE_ALL_QUESTIONS = 1;
-	public static final int KEY_GAMETYPE_LEVELS = 2;
-	public static final int KEY_GAMETYPE_CATEGORIES = 3;
+	public static final int GAMETYPE_ALL_QUESTIONS = 1;
+	public static final int GAMETYPE_LEVELS = 2;
+	public static final int GAMETYPE_CATEGORIES = 3;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,13 +91,13 @@ public class Game extends Activity implements OnClickListener {
 		//
 		m_CurrentGameType = extras.getInt("GameType");
 		switch (m_CurrentGameType) {
-		case KEY_GAMETYPE_ALL_QUESTIONS:
+		case GAMETYPE_ALL_QUESTIONS:
 			startGameAllQuestions();
 			break;
-		case KEY_GAMETYPE_CATEGORIES:
+		case GAMETYPE_CATEGORIES:
 
 			break;
-		case KEY_GAMETYPE_LEVELS:
+		case GAMETYPE_LEVELS:
 			startGameLevels();
 			break;
 
@@ -107,15 +109,8 @@ public class Game extends Activity implements OnClickListener {
 
 	private void startGameLevels() {
 		//
-		m_Questions = m_TriviaDb.getEnabledQuestions();
-
-		m_QuestionLength = m_Questions.size();
-
 		// checking if there are questions to be asked
-		if (m_Questions.size() > 0) {
-
-			// Shuffling the order of the questions
-			Collections.shuffle(m_Questions);
+		if (m_TriviaDb.isEmpty() == false) {
 
 			m_CurrentLevel = 0;
 			m_NumberOfLevels = 10;
@@ -138,7 +133,20 @@ public class Game extends Activity implements OnClickListener {
 
 		m_CurrentLevel++;
 
-		if (m_CurrentLevel <= m_NumberOfLevels) {
+		if (m_CurrentLevel <= m_NumberOfLevels && !m_GameOver) {
+
+			m_Questions = m_TriviaDb.getQuestionByLevel(m_CurrentLevel);
+
+			m_QuestionLength = m_Questions.size();
+			if (m_QuestionLength < 10) {
+				m_MaxNumberOfQuestionInLevel = m_QuestionLength;
+			} else {
+				m_MaxNumberOfQuestionInLevel = 10;
+			}
+
+			m_QuestionIndex = 0;
+
+			Collections.shuffle(m_Questions);
 
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(Game.this);
 
@@ -158,12 +166,11 @@ public class Game extends Activity implements OnClickListener {
 						}
 					});
 			alertDialog.setCancelable(false);
-			
-			
+
 			alertDialog.show();
 
 		} else {
-			Toast.makeText(this, "game over levels", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Levels Game Over", Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -222,10 +229,10 @@ public class Game extends Activity implements OnClickListener {
 		buttonAnswer4.setBackgroundResource(R.drawable.blue_button);
 
 		switch (m_CurrentGameType) {
-		case KEY_GAMETYPE_ALL_QUESTIONS:
+		case GAMETYPE_ALL_QUESTIONS:
 			startNewQuestionAllQuestions();
 			break;
-		case KEY_GAMETYPE_LEVELS:
+		case GAMETYPE_LEVELS:
 
 			startNewQuestionLevels();
 			break;
@@ -251,7 +258,11 @@ public class Game extends Activity implements OnClickListener {
 			if (m_CurrentQuestion == null) {
 				// no more questions in this level
 				// going to next level
-				Toast.makeText(Game.this, "No more questions in this level, going to next level :)", Toast.LENGTH_LONG).show();
+
+				Toast.makeText(
+						Game.this,
+						"No more questions in this level, going to next level :)",
+						Toast.LENGTH_LONG).show();
 				startNewRoundGameLevels();
 
 			} else {
@@ -285,24 +296,14 @@ public class Game extends Activity implements OnClickListener {
 	}
 
 	private Question getNextQuestionInLevel() {
-		//
-		boolean foundQuestion = false;
+
 		Question ret = null;
 
-		Log.v(TAG, "Current level is " + m_CurrentLevel);
-
-		while (m_QuestionIndex < m_QuestionLength && !foundQuestion) {
+		if (m_QuestionIndex < m_QuestionLength) {
 
 			ret = m_Questions.get(m_QuestionIndex);
 
-			if (ret.getQuestionLevel() == m_CurrentLevel) {
-				foundQuestion = true;
-			}
 			m_QuestionIndex++;
-		}
-
-		if (!foundQuestion) {
-			ret = null;
 		}
 
 		return ret;
@@ -342,6 +343,7 @@ public class Game extends Activity implements OnClickListener {
 	private void initializeVariables() {
 		//
 
+		m_GameOver = false;
 		m_TriviaDb = new TriviaDbEngine(Game.this);
 		// m_Random = new Random(1);
 		m_Random = new Random(System.currentTimeMillis());
@@ -496,7 +498,6 @@ public class Game extends Activity implements OnClickListener {
 			ret = -1;
 			sb.append("Time is up!");
 			incCurrentWrongAnswersCounter();
-			
 
 		} else {
 
@@ -520,12 +521,9 @@ public class Game extends Activity implements OnClickListener {
 		if (m_QuestionIndex < m_QuestionLength) {
 			// start a new question and
 			new StartNewQuestionAsync().execute(m_DelayBetweenQuestions);
-		} else {
-			if (m_CurrentGameType == KEY_GAMETYPE_ALL_QUESTIONS) {
 
-				sb.append("Finished Round!");
-				// TODO: how to end this
-			}
+		} else {
+			finishedQuestions();
 		}
 
 		if (sb.length() > 0) {
@@ -537,10 +535,43 @@ public class Game extends Activity implements OnClickListener {
 
 	}
 
+	private void finishedQuestions() {
+		//
+		switch (m_CurrentGameType) {
+		case GAMETYPE_ALL_QUESTIONS:
+			Toast.makeText(Game.this, "Game over", Toast.LENGTH_LONG).show();
+			break;
+
+		case GAMETYPE_LEVELS:
+			startNewRoundGameLevels();
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
 	private void incCurrentWrongAnswersCounter() {
-		// 
-		m_CurrentWrongAnswersCounter++;
-		
+		//
+		//m_CurrentWrongAnswersCounter++;
+		if ( m_CurrentWrongAnswersCounter > m_MaxWrongAnswersAllowed){
+			m_GameOver = true;
+			AlertDialog.Builder gameOverDialog = new AlertDialog.Builder(Game.this);
+			gameOverDialog.setTitle("Game over :(");
+			gameOverDialog.setCancelable(false);
+			gameOverDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// 
+					
+				}
+			});
+			gameOverDialog.show();
+			
+		}
+
 	}
 
 	private void stopCountdownCounter() {

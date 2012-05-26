@@ -17,7 +17,7 @@ public class Question {
 	private ArrayList<String> m_Answers;
 
 	private int m_CorrectAnswerIndex;
-	private String m_Category;
+	private int m_Category;
 	private String m_SubCategory;
 	private String m_Language;
 	
@@ -40,7 +40,7 @@ public class Question {
 		m_CorrectAnswerIndex = i_Value
 				.getAsInteger(TriviaDbEngine.KEY_ANSWER_INDEX);
 
-		m_Category = i_Value.getAsString(TriviaDbEngine.KEY_CATEGORY);
+		m_Category = i_Value.getAsInteger(TriviaDbEngine.KEY_CATEGORY);
 		
 		double x = i_Value.getAsDouble(TriviaDbEngine.KEY_CORRECT_WRONG_RATIO);
 		
@@ -57,6 +57,7 @@ public class Question {
 	public int getQuestionLevel() {
 		
 		Log.v(TAG,"getQuestionLevel(): Question level is "+ m_CorrectWrongRatio);
+		Log.v(TAG,"getQuestionLevel(): Question category is "+ m_Category);
 
 		
 		return m_CorrectWrongRatio;
@@ -123,6 +124,11 @@ public class Question {
 	public String getQuestionId() {
 		//
 		return m_QuestionId;
+	}
+
+	public int getCategory() {
+		// 
+		return m_Category;
 	}
 
 }

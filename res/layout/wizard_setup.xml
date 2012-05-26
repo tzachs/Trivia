@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/viewWizardSetup"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ViewFlipper
+        android:id="@+id/viewFlipperWizardSetup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true" >
+        
+         <include
+            android:id="@+id/wizard_setup_welcome"
+            layout="@layout/wizard_setup_welcome" />
+
+        <include
+            android:id="@+id/wizard_setup_network"
+            layout="@layout/wizard_setup_network" />
+
+        <include
+            android:id="@+id/wizard_setup_game"
+            layout="@layout/wizard_setup_game" />
+         <include
+            android:id="@+id/wizard_setup_finish"
+            layout="@layout/wizard_setup_finish" />
+        
+     
+    </ViewFlipper>
+
+    <Button
+        android:id="@+id/buttonNext"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="@string/buttonNextText" />
+
+</RelativeLayout>

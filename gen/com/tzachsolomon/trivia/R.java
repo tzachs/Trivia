@@ -27,23 +27,51 @@ public final class R {
         public static final int buttonAnswer4=0x7f09000a;
         public static final int buttonNewGame=0x7f09000d;
         public static final int buttonNewGameLevels=0x7f09000c;
+        public static final int buttonNext=0x7f090017;
         public static final int buttonPreferences=0x7f09000f;
         public static final int buttonReportMistakeInQuestion=0x7f09000b;
+        public static final int buttonSetupFinish=0x7f090019;
         public static final int buttonUpdateDatabase=0x7f09000e;
-        public static final int menuItemAbout=0x7f090010;
-        public static final int menuItemExit=0x7f090012;
-        public static final int menuItemPreferences=0x7f090011;
+        public static final int buttonWizardSetup=0x7f090010;
+        public static final int checkBoxAllowUpdateUsing3GOnly=0x7f090025;
+        public static final int checkBoxAllowUpdateUsingMobileNetwork=0x7f090024;
+        public static final int checkBoxAllowUpdateUsingWifi=0x7f090023;
+        public static final int checkBoxCheckUpdateOnStartup=0x7f09001f;
+        public static final int checkBoxShowReportQuestion=0x7f09001d;
+        public static final int checkBoxUploadWrongCorrectStatistics=0x7f09001e;
+        public static final int menuItemAbout=0x7f090027;
+        public static final int menuItemExit=0x7f090029;
+        public static final int menuItemPreferences=0x7f090028;
         public static final int textViewNumberOfQuestionsLeft=0x7f090003;
         public static final int textViewNumberOfQuestionsLeftTitle=0x7f090002;
         public static final int textViewQuestion=0x7f090006;
         public static final int textViewQuestionDifficulty=0x7f090005;
         public static final int textViewQuestionDifficultyTitle=0x7f090004;
+        public static final int textViewSetupFinish=0x7f090018;
         public static final int textViewTime=0x7f090001;
         public static final int textViewTimeTitle=0x7f090000;
+        public static final int textViewWelcomeMessage=0x7f090026;
+        public static final int textViewWizardSetupGame=0x7f09001b;
+        public static final int textViewWizardSetupGameHint=0x7f09001c;
+        public static final int textViewWizardSetupNetwork=0x7f090021;
+        public static final int textViewWizardSetupNetworkHint=0x7f090022;
+        public static final int viewFlipperWizardSetup=0x7f090012;
+        public static final int viewWizardSetup=0x7f090011;
+        public static final int wizard_setup_1=0x7f090020;
+        public static final int wizard_setup_2=0x7f09001a;
+        public static final int wizard_setup_finish=0x7f090016;
+        public static final int wizard_setup_game=0x7f090015;
+        public static final int wizard_setup_network=0x7f090014;
+        public static final int wizard_setup_welcome=0x7f090013;
     }
     public static final class layout {
         public static final int game=0x7f030000;
         public static final int main=0x7f030001;
+        public static final int wizard_setup=0x7f030002;
+        public static final int wizard_setup_finish=0x7f030003;
+        public static final int wizard_setup_game=0x7f030004;
+        public static final int wizard_setup_network=0x7f030005;
+        public static final int wizard_setup_welcome=0x7f030006;
     }
     public static final class menu {
         public static final int main_menu=0x7f080000;
@@ -53,9 +81,16 @@ public final class R {
         public static final int buttonAnswer1=0x7f060003;
         public static final int buttonNewGameLevelsText=0x7f060021;
         public static final int buttonNewGameText=0x7f060001;
+        public static final int buttonNextText=0x7f060033;
         public static final int buttonPreferencesText=0x7f06001d;
         public static final int buttonReportMistakeInQuestion=0x7f060009;
+        public static final int buttonSetupFinishText=0x7f060028;
         public static final int buttonUpdateDatabaseText=0x7f060005;
+        public static final int buttonWizardSetupText=0x7f060025;
+        public static final int checkBoxAllowUpdateUsing3GOnlyText=0x7f060032;
+        public static final int checkBoxAllowUpdateUsingMobileNetworkText=0x7f060031;
+        public static final int checkBoxAllowUpdateUsingWifiText=0x7f060030;
+        public static final int checkBoxCheckUpdateOnStartupText=0x7f06002d;
         public static final int checkBoxPreferenceAllowUpdateMobileNetwork3GSummary=0x7f06000f;
         public static final int checkBoxPreferenceAllowUpdateMobileNetwork3GTitle=0x7f06000e;
         public static final int checkBoxPreferenceAllowUpdateMobileNetworkRoamingSummary=0x7f06000c;
@@ -70,6 +105,8 @@ public final class R {
         public static final int checkBoxPreferenceShowReportQuestionTitle=0x7f060014;
         public static final int checkBoxPreferenceUploadCorrectWrongUserStatSummary=0x7f06001f;
         public static final int checkBoxPreferenceUploadCorrectWrongUserStatTitle=0x7f060020;
+        public static final int checkBoxShowReportQuestionText=0x7f06002b;
+        public static final int checkBoxUploadWrongCorrectStatisticsText=0x7f06002c;
         public static final int editTextPreferenceCountDownTimerSummary=0x7f06001b;
         public static final int editTextPreferenceCountDownTimerTitle=0x7f06001c;
         public static final int editTextPreferenceDelayBetweenQuestionsSummary=0x7f06000a;
@@ -84,8 +121,14 @@ public final class R {
         public static final int textViewNumberOfQuestionsLeftTitle=0x7f060007;
         public static final int textViewQuestionDifficultyTitle=0x7f060008;
         public static final int textViewQuestionText=0x7f060002;
+        public static final int textViewSetupFinishText=0x7f060027;
         public static final int textViewTimeText=0x7f060004;
         public static final int textViewTimeTitleText=0x7f060006;
+        public static final int textViewWelcomeMessageText=0x7f060026;
+        public static final int textViewWizardSetupGameHintText=0x7f06002a;
+        public static final int textViewWizardSetupGameText=0x7f060029;
+        public static final int textViewWizardSetupNetworkHintText=0x7f06002f;
+        public static final int textViewWizardSetupNetworkText=0x7f06002e;
     }
     public static final class style {
         public static final int Button=0x7f070000;

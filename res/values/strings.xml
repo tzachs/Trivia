@@ -38,6 +38,21 @@
     <string name="preferenceCategoryGameRelatedTitle">הגדרות משחק</string>
     <string name="checkBoxPreferenceCheckUpdateOnStartupSummary">בדוק עדכון בעלייה</string>
     <string name="checkBoxPreferenceCheckUpdateOnStartupTitle">בדוק עדכון בעלייה</string>
+    <string name="buttonWizardSetupText">Wizard Setup</string>
+    <string name="textViewWelcomeMessageText">Welcome to first time configuration wizard of Trivia. Press next to toggle betweens options and click finish when you are done</string>
+    <string name="textViewSetupFinishText">Thank you for confiuring Trivia for the first time. Next thing to do is hit finish and than update database from the main menu</string>
+    <string name="buttonSetupFinishText">Finish</string>
+    <string name="textViewWizardSetupGameText">Game Setup</string>
+    <string name="textViewWizardSetupGameHintText">In this page you can configure game related preferences</string>
+    <string name="checkBoxShowReportQuestionText">If you would like to help us by reporting errors in questions, enable this :)</string>
+    <string name="checkBoxUploadWrongCorrectStatisticsText">Upload correct wrong statistics. User statisics help us calculate and determine the level of each question</string>
+    <string name="checkBoxCheckUpdateOnStartupText">Check database updates on startup</string>
+    <string name="textViewWizardSetupNetworkText">Network setup</string>
+    <string name="textViewWizardSetupNetworkHintText">In this page you can configure how you will recieve updates for the questions database</string>
+    <string name="checkBoxAllowUpdateUsingWifiText">Allow update using WiFi</string>
+    <string name="checkBoxAllowUpdateUsingMobileNetworkText">Allow update using Mobile Network. Notice!!! your mobile network provider might charge you.</string>
+    <string name="checkBoxAllowUpdateUsing3GOnlyText">Allow update using only 3G Networks. This is a recommended option if using the mobile network to update.</string>
+    <string name="buttonNextText">Next</string>
     
 
 </resources>

@@ -181,7 +181,7 @@ public class TriviaDbEngine {
 
 		Cursor cursor;
 
-		int i;
+		
 		ArrayList<Question> ret;
 		this.openDbReadable();
 
@@ -191,14 +191,14 @@ public class TriviaDbEngine {
 
 		ret = new ArrayList<Question>();
 
-		i = 0;
+		
 
 		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
 
 			DatabaseUtils.cursorRowToContentValues(cursor, map);
 
 			ret.add(new Question(map));
-			i++;
+		
 
 		}
 
@@ -207,6 +207,133 @@ public class TriviaDbEngine {
 		this.closeDb();
 
 		return ret;
+	}
+	
+	public ArrayList<Question> getQuestionByLevel(int i_Level){
+		// 
+		
+		StringBuilder orderBy = new StringBuilder();
+		ContentValues map;
+		String sum = "SUM("+KEY_CORRECT_USER + " + " + KEY_WRONG_USER + ") as sumUserCorrectWrong" ;
+		String[] columns = { sum, KEY_ANSWER1, KEY_ANSWER2, KEY_ANSWER3,
+				KEY_ANSWER4, KEY_ANSWER_INDEX, KEY_CATEGORY,
+				KEY_CORRECT_WRONG_RATIO, KEY_CORRECT_USER, KEY_ENABLED,
+				KEY_LANGUAGE, KEY_LAST_UPDATE, KEY_QUESTION, KEY_QUESTIONID,
+				KEY_ROWID, KEY_SUB_CATEGORY, KEY_WRONG_USER };
+
+		Cursor cursor;
+		double i_MaxLevel = ((double)i_Level + 0.5) / 10;
+		double i_MinLevel = i_MaxLevel - 0.1;
+		
+		
+		// this correction is done since the ratio is in double from 0 - 1 and the level are in integer from 1 - 10
+		// in order to convert ratio to level we do plus 0.5 and floor the answer meaning:
+		// level 1 is [0,0.15)
+		// level 2 is [0.15,0.25)
+		// level 10 is [0.95,1]
+		if ( i_Level ==  1){
+			i_MinLevel = 0;
+		}
+		
+		
+		String where = KEY_ENABLED + "=1 AND " + KEY_CORRECT_WRONG_RATIO + " <  " + i_MaxLevel + " AND " +  
+			KEY_CORRECT_WRONG_RATIO + " >= " + i_MinLevel;
+		
+		ArrayList<Question> ret;
+		
+		
+		// ordering by
+		// the category
+		orderBy.append(KEY_CATEGORY);
+		orderBy.append(',');
+		// the least answered questions by the user (meaning the user didn't already answer these questions)
+		// notice this is cleared every update
+		orderBy.append("sumUserCorrectWrong");
+		
+		
+		
+		
+		this.openDbReadable();
+
+		map = new ContentValues();
+		cursor = ourDatabase.query(TABLE_QUESTIONS, columns,where, null, KEY_QUESTIONID, null, orderBy.toString());
+		
+				
+		
+		orderBy.setLength(0);
+
+		ret = new ArrayList<Question>();
+		
+
+		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+
+			DatabaseUtils.cursorRowToContentValues(cursor, map);
+
+			ret.add(new Question(map));
+		
+
+		}
+
+		cursor.close();
+
+		this.closeDb();
+
+		return ret;
+		
+	}
+
+	
+	public ArrayList<Question> getQuestionsSortedBy(String... i_OrderBy){
+		// 
+		StringBuilder orderBy = new StringBuilder();
+		ContentValues map;
+		String[] columns = { KEY_ANSWER1, KEY_ANSWER2, KEY_ANSWER3,
+				KEY_ANSWER4, KEY_ANSWER_INDEX, KEY_CATEGORY,
+				KEY_CORRECT_WRONG_RATIO, KEY_CORRECT_USER, KEY_ENABLED,
+				KEY_LANGUAGE, KEY_LAST_UPDATE, KEY_QUESTION, KEY_QUESTIONID,
+				KEY_ROWID, KEY_SUB_CATEGORY, KEY_WRONG_USER };
+
+		Cursor cursor;
+
+		int i, length;
+		ArrayList<Question> ret;
+		
+		length = i_OrderBy.length - 1;
+		
+		for ( i = 0; i < length; i++){
+			orderBy.append(i_OrderBy[i]);
+			orderBy.append(',');
+		}
+		
+		orderBy.append(i_OrderBy[length]);
+		
+		this.openDbReadable();
+
+		map = new ContentValues();
+		cursor = ourDatabase.query(TABLE_QUESTIONS, columns,
+				KEY_ENABLED + "=1", null, null, null, orderBy.toString());
+		
+		orderBy.setLength(0);
+
+		ret = new ArrayList<Question>();
+
+		
+
+		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+
+			DatabaseUtils.cursorRowToContentValues(cursor, map);
+
+			ret.add(new Question(map));
+			
+
+		}
+
+		cursor.close();
+
+		this.closeDb();
+
+		return ret;
+		
 	}
 
 	public boolean isEmpty() {
@@ -514,5 +641,7 @@ public class TriviaDbEngine {
 		this.closeDb();
 		return ret;
 	}
+
+	
 
 }

@@ -76,7 +76,10 @@
             android:summary="@string/checkBoxPreferenceAllowUpdateMobileNetworkRoamingSummary"
             android:title="@string/checkBoxPreferenceAllowUpdateMobileNetworkRoamingTitle" />
     </PreferenceCategory>
-    
-   
+    <CheckBoxPreference 
+        android:key="showFirstTimeConfiguration"
+        android:defaultValue="true"
+        android:title="Show first time configuration"
+        />
 
 </PreferenceScreen>

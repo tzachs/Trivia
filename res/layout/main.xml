@@ -2,9 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" 
     android:background="#FFE8D0A9"
-    >
+    android:orientation="vertical" >
 
     <Button
         android:id="@+id/buttonNewGameLevels"
@@ -13,7 +12,7 @@
         android:layout_above="@+id/buttonNewGame"
         android:layout_margin="4dp"
         android:text="@string/buttonNewGameLevelsText" />
-    
+
     <Button
         android:id="@+id/buttonNewGame"
         android:layout_width="fill_parent"
@@ -29,7 +28,7 @@
         android:layout_below="@id/buttonNewGame"
         android:layout_margin="4dp"
         android:text="@string/buttonUpdateDatabaseText" />
-    
+
     <Button
         android:id="@+id/buttonPreferences"
         android:layout_width="fill_parent"
@@ -37,5 +36,13 @@
         android:layout_below="@id/buttonUpdateDatabase"
         android:layout_margin="4dp"
         android:text="@string/buttonPreferencesText" />
+
+    <Button
+        android:id="@+id/buttonWizardSetup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/buttonWizardSetup"
+        android:layout_margin="4dp"
+        android:text="@string/buttonWizardSetupText" />
 
 </RelativeLayout>
