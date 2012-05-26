@@ -37,12 +37,6 @@
         android:layout_margin="4dp"
         android:text="@string/buttonPreferencesText" />
 
-    <Button
-        android:id="@+id/buttonWizardSetup"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/buttonWizardSetup"
-        android:layout_margin="4dp"
-        android:text="@string/buttonWizardSetupText" />
+  
 
 </RelativeLayout>

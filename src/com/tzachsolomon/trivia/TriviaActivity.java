@@ -2,11 +2,12 @@ package com.tzachsolomon.trivia;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+
 import android.app.ProgressDialog;
 
 import android.content.ContentValues;
-
 import android.content.DialogInterface;
+
 import android.content.Intent;
 
 import android.content.SharedPreferences;
@@ -45,8 +46,6 @@ public class TriviaActivity extends Activity implements OnClickListener {
 	private JSONHandler m_JSONHandler;
 
 	private SharedPreferences m_SharedPreferences;
-
-	private Button buttonWizardSetup;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -87,65 +86,11 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		new AsyncTaskCheckUpdateIsAvailable().execute(i_DisplayInfoIfNoUpdate);
 	}
 
-	private boolean checkIfFirstTime() {
-		//
-
-		boolean ret = m_TriviaDb.isEmpty();
-		/*
-		 * if (ret) { updateDatabaseFromInternetDisplayQuestion(
-		 * "It seems this is the first time you are running Trivia.\n" +
-		 * "You must once update the datatable.\n" +
-		 * "Update Now? (This requires internet connection)"); }
-		 */
-
-		return ret;
-
-	}
-
-	private void updateDatabaseFromInternet() {
-		ContentValues[] values;
-		String updateMethod;
-		String serverUrl = m_SharedPreferences.getString(
-				"editTextPreferencePrimaryServerIP", "");
-
-		if (serverUrl.contentEquals("")) {
-			Toast.makeText(this,
-					"Error finding server URL, please check prefereneces",
-					Toast.LENGTH_SHORT).show();
-
-		} else {
-
-			// getting the desired update method
-			updateMethod = m_SharedPreferences.getString(
-					"listPreferenceUpdateMethod", "async");
-
-			if (updateMethod.contentEquals("sync")) {
-				values = m_JSONHandler.updateFromInternetSync(m_TriviaDb
-						.getLastUpdate());
-				if (values == null) {
-					Toast.makeText(this, "Error updating from server",
-							Toast.LENGTH_SHORT).show();
-				} else {
-
-					m_TriviaDb.updateFromInternetSync(values);
-				}
-
-			} else {
-				m_JSONHandler.updateFromInternetAsync(m_TriviaDb
-						.getLastUpdate());
-
-			}
-		}
-
-	}
-
-	private void updateDatabaseFromInternetDisplayQuestion(String i_Message) {
-
-	}
-
 	private void initializeVariables() {
 		//
 		m_TriviaDb = new TriviaDbEngine(this);
+
+		m_TriviaDb.deleteQuestions();
 
 		m_JSONHandler = new JSONHandler(TriviaActivity.this);
 
@@ -159,13 +104,11 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		buttonUpdateDatabase = (Button) findViewById(R.id.buttonUpdateDatabase);
 		buttonPreferences = (Button) findViewById(R.id.buttonPreferences);
 		buttonNewGameLevels = (Button) findViewById(R.id.buttonNewGameLevels);
-		buttonWizardSetup = (Button) findViewById(R.id.buttonWizardSetup);
 
 		buttonNewGame.setOnClickListener(this);
 		buttonUpdateDatabase.setOnClickListener(this);
 		buttonPreferences.setOnClickListener(this);
 		buttonNewGameLevels.setOnClickListener(this);
-		buttonWizardSetup.setOnClickListener(this);
 
 		// checking if the device is with API 11 and earlier,
 		// if so, hide the preferences button since it can be done through menu
@@ -180,9 +123,6 @@ public class TriviaActivity extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		//
 		switch (v.getId()) {
-		case R.id.buttonWizardSetup:
-			buttonWizardSetup_Clicked();
-			break;
 		case R.id.buttonNewGame:
 			buttonNewGame_Clicked();
 			break;
@@ -225,13 +165,13 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 	private void buttonUpdateDatabase_Clicked() {
 		//
-		uploadCorrectWrong();
-
-	}
-
-	private void uploadCorrectWrong() {
-		//
-		new UpdateCorrectWrongAsync().execute();
+		// checking if to upload user correct wrong statistics before
+		if (m_SharedPreferences.getBoolean(
+				"checkBoxPreferenceUploadCorrectWrongUserStat", true)) {
+			new AsyncTaskUpdateCorrectWrongAsync().execute();
+		} else {
+			checkIsUpdateAvailableAsync(true);
+		}
 
 	}
 
@@ -302,7 +242,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 	}
 
-	public class UpdateCorrectWrongAsync extends
+	public class AsyncTaskUpdateCorrectWrongAsync extends
 			AsyncTask<Void, Integer, String> {
 
 		boolean enabled;
@@ -313,24 +253,18 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		protected void onPreExecute() {
 			StringBuilder detailedResult = new StringBuilder();
 			//
-			enabled = m_SharedPreferences.getBoolean(
-					"checkBoxPreferenceUploadCorrectWrongUserStat", true);
 
+			enabled = m_JSONHandler.isInternetAvailable(detailedResult);
 			if (enabled) {
-				enabled = m_JSONHandler.isInternetAvailable(detailedResult);
-				if (enabled) {
 
-					m_ProgressDialog = new ProgressDialog(TriviaActivity.this);
-					m_ProgressDialog
-							.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-					m_ProgressDialog
-							.setTitle("Uploading correct wrong statistics");
-					m_ProgressDialog.show();
-				} else {
-					Toast.makeText(TriviaActivity.this,
-							detailedResult.toString(), Toast.LENGTH_LONG)
-							.show();
-				}
+				m_ProgressDialog = new ProgressDialog(TriviaActivity.this);
+				m_ProgressDialog
+						.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+				m_ProgressDialog.setTitle("Uploading correct wrong statistics");
+				m_ProgressDialog.show();
+			} else {
+				Toast.makeText(TriviaActivity.this, detailedResult.toString(),
+						Toast.LENGTH_LONG).show();
 			}
 
 			detailedResult.setLength(0);
@@ -339,20 +273,19 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		@Override
 		protected void onPostExecute(String result) {
 			//
-			if (result.length() > 0) {
-				Toast.makeText(TriviaActivity.this, result, Toast.LENGTH_LONG)
-						.show();
-			} else {
-				Toast.makeText(TriviaActivity.this,
-						"Thank you for making this trivia better! :)",
-						Toast.LENGTH_SHORT).show();
-			}
-
 			if (enabled) {
-				m_ProgressDialog.dismiss();
-			}
+				if (result.length() > 0) {
+					Toast.makeText(TriviaActivity.this, result,
+							Toast.LENGTH_LONG).show();
+				} else {
+					Toast.makeText(TriviaActivity.this,
+							"Thank you for making this trivia better! :)",
+							Toast.LENGTH_SHORT).show();
+				}
 
-			checkIsUpdateAvailableAsync(true);
+				m_ProgressDialog.dismiss();
+				checkIsUpdateAvailableAsync(true);
+			}
 
 		}
 
@@ -397,34 +330,67 @@ public class TriviaActivity extends Activity implements OnClickListener {
 	}
 
 	private class AsyncTaskCheckUpdateIsAvailable extends
-			AsyncTask<Boolean, Integer, Boolean> {
+			AsyncTask<Boolean, Integer, Integer> {
 
 		private ProgressDialog m_ProgressDialog;
+		private boolean enabled;
 
 		@Override
 		protected void onPreExecute() {
 			//
-			m_ProgressDialog = new ProgressDialog(TriviaActivity.this);
-			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			m_ProgressDialog.setTitle("Checking for updates...");
-			m_ProgressDialog.setCancelable(true);
-			m_ProgressDialog.show();
+			StringBuilder detailedResult = new StringBuilder();
+
+			enabled = m_JSONHandler.isInternetAvailable(detailedResult);
+			if (enabled) {
+				m_ProgressDialog = new ProgressDialog(TriviaActivity.this);
+				m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				m_ProgressDialog.setTitle("Checking for updates...");
+				m_ProgressDialog.setCancelable(true);
+				m_ProgressDialog.show();
+			} else {
+				Toast.makeText(TriviaActivity.this, detailedResult.toString(),
+						Toast.LENGTH_LONG).show();
+			}
+
+			detailedResult.setLength(0);
 
 		}
 
 		@Override
-		protected void onPostExecute(Boolean result) {
+		protected void onPostExecute(Integer result) {
 			//
 			m_ProgressDialog.dismiss();
-			if (result) {
-				try {
-					new AsyncTaskUpdateFromDatabase()
-							.execute("Update is available\nUpdate database?");
+			if (result > 0) {
+				AlertDialog.Builder dialog = new AlertDialog.Builder(
+						TriviaActivity.this);
+				dialog.setCancelable(false);
+				dialog.setMessage("Update is available for " + result
+						+ " Questions.\nUpdate database?");
+				dialog.setPositiveButton("Update",
+						new DialogInterface.OnClickListener() {
 
-				} catch (Exception e) {
-					Log.e(TAG, "error at onPostExecute");
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								//
+								m_JSONHandler
+										.updateFromInternetAsync(m_TriviaDb
+												.getLastUpdate());
 
-				}
+							}
+						});
+				dialog.setNegativeButton("Cancel",
+						new DialogInterface.OnClickListener() {
+
+							@Override
+							public void onClick(DialogInterface dialog,
+									int which) {
+								//
+							}
+						});
+
+				dialog.show();
+
 			} else {
 				Toast.makeText(TriviaActivity.this, "No update available",
 						Toast.LENGTH_SHORT).show();
@@ -432,17 +398,12 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		}
 
 		@Override
-		protected Boolean doInBackground(Boolean... params) {
+		protected Integer doInBackground(Boolean... params) {
 			//
-			boolean ret = false;
+			int ret = -1;
 			try {
 				long lastUpdate = m_TriviaDb.getLastUpdate();
-				int numberOfQuestionsToUpdate = m_JSONHandler
-						.isUpdateAvailable(lastUpdate);
-
-				if (numberOfQuestionsToUpdate > 0) {
-					ret = true;
-				}
+				ret = m_JSONHandler.isUpdateAvailable(lastUpdate);
 
 			} catch (Exception e) {
 				String msg = e.getMessage().toString();
@@ -453,37 +414,6 @@ public class TriviaActivity extends Activity implements OnClickListener {
 			}
 
 			return ret;
-		}
-
-	}
-
-	public class AsyncTaskUpdateFromDatabase extends
-			AsyncTask<String, Integer, Boolean> {
-
-		@Override
-		protected void onPreExecute() {
-			// TODO Auto-generated method stub
-			super.onPreExecute();
-		}
-
-		@Override
-		protected void onPostExecute(Boolean result) {
-			// TODO Auto-generated method stub
-			super.onPostExecute(result);
-		}
-
-		@Override
-		protected void onProgressUpdate(Integer... values) {
-			//
-			super.onProgressUpdate(values);
-		}
-
-		@Override
-		protected Boolean doInBackground(String... params) {
-			//
-			m_JSONHandler.updateFromInternetAsync(m_TriviaDb
-					.getLastUpdate());
-			return null;
 		}
 
 	}

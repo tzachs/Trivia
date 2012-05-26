@@ -45,13 +45,7 @@
             android:summary="@string/editTextPreferencePrimaryServerIPSummary"
             android:title="@string/editTextPreferencePrimaryServerIPTitle" />
 
-        <ListPreference
-            android:defaultValue="async"
-            android:entries="@array/updateMethod"
-            android:entryValues="@array/updateMethodValues"
-            android:key="listPreferenceUpdateMethod"
-            android:summary="@string/listPreferenceUpdateMethodSummary"
-            android:title="@string/listPreferenceUpdateMethodTitle" />
+     
 
         <CheckBoxPreference
             android:defaultValue="true"

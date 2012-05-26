@@ -76,6 +76,12 @@ public class WizardSetup extends Activity implements OnClickListener,
 		checkBoxShowReportQuestion.setOnCheckedChangeListener(this);
 		checkBoxUploadWrongCorrectStatistics.setOnCheckedChangeListener(this);
 		checkBoxCheckUpdateOnStartup.setOnCheckedChangeListener(this);
+		
+		checkBoxAllowUpdateUsingWifi.setChecked(m_SharedPreferences.getBoolean("checkBoxPreferenceAllowUpdateWifi",true));
+		checkBoxAllowUpdateUsingMobileNetwork.setChecked(m_SharedPreferences.getBoolean("checkBoxPreferenceAllowUpdateMobileNetwork",
+				false));
+		checkBoxAllowUpdateUsing3GOnly.setChecked(checkBoxAllowUpdateUsingMobileNetwork.isChecked());
+		checkBoxAllowUpdateUsing3GOnly.setEnabled(checkBoxAllowUpdateUsingMobileNetwork.isChecked());
 
 	}
 
