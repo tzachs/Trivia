@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/wizard_setup_1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textViewWizardSetupLanguage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="4dp"
+        android:text="@string/textViewWizardSetupLanguageText"
+        android:textSize="20dp" />
+
+    <View
+        android:id="@+id/viewLine"
+        android:layout_width="fill_parent"
+        android:layout_height="4dip"
+        android:layout_below="@+id/textViewWizardSetupLanguage"
+        android:background="@drawable/custom_line_purple" />
+
+    <TextView
+        android:id="@+id/textViewWizardSetupLanguageMessage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/viewLine"
+        android:layout_margin="4dp"
+        android:layout_marginBottom="20dp"
+        android:text="@string/textViewWizardSetupLanguageMessageText" />
+    
+    <ListView 
+        android:id="@+id/listViewLanguages"
+        android:entries="@array/strinArrayLanguagesText"
+        android:layout_width="fill_parent"        
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewWizardSetupLanguageMessage"
+        android:layout_margin="4dp"
+        
+        ></ListView>
+
+    
+    
+    
+
+</RelativeLayout>

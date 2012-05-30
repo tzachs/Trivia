@@ -13,36 +13,49 @@
         android:layout_marginBottom="4dp"
         android:text="@string/textViewWizardSetupNetworkText"
         android:textSize="20dp" />
-
+    
+      
+    <View 
+        android:id="@+id/viewLine"
+        android:layout_width="fill_parent"
+        android:layout_height="4dip"
+        android:layout_below="@+id/textViewWizardSetupNetwork"
+        android:background="@drawable/custom_line_yellow"
+        />
+
     <TextView
         android:id="@+id/textViewWizardSetupNetworkHint"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewWizardSetupNetwork"
+        android:layout_below="@+id/viewLine"
+        android:layout_margin="4dp"
         android:layout_marginBottom="20dp"
         android:text="@string/textViewWizardSetupNetworkHintText" />
-
+
     <CheckBox
         android:id="@+id/checkBoxAllowUpdateUsingWifi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textViewWizardSetupNetworkHint"
+        android:layout_margin="4dp"
         android:checked="true"
         android:text="@string/checkBoxAllowUpdateUsingWifiText" />
-
+
     <CheckBox
         android:id="@+id/checkBoxAllowUpdateUsingMobileNetwork"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/checkBoxAllowUpdateUsingWifi"
+        android:layout_margin="4dp"
         android:checked="false"
         android:text="@string/checkBoxAllowUpdateUsingMobileNetworkText" />
-
+
     <CheckBox
         android:id="@+id/checkBoxAllowUpdateUsing3GOnly"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/checkBoxAllowUpdateUsingMobileNetwork"
+        android:layout_margin="4dp"
         android:checked="false"
         android:enabled="false"
         android:text="@string/checkBoxAllowUpdateUsing3GOnlyText" />

@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <PreferenceCategory
+        android:key="preferenceCategoryGenerlUI"
+        android:title="General UI">
+        <ListPreference android:entries="@array/strinArrayLanguagesText"
+            android:entryValues="@array/integerArrayLanguagesValues" android:key="listPreferenceLanguages"
+            android:defaultValue="2" android:title="Language" android:summary="UI Language"
+            />
+        
+    </PreferenceCategory>
+         
+    
+    
+    
     <PreferenceCategory 
         android:key="preferenceCategoryGameRelated"
         android:title="@string/preferenceCategoryGameRelatedTitle" >
@@ -9,18 +22,25 @@
             android:inputType="number"
             android:key="editTextPreferenceCountDownTimer"
             android:summary="@string/editTextPreferenceCountDownTimerSummary"
-            android:title="@string/editTextPreferenceCountDownTimerTitle" />
+            android:title="@string/editTextPreferenceCountDownTimerTitle"/>
         <EditTextPreference
             android:defaultValue="500"
             android:inputType="number"
             android:key="editTextPreferenceDelayBetweenQuestions"
             android:summary="@string/editTextPreferenceDelayBetweenQuestionsSummary"
             android:title="@string/editTextPreferenceDelayBetweenQuestionsTitle" />
+        <CheckBoxPreference 
+            android:key="checkBoxPreferencePreferNewQuestions"
+            android:title="@string/checkBoxPreferencePreferNewQuestionsTitle"
+            android:summary="@string/checkBoxPreferencePreferNewQuestionsSummary"
+            android:defaultValue="true"
+            />
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="checkBoxPreferenceShowReportQuestion"
             android:summary="@string/checkBoxPreferenceShowReportQuestionSummary"
             android:title="@string/checkBoxPreferenceShowReportQuestionTitle" />
+        
     </PreferenceCategory>
     <PreferenceCategory
         android:key="preferenceCategoryDatabaseServer"

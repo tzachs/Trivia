@@ -14,39 +14,48 @@
         android:text="@string/textViewWizardSetupGameText"
         android:textSize="20dp" />
      
-     <TextView
-        android:id="@+id/textViewWizardSetupGameHint"
+      <View 
+        android:id="@+id/viewLine"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="4dip"
         android:layout_below="@+id/textViewWizardSetupGame"
-        android:layout_marginBottom="20dp"
-        android:text="@string/textViewWizardSetupGameHintText"/>
-     
+        android:background="@drawable/custom_line_red"
+        />
+     
+     <TextView
+         android:id="@+id/textViewWizardSetupGameHint"
+         android:layout_width="fill_parent"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/viewLine"
+         android:layout_margin="4dp"
+         android:layout_marginBottom="20dp"
+         android:text="@string/textViewWizardSetupGameHintText" />
+     
      <CheckBox
-        android:id="@+id/checkBoxShowReportQuestion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewWizardSetupGameHint"
-        android:checked="false"
-        android:text="@string/checkBoxShowReportQuestionText" />
-     
+         android:id="@+id/checkBoxShowReportQuestion"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/textViewWizardSetupGameHint"
+         android:layout_margin="4dp"
+         android:checked="false"
+         android:text="@string/checkBoxShowReportQuestionText" />
+     
      <CheckBox
-        android:id="@+id/checkBoxUploadWrongCorrectStatistics"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/checkBoxShowReportQuestion"
-        android:checked="true"
-        android:text="@string/checkBoxUploadWrongCorrectStatisticsText" />
-     
+         android:id="@+id/checkBoxUploadWrongCorrectStatistics"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/checkBoxShowReportQuestion"
+         android:layout_margin="4dp"
+         android:checked="true"
+         android:text="@string/checkBoxUploadWrongCorrectStatisticsText" />
+     
      <CheckBox
-        android:id="@+id/checkBoxCheckUpdateOnStartup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/checkBoxUploadWrongCorrectStatistics"
-        android:checked="true"
-        android:text="@string/checkBoxCheckUpdateOnStartupText" />
-     
-     
-    
+         android:id="@+id/checkBoxCheckUpdateOnStartup"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/checkBoxUploadWrongCorrectStatistics"
+         android:layout_margin="4dp"
+         android:checked="true"
+         android:text="@string/checkBoxCheckUpdateOnStartupText" />
 
 </RelativeLayout>

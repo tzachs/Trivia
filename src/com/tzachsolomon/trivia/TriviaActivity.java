@@ -90,7 +90,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		//
 		m_TriviaDb = new TriviaDbEngine(this);
 
-		m_TriviaDb.deleteQuestions();
+		//m_TriviaDb.deleteQuestions();
 
 		m_JSONHandler = new JSONHandler(TriviaActivity.this);
 

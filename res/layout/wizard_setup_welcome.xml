@@ -3,12 +3,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
-
+    
+    <TextView 
+        android:id="@+id/textViewWelcomeTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:text="@string/textViewWelcomeTitle"
+        android:textSize="20dp"
+        />
+    
+    <View 
+        android:id="@+id/viewLine"
+        android:layout_width="fill_parent"
+        android:layout_height="4dip"
+        android:layout_below="@+id/textViewWelcomeTitle"
+        android:background="@drawable/custom_line_white"
+        />
+
     <TextView
         android:id="@+id/textViewWelcomeMessage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_below="@+id/viewLine"
+        android:layout_margin="4dp"
         android:text="@string/textViewWelcomeMessageText" />
 
 </RelativeLayout>

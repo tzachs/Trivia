@@ -14,11 +14,12 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.CountDownTimer;
+
 
 import android.preference.PreferenceManager;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -26,6 +27,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class Game extends Activity implements OnClickListener {
+	
+	// TODO: onPause pause clock
+	// TODO: onResume resume clock
 
 	public static final String TAG = Game.class.getSimpleName();
 
@@ -40,6 +44,7 @@ public class Game extends Activity implements OnClickListener {
 	private TextView textViewTime;
 	private TextView textViewQuestion;
 	private TextView textViewNumberOfQuestionsLeft;
+	private TextView textViewQuestionDifficulty;
 
 	private ArrayList<Question> m_Questions;
 	private Question m_CurrentQuestion;
@@ -51,11 +56,9 @@ public class Game extends Activity implements OnClickListener {
 	private SharedPreferences m_SharedPreferences;
 
 	private Random m_Random;
-	private TextView textViewQuestionDifficulty;
+	
 	private int m_DelayBetweenQuestions;
-
 	private int m_CurrentGameType;
-
 	private int m_CurrentQuestionInThisLevel;
 	private int m_MaxNumberOfQuestionInLevel;
 	private int m_NumberOfLevels;
@@ -65,6 +68,9 @@ public class Game extends Activity implements OnClickListener {
 	private int m_MaxWrongAnswersAllowed;
 	
 	private boolean m_GameOver;
+	private boolean m_SortByNewQuestionFirst;
+
+	private boolean m_ResumeClock;
 
 	public static final int GAMETYPE_ALL_QUESTIONS = 1;
 	public static final int GAMETYPE_LEVELS = 2;
@@ -117,6 +123,8 @@ public class Game extends Activity implements OnClickListener {
 			m_MaxNumberOfQuestionInLevel = 10;
 			m_MaxWrongAnswersAllowed = 3;
 			m_CurrentWrongAnswersCounter = 0;
+			
+			m_SortByNewQuestionFirst = m_SharedPreferences.getBoolean("checkBoxPreferencePreferNewQuestions", true);
 
 			startNewRoundGameLevels();
 
@@ -130,12 +138,14 @@ public class Game extends Activity implements OnClickListener {
 	}
 
 	private void startNewRoundGameLevels() {
-
+		
+		m_ResumeClock = false;
+		
 		m_CurrentLevel++;
 
 		if (m_CurrentLevel <= m_NumberOfLevels && !m_GameOver) {
 
-			m_Questions = m_TriviaDb.getQuestionByLevel(m_CurrentLevel);
+			m_Questions = m_TriviaDb.getQuestionByLevel(m_CurrentLevel, m_SortByNewQuestionFirst);
 
 			m_QuestionLength = m_Questions.size();
 			if (m_QuestionLength < 10) {
@@ -282,7 +292,7 @@ public class Game extends Activity implements OnClickListener {
 				buttonAnswer2.setText(m_CurrentQuestion.getAnswer2());
 				buttonAnswer3.setText(m_CurrentQuestion.getAnswer3());
 				buttonAnswer4.setText(m_CurrentQuestion.getAnswer4());
-
+				
 				m_CountDownCounter.start();
 
 			}
@@ -343,6 +353,7 @@ public class Game extends Activity implements OnClickListener {
 	private void initializeVariables() {
 		//
 
+		m_ResumeClock = false;
 		m_GameOver = false;
 		m_TriviaDb = new TriviaDbEngine(Game.this);
 		// m_Random = new Random(1);
@@ -366,6 +377,7 @@ public class Game extends Activity implements OnClickListener {
 		total *= 1000;
 
 		m_CountDownCounter = new MyCountDownCounter(total, 1000);
+		
 
 		m_CurrentGameType = -1;
 
@@ -399,7 +411,7 @@ public class Game extends Activity implements OnClickListener {
 		textViewQuestionDifficulty = (TextView) findViewById(R.id.textViewQuestionDifficulty);
 	}
 
-	public class MyCountDownCounter extends CountDownTimer {
+	public class MyCountDownCounter extends CountDownTimerWithPause {
 
 		public MyCountDownCounter(long millisInFuture, long countDownInterval) {
 			super(millisInFuture, countDownInterval);
@@ -592,14 +604,24 @@ public class Game extends Activity implements OnClickListener {
 		} else {
 			buttonReportMistakeInQuestion.setVisibility(View.GONE);
 		}
+		
+		if ( m_ResumeClock){
+			m_CountDownCounter.resume();
+		}
+		
 	}
+	
 
 	@Override
 	protected void onPause() {
 		//
 		super.onPause();
+		
+		m_CountDownCounter.pause();
+		m_ResumeClock = true;
 
-		stopCountdownCounter();
+		
 	}
+	
 
 }

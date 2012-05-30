@@ -6,14 +6,18 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ListView;
 import android.widget.ViewFlipper;
 
 public class WizardSetup extends Activity implements OnClickListener,
-		OnCheckedChangeListener {
+		OnCheckedChangeListener, OnItemClickListener {
 
 	private ViewFlipper viewFlipper;
 	private Button buttonNext;
@@ -29,6 +33,7 @@ public class WizardSetup extends Activity implements OnClickListener,
 	private int m_NumberOfPages;
 	private int m_CurrentPageIndex;
 	private Button buttonFinish;
+	private ListView listViewLanguages;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,11 @@ public class WizardSetup extends Activity implements OnClickListener,
 
 		buttonNext.setOnClickListener(this);
 		buttonFinish.setOnClickListener(this);
+		
+		listViewLanguages = (ListView)findViewById(R.id.listViewLanguages);
+		
+		
+		listViewLanguages.setOnItemClickListener(this);
 
 		initializeCheckBoxes();
 
@@ -96,6 +106,8 @@ public class WizardSetup extends Activity implements OnClickListener,
 		case R.id.buttonSetupFinish:
 			buttonSetupFinish_Clicked();
 			break;
+			
+		
 
 		default:
 			break;
@@ -182,6 +194,14 @@ public class WizardSetup extends Activity implements OnClickListener,
 
 		}
 
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		// 
+		m_SharedPreferencesEditor.putString("listPreferenceLanguages",Integer.toString(position+1)).commit();
+		
 	}
 
 }
