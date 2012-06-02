@@ -458,7 +458,7 @@ public class TriviaDbEngine {
 			//
 			m_ProgressDialog = new ProgressDialog(ourContext);
 			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			m_ProgressDialog.setTitle("Inserting questions to DB");
+			m_ProgressDialog.setTitle(ourContext.getString(R.string.inserting_questions_to_database));
 			m_ProgressDialog.show();
 
 		}

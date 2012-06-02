@@ -36,7 +36,6 @@
     <string name="preferenceCategoryGameRelatedTitle">Game Configuration</string>
     <string name="checkBoxPreferenceCheckUpdateOnStartupSummary">Check update on the startup of the app</string>
     <string name="checkBoxPreferenceCheckUpdateOnStartupTitle">Check update on startup</string>
-    <string name="buttonWizardSetupText">Wizard Setup</string>
     <string name="textViewWelcomeMessageText">Welcome to first time configuration wizard of Trivia. Press next to toggle between options and click finish when you are done</string>
     <string name="textViewSetupFinishText">Thank you for configuring Trivia for the first time. Next thing to do is hit finish and than update database from the main menu</string>
     <string name="textViewSetupFinishTitleText">Trivia - Finish</string>
@@ -69,6 +68,20 @@
     <string name="starting_level_">"Starting level "</string>
     <string name="start">Start</string>
     <string name="levels_game_over">Levels Game Over</string>
+    <string name="no_more_questions_in_this_level_going_to_next_level_">No more questions in this level, going to next level :)</string>
+    <string name="error_sent_thanks_">Error sent, thanks :)</string>
+    <string name="game_over">Game over</string>
+    <string name="thank_you_for_making_this_trivia_better_">Thank you for making this trivia better! :)</string>
+    <string name="no_update_available">No update available</string>
+    <string name="uploading_correct_wrong_statistics">Uploading correct wrong statistics</string>
+    <string name="update_is_available_for_">"Update is available for "</string>
+    <string name="_questions_update_database_">" Questions. Update database?"</string>
+    <string name="update">Update</string>
+    <string name="cancel">Cancel</string>
+    <string name="checking_for_updates_">Checking for updates &#8230;</string>
+    <string name="error_occoured_stopping_upload_check_server_url_or_connectivity">Error occurred stopping upload, check Server URL or Connectivity</string>
+    <string name="inserting_questions_to_database">Inserting questions to Database</string>
+    
     
 
 </resources>

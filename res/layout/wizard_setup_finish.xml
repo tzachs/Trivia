@@ -13,7 +13,7 @@
         android:textSize="20dp" />
 
     <View
-        android:id="@+id/viewLine"
+        android:id="@+id/viewLineFinish"
         android:layout_width="fill_parent"
         android:layout_height="4dip"
         android:layout_below="@+id/textViewSetupFinishTitle"
@@ -23,7 +23,7 @@
         android:id="@+id/textViewSetupFinishMessage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/viewLine"
+        android:layout_below="@+id/viewLineFinish"
         android:text="@string/textViewSetupFinishText" />
 
     <Button

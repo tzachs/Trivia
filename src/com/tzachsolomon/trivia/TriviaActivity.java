@@ -1,5 +1,7 @@
 package com.tzachsolomon.trivia;
 
+import java.util.Locale;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 
@@ -11,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 
 import android.os.Bundle;
@@ -79,8 +82,25 @@ public class TriviaActivity extends Activity implements OnClickListener {
 			m_SharedPreferences.edit()
 					.putBoolean("showFirstTimeConfiguration", false).commit();
 		}
+		
+		changeLanguageTo(m_SharedPreferences.getString("listPreferenceLanguages", "iw"));
 
 	}
+	
+	private void changeLanguageTo(String string) {
+		// 
+		Locale locale = new Locale(string);
+		Locale.setDefault(locale);
+		Configuration config = new Configuration();
+		config.locale = locale;
+		getBaseContext().getResources().updateConfiguration(config,
+				getBaseContext().getResources().getDisplayMetrics());
+		
+		setContentView(R.layout.main);
+
+		
+	}
+
 
 	private void checkIsUpdateAvailableAsync(boolean i_DisplayInfoIfNoUpdate) {
 		new AsyncTaskCheckUpdateIsAvailable().execute(i_DisplayInfoIfNoUpdate);
@@ -260,7 +280,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 				m_ProgressDialog = new ProgressDialog(TriviaActivity.this);
 				m_ProgressDialog
 						.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-				m_ProgressDialog.setTitle("Uploading correct wrong statistics");
+				m_ProgressDialog.setTitle(getString(R.string.uploading_correct_wrong_statistics));
 				m_ProgressDialog.show();
 			} else {
 				Toast.makeText(TriviaActivity.this, detailedResult.toString(),
@@ -279,7 +299,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 							Toast.LENGTH_LONG).show();
 				} else {
 					Toast.makeText(TriviaActivity.this,
-							"Thank you for making this trivia better! :)",
+							getString(R.string.thank_you_for_making_this_trivia_better_),
 							Toast.LENGTH_SHORT).show();
 				}
 
@@ -310,7 +330,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 										.getAsString(TriviaDbEngine.KEY_QUESTIONID));
 					} else {
 						i = length;
-						sb.append("Error occoured stopping upload, check Server URL or Connectivity");
+						sb.append(getString(R.string.error_occoured_stopping_upload_check_server_url_or_connectivity));
 						Log.e(TAG, sb.toString());
 					}
 					publishProgress(++i);
@@ -344,7 +364,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 			if (enabled) {
 				m_ProgressDialog = new ProgressDialog(TriviaActivity.this);
 				m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				m_ProgressDialog.setTitle("Checking for updates...");
+				m_ProgressDialog.setTitle(getString(R.string.checking_for_updates_));
 				m_ProgressDialog.setCancelable(true);
 				m_ProgressDialog.show();
 			} else {
@@ -364,9 +384,9 @@ public class TriviaActivity extends Activity implements OnClickListener {
 				AlertDialog.Builder dialog = new AlertDialog.Builder(
 						TriviaActivity.this);
 				dialog.setCancelable(false);
-				dialog.setMessage("Update is available for " + result
-						+ " Questions.\nUpdate database?");
-				dialog.setPositiveButton("Update",
+				dialog.setMessage(getString(R.string.update_is_available_for_) + result
+						+ getString(R.string._questions_update_database_));
+				dialog.setPositiveButton(getString(R.string.update),
 						new DialogInterface.OnClickListener() {
 
 							@Override
@@ -379,7 +399,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 							}
 						});
-				dialog.setNegativeButton("Cancel",
+				dialog.setNegativeButton(getString(R.string.cancel),
 						new DialogInterface.OnClickListener() {
 
 							@Override
@@ -392,7 +412,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 				dialog.show();
 
 			} else {
-				Toast.makeText(TriviaActivity.this, "No update available",
+				Toast.makeText(TriviaActivity.this, getString(R.string.no_update_available),
 						Toast.LENGTH_SHORT).show();
 			}
 		}

@@ -15,7 +15,7 @@
         android:textSize="20dp" />
      
       <View 
-        android:id="@+id/viewLine"
+        android:id="@+id/viewLineGame"
         android:layout_width="fill_parent"
         android:layout_height="4dip"
         android:layout_below="@+id/textViewWizardSetupGame"
@@ -26,7 +26,7 @@
          android:id="@+id/textViewWizardSetupGameHint"
          android:layout_width="fill_parent"
          android:layout_height="wrap_content"
-         android:layout_below="@+id/viewLine"
+         android:layout_below="@+id/viewLineGame"
          android:layout_margin="4dp"
          android:layout_marginBottom="20dp"
          android:text="@string/textViewWizardSetupGameHintText" />

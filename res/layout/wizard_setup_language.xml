@@ -15,7 +15,7 @@
         android:textSize="20dp" />
 
     <View
-        android:id="@+id/viewLine"
+        android:id="@+id/viewLineLanguage"
         android:layout_width="fill_parent"
         android:layout_height="4dip"
         android:layout_below="@+id/textViewWizardSetupLanguage"
@@ -25,7 +25,7 @@
         android:id="@+id/textViewWizardSetupLanguageMessage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/viewLine"
+        android:layout_below="@+id/viewLineLanguage"
         android:layout_margin="4dp"
         android:layout_marginBottom="20dp"
         android:text="@string/textViewWizardSetupLanguageMessageText" />

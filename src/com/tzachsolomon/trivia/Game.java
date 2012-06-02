@@ -199,7 +199,7 @@ public class Game extends Activity implements OnClickListener {
 
 			new StartNewQuestionAsync().execute(0);
 		} else {
-			Toast.makeText(this, "no questions in database", Toast.LENGTH_SHORT)
+			Toast.makeText(this, getString(R.string.no_questions_in_database), Toast.LENGTH_SHORT)
 					.show();
 			finish();
 
@@ -271,7 +271,7 @@ public class Game extends Activity implements OnClickListener {
 
 				Toast.makeText(
 						Game.this,
-						"No more questions in this level, going to next level :)",
+						getString(R.string.no_more_questions_in_this_level_going_to_next_level_),
 						Toast.LENGTH_LONG).show();
 				startNewRoundGameLevels();
 
@@ -472,9 +472,10 @@ public class Game extends Activity implements OnClickListener {
 
 		try {
 
+			// TODO: change this to form
 			m_JSONHandler.reportMistakeInQuestionAsync(
 					m_CurrentQuestion.getQuestionId(), "no description");
-			Toast.makeText(Game.this, "sent, thanks :)", Toast.LENGTH_SHORT)
+			Toast.makeText(Game.this, getString(R.string.error_sent_thanks_), Toast.LENGTH_SHORT)
 					.show();
 		} catch (ClientProtocolException e) {
 			//
@@ -551,7 +552,7 @@ public class Game extends Activity implements OnClickListener {
 		//
 		switch (m_CurrentGameType) {
 		case GAMETYPE_ALL_QUESTIONS:
-			Toast.makeText(Game.this, "Game over", Toast.LENGTH_LONG).show();
+			Toast.makeText(Game.this, getString(R.string.game_over), Toast.LENGTH_LONG).show();
 			break;
 
 		case GAMETYPE_LEVELS:

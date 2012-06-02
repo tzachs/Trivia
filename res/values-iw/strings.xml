@@ -1,0 +1,87 @@
+<resources>
+
+    <string name="app_name">"טריוויה"</string>
+    <string name="buttonNewGameText">"כל השאלות"</string>
+    <string name="textViewQuestionText">""</string>
+    <string name="buttonAnswer1">""</string>
+    <string name="textViewTimeText">"0"</string>
+    <string name="buttonUpdateDatabaseText">"עדכן מאגר שאלות"</string>
+    <string name="textViewTimeTitleText">"זמן"</string>
+    <string name="textViewNumberOfQuestionsLeftTitle">"שאלות"</string>
+    <string name="textViewQuestionDifficultyTitle">"קושי"</string>
+    <string name="buttonReportMistakeInQuestion">"דווח שגיאה"</string>
+    <string name="editTextPreferenceDelayBetweenQuestionsSummary">"עיכוב בין השאלות אלפיות השנייה"</string>
+    <string name="editTextPreferenceDelayBetweenQuestionsTitle">"עיכוב בין שאלות"</string>
+    <string name="checkBoxPreferenceAllowUpdateMobileNetworkRoamingSummary">"עדכון כאשר רשת במצב נדידה (לא מומלץ)"</string>
+    <string name="checkBoxPreferenceAllowUpdateMobileNetworkRoamingTitle">"אפשר עדכון בנדידה "</string>
+    <string name="checkBoxPreferenceAllowUpdateMobileNetwork3GTitle">"עדכון ברשת 3G"</string>
+    <string name="checkBoxPreferenceAllowUpdateMobileNetwork3GSummary">"עדכן רק רשתות 3G ומעלה"</string>
+    <string name="checkBoxPreferenceAllowUpdateMobileNetworkTitle">"לאפשר עדכונים באמצעות הרשת הסלולרית"</string>
+    <string name="checkBoxPreferenceAllowUpdateMobileNetworkSummary">"אפשר עדכונים באמצעות התקן הרשת הסלולרית (שים לב!!! ייתכן תשלום נוסף לספק השירות עבור השימוש בהתקן זה)"</string>
+    <string name="checkBoxPreferenceAllowUpdateWifiTitle">"עדכון באמצעות WiFi"</string>
+    <string name="checkBoxPreferenceAllowUpdateWifiSummary">"אפשר עדכון באמצעות WiFi"</string>
+    <string name="checkBoxPreferenceShowReportQuestionTitle">"דווח על שגיאה"</string>
+    <string name="checkBoxPreferenceShowReportQuestionSummary">"הראה אפשרות לדווח שגיאה בשאלה"</string>
+    <string name="preferenceCategoryDatabaseServerAdvancedTitle">"שאלות שרת רשת"</string>
+    <string name="editTextPreferencePrimaryServerIPSummary">"שאלות שרת רשת ה-IP"</string>
+    <string name="editTextPreferencePrimaryServerIPTitle">"שרת ה-IP"</string>
+    <string name="editTextPreferenceCountDownTimerSummary">"כמה זמן עבור כל שאלה לענות"</string>
+    <string name="editTextPreferenceCountDownTimerTitle">"כמה זמן לשאלה"</string>
+    <string name="buttonPreferencesText">"תצורה"</string>
+    <string name="preferenceCategoryDatabaseServerTitle">"תצורת מסד נתונים"</string>
+    <string name="checkBoxPreferenceUploadCorrectWrongUserStatSummary">"העלה כמה פעמים ענו נכון או לא נכון על שאלה"</string> 
+    <string name="checkBoxPreferenceUploadCorrectWrongUserStatTitle">"העלה הסטטיסטיקה"</string>
+    <string name="buttonNewGameLevelsText">"רמות"</string>
+    <string name="preferenceCategoryGameRelatedTitle">"הגדרות משחק"</string>
+    <string name="checkBoxPreferenceCheckUpdateOnStartupSummary">"בדוק עדכונים בזמן העלאת התוכנה"</string>
+    <string name="checkBoxPreferenceCheckUpdateOnStartupTitle">"בדוק עדכונים באתחול"</string>
+    
+    <string name="textViewWelcomeMessageText">"ברוך הבא לאשף ההגדרות. לחץ הבא על מנת להמשיך ובסוף על סיום על מנת לשמור."</string>
+    <string name="textViewSetupFinishText">"תודה על שהגדרת את טריוויה בפעם הראשונה. הדבר הבא לעשות הוא ללחוץ סיום ואז לללחוץ על עדכן את מאגר השאלות מהמסך הראשי"</string>
+    <string name="textViewSetupFinishTitleText">"טריוויה - סיום"</string>
+    <string name="buttonSetupFinishText">"סיום"</string>
+    <string name="textViewWizardSetupGameText">"הגדרת משחק"</string>
+    <string name="textViewWizardSetupGameHintText">"בדף זה ניתן להגדיר העדפות הקשורות למשחק"</string>
+    <string name="checkBoxShowReportQuestionText">"אם ברצונך לעזור לנו על ידי דיווח שגיאה בשאלה, סמן כאן :)"</string>
+    <string name="checkBoxUploadWrongCorrectStatisticsText">"העלה סטטיסטיקות. סטטיסטיקות אלו עוזרות לנו לחשב את קושי השאלות"</string>
+    <string name="checkBoxCheckUpdateOnStartupText">"בדוק עדגונים בזמן הפעלה"</string>
+    <string name="textViewWizardSetupNetworkText">"הגדרת הרשת"</string>
+    <string name="textViewWizardSetupNetworkHintText">"בדף זה ניתן להגדיר איך תוכל לקבל עדכונים עבור מאגר השאלות"</string>
+    <string name="checkBoxAllowUpdateUsingWifiText">"אפשר עדכון באמצעות WiFi"</string>
+    <string name="checkBoxAllowUpdateUsingMobileNetworkText">"אפשר עדכון באמצעות הרשת הסלולרית. "</string>
+    <string name="checkBoxAllowUpdateUsing3GOnlyText">"אפשר עדכון רק באמצעות רשתות 3G. זוהי האפשרות המומלצת אם ברצונך לעדכן בעזרת הרשת הסלולרית"</string>
+    <string name="buttonNextText">"הבא"</string>
+    <string name="textViewWelcomeTitle">"טריוויה ברוך הבא"</string>
+    <string name="checkBoxPreferencePreferNewQuestionsTitle">"העדף שאלות חדשות"</string>
+    <string name="checkBoxPreferencePreferNewQuestionsSummary">"מיין שאלות לפי שאלות חדשות קודם"</string>
+    <string name="textViewWizardSetupLanguageText">"שפות"</string>
+    <string name="textViewWizardSetupLanguageMessageText">"בחר את השפה המועדפת עליך"</string>
+    <string name="wifi_is_enabled_but_isn_t_connected_please_check_wifi_connection">"WiFi מופעל, אך אינו מחובר, בדוק את חיבור WiFi"</string>
+    <string name="mobile_network_found_but_only_3g_mobile_network_connection_is_allowed_">"רשת הסלולרית נמצא רך רק חיבור רשת 3G נייד מותר, בדוק הגדרות"</string>
+    <string name="check_preferencs_to_allow_slow_networks">"בדוק את העדפות כדי לאפשר רשתות איטיות"</string>
+    <string name="mobile_connection_was_found_but_it_is_in_roaming">"חיבור נייד נמצא אבל זה במצב נדידה"</string>
+    <string name="mobile_device_is_online_but_option_is_disabled_please_check_preferences">"הרשת הניידת קיימת אך אפשרות זו מבוטלת בהגדרות. אנא בדקו הגדרות"</string>
+    <string name="no_network_devices_are_available_check_your_wifi_or_mobile_network_connection">"אין התקני רשת זמינים, בדוק חיבור WiFi או רשת הנייד שלך"</string>
+    <string name="downloading_questions">"מוריד שאלות"</string>
+    <string name="error_while_trying_to_update_from_server">"שגיאה בעת ניסיון לעדכן משרת"</string>
+    <string name="no_questions_in_database">"אין שאלות במאגר, אנא עדכן"</string>
+    <string name="starting_level_">"החל שלב "</string>
+    <string name="start">"התחל"</string>
+    <string name="levels_game_over">"משחק נגמר"</string>
+    <string name="no_more_questions_in_this_level_going_to_next_level_">"אין שאלות נוספות ברמה זו, הולך לרמה הבאה :)"</string>
+    <string name="error_sent_thanks_">"שגיאה נשלחה, תודה :)"</string>
+    <string name="game_over">"המשחק נגמר"</string>
+    <string name="thank_you_for_making_this_trivia_better_">"תודה רבה על תרומתך לטריוויה! :)"</string>
+    <string name="no_update_available">"אין עדכון"</string>
+    <string name="uploading_correct_wrong_statistics">"העלאת נתונים סטטיסטיים"</string>
+    <string name="update_is_available_for_">"העדכון זמין עבור "</string>
+    <string name="_questions_update_database_">" שאלות. לעדכן את מסד הנתונים?"</string>
+    <string name="update">"עדכן"</string>
+    <string name="cancel">"ביטול"</string>
+    <string name="checking_for_updates_">"מחפש עדכונים &#8230; "</string>
+    <string name="error_occoured_stopping_upload_check_server_url_or_connectivity">"שגיאה קרתה בזמן העלאה, בדוק הגדרות שרת או קישוריות"</string>
+    <string name="inserting_questions_to_database">"הוספת שאלות למאגר"</string>
+    
+    
+
+</resources>
