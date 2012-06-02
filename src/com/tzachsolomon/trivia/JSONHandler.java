@@ -186,11 +186,10 @@ public class JSONHandler {
 				TriviaDbEngine.KEY_ANSWER2, TriviaDbEngine.KEY_ANSWER3,
 				TriviaDbEngine.KEY_ANSWER4, TriviaDbEngine.KEY_ANSWER_INDEX,
 				TriviaDbEngine.KEY_CATEGORY,
-				TriviaDbEngine.KEY_CORRECT_WRONG_RATIO, TriviaDbEngine.KEY_ENABLED,
-				TriviaDbEngine.KEY_LANGUAGE, TriviaDbEngine.KEY_LAST_UPDATE,
-				TriviaDbEngine.KEY_QUESTION, TriviaDbEngine.KEY_QUESTIONID,
-				TriviaDbEngine.KEY_SUB_CATEGORY
-				
+				TriviaDbEngine.KEY_CORRECT_WRONG_RATIO,
+				TriviaDbEngine.KEY_ENABLED, TriviaDbEngine.KEY_LANGUAGE,
+				TriviaDbEngine.KEY_LAST_UPDATE, TriviaDbEngine.KEY_QUESTION,
+				TriviaDbEngine.KEY_QUESTIONID, TriviaDbEngine.KEY_SUB_CATEGORY
 
 		};
 		int i = keys.length - 1;
@@ -455,8 +454,13 @@ public class JSONHandler {
 								i_DetailedResult
 										.append("Mobile network found but only 3G mobile network connection is allowed,");
 								i_DetailedResult
-								.append("check preferencs to allow slow networks");
+										.append("check preferencs to allow slow networks");
 							}
+						} else {
+							i_DetailedResult
+									.append("Mobile network found but only 3G mobile network connection is allowed,");
+							i_DetailedResult
+									.append("check preferencs to allow slow networks");
 						}
 					} else {
 						ret = info.isConnected();
@@ -464,11 +468,13 @@ public class JSONHandler {
 
 					// checking if connection is roaming
 					if (m_TelephonyManager.isNetworkRoaming()) {
-						// the connection is roaming, checking if the user allow update on roaming
+						// the connection is roaming, checking if the user allow
+						// update on roaming
 						if (allowUpdateRoaming) {
 							ret = true;
 						} else {
-							i_DetailedResult.append("Mobile connection was found but it is in roaming");
+							i_DetailedResult
+									.append("Mobile connection was found but it is in roaming");
 						}
 
 					}
