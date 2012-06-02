@@ -121,15 +121,26 @@ public final class R {
         public static final int checkBoxPreferenceUploadCorrectWrongUserStatTitle=0x7f06001e;
         public static final int checkBoxShowReportQuestionText=0x7f06002a;
         public static final int checkBoxUploadWrongCorrectStatisticsText=0x7f06002b;
+        public static final int check_preferencs_to_allow_slow_networks=0x7f06003a;
+        public static final int downloading_questions=0x7f06003e;
         public static final int editTextPreferenceCountDownTimerSummary=0x7f060019;
         public static final int editTextPreferenceCountDownTimerTitle=0x7f06001a;
         public static final int editTextPreferenceDelayBetweenQuestionsSummary=0x7f06000a;
         public static final int editTextPreferenceDelayBetweenQuestionsTitle=0x7f06000b;
         public static final int editTextPreferencePrimaryServerIPSummary=0x7f060017;
         public static final int editTextPreferencePrimaryServerIPTitle=0x7f060018;
+        public static final int error_while_trying_to_update_from_server=0x7f06003f;
+        public static final int levels_game_over=0x7f060043;
+        public static final int mobile_connection_was_found_but_it_is_in_roaming=0x7f06003b;
+        public static final int mobile_device_is_online_but_option_is_disabled_please_check_preferences=0x7f06003c;
+        public static final int mobile_network_found_but_only_3g_mobile_network_connection_is_allowed_=0x7f060039;
+        public static final int no_network_devices_are_available_check_your_wifi_or_mobile_network_connection=0x7f06003d;
+        public static final int no_questions_in_database=0x7f060040;
         public static final int preferenceCategoryDatabaseServerAdvancedTitle=0x7f060016;
         public static final int preferenceCategoryDatabaseServerTitle=0x7f06001c;
         public static final int preferenceCategoryGameRelatedTitle=0x7f060020;
+        public static final int start=0x7f060042;
+        public static final int starting_level_=0x7f060041;
         public static final int textViewNumberOfQuestionsLeftTitle=0x7f060007;
         public static final int textViewQuestionDifficultyTitle=0x7f060008;
         public static final int textViewQuestionText=0x7f060002;
@@ -145,6 +156,7 @@ public final class R {
         public static final int textViewWizardSetupLanguageText=0x7f060036;
         public static final int textViewWizardSetupNetworkHintText=0x7f06002e;
         public static final int textViewWizardSetupNetworkText=0x7f06002d;
+        public static final int wifi_is_enabled_but_isn_t_connected_please_check_wifi_connection=0x7f060038;
     }
     public static final class style {
         public static final int Button=0x7f070000;

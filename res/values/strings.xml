@@ -56,7 +56,19 @@
     <string name="checkBoxPreferencePreferNewQuestionsTitle">Prefer new questions</string>
     <string name="checkBoxPreferencePreferNewQuestionsSummary">Sort the questions by least played questions first</string>
     <string name="textViewWizardSetupLanguageText">Language</string>
-    <string name="textViewWizardSetupLanguageMessageText">Choose your prefered language</string>
+    <string name="textViewWizardSetupLanguageMessageText">Choose your preferred language</string>
+    <string name="wifi_is_enabled_but_isn_t_connected_please_check_wifi_connection">WiFi is enabled but isn\'t connected, please check WiFi connection</string>
+    <string name="mobile_network_found_but_only_3g_mobile_network_connection_is_allowed_">Mobile network found but only 3G mobile network connection is allowed,</string>
+    <string name="check_preferencs_to_allow_slow_networks">check preference to allow slow networks</string>
+    <string name="mobile_connection_was_found_but_it_is_in_roaming">Mobile connection was found but it is in roaming</string>
+    <string name="mobile_device_is_online_but_option_is_disabled_please_check_preferences">Mobile device is online but option is disabled, please check preferences</string>
+    <string name="no_network_devices_are_available_check_your_wifi_or_mobile_network_connection">No network devices are available, check your WiFi or Mobile Network connection</string>
+    <string name="downloading_questions">Downloading questions</string>
+    <string name="error_while_trying_to_update_from_server">Error while trying to update from server</string>
+    <string name="no_questions_in_database">No questions in database</string>
+    <string name="starting_level_">"Starting level "</string>
+    <string name="start">Start</string>
+    <string name="levels_game_over">Levels Game Over</string>
     
 
 </resources>

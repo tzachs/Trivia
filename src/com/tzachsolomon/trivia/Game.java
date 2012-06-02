@@ -19,7 +19,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 
 import android.util.Log;
-import android.view.KeyEvent;
+
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -28,10 +28,12 @@ import android.widget.Toast;
 
 public class Game extends Activity implements OnClickListener {
 	
-	// TODO: onPause pause clock
-	// TODO: onResume resume clock
 
 	public static final String TAG = Game.class.getSimpleName();
+	
+	public static final int GAMETYPE_ALL_QUESTIONS = 1;
+	public static final int GAMETYPE_LEVELS = 2;
+	public static final int GAMETYPE_CATEGORIES = 3;
 
 	private MyCountDownCounter m_CountDownCounter;
 
@@ -51,11 +53,6 @@ public class Game extends Activity implements OnClickListener {
 
 	private int m_QuestionIndex;
 	private int m_QuestionLength;
-
-	private TriviaDbEngine m_TriviaDb;
-	private SharedPreferences m_SharedPreferences;
-
-	private Random m_Random;
 	
 	private int m_DelayBetweenQuestions;
 	private int m_CurrentGameType;
@@ -67,14 +64,17 @@ public class Game extends Activity implements OnClickListener {
 	private int m_CurrentWrongAnswersCounter;
 	private int m_MaxWrongAnswersAllowed;
 	
+	private TriviaDbEngine m_TriviaDb;
+	private SharedPreferences m_SharedPreferences;
+
+	private Random m_Random;
+	
 	private boolean m_GameOver;
 	private boolean m_SortByNewQuestionFirst;
 
 	private boolean m_ResumeClock;
 
-	public static final int GAMETYPE_ALL_QUESTIONS = 1;
-	public static final int GAMETYPE_LEVELS = 2;
-	public static final int GAMETYPE_CATEGORIES = 3;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +129,7 @@ public class Game extends Activity implements OnClickListener {
 			startNewRoundGameLevels();
 
 		} else {
-			Toast.makeText(this, "no questions in database", Toast.LENGTH_SHORT)
+			Toast.makeText(this, getString(R.string.no_questions_in_database), Toast.LENGTH_SHORT)
 					.show();
 			finish();
 
@@ -160,8 +160,8 @@ public class Game extends Activity implements OnClickListener {
 
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(Game.this);
 
-			alertDialog.setTitle("Starting level " + m_CurrentLevel);
-			alertDialog.setPositiveButton("Start",
+			alertDialog.setTitle(getString(R.string.starting_level_) + m_CurrentLevel);
+			alertDialog.setPositiveButton(getString(R.string.start),
 					new DialogInterface.OnClickListener() {
 
 						@Override
@@ -180,7 +180,7 @@ public class Game extends Activity implements OnClickListener {
 			alertDialog.show();
 
 		} else {
-			Toast.makeText(this, "Levels Game Over", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, getString(R.string.levels_game_over), Toast.LENGTH_SHORT).show();
 		}
 	}
 

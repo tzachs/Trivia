@@ -45,7 +45,6 @@ import android.widget.Toast;
 public class JSONHandler {
 
 	public static final String TAG = JSONHandler.class.getSimpleName();
-
 	public static final String RESULT_SUCCESS = "success";
 	public static final String RESULT_ERROR = "error";
 
@@ -53,13 +52,12 @@ public class JSONHandler {
 	private static final String TAG_REPORT_QUESTION = "reportMistakeInQuestion";
 	private static final String TAG_UPDATE_WRONG_CORRECT = "updateWrongCorrectStat";
 	private static final String TAG_GET_LAST_UPDATE = "getLastUpdate";
-
-	private HttpClient m_HttpClient;
+	
 	private String m_ServerUrl;
+	private HttpClient m_HttpClient;
 	private Context m_ActivityContext;
 	private ConnectivityManager m_ConnectivityManager;
 	private TelephonyManager m_TelephonyManager;
-
 	private SharedPreferences m_SharedPreferences;
 
 	/**
@@ -98,79 +96,7 @@ public class JSONHandler {
 		new AsyncTaskGetQuestionFromServer().execute(ret);
 
 	}
-
-	/**
-	 * Function update from the database server in synchronous method, meaning
-	 * this will stuck UI
-	 * 
-	 * @return Array of content values, null in case error occurred
-	 */
-	public ContentValues[] updateFromInternetSync(long i_LastUserUpdate) {
-		ContentValues[] ret = null;
-
-		try {
-			ret = handleRead(i_LastUserUpdate);
-		} catch (ClientProtocolException e) {
-
-			Log.e(TAG, e.getMessage().toString());
-
-		} catch (IOException e) {
-
-			Log.e(TAG, e.getMessage().toString());
-
-		} catch (JSONException e) {
-			//
-			Log.e(TAG, e.getMessage().toString());
-
-		}
-		return ret;
-	}
-
-	/**
-	 * Function receive jsonArray object and parse it to Content Values
-	 * 
-	 * @return ContentValeus array, null in case error occurred
-	 * @throws ClientProtocolException
-	 * @throws IOException
-	 * @throws JSONException
-	 */
-	private ContentValues[] handleRead(long i_LastUserUpdate)
-			throws ClientProtocolException, IOException, JSONException {
-		ContentValues[] ret = null;
-
-		JSONArray jsonArray;
-		JSONObject jsonObject;
-		int numberOfRows, i;
-
-		try {
-			jsonArray = getQuestionAsJSONArray(i_LastUserUpdate);
-			// checking if the wasn't any errors while getting the JSON array
-			if (jsonArray != null) {
-				// getting the first object
-				jsonObject = jsonArray.getJSONObject(0);
-
-				numberOfRows = jsonObject.getInt("number_of_rows");
-				ret = new ContentValues[numberOfRows];
-				Log.v(TAG, "Number of rows to parse: " + numberOfRows);
-				numberOfRows++;
-				for (i = 1; i < numberOfRows; i++) {
-					jsonObject = jsonArray.getJSONObject(i);
-					ret[i - 1] = convertJSONObjectToContentValue(jsonObject);
-				}
-			} else {
-				Log.e(TAG, "Error duruing downloading questions from database");
-			}
-
-		} catch (Exception e1) {
-			String message = e1.getMessage().toString();
-			if (message != null) {
-				Log.e(TAG, message);
-			}
-		}
-
-		return ret;
-	}
-
+	
 	/**
 	 * Function receive a JSON object and parse it to ContentValues object
 	 * 
@@ -437,7 +363,7 @@ public class JSONHandler {
 					ret = info.isConnected();
 					if (!ret) {
 						i_DetailedResult
-								.append("WiFi is enabled but isn't connected, please check WiFi connection");
+								.append(m_ActivityContext.getString(R.string.wifi_is_enabled_but_isn_t_connected_please_check_wifi_connection));
 					}
 				} else {
 					i_DetailedResult
@@ -452,15 +378,15 @@ public class JSONHandler {
 							ret = info.isConnected();
 							if (!ret) {
 								i_DetailedResult
-										.append("Mobile network found but only 3G mobile network connection is allowed,");
+										.append(m_ActivityContext.getString(R.string.mobile_network_found_but_only_3g_mobile_network_connection_is_allowed_));
 								i_DetailedResult
-										.append("check preferencs to allow slow networks");
+										.append(m_ActivityContext.getString(R.string.check_preferencs_to_allow_slow_networks));
 							}
 						} else {
 							i_DetailedResult
-									.append("Mobile network found but only 3G mobile network connection is allowed,");
+									.append(m_ActivityContext.getString(R.string.mobile_network_found_but_only_3g_mobile_network_connection_is_allowed_));
 							i_DetailedResult
-									.append("check preferencs to allow slow networks");
+									.append(m_ActivityContext.getString(R.string.check_preferencs_to_allow_slow_networks));
 						}
 					} else {
 						ret = info.isConnected();
@@ -474,20 +400,20 @@ public class JSONHandler {
 							ret = true;
 						} else {
 							i_DetailedResult
-									.append("Mobile connection was found but it is in roaming");
+									.append(m_ActivityContext.getString(R.string.mobile_connection_was_found_but_it_is_in_roaming));
 						}
 
 					}
 
 				} else {
 					i_DetailedResult
-							.append("Mobile device is online but option is disabled, please check preferences");
+							.append(m_ActivityContext.getString(R.string.mobile_device_is_online_but_option_is_disabled_please_check_preferences));
 				}
 			}
 
 		} else {
 			i_DetailedResult
-					.append("No network devices are available, check your WiFi or Mobile Network connection");
+					.append(m_ActivityContext.getString(R.string.no_network_devices_are_available_check_your_wifi_or_mobile_network_connection));
 
 		}
 
@@ -514,7 +440,7 @@ public class JSONHandler {
 
 			m_ProgressDialog = new ProgressDialog(m_ActivityContext);
 			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			m_ProgressDialog.setTitle("Downloading questions");
+			m_ProgressDialog.setTitle(m_ActivityContext.getString(R.string.downloading_questions));
 			m_ProgressDialog.show();
 
 			isInternetAvailable = isInternetAvailable(detailedResult);
@@ -536,10 +462,10 @@ public class JSONHandler {
 			if (result != null) {
 				TriviaDbEngine dbEngine = new TriviaDbEngine(m_ActivityContext);
 				dbEngine.updateFromInternetAsync(result);
-				// dbEngine.updateFromInternetSync(result);
+ 
 			} else {
 				Toast.makeText(m_ActivityContext,
-						"Error while trying to update from server",
+						m_ActivityContext.getString(R.string.error_while_trying_to_update_from_server),
 						Toast.LENGTH_SHORT).show();
 			}
 
