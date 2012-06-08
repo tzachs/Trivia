@@ -18,7 +18,7 @@ public class TriviaDbEngine {
 	public static final String TAG = TriviaDbEngine.class.getSimpleName();
 
 	private static final String DATABASE_NAME = "TriviaDb";
-	private static final int DATABASE_VERSION = 6;
+	private static final int DATABASE_VERSION = 7;
 	private static final String TABLE_QUESTIONS = "tblQuestions";
 
 	public static final String KEY_ROWID = "_id";
@@ -30,7 +30,7 @@ public class TriviaDbEngine {
 	public static final String KEY_ANSWER4 = "colAnswer4";
 	public static final String KEY_ANSWER_INDEX = "colAnswerIndex";
 	public static final String KEY_CATEGORY = "colCategory";
-	public static final String KEY_SUB_CATEGORY = "colSubCategory";
+	
 	public static final String KEY_LANGUAGE = "colLanguage";
 	public static final String KEY_CORRECT_WRONG_RATIO = "colCorrectWrongRatio";
 	public static final String KEY_CORRECT_USER = "colCorrectUser"; // the
@@ -85,7 +85,6 @@ public class TriviaDbEngine {
 			sb.append(KEY_CORRECT_USER + " INTEGER NOT NULL, ");
 			sb.append(KEY_PLAYED_COUNTER + " INTEGER NOT NULL, ");
 			sb.append(KEY_LANGUAGE + " INTEGER NOT NULL, ");
-			sb.append(KEY_SUB_CATEGORY + " TEXT, ");
 			sb.append(KEY_WRONG_USER + " INTEGER NOT NULL,");
 			sb.append(KEY_ENABLED + " BOOLEAN NOT NULL, ");
 			sb.append(KEY_LAST_UPDATE + " INTEGER NOT NULL ");
@@ -157,7 +156,6 @@ public class TriviaDbEngine {
 		cv.put(KEY_LAST_UPDATE, i_LastUpdate);
 		cv.put(KEY_QUESTION, i_Question);
 		cv.put(KEY_QUESTIONID, i_QuestionId);
-		cv.put(KEY_SUB_CATEGORY, i_SubCategory);
 
 		cv.put(KEY_WRONG_USER, i_WrongUser);
 
@@ -175,7 +173,7 @@ public class TriviaDbEngine {
 				KEY_ANSWER4, KEY_ANSWER_INDEX, KEY_CATEGORY,
 				KEY_CORRECT_WRONG_RATIO, KEY_CORRECT_USER, KEY_ENABLED,
 				KEY_LANGUAGE, KEY_LAST_UPDATE, KEY_QUESTION, KEY_QUESTIONID,
-				KEY_ROWID, KEY_SUB_CATEGORY, KEY_WRONG_USER, KEY_PLAYED_COUNTER};
+				KEY_ROWID, KEY_WRONG_USER, KEY_PLAYED_COUNTER};
 
 		Cursor cursor;
 
@@ -215,7 +213,7 @@ public class TriviaDbEngine {
 				KEY_ANSWER4, KEY_ANSWER_INDEX, KEY_CATEGORY,
 				KEY_CORRECT_WRONG_RATIO, KEY_CORRECT_USER, KEY_ENABLED,
 				KEY_LANGUAGE, KEY_LAST_UPDATE, KEY_QUESTION, KEY_QUESTIONID,
-				KEY_ROWID, KEY_SUB_CATEGORY, KEY_WRONG_USER, KEY_PLAYED_COUNTER};
+				KEY_ROWID, KEY_WRONG_USER, KEY_PLAYED_COUNTER};
 
 		Cursor cursor;
 		double i_MaxLevel = ((double) i_Level + 0.5) / 10;

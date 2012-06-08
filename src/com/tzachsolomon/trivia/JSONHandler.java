@@ -115,7 +115,7 @@ public class JSONHandler {
 				TriviaDbEngine.KEY_CORRECT_WRONG_RATIO,
 				TriviaDbEngine.KEY_ENABLED, TriviaDbEngine.KEY_LANGUAGE,
 				TriviaDbEngine.KEY_LAST_UPDATE, TriviaDbEngine.KEY_QUESTION,
-				TriviaDbEngine.KEY_QUESTIONID, TriviaDbEngine.KEY_SUB_CATEGORY
+				TriviaDbEngine.KEY_QUESTIONID
 
 		};
 		int i = keys.length - 1;
