@@ -6,7 +6,7 @@
         android:title="General UI">
         <ListPreference android:entries="@array/strinArrayLanguagesText"
             android:entryValues="@array/integerArrayLanguagesValues" android:key="listPreferenceLanguages"
-            android:defaultValue="2" android:title="Language" android:summary="UI Language"
+            android:defaultValue="2" android:title="@string/language" android:summary="@string/ui_language"
             />
         
     </PreferenceCategory>
@@ -91,7 +91,7 @@
     <CheckBoxPreference 
         android:key="showFirstTimeConfiguration"
         android:defaultValue="true"
-        android:title="Show first time configuration"
+        android:title="@string/show_first_time_configuration"
         />
 
 </PreferenceScreen>

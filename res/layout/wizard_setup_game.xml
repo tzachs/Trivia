@@ -57,5 +57,16 @@
          android:layout_margin="4dp"
          android:checked="true"
          android:text="@string/checkBoxCheckUpdateOnStartupText" />
+     
+     <CheckBox
+         android:id="@+id/checkBoxShowCorrectAnwer"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/checkBoxCheckUpdateOnStartup"
+         android:layout_margin="4dp"
+         android:checked="true"
+         android:text="@string/checkBoxShowCorrectAnswer" />
+     
+     
 
 </RelativeLayout>

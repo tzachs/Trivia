@@ -6,7 +6,7 @@
     <string name="textViewQuestionText"></string>
     <string name="buttonAnswer1"></string>
     <string name="textViewTimeText">0</string>
-    <string name="buttonUpdateDatabaseText">Update questions database</string>
+    <string name="buttonUpdateDatabaseText">Update Questions Database</string>
     <string name="textViewTimeTitleText">Time</string>
     <string name="textViewNumberOfQuestionsLeftTitle">Questions</string>
     <string name="textViewQuestionDifficultyTitle">Level</string>
@@ -81,6 +81,12 @@
     <string name="checking_for_updates_">Checking for updates &#8230;</string>
     <string name="error_occoured_stopping_upload_check_server_url_or_connectivity">Error occurred stopping upload, check Server URL or Connectivity</string>
     <string name="inserting_questions_to_database">Inserting questions to Database</string>
+    <string name="show_first_time_configuration">Show Wizard Configuration</string>
+    <string name="buttonDeleteDatabaseText">Delete Database</string>
+    <string name="buttonManageDatabaseText">Manage Database</string>
+    <string name="language">Language</string>
+    <string name="ui_language">UI Language</string>
+    <string name="checkBoxShowCorrectAnswer">Show Correct Answer</string>
     
     
 

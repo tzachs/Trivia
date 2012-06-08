@@ -81,6 +81,12 @@
     <string name="checking_for_updates_">"מחפש עדכונים &#8230; "</string>
     <string name="error_occoured_stopping_upload_check_server_url_or_connectivity">"שגיאה קרתה בזמן העלאה, בדוק הגדרות שרת או קישוריות"</string>
     <string name="inserting_questions_to_database">"הוספת שאלות למאגר"</string>
+    <string name="show_first_time_configuration">הראה אשף הגדרות</string>
+    <string name="buttonDeleteDatabaseText">מחק מאגר נתונים</string>
+    <string name="buttonManageDatabaseText">נהל מאגר נתונים</string>
+    <string name="language">שפה</string>
+    <string name="ui_language">שפת ממשק</string>
+    <string name="checkBoxShowCorrectAnswer">הראה תשובה נכונה</string>
     
     
 

@@ -65,7 +65,6 @@ public class WizardSetup extends Activity implements OnClickListener,
 		
 		listViewLanguages = (ListView)findViewById(R.id.listViewLanguages);
 		
-		
 		listViewLanguages.setOnItemClickListener(this);
 
 		initializeCheckBoxes();
@@ -73,6 +72,7 @@ public class WizardSetup extends Activity implements OnClickListener,
 	}
 
 	private void initializeCheckBoxes() {
+		
 		checkBoxAllowUpdateUsingWifi = (CheckBox) findViewById(R.id.checkBoxAllowUpdateUsingWifi);
 		checkBoxAllowUpdateUsingMobileNetwork = (CheckBox) findViewById(R.id.checkBoxAllowUpdateUsingMobileNetwork);
 		checkBoxAllowUpdateUsing3GOnly = (CheckBox) findViewById(R.id.checkBoxAllowUpdateUsing3GOnly);
@@ -201,6 +201,7 @@ public class WizardSetup extends Activity implements OnClickListener,
 			long id) {
 		// 
 		m_SharedPreferencesEditor.putString("listPreferenceLanguages",Integer.toString(position+1)).commit();
+		
 		
 	}
 

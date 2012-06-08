@@ -22,18 +22,18 @@
         android:text="@string/buttonNewGameText" />
 
     <Button
-        android:id="@+id/buttonUpdateDatabase"
+        android:id="@+id/buttonManageDatabase"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/buttonNewGame"
         android:layout_margin="4dp"
-        android:text="@string/buttonUpdateDatabaseText" />
+        android:text="@string/buttonManageDatabaseText" />
 
     <Button
         android:id="@+id/buttonPreferences"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/buttonUpdateDatabase"
+        android:layout_below="@+id/buttonManageDatabase"
         android:layout_margin="4dp"
         android:text="@string/buttonPreferencesText" />
 
