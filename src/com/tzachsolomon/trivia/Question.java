@@ -89,6 +89,10 @@ public class Question {
 		//
 		return m_Answers.get(3);
 	}
+	
+	public int getCorrectAnswerIndex (){
+		return m_CorrectAnswerIndex;
+	}
 
 	public boolean isCorrect(int i) {
 		//

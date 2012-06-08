@@ -506,6 +506,7 @@ public class JSONHandler {
 					}
 				} catch (JSONException e) {
 					//
+					
 					e.printStackTrace();
 				}
 			}

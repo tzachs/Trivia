@@ -502,6 +502,7 @@ public class Game extends Activity implements OnClickListener {
 		//
 		StringBuilder sb = new StringBuilder();
 		int ret = 1;
+		boolean answeredCorrectly = false;
 
 		// stopping the counter in order to create a race condition where the
 		// user already click but the timer
@@ -523,15 +524,23 @@ public class Game extends Activity implements OnClickListener {
 
 				m_TriviaDb.incUserCorrectCounter(m_CurrentQuestion
 						.getQuestionId());
+				answeredCorrectly = true;
 
 			} else {
 				setButtonRed(o_Button);
 				m_TriviaDb.incUserWrongCounter(m_CurrentQuestion
 						.getQuestionId());
 				incCurrentWrongAnswersCounter();
+				
+				
 
 			}
 
+		}
+		
+		// checking if the user answer wrong and we need to show the correct answer
+		if ( !answeredCorrectly & m_ShowCorrectAnswer){
+			setButtonGreen(m_CurrentQuestion.getCorrectAnswerIndex());
 		}
 
 		if (m_QuestionIndex < m_QuestionLength) {
@@ -549,6 +558,29 @@ public class Game extends Activity implements OnClickListener {
 
 		return ret;
 
+	}
+
+	private void setButtonGreen(int correctAnswerIndex) {
+		// 
+		switch (correctAnswerIndex) {
+		case 0:
+			setButtonGreen(buttonAnswer1);
+			break;
+		case 1:
+			setButtonGreen(buttonAnswer2);
+			break;
+		case 2:
+			setButtonGreen(buttonAnswer3);
+			break;
+		case 3:
+			setButtonGreen(buttonAnswer4);
+			break;
+		
+
+		default:
+			break;
+		}
+		
 	}
 
 	private void finishedQuestions() {
