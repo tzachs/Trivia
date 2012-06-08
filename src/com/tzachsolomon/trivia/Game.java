@@ -74,6 +74,8 @@ public class Game extends Activity implements OnClickListener {
 
 	private boolean m_ResumeClock;
 
+	private boolean m_ShowCorrectAnswer;
+
 	
 
 	@Override
@@ -353,6 +355,7 @@ public class Game extends Activity implements OnClickListener {
 	private void initializeVariables() {
 		//
 
+		m_ShowCorrectAnswer = m_SharedPreferences.getBoolean("checkBoxPreferenceShowCorrectAnswer", true);
 		m_ResumeClock = false;
 		m_GameOver = false;
 		m_TriviaDb = new TriviaDbEngine(Game.this);

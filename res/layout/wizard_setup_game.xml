@@ -30,7 +30,7 @@
          android:layout_margin="4dp"
          android:layout_marginBottom="20dp"
          android:text="@string/textViewWizardSetupGameHintText" />
-     
+
      <CheckBox
          android:id="@+id/checkBoxShowReportQuestion"
          android:layout_width="wrap_content"

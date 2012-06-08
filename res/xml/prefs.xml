@@ -15,8 +15,15 @@
     <PreferenceCategory 
         android:key="preferenceCategoryGameRelated"
         android:title="@string/preferenceCategoryGameRelatedTitle" >
+        <CheckBoxPreference 
+            android:key="checkBoxPreferenceShowCorrectAnswer"
+            android:title="@string/checkBoxPreferenceShowCorrectAnswerText"
+            android:summary="@string/checkBoxPreferenceShowCorrectAnswerSummary"
+            android:defaultValue="true"
+            
+            />
         <EditTextPreference
-            android:defaultValue="8"
+            android:defaultValue="10"
             android:inputType="number"
             android:key="editTextPreferenceCountDownTimer"
             android:summary="@string/editTextPreferenceCountDownTimerSummary"

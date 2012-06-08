@@ -87,6 +87,8 @@
     <string name="language">שפה</string>
     <string name="ui_language">שפת ממשק</string>
     <string name="checkBoxShowCorrectAnswer">הראה תשובה נכונה</string>
+    <string name="checkBoxPreferenceShowCorrectAnswerSummary">הראה תשובה נכונה (בצבע ירוק) במקרה ותשובה שגויה נענתה</string>
+    <string name="checkBoxPreferenceShowCorrectAnswerText">הראה תשובה נכונה</string>
     
     
 
