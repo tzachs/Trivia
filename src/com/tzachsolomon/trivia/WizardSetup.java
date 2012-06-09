@@ -63,9 +63,9 @@ public class WizardSetup extends Activity implements OnClickListener,
 		buttonNext.setOnClickListener(this);
 		buttonFinish.setOnClickListener(this);
 		
-		listViewLanguages = (ListView)findViewById(R.id.listViewLanguages);
+		//listViewLanguages = (ListView)findViewById(R.id.listViewLanguages);
 		
-		listViewLanguages.setOnItemClickListener(this);
+		//listViewLanguages.setOnItemClickListener(this);
 
 		initializeCheckBoxes();
 

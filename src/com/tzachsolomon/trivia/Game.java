@@ -14,12 +14,8 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
-
 import android.preference.PreferenceManager;
-
 import android.util.Log;
-
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -92,6 +88,7 @@ public class Game extends Activity implements OnClickListener {
 		Bundle extras = getIntent().getExtras();
 
 		parseGameSetupAndStart(extras);
+		
 
 	}
 
@@ -199,6 +196,7 @@ public class Game extends Activity implements OnClickListener {
 		if (m_Questions.size() > 0) {
 			m_QuestionIndex = -1;
 
+			
 			new StartNewQuestionAsync().execute(0);
 		} else {
 			Toast.makeText(this, getString(R.string.no_questions_in_database), Toast.LENGTH_SHORT)
@@ -502,7 +500,7 @@ public class Game extends Activity implements OnClickListener {
 		//
 		StringBuilder sb = new StringBuilder();
 		int ret = 1;
-		boolean answeredCorrectly = false;
+		
 
 		// stopping the counter in order to create a race condition where the
 		// user already click but the timer
@@ -524,7 +522,6 @@ public class Game extends Activity implements OnClickListener {
 
 				m_TriviaDb.incUserCorrectCounter(m_CurrentQuestion
 						.getQuestionId());
-				answeredCorrectly = true;
 
 			} else {
 				setButtonRed(o_Button);
@@ -532,16 +529,18 @@ public class Game extends Activity implements OnClickListener {
 						.getQuestionId());
 				incCurrentWrongAnswersCounter();
 				
+				// checking if the user answer wrong and we need to show the correct answer
+				if ( m_ShowCorrectAnswer){
+					setButtonGreen(m_CurrentQuestion.getCorrectAnswerIndex());
+				}
+				
 				
 
 			}
 
 		}
 		
-		// checking if the user answer wrong and we need to show the correct answer
-		if ( !answeredCorrectly & m_ShowCorrectAnswer){
-			setButtonGreen(m_CurrentQuestion.getCorrectAnswerIndex());
-		}
+	
 
 		if (m_QuestionIndex < m_QuestionLength) {
 			// start a new question and

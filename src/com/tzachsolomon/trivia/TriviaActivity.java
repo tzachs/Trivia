@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 
-
 import android.os.Bundle;
 
 import android.preference.PreferenceManager;
@@ -20,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-
 
 public class TriviaActivity extends Activity implements OnClickListener {
 
@@ -43,14 +41,14 @@ public class TriviaActivity extends Activity implements OnClickListener {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		setContentView(R.layout.main);
 
-		PreferenceManager.setDefaultValues(this, R.xml.prefs, true);
+		//PreferenceManager.setDefaultValues(this, R.xml.prefs, true);
 
 		m_SharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
 
-		
+		initializeVariables();
 
 	}
 
@@ -71,13 +69,16 @@ public class TriviaActivity extends Activity implements OnClickListener {
 			m_SharedPreferences.edit()
 					.putBoolean("showFirstTimeConfiguration", false).commit();
 		}
+
+		changeLanguageTo(m_SharedPreferences.getString("listPreferenceLanguages",
+		 "iw"));
 		
-		changeLanguageTo(m_SharedPreferences.getString("listPreferenceLanguages", "iw"));
+		
 
 	}
-	
+
 	private void changeLanguageTo(String string) {
-		// 
+		//
 		Locale locale = new Locale(string);
 		Locale.setDefault(locale);
 		Configuration config = new Configuration();
@@ -86,10 +87,8 @@ public class TriviaActivity extends Activity implements OnClickListener {
 				getBaseContext().getResources().getDisplayMetrics());
 		
 		setContentView(R.layout.main);
-		
-		initializeVariables();
+		initializeButtons();
 
-		
 	}
 
 	private void initializeVariables() {
@@ -238,8 +237,5 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		//
 
 	}
-
-	
-	
 
 }

@@ -2,7 +2,7 @@
 <resources>
      <style name="CustomTheme" parent="android:style/Theme.NoTitleBar">
         <item name="android:buttonStyle">@style/Button</item>
-        <item name="android:windowBackground">@null</item>
+        
     
     </style>
 </resources>
