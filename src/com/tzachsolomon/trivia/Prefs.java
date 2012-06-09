@@ -1,11 +1,15 @@
 package com.tzachsolomon.trivia;
 
+
+
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
 
 import android.preference.PreferenceActivity;
+
 import android.widget.Toast;
 
 public class Prefs extends PreferenceActivity implements
@@ -21,7 +25,9 @@ public class Prefs extends PreferenceActivity implements
 		super.onCreate(savedInstanceState);
 
 		addPreferencesFromResource(R.xml.prefs);
-
+		
+		
+		
 		checkBoxPreferenceAllowUpdateMobileNetwork = (CheckBoxPreference) findPreference("checkBoxPreferenceAllowUpdateMobileNetwork");
 
 		checkBoxPreferenceAllowUpdateMobileNetwork3G = (CheckBoxPreference) findPreference("checkBoxPreferenceAllowUpdateMobileNetwork3G");
@@ -38,6 +44,11 @@ public class Prefs extends PreferenceActivity implements
 		super.onResume();
 		getPreferenceScreen().getSharedPreferences()
 				.registerOnSharedPreferenceChangeListener(this);
+		
+		EditTextPreference showFirstTimeMessageVersion = (EditTextPreference)findPreference("showFirstTimeMessageVersion");
+		getPreferenceScreen().removePreference(showFirstTimeMessageVersion);
+		
+		
 	}
 
 	@Override

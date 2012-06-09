@@ -72,6 +72,8 @@ public class Game extends Activity implements OnClickListener {
 
 	private boolean m_ShowCorrectAnswer;
 
+	private TextView textViewLivesLeft;
+
 	
 
 	@Override
@@ -124,6 +126,9 @@ public class Game extends Activity implements OnClickListener {
 			m_CurrentWrongAnswersCounter = 0;
 			
 			m_SortByNewQuestionFirst = m_SharedPreferences.getBoolean("checkBoxPreferencePreferNewQuestions", true);
+			
+			textViewLivesLeft.setText(getString(R.string.textViewLivesLeftText) + 
+					(m_MaxWrongAnswersAllowed - m_CurrentWrongAnswersCounter));
 
 			startNewRoundGameLevels();
 
@@ -410,6 +415,7 @@ public class Game extends Activity implements OnClickListener {
 		textViewTime = (TextView) findViewById(R.id.textViewTime);
 		textViewNumberOfQuestionsLeft = (TextView) findViewById(R.id.textViewNumberOfQuestionsLeft);
 		textViewQuestionDifficulty = (TextView) findViewById(R.id.textViewQuestionDifficulty);
+		textViewLivesLeft = (TextView)findViewById(R.id.textViewLivesLeft);
 	}
 
 	public class MyCountDownCounter extends CountDownTimerWithPause {
@@ -500,6 +506,7 @@ public class Game extends Activity implements OnClickListener {
 		//
 		StringBuilder sb = new StringBuilder();
 		int ret = 1;
+		int correctAnswerIndex;
 		
 
 		// stopping the counter in order to create a race condition where the
@@ -515,15 +522,18 @@ public class Game extends Activity implements OnClickListener {
 			incCurrentWrongAnswersCounter();
 
 		} else {
+			
+			correctAnswerIndex = m_CurrentQuestion.getCorrectAnswerIndex();
+			
+			if ( i == correctAnswerIndex){
 
-			if (m_CurrentQuestion.isCorrect(i)) {
 				ret = 0;
 				setButtonGreen(o_Button);
 
 				m_TriviaDb.incUserCorrectCounter(m_CurrentQuestion
 						.getQuestionId());
 
-			} else {
+			}else{
 				setButtonRed(o_Button);
 				m_TriviaDb.incUserWrongCounter(m_CurrentQuestion
 						.getQuestionId());
@@ -533,16 +543,13 @@ public class Game extends Activity implements OnClickListener {
 				if ( m_ShowCorrectAnswer){
 					setButtonGreen(m_CurrentQuestion.getCorrectAnswerIndex());
 				}
-				
-				
-
 			}
 
 		}
 		
 	
 
-		if (m_QuestionIndex < m_QuestionLength) {
+		if (m_QuestionIndex < m_QuestionLength && !m_GameOver) {
 			// start a new question and
 			new StartNewQuestionAsync().execute(m_DelayBetweenQuestions);
 
@@ -562,16 +569,16 @@ public class Game extends Activity implements OnClickListener {
 	private void setButtonGreen(int correctAnswerIndex) {
 		// 
 		switch (correctAnswerIndex) {
-		case 0:
+		case 1:
 			setButtonGreen(buttonAnswer1);
 			break;
-		case 1:
+		case 2:
 			setButtonGreen(buttonAnswer2);
 			break;
-		case 2:
+		case 3:
 			setButtonGreen(buttonAnswer3);
 			break;
-		case 3:
+		case 4:
 			setButtonGreen(buttonAnswer4);
 			break;
 		
@@ -601,9 +608,14 @@ public class Game extends Activity implements OnClickListener {
 
 	private void incCurrentWrongAnswersCounter() {
 		//
-		//m_CurrentWrongAnswersCounter++;
-		if ( m_CurrentWrongAnswersCounter > m_MaxWrongAnswersAllowed){
+		m_CurrentWrongAnswersCounter++;
+		
+		textViewLivesLeft.setText(getString(R.string.textViewLivesLeftText) + 
+				(m_MaxWrongAnswersAllowed - m_CurrentWrongAnswersCounter));
+		
+		if ( m_CurrentWrongAnswersCounter >= m_MaxWrongAnswersAllowed){
 			m_GameOver = true;
+			m_CountDownCounter.cancel();
 			AlertDialog.Builder gameOverDialog = new AlertDialog.Builder(Game.this);
 			gameOverDialog.setTitle("Game over :(");
 			gameOverDialog.setCancelable(false);
@@ -612,7 +624,7 @@ public class Game extends Activity implements OnClickListener {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					// 
-					
+					finish();
 				}
 			});
 			gameOverDialog.show();

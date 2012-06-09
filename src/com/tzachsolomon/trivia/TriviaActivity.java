@@ -7,12 +7,16 @@ import android.app.Activity;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 
 import android.os.Bundle;
 
 import android.preference.PreferenceManager;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,7 +27,6 @@ import android.widget.Button;
 public class TriviaActivity extends Activity implements OnClickListener {
 
 	// TODO: highest score
-	// TODO: Delete database
 	// TODO: play categories
 	// TODO: create service to update the database daily
 	// TODO: initial settings with XML file
@@ -43,20 +46,56 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 
-		//PreferenceManager.setDefaultValues(this, R.xml.prefs, true);
-
 		m_SharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
 
 		initializeVariables();
+		
+		checkIfNeedToShowFirstTimeMessage();
+		
 
 	}
 
 	@Override
 	protected void onStart() {
+		
 		//
 		super.onStart();
+		
 
+		
+		
+		
+
+	}
+
+	private void checkIfNeedToShowFirstTimeMessage() {
+		// 
+		PackageInfo packageInfo = null;
+		String i = m_SharedPreferences.getString("showFirstTimeMessageVersion", "1.0");
+		
+		try {
+			packageInfo = getPackageManager().getPackageInfo("com.tzachsolomon.trivia", PackageManager.GET_META_DATA);
+			
+			if ( !packageInfo.versionName.contentEquals(i)){
+				showWizardSetup();
+				m_SharedPreferences.edit().putString("showFirstTimeMessageVersion", packageInfo.versionName).commit();
+			}
+		} catch (NameNotFoundException e) {
+			// 
+			Log.e(TAG, "Could not get meta data info for Trivia");
+		}
+
+		
+	}
+	
+	
+
+	private void showWizardSetup() {
+		// 
+		buttonWizardSetup_Clicked();
+		m_SharedPreferences.edit()
+				.putBoolean("showFirstTimeConfiguration", false).commit();
 	}
 
 	@Override
@@ -65,9 +104,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		super.onResume();
 
 		if (m_SharedPreferences.getBoolean("showFirstTimeConfiguration", true)) {
-			buttonWizardSetup_Clicked();
-			m_SharedPreferences.edit()
-					.putBoolean("showFirstTimeConfiguration", false).commit();
+			showWizardSetup();
 		}
 
 		changeLanguageTo(m_SharedPreferences.getString("listPreferenceLanguages",
@@ -235,6 +272,8 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 	private void menuItemAbout_Clicked() {
 		//
+		Intent intent = new Intent(TriviaActivity.this, AboutActivity.class);
+		startActivity(intent);
 
 	}
 

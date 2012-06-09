@@ -29,7 +29,7 @@
             android:summary="@string/editTextPreferenceCountDownTimerSummary"
             android:title="@string/editTextPreferenceCountDownTimerTitle"/>
         <EditTextPreference
-            android:defaultValue="500"
+            android:defaultValue="1000"
             android:inputType="number"
             android:key="editTextPreferenceDelayBetweenQuestions"
             android:summary="@string/editTextPreferenceDelayBetweenQuestionsSummary"
@@ -99,6 +99,11 @@
         android:key="showFirstTimeConfiguration"
         android:defaultValue="true"
         android:title="@string/show_first_time_configuration"
+        />
+    <EditTextPreference 
+        android:key="showFirstTimeMessageVersion"
+        android:defaultValue="0"
+        
         />
 
 </PreferenceScreen>

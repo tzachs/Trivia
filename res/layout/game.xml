@@ -4,10 +4,20 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
+ 
+    <TextView 
+        android:id="@+id/textViewLivesLeft"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:text="@string/textViewLivesLeftText"
+        
+        />
+    
     <TextView
         android:id="@+id/textViewTimeTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewLivesLeft"
         android:gravity="right"
         android:text="@string/textViewTimeTitleText"
         android:textSize="20dp" />
@@ -25,6 +35,7 @@
         android:id="@+id/textViewNumberOfQuestionsLeftTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textViewTimeTitle"
         android:gravity="left"
         android:text="@string/textViewNumberOfQuestionsLeftTitle"
         android:textSize="20dp" />
@@ -42,6 +53,7 @@
         android:id="@+id/textViewQuestionDifficultyTitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textViewNumberOfQuestionsLeftTitle"
         android:gravity="center"
         android:text="@string/textViewQuestionDifficultyTitle"
         android:textSize="20dp" />

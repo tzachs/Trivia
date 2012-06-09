@@ -50,7 +50,7 @@
     <string name="checkBoxAllowUpdateUsingWifiText">Allow update using WiFi</string>
     <string name="checkBoxAllowUpdateUsingMobileNetworkText">Allow update using Mobile Network. </string>
     <string name="checkBoxAllowUpdateUsing3GOnlyText">Allow update using only 3G Networks. This is a recommended option if using the mobile network to update.</string>
-    <string name="buttonNextText">Next</string>
+    
     <string name="textViewWelcomeTitle">Trivia Welcome</string>
     <string name="checkBoxPreferencePreferNewQuestionsTitle">Prefer new questions</string>
     <string name="checkBoxPreferencePreferNewQuestionsSummary">Sort the questions by least played questions first</string>
@@ -89,6 +89,15 @@
     <string name="checkBoxShowCorrectAnswer">Show Correct Answer</string>
     <string name="checkBoxPreferenceShowCorrectAnswerSummary">Show the correct answer in case wrong answer was answered (Marked Green)</string>
     <string name="checkBoxPreferenceShowCorrectAnswerText">Show Correct Answer</string>
+    <string name="back">Back</string>
+    <string name="next">Next</string>
+    <string name="menuItemAboutTitle">About</string>
+    <string name="menuItemPreferencesTitle">Preferences</string>
+    <string name="menuItemExitTitle">Exit</string>
+    <string name="buttonSendSuggestionText">Send Suggestion</string>
+    <string name="textViewAboutText">This Trivia game was created as a project to learn JSON. I hope you enjoy it</string>
+    <string name="textViewAboutVersionText">"Version: "</string>
+    <string name="textViewLivesLeftText">"Lives left: "</string>
     
     
 

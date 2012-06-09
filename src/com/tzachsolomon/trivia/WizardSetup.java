@@ -29,11 +29,12 @@ public class WizardSetup extends Activity implements OnClickListener,
 	private CheckBox checkBoxShowReportQuestion;
 	private CheckBox checkBoxUploadWrongCorrectStatistics;
 	private CheckBox checkBoxCheckUpdateOnStartup;
-	private boolean m_Direction; // true - next page, false - back page
-	private int m_NumberOfPages;
-	private int m_CurrentPageIndex;
+	
+	
+	
 	private Button buttonFinish;
 	private ListView listViewLanguages;
+	private Button buttonBack;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,19 +54,21 @@ public class WizardSetup extends Activity implements OnClickListener,
 		m_SharedPreferencesEditor = m_SharedPreferences.edit();
 		viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipperWizardSetup);
 
-		m_NumberOfPages = viewFlipper.getChildCount();
-		m_CurrentPageIndex = 1;
-		m_Direction = true;
+		
+		
+		
 
 		buttonNext = (Button) findViewById(R.id.buttonNext);
+		buttonBack = (Button)findViewById(R.id.buttonBack);
 		buttonFinish = (Button)findViewById(R.id.buttonSetupFinish);
 
 		buttonNext.setOnClickListener(this);
+		buttonBack.setOnClickListener(this);
 		buttonFinish.setOnClickListener(this);
 		
-		//listViewLanguages = (ListView)findViewById(R.id.listViewLanguages);
+		listViewLanguages = (ListView)findViewById(R.id.listViewLanguages);
 		
-		//listViewLanguages.setOnItemClickListener(this);
+		listViewLanguages.setOnItemClickListener(this);
 
 		initializeCheckBoxes();
 
@@ -103,6 +106,10 @@ public class WizardSetup extends Activity implements OnClickListener,
 			buttonNext_Clicked();
 			break;
 			
+		case  R.id.buttonBack:
+			buttonBack_Clicked();
+			break;
+			
 		case R.id.buttonSetupFinish:
 			buttonSetupFinish_Clicked();
 			break;
@@ -115,6 +122,13 @@ public class WizardSetup extends Activity implements OnClickListener,
 
 	}
 
+	private void buttonBack_Clicked() {
+		// 
+		viewFlipper.showPrevious();
+		
+		
+	}
+
 	private void buttonSetupFinish_Clicked() {
 		// 
 		finish();
@@ -123,22 +137,8 @@ public class WizardSetup extends Activity implements OnClickListener,
 
 	private void buttonNext_Clicked() {
 		//
-		if (m_Direction) {
-			m_CurrentPageIndex++;
-			if (m_CurrentPageIndex == m_NumberOfPages) {
-				m_Direction = false;
-				buttonNext.setText("Back");
-			}
-			viewFlipper.showNext();
-
-		} else {
-			m_CurrentPageIndex--;
-			if (m_CurrentPageIndex == 1) {
-				m_Direction = true;
-				buttonNext.setText("Next");
-			}
-			viewFlipper.showPrevious();
-		}
+		viewFlipper.showNext();
+		
 
 	}
 

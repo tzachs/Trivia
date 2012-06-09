@@ -29,13 +29,12 @@
     <string name="editTextPreferenceCountDownTimerTitle">"כמה זמן לשאלה"</string>
     <string name="buttonPreferencesText">"תצורה"</string>
     <string name="preferenceCategoryDatabaseServerTitle">"תצורת מסד נתונים"</string>
-    <string name="checkBoxPreferenceUploadCorrectWrongUserStatSummary">"העלה כמה פעמים ענו נכון או לא נכון על שאלה"</string> 
+    <string name="checkBoxPreferenceUploadCorrectWrongUserStatSummary">"העלה כמה פעמים ענו נכון או לא נכון על שאלה"</string>
     <string name="checkBoxPreferenceUploadCorrectWrongUserStatTitle">"העלה הסטטיסטיקה"</string>
     <string name="buttonNewGameLevelsText">"רמות"</string>
     <string name="preferenceCategoryGameRelatedTitle">"הגדרות משחק"</string>
     <string name="checkBoxPreferenceCheckUpdateOnStartupSummary">"בדוק עדכונים בזמן העלאת התוכנה"</string>
     <string name="checkBoxPreferenceCheckUpdateOnStartupTitle">"בדוק עדכונים באתחול"</string>
-    
     <string name="textViewWelcomeMessageText">"ברוך הבא לאשף ההגדרות. לחץ הבא על מנת להמשיך ובסוף על סיום על מנת לשמור."</string>
     <string name="textViewSetupFinishText">"תודה על שהגדרת את טריוויה בפעם הראשונה. הדבר הבא לעשות הוא ללחוץ סיום ואז לללחוץ על עדכן את מאגר השאלות מהמסך הראשי"</string>
     <string name="textViewSetupFinishTitleText">"טריוויה - סיום"</string>
@@ -50,7 +49,6 @@
     <string name="checkBoxAllowUpdateUsingWifiText">"אפשר עדכון באמצעות WiFi"</string>
     <string name="checkBoxAllowUpdateUsingMobileNetworkText">"אפשר עדכון באמצעות הרשת הסלולרית. "</string>
     <string name="checkBoxAllowUpdateUsing3GOnlyText">"אפשר עדכון רק באמצעות רשתות 3G. זוהי האפשרות המומלצת אם ברצונך לעדכן בעזרת הרשת הסלולרית"</string>
-    <string name="buttonNextText">"הבא"</string>
     <string name="textViewWelcomeTitle">"טריוויה ברוך הבא"</string>
     <string name="checkBoxPreferencePreferNewQuestionsTitle">"העדף שאלות חדשות"</string>
     <string name="checkBoxPreferencePreferNewQuestionsSummary">"מיין שאלות לפי שאלות חדשות קודם"</string>
@@ -78,7 +76,7 @@
     <string name="_questions_update_database_">" שאלות. לעדכן את מסד הנתונים?"</string>
     <string name="update">"עדכן"</string>
     <string name="cancel">"ביטול"</string>
-    <string name="checking_for_updates_">"מחפש עדכונים &#8230; "</string>
+    <string name="checking_for_updates_">"מחפש עדכונים … "</string>
     <string name="error_occoured_stopping_upload_check_server_url_or_connectivity">"שגיאה קרתה בזמן העלאה, בדוק הגדרות שרת או קישוריות"</string>
     <string name="inserting_questions_to_database">"הוספת שאלות למאגר"</string>
     <string name="show_first_time_configuration">הראה אשף הגדרות</string>
@@ -89,7 +87,14 @@
     <string name="checkBoxShowCorrectAnswer">הראה תשובה נכונה</string>
     <string name="checkBoxPreferenceShowCorrectAnswerSummary">הראה תשובה נכונה (בצבע ירוק) במקרה ותשובה שגויה נענתה</string>
     <string name="checkBoxPreferenceShowCorrectAnswerText">הראה תשובה נכונה</string>
-    
-    
+    <string name="back">הקודם</string>
+    <string name="next">הבא</string>
+    <string name="menuItemAboutTitle">אודות</string>
+    <string name="menuItemPreferencesTitle">הגדרות</string>
+    <string name="menuItemExitTitle">יציאה</string>
+    <string name="buttonSendSuggestionText">שלח הצעה</string>
+    <string name="textViewAboutText">משחק הטריוויה נוצר כפרוייקט למידה, מקווה כי תהנו</string>
+    <string name="textViewAboutVersionText">"גירסא: "</string>
+    <string name="textViewLivesLeftText">"חיים שנותרו: "</string>
 
 </resources>

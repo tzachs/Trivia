@@ -3,13 +3,13 @@
 
     <item
         android:id="@+id/menuItemAbout"
-        android:title="About"
+        android:title="@string/menuItemAboutTitle"
         />
     <item
         android:id="@+id/menuItemPreferences"
-        android:title="Preferences"/>
+        android:title="@string/menuItemPreferencesTitle"/>
     <item
         android:id="@+id/menuItemExit"
-        android:title="Exit"/>
+        android:title="@string/menuItemExitTitle"/>
 
 </menu>
