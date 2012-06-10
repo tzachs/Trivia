@@ -30,6 +30,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 	// TODO: play categories
 	// TODO: create service to update the database daily
 	// TODO: initial settings with XML file
+	// TODO: 
 
 	public static final String TAG = TriviaActivity.class.getSimpleName();
 
@@ -50,49 +51,46 @@ public class TriviaActivity extends Activity implements OnClickListener {
 				.getDefaultSharedPreferences(getBaseContext());
 
 		initializeVariables();
-		
+
 		checkIfNeedToShowFirstTimeMessage();
-		
 
 	}
 
+
 	@Override
 	protected void onStart() {
-		
+
 		//
 		super.onStart();
-		
-
-		
-		
-		
 
 	}
 
 	private void checkIfNeedToShowFirstTimeMessage() {
-		// 
+		//
 		PackageInfo packageInfo = null;
-		String i = m_SharedPreferences.getString("showFirstTimeMessageVersion", "1.0");
-		
+		String i = m_SharedPreferences.getString("showFirstTimeMessageVersion",
+				"1.0");
+
 		try {
-			packageInfo = getPackageManager().getPackageInfo("com.tzachsolomon.trivia", PackageManager.GET_META_DATA);
-			
-			if ( !packageInfo.versionName.contentEquals(i)){
+			packageInfo = getPackageManager().getPackageInfo(
+					"com.tzachsolomon.trivia", PackageManager.GET_META_DATA);
+
+			if (!packageInfo.versionName.contentEquals(i)) {
 				showWizardSetup();
-				m_SharedPreferences.edit().putString("showFirstTimeMessageVersion", packageInfo.versionName).commit();
+				m_SharedPreferences
+						.edit()
+						.putString("showFirstTimeMessageVersion",
+								packageInfo.versionName).commit();
 			}
 		} catch (NameNotFoundException e) {
-			// 
+			//
 			Log.e(TAG, "Could not get meta data info for Trivia");
 		}
 
-		
 	}
-	
-	
 
 	private void showWizardSetup() {
-		// 
+		//
 		buttonWizardSetup_Clicked();
 		m_SharedPreferences.edit()
 				.putBoolean("showFirstTimeConfiguration", false).commit();
@@ -107,10 +105,8 @@ public class TriviaActivity extends Activity implements OnClickListener {
 			showWizardSetup();
 		}
 
-		changeLanguageTo(m_SharedPreferences.getString("listPreferenceLanguages",
-		 "iw"));
-		
-		
+		changeLanguageTo(m_SharedPreferences.getString(
+				"listPreferenceLanguages", "iw"));
 
 	}
 
@@ -122,7 +118,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 		config.locale = locale;
 		getBaseContext().getResources().updateConfiguration(config,
 				getBaseContext().getResources().getDisplayMetrics());
-		
+
 		setContentView(R.layout.main);
 		initializeButtons();
 

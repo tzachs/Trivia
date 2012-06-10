@@ -18,7 +18,7 @@ import android.widget.Toast;
 public class DatabaseMenuActivity extends Activity implements OnClickListener {
 
 	public static final String TAG = DatabaseMenuActivity.class.getSimpleName();
-	
+
 	private Button buttonDeleteDatabase;
 	private Button buttonUpdateDatabase;
 
@@ -26,25 +26,31 @@ public class DatabaseMenuActivity extends Activity implements OnClickListener {
 	private JSONHandler m_JSONHandler;
 
 	private SharedPreferences m_SharedPreferences;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.database);
-		
+
 		m_SharedPreferences = PreferenceManager
-		.getDefaultSharedPreferences(getBaseContext());
+				.getDefaultSharedPreferences(getBaseContext());
 
 		initializeVariables();
+
+		
+
+	
 	}
 
 	private void initializeVariables() {
 		//
+	
 		m_TriviaDb = new TriviaDbEngine(DatabaseMenuActivity.this);
 
 		m_JSONHandler = new JSONHandler(DatabaseMenuActivity.this);
-		
+
 		initializeButtons();
 
 	}
@@ -53,7 +59,6 @@ public class DatabaseMenuActivity extends Activity implements OnClickListener {
 		//
 		buttonUpdateDatabase = (Button) findViewById(R.id.buttonUpdateDatabase);
 		buttonDeleteDatabase = (Button) findViewById(R.id.buttonDeleteDatabase);
-	
 
 		buttonUpdateDatabase.setOnClickListener(this);
 		buttonDeleteDatabase.setOnClickListener(this);
@@ -77,6 +82,10 @@ public class DatabaseMenuActivity extends Activity implements OnClickListener {
 			break;
 		}
 
+	}
+
+	public void checkUpdate() {
+		buttonUpdateDatabase_Clicked();
 	}
 
 	private void buttonUpdateDatabase_Clicked() {
@@ -122,8 +131,8 @@ public class DatabaseMenuActivity extends Activity implements OnClickListener {
 						.setTitle(getString(R.string.uploading_correct_wrong_statistics));
 				m_ProgressDialog.show();
 			} else {
-				Toast.makeText(DatabaseMenuActivity.this, detailedResult.toString(),
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(DatabaseMenuActivity.this,
+						detailedResult.toString(), Toast.LENGTH_LONG).show();
 			}
 
 			detailedResult.setLength(0);
@@ -189,7 +198,7 @@ public class DatabaseMenuActivity extends Activity implements OnClickListener {
 
 	}
 
-	private class AsyncTaskCheckUpdateIsAvailable extends
+	public class AsyncTaskCheckUpdateIsAvailable extends
 			AsyncTask<Boolean, Integer, Integer> {
 
 		private ProgressDialog m_ProgressDialog;
@@ -209,8 +218,8 @@ public class DatabaseMenuActivity extends Activity implements OnClickListener {
 				m_ProgressDialog.setCancelable(true);
 				m_ProgressDialog.show();
 			} else {
-				Toast.makeText(DatabaseMenuActivity.this, detailedResult.toString(),
-						Toast.LENGTH_LONG).show();
+				Toast.makeText(DatabaseMenuActivity.this,
+						detailedResult.toString(), Toast.LENGTH_LONG).show();
 			}
 
 			detailedResult.setLength(0);
@@ -238,6 +247,7 @@ public class DatabaseMenuActivity extends Activity implements OnClickListener {
 								m_JSONHandler
 										.updateFromInternetAsync(m_TriviaDb
 												.getLastUpdate());
+							
 
 							}
 						});
@@ -248,6 +258,7 @@ public class DatabaseMenuActivity extends Activity implements OnClickListener {
 							public void onClick(DialogInterface dialog,
 									int which) {
 								//
+								
 							}
 						});
 
@@ -257,6 +268,8 @@ public class DatabaseMenuActivity extends Activity implements OnClickListener {
 				Toast.makeText(DatabaseMenuActivity.this,
 						getString(R.string.no_update_available),
 						Toast.LENGTH_SHORT).show();
+				
+
 			}
 		}
 
