@@ -18,8 +18,6 @@ public class Question {
 
 	private int m_CorrectAnswerIndex;
 	private int m_Category;
-	private String m_SubCategory;
-	private String m_Language;
 	
 
 	private int m_CorrectWrongRatio;

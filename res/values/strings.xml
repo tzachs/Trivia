@@ -98,6 +98,9 @@
     <string name="textViewAboutText">This Trivia game was created as a project to learn JSON. I hope you enjoy it</string>
     <string name="textViewAboutVersionText">"Version: "</string>
     <string name="textViewLivesLeftText">"Lives left: "</string>
+    <string name="delete_database_">Delete database?</string>
+    <string name="are_you_sure_you_want_to_delete_the_database_">Are you sure you want to delete the database?</string>
+    <string name="yes">Yes</string>
     
     
 

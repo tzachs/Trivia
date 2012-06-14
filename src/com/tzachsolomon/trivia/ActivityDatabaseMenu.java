@@ -78,10 +78,10 @@ public class ActivityDatabaseMenu extends Activity implements OnClickListener {
 		//
 		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
 
-		dialog.setTitle("Delete database?");
-		dialog.setMessage("Are you sure you want to delete the database?");
+		dialog.setTitle(getString(R.string.delete_database_));
+		dialog.setMessage(getString(R.string.are_you_sure_you_want_to_delete_the_database_));
 		dialog.setCancelable(false);
-		dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+		dialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -89,7 +89,7 @@ public class ActivityDatabaseMenu extends Activity implements OnClickListener {
 				m_TriviaDb.deleteQuestions();
 			}
 		});
-		dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		dialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

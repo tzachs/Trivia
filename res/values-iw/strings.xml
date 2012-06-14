@@ -96,5 +96,8 @@
     <string name="textViewAboutText">משחק הטריוויה נוצר כפרוייקט למידה, מקווה כי תהנו</string>
     <string name="textViewAboutVersionText">"גירסא: "</string>
     <string name="textViewLivesLeftText">"חיים שנותרו: "</string>
+    <string name="delete_database_">למחוק מאגר נתונים?</string>
+    <string name="are_you_sure_you_want_to_delete_the_database_">האם אתה בטוח שברצונך למחוק את המאגר נתונים?</string>
+    <string name="yes">כן</string>
 
 </resources>
