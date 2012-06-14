@@ -1,7 +1,7 @@
 <resources>
 
     <string name="app_name">"טריוויה"</string>
-    <string name="buttonNewGameText">"כל השאלות"</string>
+    <string name="buttonNewGameAllQuestionsText">"כל השאלות"</string>
     <string name="textViewQuestionText">""</string>
     <string name="buttonAnswer1">""</string>
     <string name="textViewTimeText">"0"</string>
@@ -31,7 +31,7 @@
     <string name="preferenceCategoryDatabaseServerTitle">"תצורת מסד נתונים"</string>
     <string name="checkBoxPreferenceUploadCorrectWrongUserStatSummary">"העלה כמה פעמים ענו נכון או לא נכון על שאלה"</string>
     <string name="checkBoxPreferenceUploadCorrectWrongUserStatTitle">"העלה הסטטיסטיקה"</string>
-    <string name="buttonNewGameLevelsText">"רמות"</string>
+    <string name="buttonNewGameSimpleText">"משחק חדש"</string>
     <string name="preferenceCategoryGameRelatedTitle">"הגדרות משחק"</string>
     <string name="checkBoxPreferenceCheckUpdateOnStartupSummary">"בדוק עדכונים בזמן העלאת התוכנה"</string>
     <string name="checkBoxPreferenceCheckUpdateOnStartupTitle">"בדוק עדכונים באתחול"</string>

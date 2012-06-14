@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Trivia</string>
-    <string name="buttonNewGameText">All questions</string>
+    <string name="buttonNewGameAllQuestionsText">All questions</string>
     <string name="textViewQuestionText"></string>
     <string name="buttonAnswer1"></string>
     <string name="textViewTimeText">0</string>
@@ -32,7 +32,7 @@
     <string name="preferenceCategoryDatabaseServerTitle">Database configuration</string>
     <string name="checkBoxPreferenceUploadCorrectWrongUserStatSummary">Upload how many times you were wrong/correct</string> 
     <string name="checkBoxPreferenceUploadCorrectWrongUserStatTitle">Upload statistics</string>
-    <string name="buttonNewGameLevelsText">New Game</string>
+    <string name="buttonNewGameSimpleText">New Game</string>
     <string name="preferenceCategoryGameRelatedTitle">Game Configuration</string>
     <string name="checkBoxPreferenceCheckUpdateOnStartupSummary">Check update on the startup of the app</string>
     <string name="checkBoxPreferenceCheckUpdateOnStartupTitle">Check update on startup</string>

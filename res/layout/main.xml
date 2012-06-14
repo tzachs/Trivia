@@ -2,30 +2,29 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#FFE8D0A9"
     android:orientation="vertical" >
 
     <Button
-        android:id="@+id/buttonNewGameLevels"
+        android:id="@+id/buttonNewGameSimple"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/buttonNewGame"
+        android:layout_above="@+id/buttonNewGameAllQuestions"
         android:layout_margin="4dp"
-        android:text="@string/buttonNewGameLevelsText" />
+        android:text="@string/buttonNewGameSimpleText" />
 
     <Button
-        android:id="@+id/buttonNewGame"
+        android:id="@+id/buttonNewGameAllQuestions"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_margin="4dp"
-        android:text="@string/buttonNewGameText" />
+        android:text="@string/buttonNewGameAllQuestionsText" />
 
     <Button
         android:id="@+id/buttonManageDatabase"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/buttonNewGame"
+        android:layout_below="@+id/buttonNewGameAllQuestions"
         android:layout_margin="4dp"
         android:text="@string/buttonManageDatabaseText" />
     

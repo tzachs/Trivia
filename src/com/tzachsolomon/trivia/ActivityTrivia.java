@@ -34,10 +34,10 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
 
-	private Button buttonNewGame;
+	private Button buttonNewGameAllQuestions;
 	private Button buttonManageDatabase;
 	private Button buttonPreferences;
-	private Button buttonNewGameLevels;
+	private Button buttonNewGameSimple;
 
 	private SharedPreferences m_SharedPreferences;
 
@@ -133,15 +133,15 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	private void initializeButtons() {
 		//
-		buttonNewGame = (Button) findViewById(R.id.buttonNewGame);
+		buttonNewGameAllQuestions = (Button) findViewById(R.id.buttonNewGameAllQuestions);
 		buttonManageDatabase = (Button) findViewById(R.id.buttonManageDatabase);
 		buttonPreferences = (Button) findViewById(R.id.buttonPreferences);
-		buttonNewGameLevels = (Button) findViewById(R.id.buttonNewGameLevels);
+		buttonNewGameSimple = (Button) findViewById(R.id.buttonNewGameSimple);
 
-		buttonNewGame.setOnClickListener(this);
+		buttonNewGameAllQuestions.setOnClickListener(this);
 		buttonManageDatabase.setOnClickListener(this);
 		buttonPreferences.setOnClickListener(this);
-		buttonNewGameLevels.setOnClickListener(this);
+		buttonNewGameSimple.setOnClickListener(this);
 
 		// checking if the device is with API 11 and earlier,
 		// if so, hide the preferences button since it can be done through menu
@@ -156,12 +156,12 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		//
 		switch (v.getId()) {
-		case R.id.buttonNewGame:
-			buttonNewGame_Clicked();
+		case R.id.buttonNewGameAllQuestions:
+			buttonNewGameAllQuestions_Clicked();
 			break;
 
-		case R.id.buttonNewGameLevels:
-			buttonNewGameLevels_Clicked();
+		case R.id.buttonNewGameSimple:
+			buttonNewGameSimple_Clicked();
 			break;
 
 		case R.id.buttonManageDatabase:
@@ -183,7 +183,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	}
 
-	private void buttonNewGameLevels_Clicked() {
+	private void buttonNewGameSimple_Clicked() {
 		//
 		startNewGame(ActivityGame.GAMETYPE_LEVELS);
 		// TODO: add start level, max level;
@@ -204,7 +204,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	}
 
-	private void buttonNewGame_Clicked() {
+	private void buttonNewGameAllQuestions_Clicked() {
 		//
 		startNewGame(ActivityGame.GAMETYPE_ALL_QUESTIONS);
 
