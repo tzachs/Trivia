@@ -32,7 +32,7 @@
     <string name="preferenceCategoryDatabaseServerTitle">Database configuration</string>
     <string name="checkBoxPreferenceUploadCorrectWrongUserStatSummary">Upload how many times you were wrong/correct</string> 
     <string name="checkBoxPreferenceUploadCorrectWrongUserStatTitle">Upload statistics</string>
-    <string name="buttonNewGameLevelsText">Levels</string>
+    <string name="buttonNewGameLevelsText">New Game</string>
     <string name="preferenceCategoryGameRelatedTitle">Game Configuration</string>
     <string name="checkBoxPreferenceCheckUpdateOnStartupSummary">Check update on the startup of the app</string>
     <string name="checkBoxPreferenceCheckUpdateOnStartupTitle">Check update on startup</string>

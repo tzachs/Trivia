@@ -28,6 +28,7 @@
         android:layout_below="@id/buttonNewGame"
         android:layout_margin="4dp"
         android:text="@string/buttonManageDatabaseText" />
+    
 
     <Button
         android:id="@+id/buttonPreferences"
