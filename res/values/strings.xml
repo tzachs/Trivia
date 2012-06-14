@@ -2,11 +2,11 @@
 <resources>
 
     <string name="app_name">Trivia</string>
-    <string name="buttonNewGameAllQuestionsText">All questions</string>
+    <string name="buttonNewGameAllQuestionsText">All Questions</string>
     <string name="textViewQuestionText"></string>
     <string name="buttonAnswer1"></string>
     <string name="textViewTimeText">0</string>
-    <string name="buttonUpdateDatabaseText">Update Questions Database</string>
+    <string name="buttonUpdateDatabaseText">Update Questions</string>
     <string name="textViewTimeTitleText">Time</string>
     <string name="textViewNumberOfQuestionsLeftTitle">Questions</string>
     <string name="textViewQuestionDifficultyTitle">Level</string>

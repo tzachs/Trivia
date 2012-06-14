@@ -8,23 +8,35 @@
         android:id="@+id/buttonNewGameSimple"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/buttonNewGameAllQuestions"
-        android:layout_margin="4dp"
+        android:layout_alignParentTop="true"
+        
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginBottom="4dp"
         android:text="@string/buttonNewGameSimpleText" />
 
     <Button
         android:id="@+id/buttonNewGameAllQuestions"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_below="@+id/buttonNewGameSimple"
         android:layout_margin="4dp"
         android:text="@string/buttonNewGameAllQuestionsText" />
+    
+     <Button
+        android:id="@+id/buttonUpdateDatabase"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_margin="4dp"
+        android:text="@string/buttonUpdateDatabaseText" />
 
     <Button
         android:id="@+id/buttonManageDatabase"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonNewGameAllQuestions"
+        android:layout_below="@+id/buttonUpdateDatabase"
         android:layout_margin="4dp"
         android:text="@string/buttonManageDatabaseText" />
     

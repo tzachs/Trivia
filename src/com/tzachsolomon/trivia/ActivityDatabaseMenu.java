@@ -1,11 +1,12 @@
 package com.tzachsolomon.trivia;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-
 
 public class ActivityDatabaseMenu extends Activity implements OnClickListener {
 
@@ -15,9 +16,8 @@ public class ActivityDatabaseMenu extends Activity implements OnClickListener {
 	private Button buttonUpdateDatabase;
 
 	private TriviaDbEngine m_TriviaDb;
-	
+
 	private UpdateManager m_UpdateManager;
-	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,18 +25,13 @@ public class ActivityDatabaseMenu extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.database);
 
-	
-
 		initializeVariables();
 
-		
-
-	
 	}
 
 	private void initializeVariables() {
 		//
-	
+
 		m_UpdateManager = new UpdateManager(this);
 		m_TriviaDb = new TriviaDbEngine(ActivityDatabaseMenu.this);
 
@@ -73,21 +68,37 @@ public class ActivityDatabaseMenu extends Activity implements OnClickListener {
 
 	}
 
-	
 	private void buttonUpdateDatabase_Clicked() {
 		// checking if to upload user correct wrong statistics before
 		m_UpdateManager.updateNow();
-		
 
 	}
 
 	private void buttonDeleteDatabase_Clicked() {
 		//
-		m_TriviaDb.deleteQuestions();
+		AlertDialog.Builder dialog = new AlertDialog.Builder(this);
+
+		dialog.setTitle("Delete database?");
+		dialog.setMessage("Are you sure you want to delete the database?");
+		dialog.setCancelable(false);
+		dialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				//
+				m_TriviaDb.deleteQuestions();
+			}
+		});
+		dialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				//
+				
+			}
+		});
+		dialog.show();
 
 	}
 
-	
-
-	
 }

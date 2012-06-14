@@ -38,8 +38,11 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	private Button buttonManageDatabase;
 	private Button buttonPreferences;
 	private Button buttonNewGameSimple;
+	private Button buttonUpdateDatabase;
 
 	private SharedPreferences m_SharedPreferences;
+	
+	private UpdateManager m_UpdateManager;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -126,6 +129,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	private void initializeVariables() {
 		//
+		m_UpdateManager = new UpdateManager(this);
 
 		initializeButtons();
 
@@ -137,11 +141,13 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		buttonManageDatabase = (Button) findViewById(R.id.buttonManageDatabase);
 		buttonPreferences = (Button) findViewById(R.id.buttonPreferences);
 		buttonNewGameSimple = (Button) findViewById(R.id.buttonNewGameSimple);
+		buttonUpdateDatabase = (Button)findViewById(R.id.buttonUpdateDatabase);
 
 		buttonNewGameAllQuestions.setOnClickListener(this);
 		buttonManageDatabase.setOnClickListener(this);
 		buttonPreferences.setOnClickListener(this);
 		buttonNewGameSimple.setOnClickListener(this);
+		buttonUpdateDatabase.setOnClickListener(this);
 
 		// checking if the device is with API 11 and earlier,
 		// if so, hide the preferences button since it can be done through menu
@@ -156,6 +162,10 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		//
 		switch (v.getId()) {
+		case R.id.buttonUpdateDatabase:
+			buttonUpdateDatabase_Clicked();
+			break;
+			
 		case R.id.buttonNewGameAllQuestions:
 			buttonNewGameAllQuestions_Clicked();
 			break;
@@ -174,6 +184,13 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		}
 
 	}
+
+	private void buttonUpdateDatabase_Clicked() {
+		// 
+		m_UpdateManager.updateNow();
+		
+	}
+
 
 	private void buttonWizardSetup_Clicked() {
 		//
