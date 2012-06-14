@@ -24,14 +24,23 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/viewLineFinish"
+        android:layout_margin="4dp"
         android:text="@string/textViewSetupFinishText" />
+
+    <TextView
+        android:id="@+id/textViewSetupFinishMessage1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewSetupFinishMessage"
+        android:layout_margin="4dp"
+        android:text="@string/textViewSetupFinishText1" />
 
     <Button
         android:id="@+id/buttonSetupFinish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/textViewSetupFinishMessage"
+        android:layout_below="@+id/textViewSetupFinishMessage1"
         android:text="@string/buttonSetupFinishText" />
 
 </RelativeLayout>

@@ -1,16 +1,17 @@
 package com.tzachsolomon.trivia;
 
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Collections;
 
 import java.util.Random;
 
-import org.apache.http.client.ClientProtocolException;
+
 
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -30,6 +31,11 @@ public class ActivityGame extends Activity implements OnClickListener {
 	public static final int GAMETYPE_ALL_QUESTIONS = 1;
 	public static final int GAMETYPE_LEVELS = 2;
 	public static final int GAMETYPE_CATEGORIES = 3;
+	
+	public static final String INTENT_EXTRA_PREVIOUS_QUESTION_ID="previousQuestionId";
+	public static final String INTENT_EXTRA_PREVIOUS_QUESTION_STRING="previousQuestionString";
+	public static final String INTENT_EXTRA_CURRENT_QUESTION_ID="currentQuestionId";
+	public static final String INTENT_EXTRA_CURRENT_QUESTION_STRING="currentQuestionString";
 
 	private MyCountDownCounter m_CountDownCounter;
 
@@ -473,24 +479,21 @@ public class ActivityGame extends Activity implements OnClickListener {
 	}
 
 	private void buttonReportMistakeInQuestion_Clicked() {
-		//
-
-		JSONHandler m_JSONHandler = new JSONHandler(ActivityGame.this);
-
-		try {
-
-			// TODO: change this to form
-			m_JSONHandler.reportMistakeInQuestionAsync(
-					m_CurrentQuestion.getQuestionId(), "no description");
-			Toast.makeText(ActivityGame.this, getString(R.string.error_sent_thanks_), Toast.LENGTH_SHORT)
-					.show();
-		} catch (ClientProtocolException e) {
-			//
-			Log.e(TAG, e.getMessage().toString());
-		} catch (IOException e) {
-			//
-			Log.e(TAG, e.getMessage().toString());
+		
+		Intent intent = new Intent(this, ActivityReportErrorInQuestion.class);
+		if ( m_QuestionIndex > 1 ){
+			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID, m_Questions.get(m_QuestionIndex - 2).getQuestionId());
+			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING, m_Questions.get(m_QuestionIndex - 2).getQuestion());
+		}else{
+			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID, -1);
+			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING, "bla bla");
 		}
+		intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_ID, m_CurrentQuestion.getQuestionId());
+		intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_STRING, m_CurrentQuestion.getQuestion());
+		
+		startActivity(intent);
+		
+	
 
 	}
 

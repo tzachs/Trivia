@@ -99,5 +99,11 @@
     <string name="delete_database_">למחוק מאגר נתונים?</string>
     <string name="are_you_sure_you_want_to_delete_the_database_">האם אתה בטוח שברצונך למחוק את המאגר נתונים?</string>
     <string name="yes">כן</string>
+    
+    <string name="buttonSendErrorText">שלח</string>
+    <string name="editTextErrorDetailsHint">&#8230; מלא שגיאה כאן</string>
+    <string name="textViewWhichQuestionText">איזה שאלה?</string>
+    
+    <string name="textViewSetupFinishText1">שלחו הצעות על טופס הצעת דרך חלון אודות</string>
 
 </resources>

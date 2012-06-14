@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textViewWhichQuestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/buttonSendError"
+        android:layout_alignParentTop="true"
+        android:layout_margin="4dp"
+        android:text="@string/textViewWhichQuestionText" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupWhichQuestion"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/buttonSendError"
+        android:layout_below="@+id/textViewWhichQuestion"
+        android:checkedButton="@+id/radioButtonCurrentQuestion"
+        android:orientation="vertical" >
+
+        <RadioButton
+            android:id="@+id/radioButtonPreviousQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="" />
+
+        <RadioButton
+            android:id="@+id/radioButtonCurrentQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:text="" />
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/editTextErrorDetails"
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:layout_alignLeft="@+id/buttonSendError"
+        android:layout_alignRight="@+id/buttonSendError"
+        android:layout_centerInParent="true"
+        android:hint="@string/editTextErrorDetailsHint"
+        android:inputType="textMultiLine" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/buttonSendError"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="4dp"
+        android:text="@string/buttonSendErrorText" />
+
+</RelativeLayout>

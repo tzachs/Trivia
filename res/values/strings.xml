@@ -38,6 +38,7 @@
     <string name="checkBoxPreferenceCheckUpdateOnStartupTitle">Check update on startup</string>
     <string name="textViewWelcomeMessageText">Welcome to first time configuration wizard of Trivia. Press next to toggle between options and click finish when you are done</string>
     <string name="textViewSetupFinishText">Thank you for configuring Trivia for the first time. Next thing to do is hit finish and than update database from the main menu</string>
+    <string name="textViewSetupFinishText1">Please send suggestion by clicking Menu and then About</string>
     <string name="textViewSetupFinishTitleText">Trivia - Finish</string>
     <string name="buttonSetupFinishText">Finish</string>
     <string name="textViewWizardSetupGameText">Game Setup</string>
@@ -101,6 +102,11 @@
     <string name="delete_database_">Delete database?</string>
     <string name="are_you_sure_you_want_to_delete_the_database_">Are you sure you want to delete the database?</string>
     <string name="yes">Yes</string>
+    
+    
+    <string name="buttonSendErrorText">Send</string>
+    <string name="editTextErrorDetailsHint">Fill error here &#8230;</string>
+    <string name="textViewWhichQuestionText">Which question?</string>
     
     
 
