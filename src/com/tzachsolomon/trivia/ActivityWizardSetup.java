@@ -16,7 +16,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.ViewFlipper;
 
-public class WizardSetup extends Activity implements OnClickListener,
+public class ActivityWizardSetup extends Activity implements OnClickListener,
 		OnCheckedChangeListener, OnItemClickListener {
 
 	private ViewFlipper viewFlipper;

@@ -12,7 +12,7 @@ import android.preference.PreferenceActivity;
 
 import android.widget.Toast;
 
-public class Prefs extends PreferenceActivity implements
+public class ActivityPrefs extends PreferenceActivity implements
 		SharedPreferences.OnSharedPreferenceChangeListener {
 
 	private CheckBoxPreference checkBoxPreferenceAllowUpdateMobileNetwork;

@@ -11,7 +11,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class AboutActivity extends Activity implements OnClickListener {
+public class ActivityAbout extends Activity implements OnClickListener {
 
 	private Button buttonSendSuggestion;
 	private TextView textViewAboutVersion;

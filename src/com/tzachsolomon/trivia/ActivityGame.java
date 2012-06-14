@@ -22,10 +22,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class Game extends Activity implements OnClickListener {
+public class ActivityGame extends Activity implements OnClickListener {
 	
 
-	public static final String TAG = Game.class.getSimpleName();
+	public static final String TAG = ActivityGame.class.getSimpleName();
 	
 	public static final int GAMETYPE_ALL_QUESTIONS = 1;
 	public static final int GAMETYPE_LEVELS = 2;
@@ -162,7 +162,7 @@ public class Game extends Activity implements OnClickListener {
 
 			Collections.shuffle(m_Questions);
 
-			AlertDialog.Builder alertDialog = new AlertDialog.Builder(Game.this);
+			AlertDialog.Builder alertDialog = new AlertDialog.Builder(ActivityGame.this);
 
 			alertDialog.setTitle(getString(R.string.starting_level_) + m_CurrentLevel);
 			alertDialog.setPositiveButton(getString(R.string.start),
@@ -275,7 +275,7 @@ public class Game extends Activity implements OnClickListener {
 				// going to next level
 
 				Toast.makeText(
-						Game.this,
+						ActivityGame.this,
 						getString(R.string.no_more_questions_in_this_level_going_to_next_level_),
 						Toast.LENGTH_LONG).show();
 				startNewRoundGameLevels();
@@ -361,7 +361,7 @@ public class Game extends Activity implements OnClickListener {
 		m_ShowCorrectAnswer = m_SharedPreferences.getBoolean("checkBoxPreferenceShowCorrectAnswer", true);
 		m_ResumeClock = false;
 		m_GameOver = false;
-		m_TriviaDb = new TriviaDbEngine(Game.this);
+		m_TriviaDb = new TriviaDbEngine(ActivityGame.this);
 		// m_Random = new Random(1);
 		m_Random = new Random(System.currentTimeMillis());
 		int total = 7;
@@ -475,14 +475,14 @@ public class Game extends Activity implements OnClickListener {
 	private void buttonReportMistakeInQuestion_Clicked() {
 		//
 
-		JSONHandler m_JSONHandler = new JSONHandler(Game.this);
+		JSONHandler m_JSONHandler = new JSONHandler(ActivityGame.this);
 
 		try {
 
 			// TODO: change this to form
 			m_JSONHandler.reportMistakeInQuestionAsync(
 					m_CurrentQuestion.getQuestionId(), "no description");
-			Toast.makeText(Game.this, getString(R.string.error_sent_thanks_), Toast.LENGTH_SHORT)
+			Toast.makeText(ActivityGame.this, getString(R.string.error_sent_thanks_), Toast.LENGTH_SHORT)
 					.show();
 		} catch (ClientProtocolException e) {
 			//
@@ -593,7 +593,7 @@ public class Game extends Activity implements OnClickListener {
 		//
 		switch (m_CurrentGameType) {
 		case GAMETYPE_ALL_QUESTIONS:
-			Toast.makeText(Game.this, getString(R.string.game_over), Toast.LENGTH_LONG).show();
+			Toast.makeText(ActivityGame.this, getString(R.string.game_over), Toast.LENGTH_LONG).show();
 			break;
 
 		case GAMETYPE_LEVELS:
@@ -616,7 +616,7 @@ public class Game extends Activity implements OnClickListener {
 		if ( m_CurrentWrongAnswersCounter >= m_MaxWrongAnswersAllowed){
 			m_GameOver = true;
 			m_CountDownCounter.cancel();
-			AlertDialog.Builder gameOverDialog = new AlertDialog.Builder(Game.this);
+			AlertDialog.Builder gameOverDialog = new AlertDialog.Builder(ActivityGame.this);
 			gameOverDialog.setTitle("Game over :(");
 			gameOverDialog.setCancelable(false);
 			gameOverDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {

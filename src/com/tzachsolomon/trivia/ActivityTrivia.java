@@ -24,7 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class TriviaActivity extends Activity implements OnClickListener {
+public class ActivityTrivia extends Activity implements OnClickListener {
 
 	// TODO: highest score
 	// TODO: play categories
@@ -32,7 +32,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 	// TODO: initial settings with XML file
 	// TODO: 
 
-	public static final String TAG = TriviaActivity.class.getSimpleName();
+	public static final String TAG = ActivityTrivia.class.getSimpleName();
 
 	private Button buttonNewGame;
 	private Button buttonManageDatabase;
@@ -177,7 +177,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 	private void buttonWizardSetup_Clicked() {
 		//
-		Intent pref = new Intent(TriviaActivity.this, WizardSetup.class);
+		Intent pref = new Intent(ActivityTrivia.this, ActivityWizardSetup.class);
 
 		startActivity(pref);
 
@@ -185,7 +185,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 	private void buttonNewGameLevels_Clicked() {
 		//
-		startNewGame(Game.GAMETYPE_LEVELS);
+		startNewGame(ActivityGame.GAMETYPE_LEVELS);
 		// TODO: add start level, max level;
 
 	}
@@ -198,7 +198,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 	private void buttonManageDatabase_Clicked() {
 		//
-		Intent intent = new Intent(this, DatabaseMenuActivity.class);
+		Intent intent = new Intent(this, ActivityDatabaseMenu.class);
 
 		startActivity(intent);
 
@@ -206,14 +206,14 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 	private void buttonNewGame_Clicked() {
 		//
-		startNewGame(Game.GAMETYPE_ALL_QUESTIONS);
+		startNewGame(ActivityGame.GAMETYPE_ALL_QUESTIONS);
 
 	}
 
 	private void startNewGame(int i_GameType) {
 		//
 
-		Intent intent = new Intent(this, Game.class);
+		Intent intent = new Intent(this, ActivityGame.class);
 		intent.putExtra("GameType", i_GameType);
 
 		startActivity(intent);
@@ -260,7 +260,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 	private void menuItemPreferences_Clicked() {
 		//
-		Intent pref = new Intent(TriviaActivity.this, Prefs.class);
+		Intent pref = new Intent(ActivityTrivia.this, ActivityPrefs.class);
 
 		startActivity(pref);
 
@@ -268,7 +268,7 @@ public class TriviaActivity extends Activity implements OnClickListener {
 
 	private void menuItemAbout_Clicked() {
 		//
-		Intent intent = new Intent(TriviaActivity.this, AboutActivity.class);
+		Intent intent = new Intent(ActivityTrivia.this, ActivityAbout.class);
 		startActivity(intent);
 
 	}

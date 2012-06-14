@@ -7,9 +7,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 
 
-public class DatabaseMenuActivity extends Activity implements OnClickListener {
+public class ActivityDatabaseMenu extends Activity implements OnClickListener {
 
-	public static final String TAG = DatabaseMenuActivity.class.getSimpleName();
+	public static final String TAG = ActivityDatabaseMenu.class.getSimpleName();
 
 	private Button buttonDeleteDatabase;
 	private Button buttonUpdateDatabase;
@@ -38,7 +38,7 @@ public class DatabaseMenuActivity extends Activity implements OnClickListener {
 		//
 	
 		m_UpdateManager = new UpdateManager(this);
-		m_TriviaDb = new TriviaDbEngine(DatabaseMenuActivity.this);
+		m_TriviaDb = new TriviaDbEngine(ActivityDatabaseMenu.this);
 
 		initializeButtons();
 
