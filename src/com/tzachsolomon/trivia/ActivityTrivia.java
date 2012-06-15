@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import android.app.Activity;
 
+import android.content.ContentValues;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
@@ -23,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class ActivityTrivia extends Activity implements OnClickListener {
 
@@ -56,6 +58,30 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		initializeVariables();
 
 		checkIfNeedToShowFirstTimeMessage();
+		
+		/*
+		ContentValues i_Value = new ContentValues();
+		
+		
+		
+		i_Value.put(TriviaDbEngine.KEY_QUESTIONID, "-1");
+		i_Value.put(TriviaDbEngine.KEY_QUESTION,"1234ב");
+		i_Value.put(TriviaDbEngine.KEY_ANSWER1,"1");
+		i_Value.put(TriviaDbEngine.KEY_ANSWER2,"2");
+		i_Value.put(TriviaDbEngine.KEY_ANSWER3,"3");
+		i_Value.put(TriviaDbEngine.KEY_ANSWER4,"4");
+
+		i_Value.put(TriviaDbEngine.KEY_ANSWER_INDEX,-1);
+
+		i_Value.put(TriviaDbEngine.KEY_CATEGORY,-1);
+		
+		i_Value.put(TriviaDbEngine.KEY_CORRECT_WRONG_RATIO,0.0);
+		
+		Question a = new Question(i_Value);
+		
+		Toast.makeText(this,a.getQuestion(),Toast.LENGTH_LONG).show();
+*/		
+		
 
 	}
 
@@ -115,8 +141,11 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	private void changeLanguageTo(String string) {
 		//
+		
+		
 		Locale locale = new Locale(string);
 		Locale.setDefault(locale);
+		Log.i(TAG,"Changed lang to " + string);
 		Configuration config = new Configuration();
 		config.locale = locale;
 		getBaseContext().getResources().updateConfiguration(config,
@@ -124,6 +153,8 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 		setContentView(R.layout.main);
 		initializeButtons();
+		
+		
 
 	}
 
@@ -155,7 +186,8 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		if (android.os.Build.VERSION.SDK_INT < 11) {
 			buttonPreferences.setVisibility(View.GONE);
 		}
-
+		
+		
 	}
 
 	@Override

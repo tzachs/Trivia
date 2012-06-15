@@ -90,7 +90,7 @@ public class TriviaDbEngine {
 			sb.append(KEY_LAST_UPDATE + " INTEGER NOT NULL ");
 			sb.append(");");
 
-			Log.v(TAG, sb.toString());
+			
 
 			db.execSQL(sb.toString());
 
@@ -381,7 +381,7 @@ public class TriviaDbEngine {
 
 		this.openDbWritable();
 
-		Log.v(TAG, "Executing " + sb.toString());
+		
 		ourDatabase.execSQL(sb.toString());
 
 		this.closeDb();
@@ -397,8 +397,7 @@ public class TriviaDbEngine {
 		boolean ret = false;
 		String query = String.format("SELECT 1 FROM %1$s WHERE %2$s =%3$s",
 				TABLE_QUESTIONS, KEY_QUESTIONID, i_QuestionId);
-
-		Log.v(TAG, "isQuestionExist " + query);
+		
 
 		Cursor cursor = ourDatabase.rawQuery(query, null);
 
@@ -500,8 +499,7 @@ public class TriviaDbEngine {
 							cv.put(TriviaDbEngine.KEY_CORRECT_USER, 0);
 							cv.put(TriviaDbEngine.KEY_WRONG_USER, 0);
 							cv.put(TriviaDbEngine.KEY_PLAYED_COUNTER, 0);
-							// Log.v(TAG,
-							// cv.getAsString(TriviaDbEngine.KEY_WRONG_USER));
+
 							ourDatabase.insert(TABLE_QUESTIONS, null, cv);
 						}
 

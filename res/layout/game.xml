@@ -111,11 +111,22 @@
             android:text="@string/buttonAnswer1" />
     </LinearLayout>
     
+     <Button 
+        android:id="@+id/buttonPassQuestion"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Pass"
+        android:layout_margin="4dp"
+        android:visibility="gone"
+        android:layout_above="@+id/buttonReportMistakeInQuestion"
+        />
+    
     <Button 
         android:id="@+id/buttonReportMistakeInQuestion"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/buttonReportMistakeInQuestion"
+        android:layout_margin="4dp"
         android:layout_alignParentBottom="true"
         />
         

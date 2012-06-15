@@ -12,30 +12,27 @@ import android.util.Log;
 import android.widget.Toast;
 
 public class UpdateManager {
-	
+
 	public static final String TAG = UpdateManager.class.getSimpleName();
-	
+
 	private JSONHandler m_JSONHandler;
 	private Context m_Context;
 	private TriviaDbEngine m_TriviaDb;
 
 	private SharedPreferences m_SharedPreferences;
 
-	
-	public UpdateManager (Context i_Context){
-		
-		
-		
+	public UpdateManager(Context i_Context) {
+
 		m_Context = i_Context;
-		
+
 		m_SharedPreferences = PreferenceManager
-		.getDefaultSharedPreferences(m_Context);
-		
+				.getDefaultSharedPreferences(m_Context);
+
 		m_TriviaDb = new TriviaDbEngine(m_Context);
 		m_JSONHandler = new JSONHandler(m_Context);
 	}
-	
-	public void updateNow(){
+
+	public void updateNow() {
 		if (m_SharedPreferences.getBoolean(
 				"checkBoxPreferenceUploadCorrectWrongUserStat", true)) {
 			new AsyncTaskUpdateCorrectWrongAsync().execute();
@@ -43,7 +40,7 @@ public class UpdateManager {
 			checkIsUpdateAvailableAsync(true);
 		}
 	}
-	
+
 	private void checkIsUpdateAvailableAsync(boolean i_DisplayInfoIfNoUpdate) {
 		new AsyncTaskCheckUpdateIsAvailable().execute(i_DisplayInfoIfNoUpdate);
 	}
@@ -67,11 +64,12 @@ public class UpdateManager {
 				m_ProgressDialog
 						.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 				m_ProgressDialog
-						.setTitle(m_Context.getString(R.string.uploading_correct_wrong_statistics));
+						.setTitle(m_Context
+								.getString(R.string.uploading_correct_wrong_statistics));
 				m_ProgressDialog.show();
 			} else {
-				Toast.makeText(m_Context,
-						detailedResult.toString(), Toast.LENGTH_LONG).show();
+				Toast.makeText(m_Context, detailedResult.toString(),
+						Toast.LENGTH_LONG).show();
 			}
 
 			detailedResult.setLength(0);
@@ -82,12 +80,12 @@ public class UpdateManager {
 			//
 			if (enabled) {
 				if (result.length() > 0) {
-					Toast.makeText(m_Context, result,
-							Toast.LENGTH_LONG).show();
+					Toast.makeText(m_Context, result, Toast.LENGTH_LONG).show();
 				} else {
 					Toast.makeText(
 							m_Context,
-							m_Context.getString(R.string.thank_you_for_making_this_trivia_better_),
+							m_Context
+									.getString(R.string.thank_you_for_making_this_trivia_better_),
 							Toast.LENGTH_SHORT).show();
 				}
 
@@ -118,7 +116,8 @@ public class UpdateManager {
 										.getAsString(TriviaDbEngine.KEY_QUESTIONID));
 					} else {
 						i = length;
-						sb.append(m_Context.getString(R.string.error_occoured_stopping_upload_check_server_url_or_connectivity));
+						sb.append(m_Context
+								.getString(R.string.error_occoured_stopping_upload_check_server_url_or_connectivity));
 						Log.e(TAG, sb.toString());
 					}
 					publishProgress(++i);
@@ -152,13 +151,13 @@ public class UpdateManager {
 			if (enabled) {
 				m_ProgressDialog = new ProgressDialog(m_Context);
 				m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				m_ProgressDialog
-						.setTitle(m_Context.getString(R.string.checking_for_updates_));
+				m_ProgressDialog.setTitle(m_Context
+						.getString(R.string.checking_for_updates_));
 				m_ProgressDialog.setCancelable(true);
 				m_ProgressDialog.show();
 			} else {
-				Toast.makeText(m_Context,
-						detailedResult.toString(), Toast.LENGTH_LONG).show();
+				Toast.makeText(m_Context, detailedResult.toString(),
+						Toast.LENGTH_LONG).show();
 			}
 
 			detailedResult.setLength(0);
@@ -170,12 +169,26 @@ public class UpdateManager {
 			//
 			m_ProgressDialog.dismiss();
 			if (result > 0) {
-				AlertDialog.Builder dialog = new AlertDialog.Builder(
-						m_Context);
+
+				StringBuilder message = new StringBuilder();
+
+				message.append(m_Context
+						.getString(R.string.update_is_available_for_));
+				message.append(result);
+				message.append(m_Context
+						.getString(R.string._questions_update_database_));
+
+				AlertDialog.Builder dialog = new AlertDialog.Builder(m_Context);
 				dialog.setCancelable(false);
-				dialog.setMessage(m_Context.getString(R.string.update_is_available_for_)
-						+ result
-						+ m_Context.getString(R.string._questions_update_database_));
+
+				if (m_SharedPreferences.getBoolean(
+						"checkBoxPreferenceRevereseInHebrew", false)) {
+					dialog.setMessage(StringParser
+							.reverseNumbersInString(message.toString()));
+				} else {
+					dialog.setMessage(message.toString());
+				}
+
 				dialog.setPositiveButton(m_Context.getString(R.string.update),
 						new DialogInterface.OnClickListener() {
 

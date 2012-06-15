@@ -1,12 +1,9 @@
 package com.tzachsolomon.trivia;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 
 import java.util.Random;
-
-
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,18 +21,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ActivityGame extends Activity implements OnClickListener {
-	
 
 	public static final String TAG = ActivityGame.class.getSimpleName();
-	
+
 	public static final int GAMETYPE_ALL_QUESTIONS = 1;
 	public static final int GAMETYPE_LEVELS = 2;
 	public static final int GAMETYPE_CATEGORIES = 3;
-	
-	public static final String INTENT_EXTRA_PREVIOUS_QUESTION_ID="previousQuestionId";
-	public static final String INTENT_EXTRA_PREVIOUS_QUESTION_STRING="previousQuestionString";
-	public static final String INTENT_EXTRA_CURRENT_QUESTION_ID="currentQuestionId";
-	public static final String INTENT_EXTRA_CURRENT_QUESTION_STRING="currentQuestionString";
+
+	public static final String INTENT_EXTRA_PREVIOUS_QUESTION_ID = "previousQuestionId";
+	public static final String INTENT_EXTRA_PREVIOUS_QUESTION_STRING = "previousQuestionString";
+	public static final String INTENT_EXTRA_CURRENT_QUESTION_ID = "currentQuestionId";
+	public static final String INTENT_EXTRA_CURRENT_QUESTION_STRING = "currentQuestionString";
 
 	private MyCountDownCounter m_CountDownCounter;
 
@@ -55,7 +51,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private int m_QuestionIndex;
 	private int m_QuestionLength;
-	
+
 	private int m_DelayBetweenQuestions;
 	private int m_CurrentGameType;
 	private int m_CurrentQuestionInThisLevel;
@@ -65,22 +61,23 @@ public class ActivityGame extends Activity implements OnClickListener {
 	private int m_CurrentLevel;
 	private int m_CurrentWrongAnswersCounter;
 	private int m_MaxWrongAnswersAllowed;
-	
+
 	private TriviaDbEngine m_TriviaDb;
 	private SharedPreferences m_SharedPreferences;
 
 	private Random m_Random;
-	
+
 	private boolean m_GameOver;
 	private boolean m_SortByNewQuestionFirst;
 
 	private boolean m_ResumeClock;
 
 	private boolean m_ShowCorrectAnswer;
+	private boolean m_ReverseNumbersInQuestions;
 
 	private TextView textViewLivesLeft;
 
-	
+	private Button buttonPassQuestion;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +93,6 @@ public class ActivityGame extends Activity implements OnClickListener {
 		Bundle extras = getIntent().getExtras();
 
 		parseGameSetupAndStart(extras);
-		
 
 	}
 
@@ -130,17 +126,19 @@ public class ActivityGame extends Activity implements OnClickListener {
 			m_MaxNumberOfQuestionInLevel = 10;
 			m_MaxWrongAnswersAllowed = 3;
 			m_CurrentWrongAnswersCounter = 0;
-			
-			m_SortByNewQuestionFirst = m_SharedPreferences.getBoolean("checkBoxPreferencePreferNewQuestions", true);
-			
-			textViewLivesLeft.setText(getString(R.string.textViewLivesLeftText) + 
-					(m_MaxWrongAnswersAllowed - m_CurrentWrongAnswersCounter));
+
+			m_SortByNewQuestionFirst = m_SharedPreferences.getBoolean(
+					"checkBoxPreferencePreferNewQuestions", true);
+
+			textViewLivesLeft
+					.setText(getString(R.string.textViewLivesLeftText)
+							+ (m_MaxWrongAnswersAllowed - m_CurrentWrongAnswersCounter));
 
 			startNewRoundGameLevels();
 
 		} else {
-			Toast.makeText(this, getString(R.string.no_questions_in_database), Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(this, getString(R.string.no_questions_in_database),
+					Toast.LENGTH_SHORT).show();
 			finish();
 
 		}
@@ -148,14 +146,15 @@ public class ActivityGame extends Activity implements OnClickListener {
 	}
 
 	private void startNewRoundGameLevels() {
-		
+
 		m_ResumeClock = false;
-		
+
 		m_CurrentLevel++;
 
 		if (m_CurrentLevel <= m_NumberOfLevels && !m_GameOver) {
 
-			m_Questions = m_TriviaDb.getQuestionByLevel(m_CurrentLevel, m_SortByNewQuestionFirst);
+			m_Questions = m_TriviaDb.getQuestionByLevel(m_CurrentLevel,
+					m_SortByNewQuestionFirst);
 
 			m_QuestionLength = m_Questions.size();
 			if (m_QuestionLength < 10) {
@@ -168,9 +167,11 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 			Collections.shuffle(m_Questions);
 
-			AlertDialog.Builder alertDialog = new AlertDialog.Builder(ActivityGame.this);
+			AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+					ActivityGame.this);
 
-			alertDialog.setTitle(getString(R.string.starting_level_) + m_CurrentLevel);
+			alertDialog.setTitle(getString(R.string.starting_level_)
+					+ m_CurrentLevel);
 			alertDialog.setPositiveButton(getString(R.string.start),
 					new DialogInterface.OnClickListener() {
 
@@ -190,7 +191,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 			alertDialog.show();
 
 		} else {
-			Toast.makeText(this, getString(R.string.levels_game_over), Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, getString(R.string.levels_game_over),
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 
@@ -207,11 +209,10 @@ public class ActivityGame extends Activity implements OnClickListener {
 		if (m_Questions.size() > 0) {
 			m_QuestionIndex = -1;
 
-			
 			new StartNewQuestionAsync().execute(0);
 		} else {
-			Toast.makeText(this, getString(R.string.no_questions_in_database), Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(this, getString(R.string.no_questions_in_database),
+					Toast.LENGTH_SHORT).show();
 			finish();
 
 		}
@@ -298,12 +299,18 @@ public class ActivityGame extends Activity implements OnClickListener {
 				// randomize answer places (indices)
 				m_CurrentQuestion.randomizeAnswerPlaces(m_Random);
 
-				textViewQuestion.setText(m_CurrentQuestion.getQuestion());
+				if (m_ReverseNumbersInQuestions) {
+					textViewQuestion.setText(StringParser
+							.reverseNumbersInString(m_CurrentQuestion
+									.getQuestion()));
+				} else {
+					textViewQuestion.setText(m_CurrentQuestion.getQuestion());
+				}
 				buttonAnswer1.setText(m_CurrentQuestion.getAnswer1());
 				buttonAnswer2.setText(m_CurrentQuestion.getAnswer2());
 				buttonAnswer3.setText(m_CurrentQuestion.getAnswer3());
 				buttonAnswer4.setText(m_CurrentQuestion.getAnswer4());
-				
+
 				m_CountDownCounter.start();
 
 			}
@@ -363,8 +370,10 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private void initializeVariables() {
 		//
-
-		m_ShowCorrectAnswer = m_SharedPreferences.getBoolean("checkBoxPreferenceShowCorrectAnswer", true);
+		m_ReverseNumbersInQuestions = m_SharedPreferences.getBoolean(
+				"checkBoxPreferenceRevereseInHebrew", false);
+		m_ShowCorrectAnswer = m_SharedPreferences.getBoolean(
+				"checkBoxPreferenceShowCorrectAnswer", true);
 		m_ResumeClock = false;
 		m_GameOver = false;
 		m_TriviaDb = new TriviaDbEngine(ActivityGame.this);
@@ -389,7 +398,6 @@ public class ActivityGame extends Activity implements OnClickListener {
 		total *= 1000;
 
 		m_CountDownCounter = new MyCountDownCounter(total, 1000);
-		
 
 		m_CurrentGameType = -1;
 
@@ -400,10 +408,12 @@ public class ActivityGame extends Activity implements OnClickListener {
 	}
 
 	private void initializeButtons() {
+		
 		buttonAnswer1 = (Button) findViewById(R.id.buttonAnswer1);
 		buttonAnswer2 = (Button) findViewById(R.id.buttonAnswer2);
 		buttonAnswer3 = (Button) findViewById(R.id.buttonAnswer3);
 		buttonAnswer4 = (Button) findViewById(R.id.buttonAnswer4);
+		buttonPassQuestion = (Button) findViewById(R.id.buttonPassQuestion);
 
 		buttonReportMistakeInQuestion = (Button) findViewById(R.id.buttonReportMistakeInQuestion);
 
@@ -413,6 +423,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		buttonAnswer4.setOnClickListener(this);
 
 		buttonReportMistakeInQuestion.setOnClickListener(this);
+		buttonPassQuestion.setOnClickListener(this);
 
 	}
 
@@ -421,7 +432,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		textViewTime = (TextView) findViewById(R.id.textViewTime);
 		textViewNumberOfQuestionsLeft = (TextView) findViewById(R.id.textViewNumberOfQuestionsLeft);
 		textViewQuestionDifficulty = (TextView) findViewById(R.id.textViewQuestionDifficulty);
-		textViewLivesLeft = (TextView)findViewById(R.id.textViewLivesLeft);
+		textViewLivesLeft = (TextView) findViewById(R.id.textViewLivesLeft);
 	}
 
 	public class MyCountDownCounter extends CountDownTimerWithPause {
@@ -452,6 +463,10 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		switch (v.getId()) {
 
+		case R.id.buttonPassQuestion:
+			buttonPassQuestion_Clicked();
+			break;
+
 		case R.id.buttonReportMistakeInQuestion:
 			buttonReportMistakeInQuestion_Clicked();
 			break;
@@ -478,22 +493,46 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	}
 
+	private void buttonPassQuestion_Clicked() {
+		//
+		checkAnswer(-2, null);
+
+	}
+
 	private void buttonReportMistakeInQuestion_Clicked() {
-		
+
 		Intent intent = new Intent(this, ActivityReportErrorInQuestion.class);
-		if ( m_QuestionIndex > 1 ){
-			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID, m_Questions.get(m_QuestionIndex - 2).getQuestionId());
-			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING, m_Questions.get(m_QuestionIndex - 2).getQuestion());
-		}else{
+		if (m_QuestionIndex > 1) {
+
+			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID,
+					m_Questions.get(m_QuestionIndex - 2).getQuestionId());
+			if (m_ReverseNumbersInQuestions) {
+				intent.putExtra(
+						ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
+						StringParser.reverseNumbersInString(m_Questions.get(
+								m_QuestionIndex - 2).getQuestion()));
+			} else {
+				intent.putExtra(
+						ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
+						m_Questions.get(m_QuestionIndex - 2).getQuestion());
+			}
+		} else {
 			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID, -1);
-			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING, "bla bla");
+			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
+					"bla bla");
 		}
-		intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_ID, m_CurrentQuestion.getQuestionId());
-		intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_STRING, m_CurrentQuestion.getQuestion());
-		
+		intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_ID,
+				m_CurrentQuestion.getQuestionId());
+		if (m_ReverseNumbersInQuestions) {
+			intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_STRING,
+					StringParser.reverseNumbersInString(m_CurrentQuestion
+							.getQuestion()));
+		} else {
+			intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_STRING,
+					m_CurrentQuestion.getQuestion());
+		}
+
 		startActivity(intent);
-		
-	
 
 	}
 
@@ -510,7 +549,6 @@ public class ActivityGame extends Activity implements OnClickListener {
 		StringBuilder sb = new StringBuilder();
 		int ret = 1;
 		int correctAnswerIndex;
-		
 
 		// stopping the counter in order to create a race condition where the
 		// user already click but the timer
@@ -524,11 +562,13 @@ public class ActivityGame extends Activity implements OnClickListener {
 			sb.append("Time is up!");
 			incCurrentWrongAnswersCounter();
 
+		} else if (i == -2) {
+			// if pass question pressed
 		} else {
-			
+
 			correctAnswerIndex = m_CurrentQuestion.getCorrectAnswerIndex();
-			
-			if ( i == correctAnswerIndex){
+
+			if (i == correctAnswerIndex) {
 
 				ret = 0;
 				setButtonGreen(o_Button);
@@ -536,21 +576,20 @@ public class ActivityGame extends Activity implements OnClickListener {
 				m_TriviaDb.incUserCorrectCounter(m_CurrentQuestion
 						.getQuestionId());
 
-			}else{
+			} else {
 				setButtonRed(o_Button);
 				m_TriviaDb.incUserWrongCounter(m_CurrentQuestion
 						.getQuestionId());
 				incCurrentWrongAnswersCounter();
-				
-				// checking if the user answer wrong and we need to show the correct answer
-				if ( m_ShowCorrectAnswer){
+
+				// checking if the user answer wrong and we need to show the
+				// correct answer
+				if (m_ShowCorrectAnswer) {
 					setButtonGreen(m_CurrentQuestion.getCorrectAnswerIndex());
 				}
 			}
 
 		}
-		
-	
 
 		if (m_QuestionIndex < m_QuestionLength && !m_GameOver) {
 			// start a new question and
@@ -570,7 +609,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 	}
 
 	private void setButtonGreen(int correctAnswerIndex) {
-		// 
+		//
 		switch (correctAnswerIndex) {
 		case 1:
 			setButtonGreen(buttonAnswer1);
@@ -584,19 +623,19 @@ public class ActivityGame extends Activity implements OnClickListener {
 		case 4:
 			setButtonGreen(buttonAnswer4);
 			break;
-		
 
 		default:
 			break;
 		}
-		
+
 	}
 
 	private void finishedQuestions() {
 		//
 		switch (m_CurrentGameType) {
 		case GAMETYPE_ALL_QUESTIONS:
-			Toast.makeText(ActivityGame.this, getString(R.string.game_over), Toast.LENGTH_LONG).show();
+			Toast.makeText(ActivityGame.this, getString(R.string.game_over),
+					Toast.LENGTH_LONG).show();
 			break;
 
 		case GAMETYPE_LEVELS:
@@ -612,26 +651,28 @@ public class ActivityGame extends Activity implements OnClickListener {
 	private void incCurrentWrongAnswersCounter() {
 		//
 		m_CurrentWrongAnswersCounter++;
-		
-		textViewLivesLeft.setText(getString(R.string.textViewLivesLeftText) + 
-				(m_MaxWrongAnswersAllowed - m_CurrentWrongAnswersCounter));
-		
-		if ( m_CurrentWrongAnswersCounter >= m_MaxWrongAnswersAllowed){
+
+		textViewLivesLeft.setText(getString(R.string.textViewLivesLeftText)
+				+ (m_MaxWrongAnswersAllowed - m_CurrentWrongAnswersCounter));
+
+		if (m_CurrentWrongAnswersCounter >= m_MaxWrongAnswersAllowed) {
 			m_GameOver = true;
 			m_CountDownCounter.cancel();
-			AlertDialog.Builder gameOverDialog = new AlertDialog.Builder(ActivityGame.this);
+			AlertDialog.Builder gameOverDialog = new AlertDialog.Builder(
+					ActivityGame.this);
 			gameOverDialog.setTitle("Game over :(");
 			gameOverDialog.setCancelable(false);
-			gameOverDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-				
-				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					// 
-					finish();
-				}
-			});
+			gameOverDialog.setPositiveButton("OK",
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							//
+							finish();
+						}
+					});
 			gameOverDialog.show();
-			
+
 		}
 
 	}
@@ -654,24 +695,21 @@ public class ActivityGame extends Activity implements OnClickListener {
 		} else {
 			buttonReportMistakeInQuestion.setVisibility(View.GONE);
 		}
-		
-		if ( m_ResumeClock){
+
+		if (m_ResumeClock) {
 			m_CountDownCounter.resume();
 		}
-		
+
 	}
-	
 
 	@Override
 	protected void onPause() {
 		//
 		super.onPause();
-		
+
 		m_CountDownCounter.pause();
 		m_ResumeClock = true;
 
-		
 	}
-	
 
 }

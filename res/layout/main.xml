@@ -48,6 +48,8 @@
         android:layout_below="@+id/buttonManageDatabase"
         android:layout_margin="4dp"
         android:text="@string/buttonPreferencesText" />
+    
+  
 
   
 

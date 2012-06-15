@@ -1,5 +1,6 @@
 package com.tzachsolomon.trivia;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 
 import java.util.Collections;
@@ -54,18 +55,16 @@ public class Question {
 
 	public int getQuestionLevel() {
 		
-		Log.v(TAG,"getQuestionLevel(): Question level is "+ m_CorrectWrongRatio);
-		Log.v(TAG,"getQuestionLevel(): Question category is "+ m_Category);
-
-		
 		return m_CorrectWrongRatio;
 
 	}
+	
 	
 
 	public String getQuestion() {
 		//
 		return m_Question;
+	
 	}
 
 	public String getAnswer1() {
