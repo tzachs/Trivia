@@ -75,6 +75,7 @@ public class ActivityHowToPlay extends Activity implements OnClickListener {
 		case R.id.checkBoxShowGameInstructionsEveryTime:
 			checkBoxShowGameInstructionsEveryTime_Clicked();
 			break;
+			
 
 		}
 
