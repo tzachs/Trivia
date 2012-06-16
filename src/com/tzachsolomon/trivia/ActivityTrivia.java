@@ -59,29 +59,10 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 		checkIfNeedToShowFirstTimeMessage();
 		
-		/*
-		ContentValues i_Value = new ContentValues();
-		
-		
-		
-		i_Value.put(TriviaDbEngine.KEY_QUESTIONID, "-1");
-		i_Value.put(TriviaDbEngine.KEY_QUESTION,"1234ב");
-		i_Value.put(TriviaDbEngine.KEY_ANSWER1,"1");
-		i_Value.put(TriviaDbEngine.KEY_ANSWER2,"2");
-		i_Value.put(TriviaDbEngine.KEY_ANSWER3,"3");
-		i_Value.put(TriviaDbEngine.KEY_ANSWER4,"4");
-
-		i_Value.put(TriviaDbEngine.KEY_ANSWER_INDEX,-1);
-
-		i_Value.put(TriviaDbEngine.KEY_CATEGORY,-1);
-		
-		i_Value.put(TriviaDbEngine.KEY_CORRECT_WRONG_RATIO,0.0);
-		
-		Question a = new Question(i_Value);
-		
-		Toast.makeText(this,a.getQuestion(),Toast.LENGTH_LONG).show();
-*/		
-		
+		if (m_SharedPreferences.getBoolean("showFirstTimeConfiguration", true)) {
+			showWizardSetup();
+		}
+				
 
 	}
 
@@ -121,8 +102,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	private void showWizardSetup() {
 		//
 		buttonWizardSetup_Clicked();
-		m_SharedPreferences.edit()
-				.putBoolean("showFirstTimeConfiguration", false).commit();
+		
 	}
 
 	@Override
@@ -130,9 +110,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		//
 		super.onResume();
 
-		if (m_SharedPreferences.getBoolean("showFirstTimeConfiguration", true)) {
-			showWizardSetup();
-		}
+		
 
 		changeLanguageTo(m_SharedPreferences.getString(
 				"listPreferenceLanguages", "iw"));

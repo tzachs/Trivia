@@ -10,8 +10,8 @@
             />
         <CheckBoxPreference 
             android:key="checkBoxPreferenceRevereseInHebrew"
-            android:title="Reverse in hebrew"
-            android:summary="Force reverse numbers in hebrew"
+            android:title="@string/checkBoxPreferenceRevereseInHebrewTitle"
+            android:summary="@string/checkBoxPreferenceRevereseInHebrewSummary"
             android:defaultValue="false"
             />
         

@@ -118,6 +118,9 @@
     <string name="howToPlayNewGame3">3. Game ends when reaching 0 lives or answer correctly all the questions\n</string>
     <string name="howToPlayNewGameTitle">New Game</string>
     <string name="show_help_new_game">Show New Game Instructions</string>
-    <string name="show_help_all_questions">Show All Questions Instructions</string>
+    <string name="show_help_all_questions">Show All Questions Game Instructions</string>
+    <string name="checkBoxPreferenceRevereseInHebrewTitle">Reverse in hebrew</string>
+    <string name="checkBoxPreferenceRevereseInHebrewSummary">Force reverse numbers in hebrew</string>
+    <string name="checkBoxShowConfigurationWizardText">Show configuration wizard @ Startup</string>
 
 </resources>

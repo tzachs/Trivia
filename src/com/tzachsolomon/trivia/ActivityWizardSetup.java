@@ -1,9 +1,16 @@
 package com.tzachsolomon.trivia;
 
+
+
+import java.util.Locale;
+
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -18,6 +25,8 @@ import android.widget.ViewFlipper;
 
 public class ActivityWizardSetup extends Activity implements OnClickListener,
 		OnCheckedChangeListener, OnItemClickListener {
+	
+	public static final String TAG = ActivityWizardSetup.class.getSimpleName();
 
 	private ViewFlipper viewFlipper;
 	private Button buttonNext;
@@ -35,12 +44,17 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 	private Button buttonFinish;
 	private ListView listViewLanguages;
 	private Button buttonBack;
+	private String[] m_LanguageValues;
+
+	private CheckBox checkBoxShowConfigurationWizard;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.wizard_setup);
+		
+		m_LanguageValues = getResources().getStringArray(R.array.integerArrayLanguagesValues);
 
 		initializeVariables();
 
@@ -53,9 +67,6 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 				.getDefaultSharedPreferences(getBaseContext());
 		m_SharedPreferencesEditor = m_SharedPreferences.edit();
 		viewFlipper = (ViewFlipper) findViewById(R.id.viewFlipperWizardSetup);
-
-		
-		
 		
 
 		buttonNext = (Button) findViewById(R.id.buttonNext);
@@ -82,6 +93,8 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		checkBoxShowReportQuestion = (CheckBox) findViewById(R.id.checkBoxShowReportQuestion);
 		checkBoxUploadWrongCorrectStatistics = (CheckBox) findViewById(R.id.checkBoxUploadWrongCorrectStatistics);
 		checkBoxCheckUpdateOnStartup = (CheckBox) findViewById(R.id.checkBoxCheckUpdateOnStartup);
+		
+		checkBoxShowConfigurationWizard = (CheckBox) findViewById(R.id.checkBoxShowConfigurationWizard);
 
 		checkBoxAllowUpdateUsingWifi.setOnCheckedChangeListener(this);
 		checkBoxAllowUpdateUsingMobileNetwork.setOnCheckedChangeListener(this);
@@ -89,6 +102,8 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		checkBoxShowReportQuestion.setOnCheckedChangeListener(this);
 		checkBoxUploadWrongCorrectStatistics.setOnCheckedChangeListener(this);
 		checkBoxCheckUpdateOnStartup.setOnCheckedChangeListener(this);
+		
+		
 		
 		checkBoxAllowUpdateUsingWifi.setChecked(m_SharedPreferences.getBoolean("checkBoxPreferenceAllowUpdateWifi",true));
 		checkBoxAllowUpdateUsingMobileNetwork.setChecked(m_SharedPreferences.getBoolean("checkBoxPreferenceAllowUpdateMobileNetwork",
@@ -102,6 +117,7 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 	public void onClick(View v) {
 		//
 		switch (v.getId()) {
+			
 		case R.id.buttonNext:
 			buttonNext_Clicked();
 			break;
@@ -131,6 +147,8 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 	private void buttonSetupFinish_Clicked() {
 		// 
+		m_SharedPreferencesEditor.putBoolean("showFirstTimeConfiguration", checkBoxShowConfigurationWizard.isChecked()).commit();
+		
 		finish();
 		
 	}
@@ -199,10 +217,34 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position,
 			long id) {
-		// 
-		m_SharedPreferencesEditor.putString("listPreferenceLanguages",Integer.toString(position+1)).commit();
+		//
 		
+		m_SharedPreferencesEditor.putString("listPreferenceLanguages",m_LanguageValues[position]).commit();
 		
+		changeLanguageTo(m_SharedPreferences.getString(
+				"listPreferenceLanguages", "iw"));	
 	}
+
+	private void changeLanguageTo(String string) {
+		//
+		
+		
+		Locale locale = new Locale(string);
+		Locale.setDefault(locale);
+		Log.i(TAG,"Changed lang to " + string);
+		Configuration config = new Configuration();
+		config.locale = locale;
+		getBaseContext().getResources().updateConfiguration(config,
+				getBaseContext().getResources().getDisplayMetrics());
+
+		setContentView(R.layout.wizard_setup);
+		initializeVariables();
+		
+		
+
+	}
+
+	
+	
 
 }

@@ -34,13 +34,28 @@
         android:layout_below="@+id/textViewSetupFinishMessage"
         android:layout_margin="4dp"
         android:text="@string/textViewSetupFinishText1" />
+      
+      <CheckBox
+        android:id="@+id/checkBoxShowConfigurationWizard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewSetupFinishMessage"
+        android:layout_below="@+id/textViewSetupFinishMessage1"
+        android:layout_centerVertical="true"
+        android:layout_margin="4dp"
+        android:checked="true"
+        android:text="@string/checkBoxShowConfigurationWizardText" />
+     
 
     <Button
         android:id="@+id/buttonSetupFinish"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/textViewSetupFinishMessage1"
+        android:layout_below="@+id/checkBoxShowConfigurationWizard"
+        android:layout_margin="4dp"
         android:text="@string/buttonSetupFinishText" />
+
+  
 
 </RelativeLayout>

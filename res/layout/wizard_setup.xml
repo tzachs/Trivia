@@ -11,13 +11,15 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" >
 
-        <include
-            android:id="@+id/wizard_setup_welcome"
-            layout="@layout/wizard_setup_welcome" />
-        
+     
         <include
             android:id="@+id/wizard_setup_language"
             layout="@layout/wizard_setup_language" />
+        
+           <include
+            android:id="@+id/wizard_setup_welcome"
+            layout="@layout/wizard_setup_welcome" />
+        
 
         <include
             android:id="@+id/wizard_setup_network"
