@@ -1,13 +1,13 @@
 package com.tzachsolomon.trivia;
 
-import java.io.UnsupportedEncodingException;
+
 import java.util.ArrayList;
 
 import java.util.Collections;
 import java.util.Random;
 
 import android.content.ContentValues;
-import android.util.Log;
+
 
 public class Question {
 
@@ -55,6 +55,9 @@ public class Question {
 
 	public int getQuestionLevel() {
 		
+		if ( m_CorrectWrongRatio == 0){
+			m_CorrectWrongRatio = 1;
+		}
 		return m_CorrectWrongRatio;
 
 	}

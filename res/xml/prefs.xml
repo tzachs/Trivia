@@ -17,7 +17,6 @@
         
     </PreferenceCategory>
     
-    
     <PreferenceCategory 
         android:key="preferenceCategoryGameRelated"
         android:title="@string/preferenceCategoryGameRelatedTitle" >
@@ -26,7 +25,6 @@
             android:title="@string/checkBoxPreferenceShowCorrectAnswerText"
             android:summary="@string/checkBoxPreferenceShowCorrectAnswerSummary"
             android:defaultValue="true"
-            
             />
         <EditTextPreference
             android:defaultValue="10"
@@ -51,8 +49,22 @@
             android:key="checkBoxPreferenceShowReportQuestion"
             android:summary="@string/checkBoxPreferenceShowReportQuestionSummary"
             android:title="@string/checkBoxPreferenceShowReportQuestionTitle" />
-        
     </PreferenceCategory>
+    <PreferenceCategory 
+        android:key="preferenceCategoryShowInstructions"
+        android:title="Game Instructions" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="checkBoxPreferenceShowHelpNewGame"
+            android:summary="@string/show_help_new_game"
+            android:title="@string/show_help_new_game" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="checkBoxPreferenceShowHelpAllQuestions"
+            android:summary="@string/show_help_all_questions"
+            android:title="@string/show_help_all_questions" />
+        </PreferenceCategory>
+    
     <PreferenceCategory
         android:key="preferenceCategoryDatabaseServer"
         android:title="@string/preferenceCategoryDatabaseServerTitle" >

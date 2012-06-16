@@ -4,7 +4,7 @@ import java.util.Locale;
 
 import android.app.Activity;
 
-import android.content.ContentValues;
+
 import android.content.Intent;
 
 import android.content.SharedPreferences;
@@ -24,7 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
+
 
 public class ActivityTrivia extends Activity implements OnClickListener {
 
@@ -261,10 +261,10 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	private void startNewGame(int i_GameType) {
 		//
-
+		
 		Intent intent = new Intent(this, ActivityGame.class);
 		intent.putExtra("GameType", i_GameType);
-
+		
 		startActivity(intent);
 
 	}

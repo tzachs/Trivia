@@ -30,7 +30,7 @@
     <string name="editTextPreferenceCountDownTimerTitle">Question\'s Time</string>
     <string name="buttonPreferencesText">Configuration</string>
     <string name="preferenceCategoryDatabaseServerTitle">Database configuration</string>
-    <string name="checkBoxPreferenceUploadCorrectWrongUserStatSummary">Upload how many times you were wrong/correct</string> 
+    <string name="checkBoxPreferenceUploadCorrectWrongUserStatSummary">Upload how many times you were wrong/correct</string>
     <string name="checkBoxPreferenceUploadCorrectWrongUserStatTitle">Upload statistics</string>
     <string name="buttonNewGameSimpleText">New Game</string>
     <string name="preferenceCategoryGameRelatedTitle">Game Configuration</string>
@@ -51,7 +51,6 @@
     <string name="checkBoxAllowUpdateUsingWifiText">Allow update using WiFi</string>
     <string name="checkBoxAllowUpdateUsingMobileNetworkText">Allow update using Mobile Network. </string>
     <string name="checkBoxAllowUpdateUsing3GOnlyText">Allow update using only 3G Networks. This is a recommended option if using the mobile network to update.</string>
-    
     <string name="textViewWelcomeTitle">Trivia Welcome</string>
     <string name="checkBoxPreferencePreferNewQuestionsTitle">Prefer new questions</string>
     <string name="checkBoxPreferencePreferNewQuestionsSummary">Sort the questions by least played questions first</string>
@@ -79,7 +78,7 @@
     <string name="_questions_update_database_">" Questions. Update database?"</string>
     <string name="update">Update</string>
     <string name="cancel">Cancel</string>
-    <string name="checking_for_updates_">Checking for updates &#8230;</string>
+    <string name="checking_for_updates_">Checking for updates …</string>
     <string name="error_occoured_stopping_upload_check_server_url_or_connectivity">Error occurred stopping upload, check Server URL or Connectivity</string>
     <string name="inserting_questions_to_database">Inserting questions to Database</string>
     <string name="show_first_time_configuration">Show Wizard Configuration</string>
@@ -102,12 +101,23 @@
     <string name="delete_database_">Delete database?</string>
     <string name="are_you_sure_you_want_to_delete_the_database_">Are you sure you want to delete the database?</string>
     <string name="yes">Yes</string>
-    
-    
     <string name="buttonSendErrorText">Send</string>
-    <string name="editTextErrorDetailsHint">Fill error here &#8230;</string>
+    <string name="editTextErrorDetailsHint">Fill error here …</string>
     <string name="textViewWhichQuestionText">Which question?</string>
-    
-    
+    <string name="instructions_message">Instructions Message</string>
+    <string name="instructions">Instructions</string>
+    <string name="title">Title</string>
+    <string name="show_game_instructions_before_starting_the_game">Show game instructions before starting the game</string>
+    <string name="howToPlayAllQuestions1">1. The game starts with you have 0 lives\n</string>
+    <string name="howToPlayAllQuestions2">2. Correct answer gives the questions level value / 10 (example, question level 7 gives you 0.7 of lives)\n</string>
+    <string name="howToPlayAllQuestions3">3. Wrong answer will reduce the question level value / 10\n</string>
+    <string name="howToPlayAllQuestions4">4. When lives are reaching a number below 0 the game is over\n</string>
+    <string name="howToPlayAllQuestionsTitle">All Questions - Soviet style</string>
+    <string name="howToPlayNewGame1">1. The game starts with you having 3 lives\n</string>
+    <string name="howToPlayNewGame2">2. Wrong answer will reduce 1 lives\n</string>
+    <string name="howToPlayNewGame3">3. Game ends when reaching 0 lives or answer correctly all the questions\n</string>
+    <string name="howToPlayNewGameTitle">New Game</string>
+    <string name="show_help_new_game">Show New Game Instructions</string>
+    <string name="show_help_all_questions">Show All Questions Instructions</string>
 
 </resources>

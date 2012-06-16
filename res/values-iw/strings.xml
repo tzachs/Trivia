@@ -105,5 +105,23 @@
     <string name="textViewWhichQuestionText">איזה שאלה?</string>
     
     <string name="textViewSetupFinishText1">שלחו הצעות על טופס הצעת דרך חלון אודות</string>
+    
+     <string name="instructions_message">הוראות</string>
+    <string name="instructions">הוראות</string>
+    <string name="title">כותרת</string>
+    <string name="show_game_instructions_before_starting_the_game">הראה הוראות לפני התחלת משחק</string>
+    
+     <string name="howToPlayAllQuestions1">1. The game starts with you have 0 lives\n</string>
+    <string name="howToPlayAllQuestions2">2. Correct answer gives the questions level value / 10 (example, question level 7 gives you 0.7 of lives)\n</string>
+    <string name="howToPlayAllQuestions3">3. Wrong answer will reduce the question level value / 10\n</string>
+    <string name="howToPlayAllQuestions4">4. When lives are reaching a number below 0 the game is over\n</string>
+    <string name="howToPlayAllQuestionsTitle">All Questions - Soviet style</string>
+    <string name="howToPlayNewGame1">1. The game starts with you having 3 lives\n</string>
+    <string name="howToPlayNewGame2">2. Wrong answer will reduce 1 lives\n</string>
+    <string name="howToPlayNewGame3">3. Game ends when reaching 0 lives or answer correctly all the questions\n</string>
+    <string name="howToPlayNewGameTitle">New Game</string>
+    <string name="show_help_new_game">Show New Game Instructions</string>
+    <string name="show_help_all_questions">Show All Questions Instructions</string>
+    
 
 </resources>

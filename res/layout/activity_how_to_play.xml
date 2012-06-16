@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textViewHowToPlayTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="@string/title"
+        android:textAppearance="@android:style/TextAppearance.Large" />
+
+    <View
+        android:id="@+id/viewLineFinish"
+        android:layout_width="fill_parent"
+        android:layout_height="4dp"
+        android:background="@drawable/custom_line_blue" />
+
+    <TextView
+        android:id="@+id/textViewHowToPlayInstructionsTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="@string/instructions"
+        android:textAppearance="@android:style/TextAppearance.Large" />
+    
+     <TextView
+        android:id="@+id/textViewHowToPlayInstructionsMessage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="@string/instructions_message"
+        />
+
+     <CheckBox
+         android:id="@+id/checkBoxShowGameInstructionsEveryTime"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:checked="true"
+         android:text="@string/show_game_instructions_before_starting_the_game" />
+
+</LinearLayout>
