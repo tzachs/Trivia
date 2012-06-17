@@ -127,6 +127,7 @@
     <string name="checkBoxPreferenceRevereseInHebrewSummary">הפוך סדר מספרים בעברית</string>
     
     <string name="checkBoxShowConfigurationWizardText">הראה אשף הגדרות בהתחלה</string>
+    <string name="language_chosen">שפה עברית נבחרה</string>
     
 
 </resources>

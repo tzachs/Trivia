@@ -64,7 +64,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 	private int m_CurrentWrongAnswersCounter;
 	private int m_MaxWrongAnswersAllowed;
 
-	private double m_AllQuestionsLives;
+	private int m_AllQuestionsLives;
 
 	private TriviaDbEngine m_TriviaDb;
 	private SharedPreferences m_SharedPreferences;
@@ -267,7 +267,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		//
 
 		m_ResumeClock = false;
-		m_AllQuestionsLives = 0.0;
+		m_AllQuestionsLives = 0;
 		m_Questions = m_TriviaDb.getEnabledQuestions();
 
 		// Shuffling the order of the questions
@@ -707,8 +707,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private void incAllQuestionsLives() {
 		//
-		m_AllQuestionsLives += (double) m_CurrentQuestion.getQuestionLevel()
-				/ (double) 10;
+		m_AllQuestionsLives += m_CurrentQuestion.getQuestionLevel();
+				
 
 	}
 
@@ -824,8 +824,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private void incCurrentWrongAnswersCounter_AllQuestions() {
 		//
-		m_AllQuestionsLives -= (double) m_CurrentQuestion.getQuestionLevel()
-				/ (double) 10;
+		m_AllQuestionsLives -= m_CurrentQuestion.getQuestionLevel();
+				
 
 		if (m_AllQuestionsLives < 0) {
 			showGameOver();

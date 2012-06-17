@@ -109,8 +109,8 @@
     <string name="title">Title</string>
     <string name="show_game_instructions_before_starting_the_game">Show game instructions before starting the game</string>
     <string name="howToPlayAllQuestions1">1. The game starts with you have 0 lives\n</string>
-    <string name="howToPlayAllQuestions2">2. Correct answer gives the questions level value / 10 (example, question level 7 gives you 0.7 of lives)\n</string>
-    <string name="howToPlayAllQuestions3">3. Wrong answer will reduce the question level value / 10\n</string>
+    <string name="howToPlayAllQuestions2">2. Correct answer adds the questions level value to your life (example, question level 7 gives you 7 lives)\n</string>
+    <string name="howToPlayAllQuestions3">3. Wrong answer will reduce the question level value\n</string>
     <string name="howToPlayAllQuestions4">4. When lives are reaching a number below 0 the game is over\n</string>
     <string name="howToPlayAllQuestionsTitle">All Questions - Soviet style</string>
     <string name="howToPlayNewGame1">1. The game starts with you having 3 lives\n</string>
@@ -122,5 +122,6 @@
     <string name="checkBoxPreferenceRevereseInHebrewTitle">Reverse in hebrew</string>
     <string name="checkBoxPreferenceRevereseInHebrewSummary">Force reverse numbers in hebrew</string>
     <string name="checkBoxShowConfigurationWizardText">Show configuration wizard @ Startup</string>
+    <string name="language_chosen">English language chosen</string>
 
 </resources>
