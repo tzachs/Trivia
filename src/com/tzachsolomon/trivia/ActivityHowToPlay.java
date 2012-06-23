@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
@@ -22,6 +23,7 @@ public class ActivityHowToPlay extends Activity implements OnClickListener {
 
 	private int m_GameType;
 	private SharedPreferences m_SharedPreferences;
+	private Button buttonCloseHowToPlay;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,11 @@ public class ActivityHowToPlay extends Activity implements OnClickListener {
 		checkBoxShowGameInstructionsEveryTime = (CheckBox) findViewById(R.id.checkBoxShowGameInstructionsEveryTime);
 
 		checkBoxShowGameInstructionsEveryTime.setOnClickListener(this);
+		
+		buttonCloseHowToPlay = (Button)findViewById(R.id.buttonCloseHowToPlay);
+		
+		buttonCloseHowToPlay.setOnClickListener(this);
+		
 
 	}
 
@@ -76,11 +83,20 @@ public class ActivityHowToPlay extends Activity implements OnClickListener {
 			checkBoxShowGameInstructionsEveryTime_Clicked();
 			break;
 			
+		case R.id.buttonCloseHowToPlay:
+			buttonCloseHowToPlay_Clicked();
+			break;
 
 		}
 
 	}
 	
+	private void buttonCloseHowToPlay_Clicked() {
+		// 
+		finish();
+		
+	}
+
 	@Override
 	protected void onStop() {
 		// 

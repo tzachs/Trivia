@@ -13,11 +13,13 @@ public class ActivityDatabaseMenu extends Activity implements OnClickListener {
 	public static final String TAG = ActivityDatabaseMenu.class.getSimpleName();
 
 	private Button buttonDeleteDatabase;
-	private Button buttonUpdateDatabase;
+	private Button buttonUpdateDatabaseQuestions;
 
 	private TriviaDbEngine m_TriviaDb;
 
 	private UpdateManager m_UpdateManager;
+
+	private Button buttonUpdateDatabaseCategories;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +43,13 @@ public class ActivityDatabaseMenu extends Activity implements OnClickListener {
 
 	private void initializeButtons() {
 		//
-		buttonUpdateDatabase = (Button) findViewById(R.id.buttonUpdateDatabase);
+		buttonUpdateDatabaseQuestions = (Button) findViewById(R.id.buttonUpdateDatabaseQuestions);
+		buttonUpdateDatabaseCategories =  (Button)findViewById(R.id.buttonUpdateDatabaseCategories);
+		
 		buttonDeleteDatabase = (Button) findViewById(R.id.buttonDeleteDatabase);
 
-		buttonUpdateDatabase.setOnClickListener(this);
+		buttonUpdateDatabaseQuestions.setOnClickListener(this);
+		buttonUpdateDatabaseCategories.setOnClickListener(this);
 		buttonDeleteDatabase.setOnClickListener(this);
 
 	}
@@ -53,7 +58,12 @@ public class ActivityDatabaseMenu extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		//
 		switch (v.getId()) {
-		case R.id.buttonUpdateDatabase:
+		
+		case R.id.buttonUpdateDatabaseCategories:
+			buttonUpdateDatabaseCategories_Clicked();
+			break;
+			
+		case R.id.buttonUpdateDatabaseQuestions:
 			buttonUpdateDatabase_Clicked();
 
 			break;
@@ -68,9 +78,15 @@ public class ActivityDatabaseMenu extends Activity implements OnClickListener {
 
 	}
 
+	private void buttonUpdateDatabaseCategories_Clicked() {
+		// 
+		m_UpdateManager.updateCategories();
+		
+	}
+
 	private void buttonUpdateDatabase_Clicked() {
 		// checking if to upload user correct wrong statistics before
-		m_UpdateManager.updateNow();
+		m_UpdateManager.updateQuestions();
 
 	}
 

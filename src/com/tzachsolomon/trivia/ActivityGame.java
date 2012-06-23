@@ -24,6 +24,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	public static final String TAG = ActivityGame.class.getSimpleName();
 
+	public static final String EXTRA_GAME_TYPE = "GameType";
+	
 	public static final int GAMETYPE_ALL_QUESTIONS = 1;
 	public static final int GAMETYPE_LEVELS = 2;
 	public static final int GAMETYPE_CATEGORIES = 3;

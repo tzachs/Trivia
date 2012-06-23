@@ -6,6 +6,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -13,6 +14,8 @@ import android.widget.TextView;
 
 public class ActivityAbout extends Activity implements OnClickListener {
 
+	public static final String TAG = ActivityAbout.class.getSimpleName();
+	
 	private Button buttonSendSuggestion;
 	private TextView textViewAboutVersion;
 
@@ -42,8 +45,9 @@ public class ActivityAbout extends Activity implements OnClickListener {
 			.setText(getString(R.string.textViewAboutVersionText)
 					+ packageInfo.versionName);
 		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			// 
+			Log.e(TAG, e.getMessage().toString());
+			
 		}
 		
 

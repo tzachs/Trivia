@@ -14,6 +14,8 @@ import android.widget.Toast;
 public class UpdateManager {
 
 	public static final String TAG = UpdateManager.class.getSimpleName();
+	
+	
 
 	private JSONHandler m_JSONHandler;
 	private Context m_Context;
@@ -32,7 +34,7 @@ public class UpdateManager {
 		m_JSONHandler = new JSONHandler(m_Context);
 	}
 
-	public void updateNow() {
+	public void updateQuestions() {
 		if (m_SharedPreferences.getBoolean(
 				"checkBoxPreferenceUploadCorrectWrongUserStat", true)) {
 			new AsyncTaskUpdateCorrectWrongAsync().execute();
@@ -141,6 +143,7 @@ public class UpdateManager {
 
 		private ProgressDialog m_ProgressDialog;
 		private boolean enabled;
+		public int updateType = JSONHandler.TYPE_UPDATE_QUESTIONS;
 
 		@Override
 		protected void onPreExecute() {
@@ -198,7 +201,7 @@ public class UpdateManager {
 								//
 								m_JSONHandler
 										.updateFromInternetAsync(m_TriviaDb
-												.getLastUpdate());
+												.getQuestionsLastUpdate());
 
 							}
 						});
@@ -228,8 +231,8 @@ public class UpdateManager {
 			//
 			int ret = -1;
 			try {
-				long lastUpdate = m_TriviaDb.getLastUpdate();
-				ret = m_JSONHandler.isUpdateAvailable(lastUpdate);
+				long lastUpdate = m_TriviaDb.getQuestionsLastUpdate();
+				ret = m_JSONHandler.isUpdateAvailable(lastUpdate, updateType);
 
 			} catch (Exception e) {
 				String msg = e.getMessage().toString();
@@ -242,6 +245,13 @@ public class UpdateManager {
 			return ret;
 		}
 
+	}
+
+	public void updateCategories() {
+		// 
+		AsyncTaskCheckUpdateIsAvailable a = new AsyncTaskCheckUpdateIsAvailable();
+		a.updateType = JSONHandler.TYPE_UPDATE_CATEGORIES;
+		a.execute(true);
 	}
 
 }

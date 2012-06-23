@@ -18,8 +18,12 @@ public class TriviaDbEngine {
 	public static final String TAG = TriviaDbEngine.class.getSimpleName();
 
 	private static final String DATABASE_NAME = "TriviaDb";
-	private static final int DATABASE_VERSION = 7;
+	private static final int DATABASE_VERSION = 8;
+	
+	// TABLE QUESTIONS
+	
 	private static final String TABLE_QUESTIONS = "tblQuestions";
+	
 
 	public static final String KEY_ROWID = "_id";
 	public static final String KEY_QUESTIONID = "colQuestionId";
@@ -30,7 +34,7 @@ public class TriviaDbEngine {
 	public static final String KEY_ANSWER4 = "colAnswer4";
 	public static final String KEY_ANSWER_INDEX = "colAnswerIndex";
 	public static final String KEY_CATEGORY = "colCategory";
-	
+
 	public static final String KEY_LANGUAGE = "colLanguage";
 	public static final String KEY_CORRECT_WRONG_RATIO = "colCorrectWrongRatio";
 	public static final String KEY_CORRECT_USER = "colCorrectUser"; // the
@@ -47,6 +51,16 @@ public class TriviaDbEngine {
 	public static final String KEY_LAST_UPDATE = "colLastUpdate";
 	public static final String KEY_ENABLED = "colEnabled";
 	public static final String KEY_PLAYED_COUNTER = "colPlayedCounter";
+	
+	// TABLE CATEGORIES
+	
+	private static final String TABLE_CATEGORIES = "tblCategories";
+	
+	private static final String KEY_COL_PARENT_ID = "colParentId";
+	private static final String KEY_COL_EN_NAME = "colEnName";
+	private static final String KEY_COL_HE_NAME = "colHeName";
+	
+	
 
 	private DbHelper ourHelper;
 	private Context ourContext;
@@ -64,6 +78,25 @@ public class TriviaDbEngine {
 			//
 			createTableQuestions(db);
 
+		}
+		
+		private void createTableCategories(SQLiteDatabase db){
+			
+			StringBuilder sb = new StringBuilder();
+
+			sb.append("CREATE TABLE ");
+			sb.append(TABLE_CATEGORIES);
+			sb.append(" (");
+			sb.append(KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, ");
+			sb.append(KEY_COL_PARENT_ID + " INTEGER NOT NULL, ");
+			sb.append(KEY_COL_EN_NAME + " TEXT NOT NULL, ");
+			sb.append(KEY_COL_HE_NAME + " TEXT NOT NULL, ");
+			sb.append(KEY_LAST_UPDATE + " INTEGER NOT NULL ");
+			sb.append(");");
+
+			db.execSQL(sb.toString());
+
+			sb.setLength(0);
 		}
 
 		private void createTableQuestions(SQLiteDatabase db) {
@@ -90,8 +123,6 @@ public class TriviaDbEngine {
 			sb.append(KEY_LAST_UPDATE + " INTEGER NOT NULL ");
 			sb.append(");");
 
-			
-
 			db.execSQL(sb.toString());
 
 			sb.setLength(0);
@@ -100,8 +131,11 @@ public class TriviaDbEngine {
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			//
-			db.execSQL("DROP TABLE " + TABLE_QUESTIONS);
+			db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUESTIONS);
+			db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIES);
+			createTableCategories(db);
 			createTableQuestions(db);
+			
 		}
 
 	}
@@ -173,7 +207,7 @@ public class TriviaDbEngine {
 				KEY_ANSWER4, KEY_ANSWER_INDEX, KEY_CATEGORY,
 				KEY_CORRECT_WRONG_RATIO, KEY_CORRECT_USER, KEY_ENABLED,
 				KEY_LANGUAGE, KEY_LAST_UPDATE, KEY_QUESTION, KEY_QUESTIONID,
-				KEY_ROWID, KEY_WRONG_USER, KEY_PLAYED_COUNTER};
+				KEY_ROWID, KEY_WRONG_USER, KEY_PLAYED_COUNTER };
 
 		Cursor cursor;
 
@@ -213,7 +247,7 @@ public class TriviaDbEngine {
 				KEY_ANSWER4, KEY_ANSWER_INDEX, KEY_CATEGORY,
 				KEY_CORRECT_WRONG_RATIO, KEY_CORRECT_USER, KEY_ENABLED,
 				KEY_LANGUAGE, KEY_LAST_UPDATE, KEY_QUESTION, KEY_QUESTIONID,
-				KEY_ROWID, KEY_WRONG_USER, KEY_PLAYED_COUNTER};
+				KEY_ROWID, KEY_WRONG_USER, KEY_PLAYED_COUNTER };
 
 		Cursor cursor;
 		double i_MaxLevel = ((double) i_Level + 0.5) / 10;
@@ -274,8 +308,6 @@ public class TriviaDbEngine {
 
 	}
 
-
-
 	public boolean isEmpty() {
 		//
 		boolean ret = true;
@@ -308,8 +340,8 @@ public class TriviaDbEngine {
 		return ret;
 
 	}
-	
-	public void incPlayedCounter (String i_QuestionId){
+
+	public void incPlayedCounter(String i_QuestionId) {
 		StringBuilder sb = new StringBuilder();
 
 		sb.append("UPDATE ");
@@ -325,14 +357,13 @@ public class TriviaDbEngine {
 		sb.append("'");
 
 		this.openDbWritable();
-		
+
 		ourDatabase.execSQL(sb.toString());
 
 		this.closeDb();
 
 		sb.setLength(0);
-		
-		
+
 	}
 
 	public void incUserCorrectCounter(String i_QuestionId) {
@@ -353,13 +384,12 @@ public class TriviaDbEngine {
 
 		this.openDbWritable();
 
-		
 		ourDatabase.execSQL(sb.toString());
 
 		this.closeDb();
 
 		sb.setLength(0);
-		
+
 		incPlayedCounter(i_QuestionId);
 	}
 
@@ -381,13 +411,12 @@ public class TriviaDbEngine {
 
 		this.openDbWritable();
 
-		
 		ourDatabase.execSQL(sb.toString());
 
 		this.closeDb();
 
 		sb.setLength(0);
-		
+
 		incPlayedCounter(i_QuestionId);
 
 	}
@@ -397,7 +426,6 @@ public class TriviaDbEngine {
 		boolean ret = false;
 		String query = String.format("SELECT 1 FROM %1$s WHERE %2$s =%3$s",
 				TABLE_QUESTIONS, KEY_QUESTIONID, i_QuestionId);
-		
 
 		Cursor cursor = ourDatabase.rawQuery(query, null);
 
@@ -441,11 +469,11 @@ public class TriviaDbEngine {
 
 	public void updateFromInternetAsync(ContentValues[] values) {
 		//
-		new UpdateFromInternetAsyncTask().execute(values);
+		new UpdateQuestionsAsyncTask().execute(values);
 
 	}
 
-	public class UpdateFromInternetAsyncTask extends
+	public class UpdateQuestionsAsyncTask extends
 			AsyncTask<ContentValues, Integer, Void> {
 
 		private ProgressDialog m_ProgressDialog;
@@ -455,7 +483,8 @@ public class TriviaDbEngine {
 			//
 			m_ProgressDialog = new ProgressDialog(ourContext);
 			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			m_ProgressDialog.setTitle(ourContext.getString(R.string.inserting_questions_to_database));
+			m_ProgressDialog.setTitle(ourContext
+					.getString(R.string.inserting_questions_to_database));
 			m_ProgressDialog.show();
 
 		}
@@ -544,36 +573,159 @@ public class TriviaDbEngine {
 
 	}
 
-	public long getLastUpdate() {
+	public long getQuestionsLastUpdate() {
 		//
-		String[] columns = new String[] { "MAX(" + KEY_QUESTIONID + ")",
-				"MAX(" + KEY_LAST_UPDATE + ")" };
-		long ret = 0;
-		int columnIndex0, columnIndex1;
-		long qid, qlastupdate;
+		String[] columns = new String[] { "MAX(" + KEY_LAST_UPDATE + ")" };
+		long ret;
+		int columnIndex0;
+		long qlastupdate;
 		this.openDbReadable();
 
 		Cursor cursor = ourDatabase.query(TABLE_QUESTIONS, columns, null, null,
 				null, null, null);
 
+		// checking if we have rows in the table, if not, we'll return 0
 		if (cursor.getCount() > 0) {
 
 			columnIndex0 = cursor.getColumnIndex(columns[0]);
-			columnIndex1 = cursor.getColumnIndex(columns[1]);
 
 			cursor.moveToFirst();
 
-			qid = cursor.getLong(columnIndex0);
-			qlastupdate = cursor.getLong(columnIndex1);
+			qlastupdate = cursor.getLong(columnIndex0);
 
-			ret = (qid >= qlastupdate) ? qid : qlastupdate;
+			ret = qlastupdate;
 
+		}else{
+			ret = 0;
 		}
 
 		cursor.close();
 
 		this.closeDb();
 		return ret;
+	}
+	
+	public long getCategoriesLastUpdate() {
+		//
+		String[] columns = new String[] { "MAX(" + KEY_LAST_UPDATE + ")" };
+		long ret;
+		int columnIndex0;
+		long qlastupdate;
+		this.openDbReadable();
+
+		Cursor cursor = ourDatabase.query(TABLE_CATEGORIES, columns, null, null,
+				null, null, null);
+
+		// checking if we have rows in the table, if not, we'll return 0
+		if (cursor.getCount() > 0) {
+
+			columnIndex0 = cursor.getColumnIndex(columns[0]);
+
+			cursor.moveToFirst();
+
+			qlastupdate = cursor.getLong(columnIndex0);
+
+			ret =  qlastupdate;
+
+		}else{
+			ret = 0;
+		}
+
+		cursor.close();
+
+		this.closeDb();
+		return ret;
+	}
+
+	public void updateCategoriesAysnc(ContentValues[] result) {
+		//
+
+	}
+
+	public class UpdateCategoriesAsyncTask extends
+			AsyncTask<ContentValues, Integer, Void> {
+
+		private ProgressDialog m_ProgressDialog;
+
+		@Override
+		protected void onPreExecute() {
+			//
+			m_ProgressDialog = new ProgressDialog(ourContext);
+			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			m_ProgressDialog.setTitle(ourContext
+					.getString(R.string.inserting_questions_to_database));
+			m_ProgressDialog.show();
+
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			//
+			m_ProgressDialog.dismiss();
+
+		}
+
+		@Override
+		protected Void doInBackground(ContentValues... params) {
+			//
+			ourHelper = new DbHelper(ourContext);
+			ourDatabase = ourHelper.getWritableDatabase();
+
+			if (params != null) {
+
+				int i = 0;
+
+				m_ProgressDialog.setMax(params.length);
+
+				for (ContentValues cv : params) {
+
+					try {
+
+						// if the questions exits then it only updates
+						String questionId = cv.getAsString(KEY_QUESTIONID);
+						if (isQuestionExist(questionId)) {
+							ourDatabase.update(TABLE_QUESTIONS, cv,
+									KEY_QUESTIONID + "=?",
+									new String[] { questionId });
+						} else {
+							// only if its a new question then insert the wrong
+							// correct
+							// user statistics to the database
+							// this isn't insert in update process since this is
+							// taken
+							// care in function uploadCorrectWrong
+							cv.put(TriviaDbEngine.KEY_CORRECT_USER, 0);
+							cv.put(TriviaDbEngine.KEY_WRONG_USER, 0);
+							cv.put(TriviaDbEngine.KEY_PLAYED_COUNTER, 0);
+
+							ourDatabase.insert(TABLE_QUESTIONS, null, cv);
+						}
+
+					} catch (Exception e) {
+						String message = e.getMessage().toString();
+						if (message != null) {
+							Log.e(TAG, message);
+						}
+
+					}
+
+					i++;
+					publishProgress(i);
+				}
+			} else {
+				Log.e(TAG, "params are null, database wasn't updated");
+			}
+
+			ourHelper.close();
+			return null;
+		}
+
+		@Override
+		protected void onProgressUpdate(Integer... values) {
+			//
+			m_ProgressDialog.setProgress(values[0]);
+		}
+
 	}
 
 }

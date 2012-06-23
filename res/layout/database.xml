@@ -2,16 +2,25 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#FFE8D0A9"
     android:orientation="vertical" >
-
+
     <Button
-        android:id="@+id/buttonUpdateDatabase"
+        android:id="@+id/buttonUpdateDatabaseQuestions"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/buttonUpdateDatabaseCategories"
+        android:layout_margin="4dp"
+        android:background="@drawable/green_brown_button"
+        android:text="@string/buttonUpdateDatabaseText" />
+    
+     <Button
+        android:id="@+id/buttonUpdateDatabaseCategories"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/buttonDeleteDatabase"
         android:layout_margin="4dp"
-        android:text="@string/buttonUpdateDatabaseText" />
+        android:background="@drawable/green_brown_button"
+        android:text="@string/buttonUpdateDatabaseCategoriesText" />
 
     <Button
         android:id="@+id/buttonDeleteDatabase"
@@ -19,8 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_margin="4dp"
+        android:background="@drawable/green_brown_button"
         android:text="@string/buttonDeleteDatabaseText" />
-
-  
 
 </RelativeLayout>

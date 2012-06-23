@@ -125,5 +125,6 @@
     <string name="language_chosen">English language chosen</string>
     <string name="buttonCloseHowToPlayText">Close</string>
     <string name="buttonNewGameCategoriesText">Categories</string>
+    <string name="buttonUpdateDatabaseCategoriesText">Update Categories</string>
 
 </resources>

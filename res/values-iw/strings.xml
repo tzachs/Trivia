@@ -130,6 +130,7 @@
     <string name="language_chosen">שפה עברית נבחרה</string>
     <string name="buttonCloseHowToPlayText">סגור</string>
     <string name="buttonNewGameCategoriesText">נושאים</string>
+    <string name="buttonUpdateDatabaseCategoriesText">עדכן נושאים</string>
     
 
 </resources>

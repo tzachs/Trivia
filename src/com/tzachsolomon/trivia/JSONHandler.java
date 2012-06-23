@@ -47,11 +47,16 @@ public class JSONHandler {
 	public static final String TAG = JSONHandler.class.getSimpleName();
 	public static final String RESULT_SUCCESS = "success";
 	public static final String RESULT_ERROR = "error";
+	
+	public static final int TYPE_UPDATE_CATEGORIES = 2;
+	public static final int TYPE_UPDATE_QUESTIONS = 1;
 
 	private static final String TAG_UPDATE_FROM_DB = "updateFromDb";
 	private static final String TAG_REPORT_QUESTION = "reportMistakeInQuestion";
 	private static final String TAG_UPDATE_WRONG_CORRECT = "updateWrongCorrectStat";
-	private static final String TAG_GET_LAST_UPDATE = "getLastUpdate";
+	private static final String TAG_GET_LAST_UPDATE_QUESTIONS = "getLastUpdateQuestions";
+	private static final String TAG_GET_LAST_UPDATE_CATEGORIES = "getLastUpdateCategories";
+	private static final String TAG_GET_CATEGORIES = "getCategories";
 	
 	private String m_ServerUrl;
 	private HttpClient m_HttpClient;
@@ -95,6 +100,15 @@ public class JSONHandler {
 
 		new AsyncTaskGetQuestionFromServer().execute(ret);
 
+	}
+	
+	public void updateCategoriesFromInternetAsync(long i_LastUserUpdate){
+		ContentValues[] ret = new ContentValues[1];
+		
+		ret[0]= new ContentValues();
+		ret[0].put("lastUserUpdate", i_LastUserUpdate);
+		
+		
 	}
 	
 	/**
@@ -419,6 +433,59 @@ public class JSONHandler {
 
 		return ret;
 	}
+	
+	public class AsyncTaskGetCategoriesFromServer  extends AsyncTask<ContentValues, Integer, ContentValues[]>{
+
+		private ProgressDialog m_ProgressDialog;
+		private boolean isInternetAvailable;
+		private StringBuilder detailedResult;
+		
+		@Override
+		protected void onPreExecute() {
+
+			detailedResult = new StringBuilder();
+
+			m_ProgressDialog = new ProgressDialog(m_ActivityContext);
+			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			m_ProgressDialog.setTitle(m_ActivityContext.getString(R.string.downloading_questions));
+			m_ProgressDialog.show();
+
+			isInternetAvailable = isInternetAvailable(detailedResult);
+
+			if (isInternetAvailable == false) {
+				Toast.makeText(m_ActivityContext, detailedResult.toString(),
+						Toast.LENGTH_SHORT).show();
+			}
+
+			detailedResult.setLength(0);
+
+		}
+		
+		@Override
+		protected void onPostExecute(ContentValues[] result) {
+			//
+			m_ProgressDialog.dismiss();
+
+			if (result != null) {
+				TriviaDbEngine dbEngine = new TriviaDbEngine(m_ActivityContext);
+				dbEngine.updateCategoriesAysnc(result);
+ 
+			} else {
+				Toast.makeText(m_ActivityContext,
+						m_ActivityContext.getString(R.string.error_while_trying_to_update_from_server),
+						Toast.LENGTH_SHORT).show();
+			}
+
+		}
+
+		
+		@Override
+		protected ContentValues[] doInBackground(ContentValues... params) {
+			// 
+			return null;
+		}
+		
+	}
 
 	/**
 	 * @author Tzach Solomon
@@ -545,12 +612,17 @@ public class JSONHandler {
 
 	}
 
-	public int isUpdateAvailable(long lastUpdate) {
+	public int isUpdateAvailable(long lastUpdate, int i_UpdateType) {
 		//
 		int ret = -1;
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		
+		if ( i_UpdateType == 1){
 
-		params.add(new BasicNameValuePair("tag", TAG_GET_LAST_UPDATE));
+		params.add(new BasicNameValuePair("tag", TAG_GET_LAST_UPDATE_QUESTIONS));
+		}else if ( i_UpdateType == 2){
+			params.add(new BasicNameValuePair("tag", TAG_GET_LAST_UPDATE_CATEGORIES));
+		}
 		params.add(new BasicNameValuePair("lastUserUpdate", Long
 				.toString(lastUpdate)));
 

@@ -32,7 +32,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	// TODO: play categories
 	// TODO: create service to update the database daily
 	// TODO: initial settings with XML file
-	// TODO: 
+
 
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
 
@@ -45,6 +45,8 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	private SharedPreferences m_SharedPreferences;
 	
 	private UpdateManager m_UpdateManager;
+
+	private Button buttonNewGameCategories;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -151,12 +153,14 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		buttonPreferences = (Button) findViewById(R.id.buttonPreferences);
 		buttonNewGameSimple = (Button) findViewById(R.id.buttonNewGameSimple);
 		buttonUpdateDatabase = (Button)findViewById(R.id.buttonUpdateDatabase);
+		buttonNewGameCategories = (Button)findViewById(R.id.buttonNewGameCategories);
 
 		buttonNewGameAllQuestions.setOnClickListener(this);
 		buttonManageDatabase.setOnClickListener(this);
 		buttonPreferences.setOnClickListener(this);
 		buttonNewGameSimple.setOnClickListener(this);
 		buttonUpdateDatabase.setOnClickListener(this);
+		buttonNewGameCategories.setOnClickListener(this);
 
 		// checking if the device is with API 11 and earlier,
 		// if so, hide the preferences button since it can be done through menu
@@ -172,6 +176,10 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		//
 		switch (v.getId()) {
+		case R.id.buttonNewGameCategories:
+			buttonNewGameCategories_Clicked();
+			break;
+		
 		case R.id.buttonUpdateDatabase:
 			buttonUpdateDatabase_Clicked();
 			break;
@@ -195,9 +203,16 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	}
 
+	private void buttonNewGameCategories_Clicked() {
+		// 
+		startNewGame(ActivityGame.GAMETYPE_CATEGORIES);
+		
+	}
+
+
 	private void buttonUpdateDatabase_Clicked() {
 		// 
-		m_UpdateManager.updateNow();
+		m_UpdateManager.updateQuestions();
 		
 	}
 
@@ -241,7 +256,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		//
 		
 		Intent intent = new Intent(this, ActivityGame.class);
-		intent.putExtra("GameType", i_GameType);
+		intent.putExtra(ActivityGame.EXTRA_GAME_TYPE, i_GameType);
 		
 		startActivity(intent);
 
