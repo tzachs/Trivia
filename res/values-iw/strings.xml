@@ -61,6 +61,7 @@
     <string name="mobile_device_is_online_but_option_is_disabled_please_check_preferences">"הרשת הניידת קיימת אך אפשרות זו מבוטלת בהגדרות. אנא בדקו הגדרות"</string>
     <string name="no_network_devices_are_available_check_your_wifi_or_mobile_network_connection">"אין התקני רשת זמינים, בדוק חיבור WiFi או רשת הנייד שלך"</string>
     <string name="downloading_questions">"מוריד שאלות"</string>
+    <string name="downloading_categories">"מוריד נושאים"</string>
     <string name="error_while_trying_to_update_from_server">"שגיאה בעת ניסיון לעדכן משרת"</string>
     <string name="no_questions_in_database">"אין שאלות במאגר, אנא עדכן"</string>
     <string name="starting_level_">"החל שלב "</string>
@@ -130,6 +131,7 @@
     <string name="language_chosen">שפה עברית נבחרה</string>
     <string name="buttonCloseHowToPlayText">סגור</string>
     <string name="buttonNewGameCategoriesText">נושאים</string>
+    <string name="categories">נושאים</string>
     <string name="buttonUpdateDatabaseCategoriesText">עדכן נושאים</string>
     
 

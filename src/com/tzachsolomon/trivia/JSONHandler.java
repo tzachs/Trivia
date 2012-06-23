@@ -47,7 +47,7 @@ public class JSONHandler {
 	public static final String TAG = JSONHandler.class.getSimpleName();
 	public static final String RESULT_SUCCESS = "success";
 	public static final String RESULT_ERROR = "error";
-	
+
 	public static final int TYPE_UPDATE_CATEGORIES = 2;
 	public static final int TYPE_UPDATE_QUESTIONS = 1;
 
@@ -57,7 +57,7 @@ public class JSONHandler {
 	private static final String TAG_GET_LAST_UPDATE_QUESTIONS = "getLastUpdateQuestions";
 	private static final String TAG_GET_LAST_UPDATE_CATEGORIES = "getLastUpdateCategories";
 	private static final String TAG_GET_CATEGORIES = "getCategories";
-	
+
 	private String m_ServerUrl;
 	private HttpClient m_HttpClient;
 	private Context m_ActivityContext;
@@ -101,16 +101,17 @@ public class JSONHandler {
 		new AsyncTaskGetQuestionFromServer().execute(ret);
 
 	}
-	
-	public void updateCategoriesFromInternetAsync(long i_LastUserUpdate){
+
+	public void updateCategoriesFromInternetAsync(long i_LastUserUpdate) {
 		ContentValues[] ret = new ContentValues[1];
-		
-		ret[0]= new ContentValues();
+
+		ret[0] = new ContentValues();
 		ret[0].put("lastUserUpdate", i_LastUserUpdate);
 		
-		
+		new AsyncTaskGetCategoriesFromServer().execute(ret);
+
 	}
-	
+
 	/**
 	 * Function receive a JSON object and parse it to ContentValues object
 	 * 
@@ -377,7 +378,8 @@ public class JSONHandler {
 					ret = info.isConnected();
 					if (!ret) {
 						i_DetailedResult
-								.append(m_ActivityContext.getString(R.string.wifi_is_enabled_but_isn_t_connected_please_check_wifi_connection));
+								.append(m_ActivityContext
+										.getString(R.string.wifi_is_enabled_but_isn_t_connected_please_check_wifi_connection));
 					}
 				} else {
 					i_DetailedResult
@@ -392,15 +394,19 @@ public class JSONHandler {
 							ret = info.isConnected();
 							if (!ret) {
 								i_DetailedResult
-										.append(m_ActivityContext.getString(R.string.mobile_network_found_but_only_3g_mobile_network_connection_is_allowed_));
+										.append(m_ActivityContext
+												.getString(R.string.mobile_network_found_but_only_3g_mobile_network_connection_is_allowed_));
 								i_DetailedResult
-										.append(m_ActivityContext.getString(R.string.check_preferencs_to_allow_slow_networks));
+										.append(m_ActivityContext
+												.getString(R.string.check_preferencs_to_allow_slow_networks));
 							}
 						} else {
 							i_DetailedResult
-									.append(m_ActivityContext.getString(R.string.mobile_network_found_but_only_3g_mobile_network_connection_is_allowed_));
+									.append(m_ActivityContext
+											.getString(R.string.mobile_network_found_but_only_3g_mobile_network_connection_is_allowed_));
 							i_DetailedResult
-									.append(m_ActivityContext.getString(R.string.check_preferencs_to_allow_slow_networks));
+									.append(m_ActivityContext
+											.getString(R.string.check_preferencs_to_allow_slow_networks));
 						}
 					} else {
 						ret = info.isConnected();
@@ -414,32 +420,36 @@ public class JSONHandler {
 							ret = true;
 						} else {
 							i_DetailedResult
-									.append(m_ActivityContext.getString(R.string.mobile_connection_was_found_but_it_is_in_roaming));
+									.append(m_ActivityContext
+											.getString(R.string.mobile_connection_was_found_but_it_is_in_roaming));
 						}
 
 					}
 
 				} else {
 					i_DetailedResult
-							.append(m_ActivityContext.getString(R.string.mobile_device_is_online_but_option_is_disabled_please_check_preferences));
+							.append(m_ActivityContext
+									.getString(R.string.mobile_device_is_online_but_option_is_disabled_please_check_preferences));
 				}
 			}
 
 		} else {
 			i_DetailedResult
-					.append(m_ActivityContext.getString(R.string.no_network_devices_are_available_check_your_wifi_or_mobile_network_connection));
+					.append(m_ActivityContext
+							.getString(R.string.no_network_devices_are_available_check_your_wifi_or_mobile_network_connection));
 
 		}
 
 		return ret;
 	}
-	
-	public class AsyncTaskGetCategoriesFromServer  extends AsyncTask<ContentValues, Integer, ContentValues[]>{
+
+	public class AsyncTaskGetCategoriesFromServer extends
+			AsyncTask<ContentValues, Integer, ContentValues[]> {
 
 		private ProgressDialog m_ProgressDialog;
 		private boolean isInternetAvailable;
 		private StringBuilder detailedResult;
-		
+
 		@Override
 		protected void onPreExecute() {
 
@@ -447,7 +457,8 @@ public class JSONHandler {
 
 			m_ProgressDialog = new ProgressDialog(m_ActivityContext);
 			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			m_ProgressDialog.setTitle(m_ActivityContext.getString(R.string.downloading_questions));
+			m_ProgressDialog.setTitle(m_ActivityContext
+					.getString(R.string.downloading_categories));
 			m_ProgressDialog.show();
 
 			isInternetAvailable = isInternetAvailable(detailedResult);
@@ -460,7 +471,7 @@ public class JSONHandler {
 			detailedResult.setLength(0);
 
 		}
-		
+
 		@Override
 		protected void onPostExecute(ContentValues[] result) {
 			//
@@ -469,22 +480,23 @@ public class JSONHandler {
 			if (result != null) {
 				TriviaDbEngine dbEngine = new TriviaDbEngine(m_ActivityContext);
 				dbEngine.updateCategoriesAysnc(result);
- 
+
 			} else {
-				Toast.makeText(m_ActivityContext,
-						m_ActivityContext.getString(R.string.error_while_trying_to_update_from_server),
+				Toast.makeText(
+						m_ActivityContext,
+						m_ActivityContext
+								.getString(R.string.error_while_trying_to_update_from_server),
 						Toast.LENGTH_SHORT).show();
 			}
 
 		}
 
-		
 		@Override
 		protected ContentValues[] doInBackground(ContentValues... params) {
-			// 
+			//
 			return null;
 		}
-		
+
 	}
 
 	/**
@@ -507,7 +519,8 @@ public class JSONHandler {
 
 			m_ProgressDialog = new ProgressDialog(m_ActivityContext);
 			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			m_ProgressDialog.setTitle(m_ActivityContext.getString(R.string.downloading_questions));
+			m_ProgressDialog.setTitle(m_ActivityContext
+					.getString(R.string.downloading_questions));
 			m_ProgressDialog.show();
 
 			isInternetAvailable = isInternetAvailable(detailedResult);
@@ -529,10 +542,12 @@ public class JSONHandler {
 			if (result != null) {
 				TriviaDbEngine dbEngine = new TriviaDbEngine(m_ActivityContext);
 				dbEngine.updateFromInternetAsync(result);
- 
+
 			} else {
-				Toast.makeText(m_ActivityContext,
-						m_ActivityContext.getString(R.string.error_while_trying_to_update_from_server),
+				Toast.makeText(
+						m_ActivityContext,
+						m_ActivityContext
+								.getString(R.string.error_while_trying_to_update_from_server),
 						Toast.LENGTH_SHORT).show();
 			}
 
@@ -573,7 +588,7 @@ public class JSONHandler {
 					}
 				} catch (JSONException e) {
 					//
-					
+
 					e.printStackTrace();
 				}
 			}
@@ -616,12 +631,14 @@ public class JSONHandler {
 		//
 		int ret = -1;
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		
-		if ( i_UpdateType == 1){
 
-		params.add(new BasicNameValuePair("tag", TAG_GET_LAST_UPDATE_QUESTIONS));
-		}else if ( i_UpdateType == 2){
-			params.add(new BasicNameValuePair("tag", TAG_GET_LAST_UPDATE_CATEGORIES));
+		if (i_UpdateType == 1) {
+
+			params.add(new BasicNameValuePair("tag",
+					TAG_GET_LAST_UPDATE_QUESTIONS));
+		} else if (i_UpdateType == 2) {
+			params.add(new BasicNameValuePair("tag",
+					TAG_GET_LAST_UPDATE_CATEGORIES));
 		}
 		params.add(new BasicNameValuePair("lastUserUpdate", Long
 				.toString(lastUpdate)));

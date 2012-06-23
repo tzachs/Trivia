@@ -62,7 +62,8 @@
     <string name="mobile_connection_was_found_but_it_is_in_roaming">Mobile connection was found but it is in roaming</string>
     <string name="mobile_device_is_online_but_option_is_disabled_please_check_preferences">Mobile device is online but option is disabled, please check preferences</string>
     <string name="no_network_devices_are_available_check_your_wifi_or_mobile_network_connection">No network devices are available, check your WiFi or Mobile Network connection</string>
-    <string name="downloading_questions">Downloading questions</string>
+    <string name="downloading_questions">Downloading Questions</string>
+    <string name="downloading_categories">Downloading Categories</string>
     <string name="error_while_trying_to_update_from_server">Error while trying to update from server</string>
     <string name="no_questions_in_database">No questions in database</string>
     <string name="starting_level_">"Starting level "</string>
@@ -75,7 +76,7 @@
     <string name="no_update_available">No update available</string>
     <string name="uploading_correct_wrong_statistics">Uploading correct wrong statistics</string>
     <string name="update_is_available_for_">"Update is available for "</string>
-    <string name="_questions_update_database_">" Questions. Update database?"</string>
+    <string name="_questions_update_database_">"Questions. Update database?"</string>
     <string name="update">Update</string>
     <string name="cancel">Cancel</string>
     <string name="checking_for_updates_">Checking for updates …</string>
@@ -125,6 +126,7 @@
     <string name="language_chosen">English language chosen</string>
     <string name="buttonCloseHowToPlayText">Close</string>
     <string name="buttonNewGameCategoriesText">Categories</string>
+    <string name="categories">Categories</string>
     <string name="buttonUpdateDatabaseCategoriesText">Update Categories</string>
 
 </resources>

@@ -14,8 +14,6 @@ import android.widget.Toast;
 public class UpdateManager {
 
 	public static final String TAG = UpdateManager.class.getSimpleName();
-	
-	
 
 	private JSONHandler m_JSONHandler;
 	private Context m_Context;
@@ -43,8 +41,19 @@ public class UpdateManager {
 		}
 	}
 
+	public void updateCategories() {
+		//
+		AsyncTaskCheckUpdateIsAvailable a = new AsyncTaskCheckUpdateIsAvailable();
+		a.setUpdateType(JSONHandler.TYPE_UPDATE_CATEGORIES);
+		a.execute(true);
+	}
+
 	private void checkIsUpdateAvailableAsync(boolean i_DisplayInfoIfNoUpdate) {
-		new AsyncTaskCheckUpdateIsAvailable().execute(i_DisplayInfoIfNoUpdate);
+		AsyncTaskCheckUpdateIsAvailable a = new AsyncTaskCheckUpdateIsAvailable();
+
+		a.setUpdateType(JSONHandler.TYPE_UPDATE_QUESTIONS);
+		a.execute(i_DisplayInfoIfNoUpdate);
+
 	}
 
 	public class AsyncTaskUpdateCorrectWrongAsync extends
@@ -143,7 +152,13 @@ public class UpdateManager {
 
 		private ProgressDialog m_ProgressDialog;
 		private boolean enabled;
-		public int updateType = JSONHandler.TYPE_UPDATE_QUESTIONS;
+
+		private int m_UpdateType = -1;
+		private int m_LastUserUpdate;
+
+		public void setUpdateType(int i_UpdateType) {
+			m_UpdateType = i_UpdateType;
+		}
 
 		@Override
 		protected void onPreExecute() {
@@ -178,8 +193,17 @@ public class UpdateManager {
 				message.append(m_Context
 						.getString(R.string.update_is_available_for_));
 				message.append(result);
-				message.append(m_Context
-						.getString(R.string._questions_update_database_));
+				message.append(' ');
+
+				if (m_UpdateType == JSONHandler.TYPE_UPDATE_CATEGORIES) {
+
+					message.append(m_Context.getString(R.string.categories));
+
+				} else if (m_UpdateType == JSONHandler.TYPE_UPDATE_QUESTIONS) {
+
+					message.append(m_Context
+							.getString(R.string._questions_update_database_));
+				}
 
 				AlertDialog.Builder dialog = new AlertDialog.Builder(m_Context);
 				dialog.setCancelable(false);
@@ -198,10 +222,17 @@ public class UpdateManager {
 							@Override
 							public void onClick(DialogInterface dialog,
 									int which) {
+
 								//
-								m_JSONHandler
-										.updateFromInternetAsync(m_TriviaDb
-												.getQuestionsLastUpdate());
+								if (m_UpdateType == JSONHandler.TYPE_UPDATE_CATEGORIES) {
+
+									m_JSONHandler
+											.updateCategoriesFromInternetAsync(m_LastUserUpdate);
+
+								} else if (m_UpdateType == JSONHandler.TYPE_UPDATE_QUESTIONS) {
+									m_JSONHandler
+											.updateFromInternetAsync(m_LastUserUpdate);
+								}
 
 							}
 						});
@@ -231,8 +262,15 @@ public class UpdateManager {
 			//
 			int ret = -1;
 			try {
-				long lastUpdate = m_TriviaDb.getQuestionsLastUpdate();
-				ret = m_JSONHandler.isUpdateAvailable(lastUpdate, updateType);
+				m_LastUserUpdate = 0;
+				if (m_UpdateType == JSONHandler.TYPE_UPDATE_CATEGORIES) {
+
+					m_TriviaDb.getCategoriesLastUpdate();
+				} else if (m_UpdateType == JSONHandler.TYPE_UPDATE_QUESTIONS) {
+					m_TriviaDb.getQuestionsLastUpdate();
+				}
+				ret = m_JSONHandler.isUpdateAvailable(m_LastUserUpdate,
+						m_UpdateType);
 
 			} catch (Exception e) {
 				String msg = e.getMessage().toString();
@@ -245,13 +283,6 @@ public class UpdateManager {
 			return ret;
 		}
 
-	}
-
-	public void updateCategories() {
-		// 
-		AsyncTaskCheckUpdateIsAvailable a = new AsyncTaskCheckUpdateIsAvailable();
-		a.updateType = JSONHandler.TYPE_UPDATE_CATEGORIES;
-		a.execute(true);
 	}
 
 }
