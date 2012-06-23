@@ -41,4 +41,10 @@
          android:checked="true"
          android:text="@string/show_game_instructions_before_starting_the_game" />
 
+     <Button
+         android:id="@+id/buttonCloseHowToPlay"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="@string/buttonCloseHowToPlayText" />
+
 </LinearLayout>

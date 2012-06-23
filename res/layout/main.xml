@@ -5,57 +5,60 @@
     android:orientation="vertical" >
 
     <Button
-        android:background="@drawable/brown_button"
         android:id="@+id/buttonNewGameSimple"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        
-        android:layout_marginTop="20dp"
-        android:layout_marginRight="4dp"
-        android:layout_marginLeft="4dp"
         android:layout_marginBottom="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/green_brown_button"
         android:text="@string/buttonNewGameSimpleText" />
 
     <Button
-        android:background="@drawable/brown_button"
         android:id="@+id/buttonNewGameAllQuestions"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonNewGameSimple"
         android:layout_margin="4dp"
+        android:background="@drawable/green_brown_button"
         android:text="@string/buttonNewGameAllQuestionsText" />
-    
-     <Button
-         android:background="@drawable/brown_button"
+
+    <Button
+        android:id="@+id/buttonNewGameCategories"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonNewGameAllQuestions"
+        android:layout_margin="4dp"
+        android:background="@drawable/green_brown_button"
+        android:text="@string/buttonNewGameCategoriesText" />
+
+    <Button
         android:id="@+id/buttonUpdateDatabase"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_margin="4dp"
+        android:background="@drawable/green_brown_button"
         android:text="@string/buttonUpdateDatabaseText" />
 
     <Button
-        android:background="@drawable/brown_button"
         android:id="@+id/buttonManageDatabase"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonUpdateDatabase"
         android:layout_margin="4dp"
+        android:background="@drawable/green_brown_button"
         android:text="@string/buttonManageDatabaseText" />
-    
 
     <Button
-        android:background="@drawable/brown_button"
         android:id="@+id/buttonPreferences"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonManageDatabase"
         android:layout_margin="4dp"
+        android:background="@drawable/green_brown_button"
         android:text="@string/buttonPreferencesText" />
-    
-  
-
-  
 
 </RelativeLayout>

@@ -123,5 +123,7 @@
     <string name="checkBoxPreferenceRevereseInHebrewSummary">Force reverse numbers in hebrew</string>
     <string name="checkBoxShowConfigurationWizardText">Show configuration wizard @ Startup</string>
     <string name="language_chosen">English language chosen</string>
+    <string name="buttonCloseHowToPlayText">Close</string>
+    <string name="buttonNewGameCategoriesText">Categories</string>
 
 </resources>
