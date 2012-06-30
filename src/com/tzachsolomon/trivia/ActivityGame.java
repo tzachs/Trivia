@@ -39,10 +39,6 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	public static final String INTENT_EXTRA_GAME_TYPE = "keyGameType";
 
-
-
-	
-
 	private MyCountDownCounter m_CountDownCounter;
 
 	private Button buttonAnswer1;
@@ -90,6 +86,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 	private Bundle m_Extras;
 
 	private int[] m_Categories;
+
+	private boolean m_ResumeFromHelp;
 
 	
 	
@@ -184,6 +182,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		if (showInstruction) {
 			intent.putExtra(ActivityGame.INTENT_EXTRA_GAME_TYPE,
 					m_CurrentGameType);
+			m_ResumeFromHelp = true;
 			startActivityForResult(intent, 1);
 		} else {
 			parseGameSetupAndStart();
@@ -194,6 +193,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		//
+		
 		parseGameSetupAndStart();
 	}
 
@@ -430,7 +430,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 				buttonAnswer2.setText(m_CurrentQuestion.getAnswer2());
 				buttonAnswer3.setText(m_CurrentQuestion.getAnswer3());
 				buttonAnswer4.setText(m_CurrentQuestion.getAnswer4());
-
+				
 				m_CountDownCounter.start();
 
 			}
@@ -880,10 +880,17 @@ public class ActivityGame extends Activity implements OnClickListener {
 		} else {
 			buttonReportMistakeInQuestion.setVisibility(View.GONE);
 		}
+		
+		if ( m_ResumeFromHelp ){
+			m_ResumeClock = false;
+			m_ResumeFromHelp = false;
+		}
 
 		if (m_ResumeClock) {
 			m_CountDownCounter.resume();
 		}
+		
+	
 
 	}
 
@@ -894,8 +901,6 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		m_CountDownCounter.pause();
 		m_ResumeClock = true;
-		
-		
 
 	}
 

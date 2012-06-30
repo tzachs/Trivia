@@ -20,6 +20,7 @@ import android.os.Handler;
 import android.os.SystemClock;
 import android.os.Message;
 
+
 /**
  * Taken from: https://gist.github.com/1492672
  * 
@@ -95,11 +96,13 @@ public abstract class CountDownTimerWithPause {
     public synchronized final CountDownTimerWithPause start() {
         if (mMillisInFuture <= 0) {
             onFinish();
+            
             return this;
         }
         mStopTimeInFuture = SystemClock.elapsedRealtime() + mMillisInFuture;
         mHandler.sendMessage(mHandler.obtainMessage(MSG));
         mCancelled = false;
+        mPaused = false;
         return this;
     }
 
