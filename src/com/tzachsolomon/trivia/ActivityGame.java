@@ -140,6 +140,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		Intent intent = new Intent(ActivityGame.this, ActivityHowToPlay.class);
 		switch (m_CurrentGameType) {
+		
 		case ActivityGame.GAMETYPE_ALL_QUESTIONS:
 			showInstruction = m_SharedPreferences.getBoolean(
 					"checkBoxPreferenceShowHelpAllQuestions", true);
@@ -160,7 +161,6 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 			break;
 		case ActivityGame.GAMETYPE_CATEGORIES:
-			break;
 		case ActivityGame.GAMETYPE_LEVELS:
 			showInstruction = m_SharedPreferences.getBoolean(
 					"checkBoxPreferenceShowHelpNewGame", true);
@@ -784,13 +784,14 @@ public class ActivityGame extends Activity implements OnClickListener {
 	private void incCurrentWrongAnswersCounter() {
 		//
 		switch (m_CurrentGameType) {
+		
 		case GAMETYPE_ALL_QUESTIONS:
 			incCurrentWrongAnswersCounter_AllQuestions();
 			break;
-		case GAMETYPE_CATEGORIES:
-			break;
+		
+		case GAMETYPE_CATEGORIES:	
 		case GAMETYPE_LEVELS:
-			incCurrentWrongAnswersCounter_NewGame();
+			incCurrentWrongAnswersCounter_GameLevels();
 			break;
 		}
 
@@ -817,16 +818,17 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private void updateLivesTextView() {
 		switch (m_CurrentGameType) {
+
+
+
 		case GAMETYPE_ALL_QUESTIONS:
 
 			textViewLivesLeft.setText(getString(R.string.textViewLivesLeftText)
 					+ m_AllQuestionsLives);
 			break;
 
+
 		case GAMETYPE_CATEGORIES:
-
-			break;
-
 		case GAMETYPE_LEVELS:
 
 			textViewLivesLeft
@@ -840,7 +842,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		}
 	}
 
-	private void incCurrentWrongAnswersCounter_NewGame() {
+	private void incCurrentWrongAnswersCounter_GameLevels() {
 		//
 		m_CurrentWrongAnswersCounter++;
 
