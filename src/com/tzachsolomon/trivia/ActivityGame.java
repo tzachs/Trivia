@@ -638,7 +638,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 						m_Questions.get(m_QuestionIndex - 2).getQuestion());
 			}
 		} else {
-			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID, -1);
+			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID, "-1");
 			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
 					"bla bla");
 		}

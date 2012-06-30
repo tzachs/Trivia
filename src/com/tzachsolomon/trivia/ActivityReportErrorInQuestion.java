@@ -26,9 +26,9 @@ public class ActivityReportErrorInQuestion extends Activity implements OnChecked
 	private RadioButton radioButtonPreviousQuestion;
 	private RadioButton radioButtonCurrentQuestion;
 	private JSONHandler m_JSONHandler;
-	private int m_CurrentQuestionId;
-	private int m_PreviousQuestionId;
-	private int m_SentQuestionId;
+	private String m_CurrentQuestionId;
+	private String m_PreviousQuestionId;
+	private String m_SentQuestionId;
 
 	private EditText editTextErrorDetails;
 
@@ -43,7 +43,7 @@ public class ActivityReportErrorInQuestion extends Activity implements OnChecked
 
 	private void initializeVariables() {
 		// 
-		m_SentQuestionId = -1;
+		m_SentQuestionId = "-1";
 		
 		m_JSONHandler  = new JSONHandler(ActivityReportErrorInQuestion.this);
 		initializeButtons();
@@ -69,12 +69,18 @@ public class ActivityReportErrorInQuestion extends Activity implements OnChecked
 		
 		radioButtonCurrentQuestion.setText(extras.getString(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_STRING));
 		radioButtonPreviousQuestion.setText(extras.getString(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING));
-		m_CurrentQuestionId = extras.getInt(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_ID);
-		m_PreviousQuestionId = extras.getInt(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID);
+		m_CurrentQuestionId = extras.getString(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_ID);
+		m_PreviousQuestionId = extras.getString(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID);
+		
+		radioButtonCurrentQuestion.setChecked(true);
+		radioButtonPreviousQuestion.setChecked(false);
+		
+		m_SentQuestionId = m_CurrentQuestionId;
 		
 		// checking if sending error report without previous question
-		if ( m_PreviousQuestionId == -1){
+		if ( m_PreviousQuestionId.contentEquals("-1")){
 			radioButtonPreviousQuestion.setVisibility(View.GONE);
+			
 		}
 		
 	}
@@ -113,7 +119,7 @@ public class ActivityReportErrorInQuestion extends Activity implements OnChecked
 		try {
 
 			m_JSONHandler.reportMistakeInQuestionAsync(
-					Integer.toString(m_SentQuestionId), description);
+					m_SentQuestionId, description);
 			Toast.makeText(ActivityReportErrorInQuestion.this, getString(R.string.error_sent_thanks_), Toast.LENGTH_SHORT)
 					.show();
 		} catch (ClientProtocolException e) {

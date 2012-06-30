@@ -28,6 +28,8 @@ import android.widget.Button;
 
 public class ActivityTrivia extends Activity implements OnClickListener {
 
+	// 
+	
 	// TODO: highest score
 	// TODO: create service to update the database daily
 	// TODO: initial settings with XML file

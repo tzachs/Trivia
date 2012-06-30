@@ -68,7 +68,7 @@
             android:name=".ActivityHowToPlay"
             android:configChanges="locale"
             android:label="@string/app_name"
-            android:theme="@android:style/Theme.Dialog" >
+            android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen" >
         </activity>
         <activity
             android:name=".ActivityShowCategoryForGame"
