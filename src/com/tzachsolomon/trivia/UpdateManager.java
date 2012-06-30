@@ -154,7 +154,7 @@ public class UpdateManager {
 		private boolean enabled;
 
 		private int m_UpdateType = -1;
-		private int m_LastUserUpdate;
+		private long m_LastUserUpdate;
 
 		public void setUpdateType(int i_UpdateType) {
 			m_UpdateType = i_UpdateType;
@@ -265,9 +265,9 @@ public class UpdateManager {
 				m_LastUserUpdate = 0;
 				if (m_UpdateType == JSONHandler.TYPE_UPDATE_CATEGORIES) {
 
-					m_TriviaDb.getCategoriesLastUpdate();
+					m_LastUserUpdate = m_TriviaDb.getCategoriesLastUpdate();
 				} else if (m_UpdateType == JSONHandler.TYPE_UPDATE_QUESTIONS) {
-					m_TriviaDb.getQuestionsLastUpdate();
+					m_LastUserUpdate = m_TriviaDb.getQuestionsLastUpdate();
 				}
 				ret = m_JSONHandler.isUpdateAvailable(m_LastUserUpdate,
 						m_UpdateType);

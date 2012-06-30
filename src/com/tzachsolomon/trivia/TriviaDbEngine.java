@@ -18,7 +18,7 @@ public class TriviaDbEngine {
 	public static final String TAG = TriviaDbEngine.class.getSimpleName();
 
 	private static final String DATABASE_NAME = "TriviaDb";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 8;
 
 	// TABLE QUESTIONS
 
