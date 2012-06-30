@@ -12,10 +12,16 @@
         android:text="Start Category Game" />
 
     <ExpandableListView
-        android:id="@+id/android:list"
+        android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:groupIndicator="@android:color/transparent" >
     </ExpandableListView>
+
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="No categories found, update categories" />
 
 </LinearLayout>
