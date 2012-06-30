@@ -18,12 +18,11 @@ public class TriviaDbEngine {
 	public static final String TAG = TriviaDbEngine.class.getSimpleName();
 
 	private static final String DATABASE_NAME = "TriviaDb";
-	private static final int DATABASE_VERSION = 8;
-	
+	private static final int DATABASE_VERSION = 1;
+
 	// TABLE QUESTIONS
-	
+
 	private static final String TABLE_QUESTIONS = "tblQuestions";
-	
 
 	public static final String KEY_ROWID = "_id";
 	public static final String KEY_QUESTIONID = "colQuestionId";
@@ -51,16 +50,14 @@ public class TriviaDbEngine {
 	public static final String KEY_LAST_UPDATE = "colLastUpdate";
 	public static final String KEY_ENABLED = "colEnabled";
 	public static final String KEY_PLAYED_COUNTER = "colPlayedCounter";
-	
+
 	// TABLE CATEGORIES
-	
+
 	private static final String TABLE_CATEGORIES = "tblCategories";
-	
-	private static final String KEY_COL_PARENT_ID = "colParentId";
-	private static final String KEY_COL_EN_NAME = "colEnName";
-	private static final String KEY_COL_HE_NAME = "colHeName";
-	
-	
+
+	public static final String KEY_COL_PARENT_ID = "colParentId";
+	public static final String KEY_COL_EN_NAME = "colEnName";
+	public static final String KEY_COL_HE_NAME = "colHeName";
 
 	private DbHelper ourHelper;
 	private Context ourContext;
@@ -79,15 +76,15 @@ public class TriviaDbEngine {
 			createTableQuestions(db);
 
 		}
-		
-		private void createTableCategories(SQLiteDatabase db){
-			
+
+		private void createTableCategories(SQLiteDatabase db) {
+
 			StringBuilder sb = new StringBuilder();
 
 			sb.append("CREATE TABLE ");
 			sb.append(TABLE_CATEGORIES);
 			sb.append(" (");
-			sb.append(KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, ");
+			sb.append(KEY_ROWID + " INTEGER PRIMARY KEY, ");
 			sb.append(KEY_COL_PARENT_ID + " INTEGER NOT NULL, ");
 			sb.append(KEY_COL_EN_NAME + " TEXT NOT NULL, ");
 			sb.append(KEY_COL_HE_NAME + " TEXT NOT NULL, ");
@@ -135,7 +132,7 @@ public class TriviaDbEngine {
 			db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIES);
 			createTableCategories(db);
 			createTableQuestions(db);
-			
+
 		}
 
 	}
@@ -235,8 +232,58 @@ public class TriviaDbEngine {
 		return ret;
 	}
 
+	public ContentValues[] getPrimaryCategories() {
+		return getCategories(-1);
+	}
+
+	private ContentValues[] getCategories(int i_CategoryId) {
+		//
+		ContentValues map;
+		String[] columns = { KEY_ROWID, KEY_COL_PARENT_ID, KEY_COL_EN_NAME,
+				KEY_COL_HE_NAME, KEY_LAST_UPDATE };
+
+		Cursor cursor;
+		int i;
+
+		ContentValues[] ret;
+		this.openDbReadable();
+
+		cursor = ourDatabase.query(TABLE_CATEGORIES, columns, KEY_COL_PARENT_ID
+				+ "=" + i_CategoryId, null, null, null, null);
+
+		ret = new ContentValues[cursor.getCount()];
+		i = 0;
+
+		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+			map = new ContentValues();
+			DatabaseUtils.cursorRowToContentValues(cursor, map);
+			ret[i] = map;
+			i++;
+
+		}
+
+		cursor.close();
+
+		this.closeDb();
+
+		return ret;
+
+	}
+
+	public ContentValues[] getSubCategories(int categoryId) {
+		//
+		return getCategories(categoryId);
+	}
+
 	public ArrayList<Question> getQuestionByLevel(int i_Level,
 			boolean i_SortByNewQuestionsFirst) {
+		//
+
+		return getQuestionByLevelAndCategories(i_Level, i_SortByNewQuestionsFirst, null);
+	}
+
+	public ArrayList<Question> getQuestionByLevelAndCategories(int i_Level,
+			boolean i_SortByNewQuestionsFirst, int[] i_Categories) {
 		//
 
 		StringBuilder orderBy = new StringBuilder();
@@ -250,6 +297,10 @@ public class TriviaDbEngine {
 				KEY_ROWID, KEY_WRONG_USER, KEY_PLAYED_COUNTER };
 
 		Cursor cursor;
+		int i, length;
+
+		StringBuilder where = new StringBuilder();
+
 		double i_MaxLevel = ((double) i_Level + 0.5) / 10;
 		double i_MinLevel = i_MaxLevel - 0.1;
 
@@ -264,9 +315,29 @@ public class TriviaDbEngine {
 			i_MinLevel = 0;
 		}
 
-		String where = KEY_ENABLED + "=1 AND " + KEY_CORRECT_WRONG_RATIO
-				+ " <  " + i_MaxLevel + " AND " + KEY_CORRECT_WRONG_RATIO
-				+ " >= " + i_MinLevel;
+		where.append(KEY_ENABLED + "=1 AND " + KEY_CORRECT_WRONG_RATIO + " <  "
+				+ i_MaxLevel + " AND " + KEY_CORRECT_WRONG_RATIO + " >= "
+				+ i_MinLevel);
+
+		if (i_Categories != null) {
+			
+			where.append(" AND (");
+
+			for (i = 0, length = i_Categories.length - 1; i < length; i++) {
+				where.append(KEY_CATEGORY);
+				where.append("=");
+				where.append(i_Categories[i]);
+				where.append(" OR ");
+			}
+			
+			where.append(KEY_CATEGORY);
+			where.append("=");
+			where.append(i_Categories[i]);
+			where.append(" ) ");
+			
+		}
+		
+		Log.i(TAG, where.toString());
 
 		ArrayList<Question> ret;
 
@@ -285,7 +356,7 @@ public class TriviaDbEngine {
 		this.openDbReadable();
 
 		map = new ContentValues();
-		cursor = ourDatabase.query(TABLE_QUESTIONS, columns, where, null,
+		cursor = ourDatabase.query(TABLE_QUESTIONS, columns, where.toString(), null,
 				KEY_QUESTIONID, null, orderBy.toString());
 
 		orderBy.setLength(0);
@@ -595,7 +666,7 @@ public class TriviaDbEngine {
 
 			ret = qlastupdate;
 
-		}else{
+		} else {
 			ret = 0;
 		}
 
@@ -604,7 +675,7 @@ public class TriviaDbEngine {
 		this.closeDb();
 		return ret;
 	}
-	
+
 	public long getCategoriesLastUpdate() {
 		//
 		String[] columns = new String[] { "MAX(" + KEY_LAST_UPDATE + ")" };
@@ -613,8 +684,8 @@ public class TriviaDbEngine {
 		long qlastupdate;
 		this.openDbReadable();
 
-		Cursor cursor = ourDatabase.query(TABLE_CATEGORIES, columns, null, null,
-				null, null, null);
+		Cursor cursor = ourDatabase.query(TABLE_CATEGORIES, columns, null,
+				null, null, null, null);
 
 		// checking if we have rows in the table, if not, we'll return 0
 		if (cursor.getCount() > 0) {
@@ -625,9 +696,9 @@ public class TriviaDbEngine {
 
 			qlastupdate = cursor.getLong(columnIndex0);
 
-			ret =  qlastupdate;
+			ret = qlastupdate;
 
-		}else{
+		} else {
 			ret = 0;
 		}
 
@@ -639,7 +710,7 @@ public class TriviaDbEngine {
 
 	public void updateCategoriesAysnc(ContentValues[] result) {
 		//
-
+		new UpdateCategoriesAsyncTask().execute(result);
 	}
 
 	public class UpdateCategoriesAsyncTask extends
@@ -682,23 +753,14 @@ public class TriviaDbEngine {
 					try {
 
 						// if the questions exits then it only updates
-						String questionId = cv.getAsString(KEY_QUESTIONID);
+						String questionId = cv.getAsString(KEY_ROWID);
 						if (isQuestionExist(questionId)) {
-							ourDatabase.update(TABLE_QUESTIONS, cv,
-									KEY_QUESTIONID + "=?",
-									new String[] { questionId });
+							ourDatabase.update(TABLE_CATEGORIES, cv, KEY_ROWID
+									+ "=?", new String[] { questionId });
 						} else {
-							// only if its a new question then insert the wrong
-							// correct
-							// user statistics to the database
-							// this isn't insert in update process since this is
-							// taken
-							// care in function uploadCorrectWrong
-							cv.put(TriviaDbEngine.KEY_CORRECT_USER, 0);
-							cv.put(TriviaDbEngine.KEY_WRONG_USER, 0);
-							cv.put(TriviaDbEngine.KEY_PLAYED_COUNTER, 0);
+							// insert if the category is new
 
-							ourDatabase.insert(TABLE_QUESTIONS, null, cv);
+							ourDatabase.insert(TABLE_CATEGORIES, null, cv);
 						}
 
 					} catch (Exception e) {

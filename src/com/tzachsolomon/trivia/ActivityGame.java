@@ -25,6 +25,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 	public static final String TAG = ActivityGame.class.getSimpleName();
 
 	public static final String EXTRA_GAME_TYPE = "GameType";
+	public static final String EXTRA_GAME_CATEGORIES = "GameCategories";
+	public static final String EXTRA_GAME_START_LEVEL = "GameStartLevel";
 	
 	public static final int GAMETYPE_ALL_QUESTIONS = 1;
 	public static final int GAMETYPE_LEVELS = 2;
@@ -37,6 +39,10 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	public static final String INTENT_EXTRA_GAME_TYPE = "keyGameType";
 
+
+
+	
+
 	private MyCountDownCounter m_CountDownCounter;
 
 	private Button buttonAnswer1;
@@ -44,11 +50,13 @@ public class ActivityGame extends Activity implements OnClickListener {
 	private Button buttonAnswer3;
 	private Button buttonAnswer4;
 	private Button buttonReportMistakeInQuestion;
+	private Button buttonPassQuestion;
 
 	private TextView textViewTime;
 	private TextView textViewQuestion;
 	private TextView textViewNumberOfQuestionsLeft;
 	private TextView textViewQuestionDifficulty;
+	private TextView textViewLivesLeft;
 
 	private ArrayList<Question> m_Questions;
 	private Question m_CurrentQuestion;
@@ -75,15 +83,16 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private boolean m_GameOver;
 	private boolean m_SortByNewQuestionFirst;
-
 	private boolean m_ResumeClock;
-
 	private boolean m_ShowCorrectAnswer;
 	private boolean m_ReverseNumbersInQuestions;
 
-	private TextView textViewLivesLeft;
+	private Bundle m_Extras;
 
-	private Button buttonPassQuestion;
+	private int[] m_Categories;
+
+	
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,9 +105,9 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		initializeVariables();
 
-		Bundle extras = getIntent().getExtras();
-		m_CurrentGameType = extras.getInt("GameType");
-
+		m_Extras = getIntent().getExtras();
+		m_CurrentGameType = m_Extras.getInt(ActivityGame.EXTRA_GAME_TYPE);
+			
 		showInstructions();
 	}
 
@@ -112,7 +121,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 			startGameAllQuestions();
 			break;
 		case GAMETYPE_CATEGORIES:
-
+			startGameLevels();
 			break;
 		case GAMETYPE_LEVELS:
 			startGameLevels();
@@ -124,6 +133,9 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	}
 
+	
+
+	
 	private void showInstructions() {
 		//
 		boolean showInstruction = true;
@@ -189,6 +201,10 @@ public class ActivityGame extends Activity implements OnClickListener {
 		//
 		// checking if there are questions to be asked
 		if (m_TriviaDb.isEmpty() == false) {
+			
+			if ( m_CurrentGameType == GAMETYPE_CATEGORIES){
+				m_Categories = m_Extras.getIntArray(ActivityGame.EXTRA_GAME_CATEGORIES);
+			}
 
 			m_CurrentLevel = 0;
 			m_NumberOfLevels = 10;
@@ -202,6 +218,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 			textViewLivesLeft
 					.setText(getString(R.string.textViewLivesLeftText)
 							+ (m_MaxWrongAnswersAllowed - m_CurrentWrongAnswersCounter));
+			
+			
 
 			startNewRoundGameLevels();
 
@@ -222,8 +240,13 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		if (m_CurrentLevel <= m_NumberOfLevels && !m_GameOver) {
 
+			if ( m_CurrentGameType == ActivityGame.GAMETYPE_LEVELS){
 			m_Questions = m_TriviaDb.getQuestionByLevel(m_CurrentLevel,
 					m_SortByNewQuestionFirst);
+			}else if ( m_CurrentGameType == ActivityGame.GAMETYPE_CATEGORIES){
+				m_Questions = m_TriviaDb.getQuestionByLevelAndCategories(m_CurrentLevel,
+						m_SortByNewQuestionFirst,m_Categories);
+			}
 
 			m_QuestionLength = m_Questions.size();
 			if (m_QuestionLength < 10) {
@@ -348,7 +371,10 @@ public class ActivityGame extends Activity implements OnClickListener {
 			startNewQuestionAllQuestions();
 			break;
 		case GAMETYPE_LEVELS:
-
+			startNewQuestionLevels();
+			break;
+			
+		case GAMETYPE_CATEGORIES:
 			startNewQuestionLevels();
 			break;
 
@@ -357,6 +383,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		}
 
 	}
+
 
 	private void startNewQuestionLevels() {
 		//
@@ -867,6 +894,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		m_CountDownCounter.pause();
 		m_ResumeClock = true;
+		
+		
 
 	}
 

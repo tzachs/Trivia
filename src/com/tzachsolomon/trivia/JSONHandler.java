@@ -107,7 +107,7 @@ public class JSONHandler {
 
 		ret[0] = new ContentValues();
 		ret[0].put("lastUserUpdate", i_LastUserUpdate);
-		
+
 		new AsyncTaskGetCategoriesFromServer().execute(ret);
 
 	}
@@ -119,7 +119,7 @@ public class JSONHandler {
 	 * @return
 	 * @throws JSONException
 	 */
-	private ContentValues convertJSONObjectToContentValue(
+	private ContentValues convertJSONObjectToQuestionContentValue(
 			JSONObject i_JsonObject) throws JSONException {
 		ContentValues ret = new ContentValues();
 
@@ -144,10 +144,37 @@ public class JSONHandler {
 	}
 
 	/**
+	 * Function receive a JSON object and parse it to ContentValues object
+	 * 
+	 * @param i_JsonObject
+	 * @return
+	 * @throws JSONException
+	 */
+	private ContentValues convertJSONObjectToCategoryContentValue(
+			JSONObject i_JsonObject) throws JSONException {
+		ContentValues ret = new ContentValues();
+
+		String[] keys = { TriviaDbEngine.KEY_ROWID,
+				TriviaDbEngine.KEY_COL_PARENT_ID,
+				TriviaDbEngine.KEY_COL_EN_NAME, TriviaDbEngine.KEY_COL_HE_NAME,
+				TriviaDbEngine.KEY_LAST_UPDATE
+
+		};
+		int i = keys.length - 1;
+
+		while (i > -1) {
+			ret.put(keys[i], i_JsonObject.getString(keys[i]));
+			i--;
+		}
+
+		return ret;
+	}
+
+	/**
 	 * 
 	 * @return
 	 */
-	private JSONArray getQuestionAsJSONArray(long i_LastUpdate) {
+	private JSONArray getQuestionsAsJSONArray(long i_LastUpdate) {
 		JSONArray jsonArray = null;
 		StringBuilder detailedResult = new StringBuilder();
 
@@ -156,6 +183,41 @@ public class JSONHandler {
 
 				List<NameValuePair> params = new ArrayList<NameValuePair>();
 				params.add(new BasicNameValuePair("tag", TAG_UPDATE_FROM_DB));
+				params.add(new BasicNameValuePair("lastUserUpdate", Long
+						.toString(i_LastUpdate)));
+
+				jsonArray = getJSONArrayFromUrl(m_ServerUrl, params);
+				if (jsonArray != null) {
+					if (!jsonArray.getJSONObject(0).has(RESULT_SUCCESS)) {
+						jsonArray = null;
+					}
+				}
+
+			} else {
+				Toast.makeText(m_ActivityContext, detailedResult.toString(),
+						Toast.LENGTH_SHORT).show();
+			}
+		} catch (Exception e1) {
+			Log.e(TAG, e1.getMessage().toString());
+		}
+
+		return jsonArray;
+
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	private JSONArray getCategoriesAsJSONArray(long i_LastUpdate) {
+		JSONArray jsonArray = null;
+		StringBuilder detailedResult = new StringBuilder();
+
+		try {
+			if (isInternetAvailable(detailedResult)) {
+
+				List<NameValuePair> params = new ArrayList<NameValuePair>();
+				params.add(new BasicNameValuePair("tag", TAG_GET_CATEGORIES));
 				params.add(new BasicNameValuePair("lastUserUpdate", Long
 						.toString(i_LastUpdate)));
 
@@ -494,7 +556,44 @@ public class JSONHandler {
 		@Override
 		protected ContentValues[] doInBackground(ContentValues... params) {
 			//
-			return null;
+			if (isInternetAvailable) {
+				JSONArray jsonArray;
+				JSONObject jsonObject;
+				int numberOfRows, i;
+				long lastUserUpdate = 0;
+
+				if (params.length > 0) {
+					lastUserUpdate = params[0].getAsLong("lastUserUpdate");
+				}
+
+				jsonArray = getCategoriesAsJSONArray(lastUserUpdate);
+				try {
+					if (jsonArray != null) {
+
+						jsonObject = jsonArray.getJSONObject(0);
+						numberOfRows = jsonObject.getInt("number_of_rows");
+
+						params = new ContentValues[numberOfRows];
+						Log.v(TAG, "Number of rows to parse: " + numberOfRows);
+						m_ProgressDialog.setMax(numberOfRows);
+
+						numberOfRows++;
+
+						for (i = 1; i < numberOfRows; i++) {
+
+							jsonObject = jsonArray.getJSONObject(i);
+							params[i - 1] = convertJSONObjectToCategoryContentValue(jsonObject);
+							publishProgress(i);
+						}
+					}
+				} catch (JSONException e) {
+					//
+
+					e.printStackTrace();
+				}
+			}
+
+			return params;
 		}
 
 	}
@@ -566,7 +665,7 @@ public class JSONHandler {
 					lastUserUpdate = params[0].getAsLong("lastUserUpdate");
 				}
 
-				jsonArray = getQuestionAsJSONArray(lastUserUpdate);
+				jsonArray = getQuestionsAsJSONArray(lastUserUpdate);
 				try {
 					if (jsonArray != null) {
 
@@ -582,7 +681,7 @@ public class JSONHandler {
 						for (i = 1; i < numberOfRows; i++) {
 
 							jsonObject = jsonArray.getJSONObject(i);
-							params[i - 1] = convertJSONObjectToContentValue(jsonObject);
+							params[i - 1] = convertJSONObjectToQuestionContentValue(jsonObject);
 							publishProgress(i);
 						}
 					}

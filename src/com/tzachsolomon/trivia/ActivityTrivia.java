@@ -202,10 +202,24 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		}
 
 	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// 
+		if ( resultCode == 1){
+			
+			startNewGame(ActivityGame.GAMETYPE_CATEGORIES,data);
+		}
+	}
+
+
+
 
 	private void buttonNewGameCategories_Clicked() {
 		// 
-		startNewGame(ActivityGame.GAMETYPE_CATEGORIES);
+		//
+		Intent intent = new Intent(this, ActivityShowCategoryForGame.class);
+		startActivityForResult(intent, 1);
 		
 	}
 
@@ -257,9 +271,19 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		
 		Intent intent = new Intent(this, ActivityGame.class);
 		intent.putExtra(ActivityGame.EXTRA_GAME_TYPE, i_GameType);
+		intent.putExtra(ActivityGame.EXTRA_GAME_START_LEVEL, 1);
 		
 		startActivity(intent);
 
+	}
+	
+	private void startNewGame(int i_GameType, Intent data) {
+		// 
+		Intent intent = new Intent(this, ActivityGame.class);
+		intent.putExtra(ActivityGame.EXTRA_GAME_TYPE, i_GameType);
+		intent.putExtra(ActivityGame.EXTRA_GAME_CATEGORIES, data.getIntArrayExtra(ActivityGame.EXTRA_GAME_CATEGORIES));
+		
+		startActivity(intent);
 	}
 
 	@Override
