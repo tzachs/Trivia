@@ -400,6 +400,30 @@ public class TriviaDbEngine {
 
 		return ret;
 	}
+	
+	public boolean isCategoriesEmpty() {
+		// 
+		//
+		boolean ret = true;
+		// the column KEY_ANSWER1 doesn't matter, Just need to check if there
+		// are any rows
+		// any other column could be chosen
+		String[] columns = { KEY_ROWID };
+
+		this.openDbReadable();
+		Cursor cursor = ourDatabase.query(TABLE_CATEGORIES, columns, null, null,
+				null, null, null);
+		if (cursor.getCount() > 0) {
+			ret = false;
+		}
+
+		cursor.close();
+
+		this.closeDb();
+
+		return ret;
+		
+	}
 
 	public int deleteQuestions() {
 		//
@@ -410,6 +434,16 @@ public class TriviaDbEngine {
 
 		return ret;
 
+	}
+	
+	private int deleteCategories() {
+		// 
+		int ret;
+		this.openDbWritable();
+		ret = ourDatabase.delete(TABLE_CATEGORIES, null, null);
+		this.closeDb();
+
+		return ret;
 	}
 
 	public void incPlayedCounter(String i_QuestionId) {
@@ -789,5 +823,16 @@ public class TriviaDbEngine {
 		}
 
 	}
+
+	public void deleteDatabase() {
+		// 
+		this.deleteQuestions();
+		this.deleteCategories();
+		
+	}
+
+	
+
+	
 
 }

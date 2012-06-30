@@ -29,10 +29,8 @@ import android.widget.Button;
 public class ActivityTrivia extends Activity implements OnClickListener {
 
 	// TODO: highest score
-	// TODO: play categories
 	// TODO: create service to update the database daily
 	// TODO: initial settings with XML file
-
 
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
 
@@ -53,10 +51,10 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-
+		
 		m_SharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(getBaseContext());
-
+		.getDefaultSharedPreferences(getBaseContext());
+		
 		initializeVariables();
 
 		checkIfNeedToShowFirstTimeMessage();
@@ -65,15 +63,6 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 			showWizardSetup();
 		}
 				
-
-	}
-
-
-	@Override
-	protected void onStart() {
-
-		//
-		super.onStart();
 
 	}
 
@@ -111,17 +100,14 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	protected void onResume() {
 		//
 		super.onResume();
-
-		
-
 		changeLanguageTo(m_SharedPreferences.getString(
 				"listPreferenceLanguages", "iw"));
+		
 
 	}
 
 	private void changeLanguageTo(String string) {
 		//
-		
 		
 		Locale locale = new Locale(string);
 		Locale.setDefault(locale);
@@ -130,19 +116,16 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		config.locale = locale;
 		getBaseContext().getResources().updateConfiguration(config,
 				getBaseContext().getResources().getDisplayMetrics());
-
+		
 		setContentView(R.layout.main);
+		
 		initializeButtons();
-		
-		
 
 	}
 
 	private void initializeVariables() {
 		//
 		m_UpdateManager = new UpdateManager(this);
-
-		initializeButtons();
 
 	}
 
@@ -226,7 +209,9 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	private void buttonUpdateDatabase_Clicked() {
 		// 
+		
 		m_UpdateManager.updateQuestions();
+		
 		
 	}
 

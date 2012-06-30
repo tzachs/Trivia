@@ -43,8 +43,8 @@
     <string name="buttonSetupFinishText">Finish</string>
     <string name="textViewWizardSetupGameText">Game Setup</string>
     <string name="textViewWizardSetupGameHintText">In this page you can configure game related preferences</string>
-    <string name="checkBoxShowReportQuestionText">If you would like to help us by reporting errors in questions, enable this :)</string>
-    <string name="checkBoxUploadWrongCorrectStatisticsText">Upload correct wrong statistics. User statistics help us calculate and determine the level of each question</string>
+    <string name="checkBoxShowReportQuestionText">If you don't would like to help us by reporting errors in questions, disable this</string>
+    <string name="checkBoxUploadWrongCorrectStatisticsText">Upload correct wrong statistics. User statistics help us calculate and determine the level of each question thus creating a more accurate questions</string>
     <string name="checkBoxCheckUpdateOnStartupText">Check database updates on startup</string>
     <string name="textViewWizardSetupNetworkText">Network setup</string>
     <string name="textViewWizardSetupNetworkHintText">In this page you can configure how you will receive updates for the questions database</string>
@@ -128,5 +128,8 @@
     <string name="buttonNewGameCategoriesText">Categories</string>
     <string name="categories">Categories</string>
     <string name="buttonUpdateDatabaseCategoriesText">Update Categories</string>
+    <string name="you_must_choose_at_least_1_category">You must choose at least 1 category</string>
+    <string name="buttonStartCategoryGameText">Start Category Game</string>
+    <string name="no_categories_found_update_categories">No categories found, Please press the Update Categories button. Please return to home screen and press Categories Game when update is finished.</string>
 
 </resources>

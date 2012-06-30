@@ -134,5 +134,9 @@
     <string name="categories">נושאים</string>
     <string name="buttonUpdateDatabaseCategoriesText">עדכן נושאים</string>
     
+        <string name="you_must_choose_at_least_1_category">אנא בחר לפחות נושא אחד</string>
+    <string name="buttonStartCategoryGameText">התחל משחק קטגוריות</string>
+    <string name="no_categories_found_update_categories">לא נמצאו קטגוריות, אנא לחץ עדכן. לאחר העדכון צא חזרה לתפריט הראשי ולחץ שוב על משחק נושאים</string>
+    
 
 </resources>

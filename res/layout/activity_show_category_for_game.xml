@@ -9,7 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:text="Start Category Game" />
+        android:text="@string/buttonStartCategoryGameText" />
 
     <ExpandableListView
         android:id="@android:id/list"
@@ -22,6 +22,14 @@
         android:id="@android:id/empty"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="No categories found, update categories" />
+        android:text="@string/no_categories_found_update_categories" />
+    
+    <Button
+        android:id="@+id/buttonUpdateCategories"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:visibility="gone"
+        android:text="@string/buttonUpdateDatabaseCategoriesText" />
 
 </LinearLayout>

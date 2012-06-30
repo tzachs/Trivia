@@ -35,6 +35,8 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 
 	private ExpandableListView m_ExpandableList;
 	private Button buttonStartCategoryGame;
+	private Button buttonUpdateCategories;
+	private TriviaDbEngine m_DbEngine;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -53,20 +55,34 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 
 	private void initialiazeVariables() {
 		//
+		
+		m_DbEngine = new TriviaDbEngine(this);
+		
 		buttonStartCategoryGame = (Button) findViewById(R.id.buttonStartCategoryGame);
+		buttonUpdateCategories = (Button)findViewById(R.id.buttonUpdateCategories);
 
 		buttonStartCategoryGame.setOnClickListener(this);
+		buttonUpdateCategories.setOnClickListener(this);
+		
+		if ( m_DbEngine.isCategoriesEmpty() ){
+			buttonUpdateCategories.setVisibility(View.VISIBLE);
+			buttonStartCategoryGame.setVisibility(View.GONE);
+		}else{
+			buttonUpdateCategories.setVisibility(View.GONE);
+			buttonStartCategoryGame.setVisibility(View.VISIBLE);
+		}
+		
 
 	}
 
 	private void initItemsFromDatabase() {
 		//
-		TriviaDbEngine dbEngine = new TriviaDbEngine(this);
+		
 		ContentValues[] categories;
 		ContentValues[] subCategories;
 		int i, length, j, jlength, categoryId, currentGroupId;
 
-		categories = dbEngine.getPrimaryCategories();
+		categories = m_DbEngine.getPrimaryCategories();
 
 		m_Items = new Items();
 
@@ -74,7 +90,7 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 			String categoryText = categories[i]
 					.getAsString(TriviaDbEngine.KEY_COL_HE_NAME);
 			categoryId = categories[i].getAsInteger(TriviaDbEngine.KEY_ROWID);
-			subCategories = dbEngine.getSubCategories(categoryId);
+			subCategories = m_DbEngine.getSubCategories(categoryId);
 
 			// checking how many sub categories this category has
 			jlength = subCategories.length;
@@ -196,7 +212,7 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 
 		@Override
 		public long getGroupId(int groupPosition) {
-			// TODO Auto-generated method stub
+			// 
 			return 0;
 		}
 
@@ -479,8 +495,18 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 		case R.id.buttonStartCategoryGame:
 			buttonStartCategoryGame_Clicked();
 			break;
+		case R.id.buttonUpdateCategories:
+			buttonUpdateCategories_Clicked();
+			break;
 		}
 
+	}
+
+	private void buttonUpdateCategories_Clicked() {
+		// 
+		UpdateManager updateManager = new UpdateManager(this);
+		updateManager.updateCategories();
+		
 	}
 
 	private void buttonStartCategoryGame_Clicked() {
@@ -503,7 +529,7 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 			setResult(1, resultData);
 			finish();
 		} else {
-			Toast.makeText(this, "You must choose at least 1 category",
+			Toast.makeText(this, getString(R.string.you_must_choose_at_least_1_category),
 					Toast.LENGTH_SHORT).show();
 		}
 

@@ -102,7 +102,8 @@ public class ActivityDatabaseMenu extends Activity implements OnClickListener {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				//
-				m_TriviaDb.deleteQuestions();
+				m_TriviaDb.deleteDatabase();
+				
 			}
 		});
 		dialog.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
