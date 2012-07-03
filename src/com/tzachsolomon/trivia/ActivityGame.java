@@ -822,9 +822,17 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 
 		case GAMETYPE_ALL_QUESTIONS:
-
-			textViewLivesLeft.setText(getString(R.string.textViewLivesLeftText)
-					+ m_AllQuestionsLives);
+			if (m_ReverseNumbersInQuestions) {
+				textViewLivesLeft.setText(StringParser.reverseNumbersInString(getString(R.string.textViewLivesLeftText)
+						+ m_AllQuestionsLives));
+				
+			} else {
+				textViewLivesLeft.setText(getString(R.string.textViewLivesLeftText)
+						+ m_AllQuestionsLives);
+				
+			}
+			
+			
 			break;
 
 
