@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/checkBoxAllowUpdateUsingWifi"
         android:layout_margin="4dp"
-        android:checked="false"
+        android:checked="true"
         android:text="@string/checkBoxAllowUpdateUsingMobileNetworkText" />
 
     <CheckBox
@@ -56,8 +56,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/checkBoxAllowUpdateUsingMobileNetwork"
         android:layout_margin="4dp"
-        android:checked="false"
-        android:enabled="false"
+        android:checked="true"
+        android:enabled="true"
         android:text="@string/checkBoxAllowUpdateUsing3GOnlyText" />
 
 </RelativeLayout>

@@ -47,7 +47,7 @@
     <string name="textViewWizardSetupNetworkText">"הגדרת הרשת"</string>
     <string name="textViewWizardSetupNetworkHintText">"בדף זה ניתן להגדיר איך תוכל לקבל עדכונים עבור מאגר השאלות"</string>
     <string name="checkBoxAllowUpdateUsingWifiText">"אפשר עדכון באמצעות WiFi"</string>
-    <string name="checkBoxAllowUpdateUsingMobileNetworkText">"אפשר עדכון באמצעות הרשת הסלולרית. "</string>
+    <string name="checkBoxAllowUpdateUsingMobileNetworkText">"אם ברצונך לא לאפשר עדכון באמצעות הרשת הסלולרית בטל סימון בתיבה זו  "</string>
     <string name="checkBoxAllowUpdateUsing3GOnlyText">"אפשר עדכון רק באמצעות רשתות 3G. זוהי האפשרות המומלצת אם ברצונך לעדכן בעזרת הרשת הסלולרית"</string>
     <string name="textViewWelcomeTitle">"טריוויה ברוך הבא"</string>
     <string name="checkBoxPreferencePreferNewQuestionsTitle">"העדף שאלות חדשות"</string>

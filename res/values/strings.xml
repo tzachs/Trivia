@@ -49,8 +49,8 @@
     <string name="textViewWizardSetupNetworkText">Network setup</string>
     <string name="textViewWizardSetupNetworkHintText">In this page you can configure how you will receive updates for the questions database</string>
     <string name="checkBoxAllowUpdateUsingWifiText">Allow update using WiFi</string>
-    <string name="checkBoxAllowUpdateUsingMobileNetworkText">Allow update using Mobile Network. </string>
-    <string name="checkBoxAllowUpdateUsing3GOnlyText">Allow update using only 3G Networks. This is a recommended option if using the mobile network to update.</string>
+    <string name="checkBoxAllowUpdateUsingMobileNetworkText">If you don\'t want to Allow update using Mobile Network, uncheck this</string>
+    <string name="checkBoxAllowUpdateUsing3GOnlyText">Allow update using only 3G Networks. This is a recommended option if using the mobile network to update</string>
     <string name="textViewWelcomeTitle">Trivia Welcome</string>
     <string name="checkBoxPreferencePreferNewQuestionsTitle">Prefer new questions</string>
     <string name="checkBoxPreferencePreferNewQuestionsSummary">Sort the questions by least played questions first</string>
