@@ -2,10 +2,12 @@ package com.tzachsolomon.trivia;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,15 +17,20 @@ import android.widget.TextView;
 public class ActivityAbout extends Activity implements OnClickListener {
 
 	public static final String TAG = ActivityAbout.class.getSimpleName();
-	
+
 	private Button buttonSendSuggestion;
 	private TextView textViewAboutVersion;
+
+	private SharedPreferences m_SharedPreferences;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.about);
+
+		m_SharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(getBaseContext());
 
 		textViewAboutVersion = (TextView) findViewById(R.id.textViewAboutVersion);
 
@@ -41,15 +48,24 @@ public class ActivityAbout extends Activity implements OnClickListener {
 		try {
 			packageInfo = getPackageManager().getPackageInfo(
 					"com.tzachsolomon.trivia", PackageManager.GET_META_DATA);
-			textViewAboutVersion
-			.setText(getString(R.string.textViewAboutVersionText)
-					+ packageInfo.versionName);
+
+			if (m_SharedPreferences.getBoolean(
+					"checkBoxPreferenceRevereseInHebrew", false)) {
+
+				textViewAboutVersion
+						.setText(StringParser
+								.reverseNumbersInString(getString(R.string.textViewAboutVersionText)
+										+ packageInfo.versionName));
+			} else {
+				textViewAboutVersion
+						.setText(getString(R.string.textViewAboutVersionText)
+								+ packageInfo.versionName);
+			}
 		} catch (NameNotFoundException e) {
-			// 
+			//
 			Log.e(TAG, e.getMessage().toString());
-			
+
 		}
-		
 
 	}
 

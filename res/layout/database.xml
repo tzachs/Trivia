@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/buttonUpdateDatabaseCategories"
         android:layout_margin="4dp"
-        android:background="@drawable/green_brown_button"
+        android:background="@drawable/custom_menu_button"
         android:text="@string/buttonUpdateDatabaseText" />
     
      <Button
@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/buttonDeleteDatabase"
         android:layout_margin="4dp"
-        android:background="@drawable/green_brown_button"
+        android:background="@drawable/custom_menu_button"
         android:text="@string/buttonUpdateDatabaseCategoriesText" />
 
     <Button
@@ -28,7 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_margin="4dp"
-        android:background="@drawable/green_brown_button"
+        android:background="@drawable/custom_menu_button"
         android:text="@string/buttonDeleteDatabaseText" />
 
 </RelativeLayout>

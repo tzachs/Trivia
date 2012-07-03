@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:text="@string/buttonSendSuggestionText"
         android:layout_margin="4dp"
-        
+        android:background="@drawable/custom_menu_button"
         />
     
     

@@ -3,10 +3,11 @@
      <style name="Button" parent="@android:style/Widget.Button">
         
         <item name="android:textColor">#ffffff</item>
-        <item name="android:shadowColor">#00ccff</item>
+        <!-- item name="android:shadowColor">#00ccff</item>
         <item name="android:shadowDx">1</item>
         <item name="android:shadowDy">1</item>
         <item name="android:shadowRadius">1</item>
+         -->
         <item name="android:textSize">16dip</item>
         <item name="android:textStyle">bold</item>
         <item name="android:background">@drawable/blue_button</item>

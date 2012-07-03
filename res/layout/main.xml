@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@drawable/background_shape"
+     >
 
     <Button
         android:id="@+id/buttonNewGameSimple"
@@ -13,7 +15,7 @@
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/green_brown_button"
+        android:background="@drawable/custom_menu_button"
         android:text="@string/buttonNewGameSimpleText" />
 
     <Button
@@ -22,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonNewGameSimple"
         android:layout_margin="4dp"
-        android:background="@drawable/green_brown_button"
+        android:background="@drawable/custom_menu_button"
         android:text="@string/buttonNewGameAllQuestionsText" />
 
     <Button
@@ -31,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonNewGameAllQuestions"
         android:layout_margin="4dp"
-        android:background="@drawable/green_brown_button"
+        android:background="@drawable/custom_menu_button"
         android:text="@string/buttonNewGameCategoriesText" />
 
     <Button
@@ -40,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_margin="4dp"
-        android:background="@drawable/green_brown_button"
+        android:background="@drawable/custom_menu_button"
         android:text="@string/buttonUpdateDatabaseText" />
 
     <Button
@@ -49,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonUpdateDatabase"
         android:layout_margin="4dp"
-        android:background="@drawable/green_brown_button"
+        android:background="@drawable/custom_menu_button"
         android:text="@string/buttonManageDatabaseText" />
 
     <Button
@@ -58,7 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonManageDatabase"
         android:layout_margin="4dp"
-        android:background="@drawable/green_brown_button"
+        android:background="@drawable/custom_menu_button"
         android:text="@string/buttonPreferencesText" />
 
 </RelativeLayout>

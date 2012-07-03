@@ -361,10 +361,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 	private void startNewQuestion() {
 
 		// initialize button color to blue
-		buttonAnswer1.setBackgroundResource(R.drawable.blue_button);
-		buttonAnswer2.setBackgroundResource(R.drawable.blue_button);
-		buttonAnswer3.setBackgroundResource(R.drawable.blue_button);
-		buttonAnswer4.setBackgroundResource(R.drawable.blue_button);
+		resetAnswerButtonBackground(R.drawable.blue_button);
+		enableAnswerButtons();
 
 		switch (m_CurrentGameType) {
 		case GAMETYPE_ALL_QUESTIONS:
@@ -384,6 +382,15 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	}
 
+
+	private void resetAnswerButtonBackground(int blueButton) {
+		// 
+		buttonAnswer1.setBackgroundResource(blueButton);
+		buttonAnswer2.setBackgroundResource(blueButton);
+		buttonAnswer3.setBackgroundResource(blueButton);
+		buttonAnswer4.setBackgroundResource(blueButton);
+		
+	}
 
 	private void startNewQuestionLevels() {
 		//
@@ -676,6 +683,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 		// is still running
 
 		stopCountdownCounter();
+		// this is implemented in order to prevent double click
+		disableAnswerButtons();
 
 		// checking if time is up
 		if (i == -1) {
@@ -732,6 +741,24 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		return ret;
 
+	}
+
+	private void disableAnswerButtons() {
+		// 
+		buttonAnswer1.setEnabled(false);
+		buttonAnswer2.setEnabled(false);
+		buttonAnswer3.setEnabled(false);
+		buttonAnswer4.setEnabled(false);
+		
+	}
+	
+	private void enableAnswerButtons() {
+		// 
+		buttonAnswer1.setEnabled(true);
+		buttonAnswer2.setEnabled(true);
+		buttonAnswer3.setEnabled(true);
+		buttonAnswer4.setEnabled(true);
+		
 	}
 
 	private void incAllQuestionsLives() {
@@ -818,7 +845,6 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private void updateLivesTextView() {
 		switch (m_CurrentGameType) {
-
 
 
 		case GAMETYPE_ALL_QUESTIONS:

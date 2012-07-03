@@ -200,7 +200,7 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 
 		@Override
 		public Object getGroup(int groupPosition) {
-			// TODO Auto-generated method stub
+			// 
 			return null;
 		}
 
