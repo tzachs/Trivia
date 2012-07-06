@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class ActivityDatabaseMenu extends Activity implements OnClickListener {
 
@@ -103,6 +104,8 @@ public class ActivityDatabaseMenu extends Activity implements OnClickListener {
 			public void onClick(DialogInterface dialog, int which) {
 				//
 				m_TriviaDb.deleteDatabase();
+				
+				Toast.makeText(ActivityDatabaseMenu.this, "Database deleted!", Toast.LENGTH_LONG).show();
 				
 			}
 		});

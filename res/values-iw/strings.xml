@@ -113,8 +113,8 @@
     <string name="show_game_instructions_before_starting_the_game">הראה הוראות לפני התחלת משחק</string>
     
      <string name="howToPlayAllQuestions1">1. המשחק מתחיל עם 0 חיים \n</string>
-    <string name="howToPlayAllQuestions2">2. תשובה נכונה מעלה את החיים בעשירית מקושי השאלה לדוגמא שאלה עם קושי 6 תזכה תעלה את החיים ב0.6 \n</string>
-    <string name="howToPlayAllQuestions3">3. תשובה לא נכונה תוריד בעשירית מהחיים שלך \n</string>
+    <string name="howToPlayAllQuestions2">2. תשובה נכונה מעלה את החיים בשווי קושי השאלה לדוגמא שאלה עם קושי 6 תזכה תעלה את החיים ב6</string>
+    <string name="howToPlayAllQuestions3">3. תשובה לא נכונה תוריד מהחיים שלך בשווי החיים</string>
 	<string name="howToPlayAllQuestions4">4. כאשר החיים מגיעים מתחת ל0 המשחק נגמר\n</string>
     <string name="howToPlayAllQuestionsTitle">כל השאלות - מבחן סובייטי</string>
     <string name="howToPlayNewGame1">1. בתחילת המשחק יש לך 3 חיים\n</string>
