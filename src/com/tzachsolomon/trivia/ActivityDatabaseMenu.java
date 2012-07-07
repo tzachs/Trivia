@@ -105,6 +105,7 @@ public class ActivityDatabaseMenu extends Activity implements OnClickListener {
 				//
 				m_TriviaDb.deleteDatabase();
 				
+				
 				Toast.makeText(ActivityDatabaseMenu.this, "Database deleted!", Toast.LENGTH_LONG).show();
 				
 			}
