@@ -108,6 +108,15 @@ public class ActivityGame extends Activity implements OnClickListener {
 			
 		showInstructions();
 	}
+	
+	private void restartGame() {
+		initializeVariables();
+
+		m_Extras = getIntent().getExtras();
+		m_CurrentGameType = m_Extras.getInt(ActivityGame.EXTRA_GAME_TYPE);
+		
+		parseGameSetupAndStart();
+	}
 
 	private void parseGameSetupAndStart() {
 		//
@@ -840,6 +849,14 @@ public class ActivityGame extends Activity implements OnClickListener {
 						finish();
 					}
 				});
+		gameOverDialog.setNegativeButton("New Game", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// 
+				restartGame();
+			}
+		});
 		gameOverDialog.show();
 	}
 
