@@ -21,6 +21,7 @@ public class ActivityAbout extends Activity implements OnClickListener {
 	private Button buttonSendSuggestion;
 	private TextView textViewAboutVersion;
 
+	private StringParser m_StringParser;
 	private SharedPreferences m_SharedPreferences;
 
 	@Override
@@ -29,8 +30,11 @@ public class ActivityAbout extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.about);
 
+		
 		m_SharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
+		
+		m_StringParser = new StringParser(m_SharedPreferences);
 
 		textViewAboutVersion = (TextView) findViewById(R.id.textViewAboutVersion);
 
@@ -53,8 +57,8 @@ public class ActivityAbout extends Activity implements OnClickListener {
 					"checkBoxPreferenceRevereseInHebrew", false)) {
 
 				textViewAboutVersion
-						.setText(StringParser
-								.reverseNumbersInString(getString(R.string.textViewAboutVersionText)
+						.setText(m_StringParser
+								.reverseNumbersInStringHebrew(getString(R.string.textViewAboutVersionText)
 										+ packageInfo.versionName));
 			} else {
 				textViewAboutVersion

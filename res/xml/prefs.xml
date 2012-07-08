@@ -8,6 +8,7 @@
             android:entryValues="@array/integerArrayLanguagesValues" android:key="listPreferenceLanguages"
             android:defaultValue="iw" android:title="@string/language" android:summary="@string/ui_language"
             />
+        
         <CheckBoxPreference 
             android:key="checkBoxPreferenceRevereseInHebrew"
             android:title="@string/checkBoxPreferenceRevereseInHebrewTitle"
@@ -20,6 +21,10 @@
     <PreferenceCategory 
         android:key="preferenceCategoryGameRelated"
         android:title="@string/preferenceCategoryGameRelatedTitle" >
+        <CheckBoxPreference 
+            android:key=""
+            
+            />
         <CheckBoxPreference 
             android:key="checkBoxPreferenceShowCorrectAnswer"
             android:title="@string/checkBoxPreferenceShowCorrectAnswerText"

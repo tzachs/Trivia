@@ -20,6 +20,7 @@ public class UpdateManager {
 	private TriviaDbEngine m_TriviaDb;
 
 	private SharedPreferences m_SharedPreferences;
+	private StringParser m_StringParser;
 
 	public UpdateManager(Context i_Context) {
 
@@ -27,6 +28,8 @@ public class UpdateManager {
 
 		m_SharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(m_Context);
+		
+		m_StringParser = new StringParser(m_SharedPreferences);
 
 		m_TriviaDb = new TriviaDbEngine(m_Context);
 		m_JSONHandler = new JSONHandler(m_Context);
@@ -155,6 +158,7 @@ public class UpdateManager {
 
 		private int m_UpdateType = -1;
 		private long m_LastUserUpdate;
+		
 
 		public void setUpdateType(int i_UpdateType) {
 			m_UpdateType = i_UpdateType;
@@ -163,6 +167,7 @@ public class UpdateManager {
 		@Override
 		protected void onPreExecute() {
 			//
+			
 			StringBuilder detailedResult = new StringBuilder();
 
 			enabled = m_JSONHandler.isInternetAvailable(detailedResult);
@@ -210,7 +215,7 @@ public class UpdateManager {
 
 				if (m_SharedPreferences.getBoolean(
 						"checkBoxPreferenceRevereseInHebrew", false)) {
-					dialog.setMessage(StringParser
+					dialog.setMessage(m_StringParser
 							.reverseNumbersInString(message.toString()));
 				} else {
 					dialog.setMessage(message.toString());

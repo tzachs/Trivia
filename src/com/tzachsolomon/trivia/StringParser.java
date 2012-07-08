@@ -1,8 +1,32 @@
 package com.tzachsolomon.trivia;
 
+import android.content.SharedPreferences;
+
+
 public class StringParser {
 
-	public static String reverseNumbersInString(String i_String) {
+	private  SharedPreferences m_SharedPreferences;
+			
+	public StringParser (SharedPreferences i_SharedPreferences){
+		m_SharedPreferences = i_SharedPreferences;
+	}
+	
+	public  String reverseNumbersInStringHebrew(String i_String) {
+		
+		boolean reverse = m_SharedPreferences.getBoolean(
+				"checkBoxPreferenceRevereseInHebrew", false);
+		String lang = m_SharedPreferences.getString("listPreferenceLanguages", "iw");
+		if ( reverse && lang.contentEquals("iw")){
+			return reverseNumbersInString(i_String);
+		}else{
+			return i_String;
+		}
+		
+		
+		
+	}
+	
+	public String reverseNumbersInString(String i_String) {
 		StringBuilder ret = new StringBuilder(i_String);
 		int i = ret.length() - 1;
 		int endIndex;
@@ -27,7 +51,7 @@ public class StringParser {
 
 	}
 
-	public static void reverseInString(int i_StartIndex, int i_EndIndex,
+	public void reverseInString(int i_StartIndex, int i_EndIndex,
 			StringBuilder i_StringBuilder) {
 		
 		StringBuilder rev;

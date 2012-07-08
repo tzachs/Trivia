@@ -89,6 +89,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private boolean m_ResumeFromHelp;
 
+	private StringParser m_StringParser;
+
 	
 	
 
@@ -100,6 +102,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		m_SharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
+		
+		
 
 		initializeVariables();
 
@@ -436,8 +440,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 				m_CurrentQuestion.randomizeAnswerPlaces(m_Random);
 
 				if (m_ReverseNumbersInQuestions) {
-					textViewQuestion.setText(StringParser
-							.reverseNumbersInString(m_CurrentQuestion
+					textViewQuestion.setText(m_StringParser
+							.reverseNumbersInStringHebrew(m_CurrentQuestion
 									.getQuestion()));
 				} else {
 					textViewQuestion.setText(m_CurrentQuestion.getQuestion());
@@ -507,6 +511,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private void initializeVariables() {
 		//
+		m_StringParser = new StringParser(m_SharedPreferences);
 		m_ReverseNumbersInQuestions = m_SharedPreferences.getBoolean(
 				"checkBoxPreferenceRevereseInHebrew", false);
 		m_ShowCorrectAnswer = m_SharedPreferences.getBoolean(
@@ -646,7 +651,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 			if (m_ReverseNumbersInQuestions) {
 				intent.putExtra(
 						ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
-						StringParser.reverseNumbersInString(m_Questions.get(
+						m_StringParser.reverseNumbersInStringHebrew(m_Questions.get(
 								m_QuestionIndex - 2).getQuestion()));
 			} else {
 				intent.putExtra(
@@ -662,7 +667,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 				m_CurrentQuestion.getQuestionId());
 		if (m_ReverseNumbersInQuestions) {
 			intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_STRING,
-					StringParser.reverseNumbersInString(m_CurrentQuestion
+					m_StringParser.reverseNumbersInStringHebrew(m_CurrentQuestion
 							.getQuestion()));
 		} else {
 			intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_STRING,
@@ -838,9 +843,9 @@ public class ActivityGame extends Activity implements OnClickListener {
 		m_CountDownCounter.cancel();
 		AlertDialog.Builder gameOverDialog = new AlertDialog.Builder(
 				ActivityGame.this);
-		gameOverDialog.setTitle("Game over :(");
+		gameOverDialog.setTitle(getString(R.string.game_over));
 		gameOverDialog.setCancelable(false);
-		gameOverDialog.setPositiveButton("OK",
+		gameOverDialog.setPositiveButton(getString(R.string.exit),
 				new DialogInterface.OnClickListener() {
 
 					@Override
@@ -849,7 +854,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 						finish();
 					}
 				});
-		gameOverDialog.setNegativeButton("New Game", new DialogInterface.OnClickListener() {
+		gameOverDialog.setNegativeButton(getString(R.string.new_game), new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -866,7 +871,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		case GAMETYPE_ALL_QUESTIONS:
 			if (m_ReverseNumbersInQuestions) {
-				textViewLivesLeft.setText(StringParser.reverseNumbersInString(getString(R.string.textViewLivesLeftText)
+				textViewLivesLeft.setText(m_StringParser.reverseNumbersInStringHebrew(getString(R.string.textViewLivesLeftText)
 						+ m_AllQuestionsLives));
 				
 			} else {

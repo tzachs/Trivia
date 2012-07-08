@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/textViewWizardSetupQuestionLanguage"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="4dp"
+        android:text="@string/textViewWizardSetupQuestionLanguageText"
+        android:textSize="20dp" />
+
+    <View
+        android:id="@+id/viewLineQuestionLanguage"
+        android:layout_width="fill_parent"
+        android:layout_height="4dip"
+        android:layout_below="@+id/textViewWizardSetupQuestionLanguage"
+        android:background="@drawable/custom_line_purple" />
+
+    <CheckBox
+        android:id="@+id/checkBoxQuestionLanguageHebrew"
+        android:layout_width="fill_parent"
+        android:layout_height="4dip"
+        android:layout_below="@+id/viewLineQuestionLanguage"
+        android:checked="true"
+        android:text="@string/checkBoxQuestionLanguageHebrewText"
+         />
+
+    <CheckBox
+        android:id="@+id/checkBoxQuestionLanguageEnglish"
+        android:layout_width="fill_parent"
+        android:layout_height="4dip"
+        android:layout_below="@+id/checkBoxQuestionLanguageHebrew"
+        android:checked="true" 
+        android:text="@string/checkBoxQuestionLanguageEnglishText"
+        />
+
+</RelativeLayout>
