@@ -50,10 +50,22 @@
             android:defaultValue="true"
             />
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="checkBoxPreferenceShowReportQuestion"
             android:summary="@string/checkBoxPreferenceShowReportQuestionSummary"
             android:title="@string/checkBoxPreferenceShowReportQuestionTitle" />
+        <CheckBoxPreference 
+            android:defaultValue="true"
+            android:key="checkBoxPreferenceQuestionLanguageHebrew"
+            android:summary="Show Hebrew questions"
+            android:title="Shw Hebrew questions"
+            />
+        <CheckBoxPreference 
+            android:defaultValue="true"
+            android:key="checkBoxPreferenceQuestionLanguageEnglish"
+            android:summary="Show English questions"
+            android:title="Show English questions"
+            />
     </PreferenceCategory>
     <PreferenceCategory 
         android:key="preferenceCategoryShowInstructions"

@@ -28,6 +28,7 @@ import android.widget.Button;
 
 public class ActivityTrivia extends Activity implements OnClickListener {
 
+	// TODO: check report question - doesn't report the correct question
 	// TODO: sounds
 	// TODO: animation
 	// TODO: background

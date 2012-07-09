@@ -36,7 +36,7 @@
     <string name="checkBoxPreferenceCheckUpdateOnStartupSummary">"בדוק עדכונים בזמן העלאת התוכנה"</string>
     <string name="checkBoxPreferenceCheckUpdateOnStartupTitle">"בדוק עדכונים באתחול"</string>
     <string name="textViewWelcomeMessageText">"ברוך הבא לאשף ההגדרות. לחץ הבא על מנת להמשיך ובסוף על סיום על מנת לשמור."</string>
-    <string name="textViewSetupFinishText">"תודה על שהגדרת את טריוויה בפעם הראשונה. הדבר הבא לעשות הוא ללחוץ סיום ואז לללחוץ על עדכן את מאגר השאלות מהמסך הראשי"</string>
+    <string name="textViewSetupFinishText">&quot;תודה על שהגדרת את טריוויה. הדבר הבא לעשות הוא ללחוץ סיום ואז לללחוץ על עדכן את מאגר השאלות מהמסך הראשי&quot;</string>
     <string name="textViewSetupFinishTitleText">"טריוויה - סיום"</string>
     <string name="buttonSetupFinishText">"סיום"</string>
     <string name="textViewWizardSetupGameText">"הגדרת משחק"</string>
@@ -52,8 +52,8 @@
     <string name="textViewWelcomeTitle">"טריוויה ברוך הבא"</string>
     <string name="checkBoxPreferencePreferNewQuestionsTitle">"העדף שאלות חדשות"</string>
     <string name="checkBoxPreferencePreferNewQuestionsSummary">"מיין שאלות לפי שאלות חדשות קודם"</string>
-    <string name="textViewWizardSetupLanguageText">"שפות"</string>
-    <string name="textViewWizardSetupLanguageMessageText">"בחר את השפה המועדפת עליך"</string>
+    <string name="textViewWizardSetupLanguageText">&quot;שפת ממשק&quot;</string>
+    <string name="textViewWizardSetupLanguageMessageText">&quot;בחר את השפת הממשק המועדפת עליך&quot;</string>
     <string name="wifi_is_enabled_but_isn_t_connected_please_check_wifi_connection">"WiFi מופעל, אך אינו מחובר, בדוק את חיבור WiFi"</string>
     <string name="mobile_network_found_but_only_3g_mobile_network_connection_is_allowed_">"רשת הסלולרית נמצא רך רק חיבור רשת 3G נייד מותר, בדוק הגדרות"</string>
     <string name="check_preferencs_to_allow_slow_networks">"בדוק את העדפות כדי לאפשר רשתות איטיות"</string>
@@ -103,7 +103,7 @@
     <string name="buttonSendErrorText">שלח</string>
     <string name="editTextErrorDetailsHint">&#8230; מלא שגיאה כאן</string>
     <string name="textViewWhichQuestionText">איזה שאלה?</string>
-    <string name="textViewSetupFinishText1">שלחו הצעות על טופס הצעת דרך חלון אודות</string>
+    <string name="textViewSetupFinishText1">במקה של תקלה או אם יש לכם הצעה אנא שלחו בטופס הצעת דרך חלון אודות</string>
     <string name="instructions_message">הוראות</string>
     <string name="instructions">הוראות</string>
     <string name="title">כותרת</string>
@@ -135,5 +135,5 @@
     <string name="checkBoxQuestionLanguageEnglishText">אנגלית</string>
     <string name="exit">יציאה</string>
     <string name="new_game">משחק חדש</string>
-
+<string name="textViewQuestionLanguageDetailsText">בחר את השפה בה יוצגו השאלות. עלייך לבחור לפחות אחת</string>
 </resources>

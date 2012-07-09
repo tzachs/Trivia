@@ -11,19 +11,17 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true" >
 
-     
         <include
             android:id="@+id/wizard_setup_language"
             layout="@layout/wizard_setup_language" />
-        
+
+        <include
+            android:id="@+id/wizard_setup_welcome"
+            layout="@layout/wizard_setup_welcome" />
+
         <include
             android:id="@+id/wizard_setup_question_language"
             layout="@layout/wizard_setup_question_language" />
-        
-           <include
-            android:id="@+id/wizard_setup_welcome"
-            layout="@layout/wizard_setup_welcome" />
-        
 
         <include
             android:id="@+id/wizard_setup_network"
@@ -45,14 +43,14 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:text="@string/next" />
-    
+
     <Button
         android:id="@+id/buttonBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:visibility="gone"
-        android:text="@string/back" />
+        android:text="@string/back"
+        android:visibility="gone" />
 
 </RelativeLayout>

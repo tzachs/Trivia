@@ -54,7 +54,7 @@
     <string name="textViewWelcomeTitle">Trivia Welcome</string>
     <string name="checkBoxPreferencePreferNewQuestionsTitle">Prefer new questions</string>
     <string name="checkBoxPreferencePreferNewQuestionsSummary">Sort the questions by least played questions first</string>
-    <string name="textViewWizardSetupLanguageText">Language</string>
+    <string name="textViewWizardSetupLanguageText">Interface Language</string>
     <string name="textViewWizardSetupQuestionLanguageText">Question Language</string>
     <string name="textViewWizardSetupLanguageMessageText">Choose your preferred language</string>
     <string name="wifi_is_enabled_but_isn_t_connected_please_check_wifi_connection">WiFi is enabled but isn\'t connected, please check WiFi connection</string>
@@ -136,5 +136,7 @@
     <string name="checkBoxQuestionLanguageEnglishText">English</string>
     <string name="exit">Exit</string>
     <string name="new_game">New Game</string>
+    <string name="textViewQuestionLanguageDetailsText">Choose the questions language. You must choose at least one language.</string>
+    
 
 </resources>

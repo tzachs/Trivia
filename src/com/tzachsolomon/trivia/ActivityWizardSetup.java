@@ -44,6 +44,8 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 	private String[] m_LanguageValues;
 
 	private CheckBox checkBoxShowConfigurationWizard;
+	private CheckBox checkBoxQuestionLanguageEnglish;
+	private CheckBox checkBoxQuestionLanguageHebrew;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +92,8 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		checkBoxShowReportQuestion = (CheckBox) findViewById(R.id.checkBoxShowReportQuestion);
 		checkBoxUploadWrongCorrectStatistics = (CheckBox) findViewById(R.id.checkBoxUploadWrongCorrectStatistics);
 		checkBoxCheckUpdateOnStartup = (CheckBox) findViewById(R.id.checkBoxCheckUpdateOnStartup);
+		checkBoxQuestionLanguageEnglish = (CheckBox) findViewById(R.id.checkBoxQuestionLanguageEnglish);
+		checkBoxQuestionLanguageHebrew = (CheckBox) findViewById(R.id.checkBoxQuestionLanguageHebrew);
 
 		checkBoxShowConfigurationWizard = (CheckBox) findViewById(R.id.checkBoxShowConfigurationWizard);
 
@@ -99,6 +103,8 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		checkBoxShowReportQuestion.setOnCheckedChangeListener(this);
 		checkBoxUploadWrongCorrectStatistics.setOnCheckedChangeListener(this);
 		checkBoxCheckUpdateOnStartup.setOnCheckedChangeListener(this);
+		checkBoxQuestionLanguageEnglish.setOnCheckedChangeListener(this);
+		checkBoxQuestionLanguageHebrew.setOnCheckedChangeListener(this);
 
 		checkBoxAllowUpdateUsingWifi.setChecked(m_SharedPreferences.getBoolean(
 				"checkBoxPreferenceAllowUpdateWifi", true));
@@ -109,6 +115,10 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 				.setChecked(checkBoxAllowUpdateUsingMobileNetwork.isChecked());
 		checkBoxAllowUpdateUsing3GOnly
 				.setEnabled(checkBoxAllowUpdateUsingMobileNetwork.isChecked());
+		checkBoxQuestionLanguageEnglish.setChecked(m_SharedPreferences
+				.getBoolean("checkBoxPreferenceQuestionLanguageEnglish", true));
+		checkBoxQuestionLanguageHebrew.setChecked(m_SharedPreferences
+				.getBoolean("checkBoxPreferenceQuestionLanguageHebrew", true));
 
 	}
 
@@ -179,6 +189,13 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		//
 		switch (buttonView.getId()) {
+		case R.id.checkBoxQuestionLanguageEnglish:
+			checkBoxQuestionLanguageEnglish_Clicked();
+			break;
+
+		case R.id.checkBoxQuestionLanguageHebrew:
+			checkBoxQuestionLanguageHebrew_Clicked();
+			break;
 		case R.id.checkBoxAllowUpdateUsingWifi:
 			m_SharedPreferencesEditor.putBoolean(
 					"checkBoxPreferenceAllowUpdateWifi", isChecked);
@@ -226,6 +243,35 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 			break;
 
 		}
+
+	}
+
+	private void checkBoxQuestionLanguageHebrew_Clicked() {
+		//
+		m_SharedPreferencesEditor.putBoolean(
+				"checkBoxPreferenceQuestionLanguageHebrew",
+				checkBoxQuestionLanguageHebrew.isChecked());
+
+		checkBoxQuestionLanguageChangeNextVisibilty();
+	}
+
+	private void checkBoxQuestionLanguageChangeNextVisibilty() {
+		if (checkBoxQuestionLanguageEnglish.isChecked()
+				|| checkBoxQuestionLanguageHebrew.isChecked()) {
+			buttonNext.setVisibility(View.VISIBLE);
+		} else {
+			buttonNext.setVisibility(View.GONE);
+		}
+	}
+
+	private void checkBoxQuestionLanguageEnglish_Clicked() {
+		//
+
+		m_SharedPreferencesEditor.putBoolean(
+				"checkBoxPreferenceQuestionLanguageEnglish",
+				checkBoxQuestionLanguageEnglish.isChecked());
+		
+		checkBoxQuestionLanguageChangeNextVisibilty();
 
 	}
 
