@@ -299,7 +299,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		m_ResumeClock = false;
 		m_AllQuestionsLives = 0;
-		m_Questions = m_TriviaDb.getQuestionsEnabled(m_QuestionLanguages);
+		m_Questions = m_TriviaDb.getQuestionsEnabled(m_SortByNewQuestionFirst, m_QuestionLanguages);
 
 		// Shuffling the order of the questions
 		Collections.shuffle(m_Questions);

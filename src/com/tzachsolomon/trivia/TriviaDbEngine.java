@@ -198,41 +198,11 @@ public class TriviaDbEngine {
 		return ret;
 	}
 
-	public ArrayList<Question> getQuestionsEnabled(int[] i_QuestionLanguage) {
+	public ArrayList<Question> getQuestionsEnabled(
+			boolean i_SortByNewQuestionsFirst, int[] i_QuestionLanguages) {
 		//
-		ContentValues map;
-		String[] columns = { KEY_ANSWER1, KEY_ANSWER2, KEY_ANSWER3,
-				KEY_ANSWER4, KEY_ANSWER_INDEX, KEY_CATEGORY,
-				KEY_CORRECT_WRONG_RATIO, KEY_CORRECT_USER, KEY_ENABLED,
-				KEY_LANGUAGE, KEY_LAST_UPDATE, KEY_QUESTION, KEY_QUESTIONID,
-				KEY_ROWID, KEY_WRONG_USER, KEY_PLAYED_COUNTER };
-
-		Cursor cursor;
-
-		ArrayList<Question> ret;
-		this.openDbReadable();
-
-		map = new ContentValues();
-		cursor = ourDatabase.query(TABLE_QUESTIONS, columns,
-				KEY_ENABLED + "=1", null, null, null, null);
-		
-		// TODO: add language where filter
-
-		ret = new ArrayList<Question>();
-
-		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
-
-			DatabaseUtils.cursorRowToContentValues(cursor, map);
-
-			ret.add(new Question(map));
-
-		}
-
-		cursor.close();
-
-		this.closeDb();
-
-		return ret;
+		return getQuestionsByLevelAndCategories(-2, i_SortByNewQuestionsFirst,
+				null, i_QuestionLanguages);
 	}
 
 	public ContentValues[] getPrimaryCategories() {
@@ -282,11 +252,13 @@ public class TriviaDbEngine {
 			boolean i_SortByNewQuestionsFirst, int[] i_QuestionsLanguages) {
 		//
 
-		return getQuestionsByLevelAndCategories(i_Level, i_SortByNewQuestionsFirst, null, i_QuestionsLanguages);
+		return getQuestionsByLevelAndCategories(i_Level,
+				i_SortByNewQuestionsFirst, null, i_QuestionsLanguages);
 	}
 
 	public ArrayList<Question> getQuestionsByLevelAndCategories(int i_Level,
-			boolean i_SortByNewQuestionsFirst, int[] i_Categories, int[] i_QuestionLanguages) {
+			boolean i_SortByNewQuestionsFirst, int[] i_Categories,
+			int[] i_QuestionLanguages) {
 		//
 
 		StringBuilder orderBy = new StringBuilder();
@@ -304,27 +276,37 @@ public class TriviaDbEngine {
 
 		StringBuilder where = new StringBuilder();
 
-		double i_MaxLevel = ((double) i_Level + 0.5) / 10;
-		double i_MinLevel = i_MaxLevel - 0.1;
+		double i_MaxLevel;
+		double i_MinLevel;
 
-		// this correction is done since the ratio is in double from 0 - 1 and
-		// the level are in integer from 1 - 10
-		// in order to convert ratio to level we do plus 0.5 and floor the
-		// answer meaning:
-		// level 1 is [0,0.15)
-		// level 2 is [0.15,0.25)
-		// level 10 is [0.95,1]
-		if (i_Level == 1) {
-			i_MinLevel = 0;
+		// adding filter of enabled questions
+		where.append(KEY_ENABLED + "=1");
+
+		// checking if to filter by level, -2 means do not filter by level
+		if (i_Level != -2) {
+			i_MaxLevel = ((double) i_Level + 0.5) / 10;
+			i_MinLevel = i_MaxLevel - 0.1;
+
+			// this correction is done since the ratio is in double from 0 - 1
+			// and
+			// the level are in integer from 1 - 10
+			// in order to convert ratio to level we do plus 0.5 and floor the
+			// answer meaning:
+			// level 1 is [0,0.15)
+			// level 2 is [0.15,0.25)
+			// level 10 is [0.95,1]
+			if (i_Level == 1) {
+				i_MinLevel = 0;
+			}
+
+			where.append(" AND " + KEY_CORRECT_WRONG_RATIO + " <  "
+					+ i_MaxLevel + " AND " + KEY_CORRECT_WRONG_RATIO + " >= "
+					+ i_MinLevel);
 		}
-
-		where.append(KEY_ENABLED + "=1 AND " + KEY_CORRECT_WRONG_RATIO + " <  "
-				+ i_MaxLevel + " AND " + KEY_CORRECT_WRONG_RATIO + " >= "
-				+ i_MinLevel);
 
 		// checking if to add categories filter
 		if (i_Categories != null) {
-			
+
 			where.append(" AND (");
 
 			for (i = 0, length = i_Categories.length - 1; i < length; i++) {
@@ -333,19 +315,19 @@ public class TriviaDbEngine {
 				where.append(i_Categories[i]);
 				where.append(" OR ");
 			}
-			
+
 			where.append(KEY_CATEGORY);
 			where.append("=");
 			where.append(i_Categories[i]);
 			where.append(" ) ");
-			
+
 		}
-		
+
 		// checking if to add language filter
-		if ( i_QuestionLanguages != null){
-			
+		if (i_QuestionLanguages != null) {
+
 			where.append(" AND (");
-			for (i = 0, length = i_QuestionLanguages.length - 1; i < length; i++){
+			for (i = 0, length = i_QuestionLanguages.length - 1; i < length; i++) {
 				where.append(KEY_LANGUAGE);
 				where.append(" = ");
 				where.append(i_QuestionLanguages[i]);
@@ -355,9 +337,9 @@ public class TriviaDbEngine {
 			where.append(" = ");
 			where.append(i_QuestionLanguages[i]);
 			where.append(" ) ");
-			
+
 		}
-		
+
 		Log.i(TAG, where.toString());
 
 		ArrayList<Question> ret;
@@ -377,8 +359,8 @@ public class TriviaDbEngine {
 		this.openDbReadable();
 
 		map = new ContentValues();
-		cursor = ourDatabase.query(TABLE_QUESTIONS, columns, where.toString(), null,
-				KEY_QUESTIONID, null, orderBy.toString());
+		cursor = ourDatabase.query(TABLE_QUESTIONS, columns, where.toString(),
+				null, KEY_QUESTIONID, null, orderBy.toString());
 
 		orderBy.setLength(0);
 
@@ -421,9 +403,9 @@ public class TriviaDbEngine {
 
 		return ret;
 	}
-	
+
 	public boolean isCategoriesEmpty() {
-		// 
+		//
 		//
 		boolean ret = true;
 		// the column KEY_ANSWER1 doesn't matter, Just need to check if there
@@ -432,8 +414,8 @@ public class TriviaDbEngine {
 		String[] columns = { KEY_ROWID };
 
 		this.openDbReadable();
-		Cursor cursor = ourDatabase.query(TABLE_CATEGORIES, columns, null, null,
-				null, null, null);
+		Cursor cursor = ourDatabase.query(TABLE_CATEGORIES, columns, null,
+				null, null, null, null);
 		if (cursor.getCount() > 0) {
 			ret = false;
 		}
@@ -443,7 +425,7 @@ public class TriviaDbEngine {
 		this.closeDb();
 
 		return ret;
-		
+
 	}
 
 	public int deleteQuestions() {
@@ -456,9 +438,9 @@ public class TriviaDbEngine {
 		return ret;
 
 	}
-	
+
 	private int deleteCategories() {
-		// 
+		//
 		int ret;
 		this.openDbWritable();
 		ret = ourDatabase.delete(TABLE_CATEGORIES, null, null);
@@ -846,14 +828,10 @@ public class TriviaDbEngine {
 	}
 
 	public void deleteDatabase() {
-		// 
+		//
 		this.deleteQuestions();
 		this.deleteCategories();
-		
+
 	}
-
-	
-
-	
 
 }
