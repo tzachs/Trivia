@@ -57,6 +57,8 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 				R.array.integerArrayLanguagesValues);
 
 		initializeVariables();
+		
+		
 
 	}
 
@@ -103,8 +105,8 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		checkBoxShowReportQuestion.setOnCheckedChangeListener(this);
 		checkBoxUploadWrongCorrectStatistics.setOnCheckedChangeListener(this);
 		checkBoxCheckUpdateOnStartup.setOnCheckedChangeListener(this);
-		checkBoxQuestionLanguageEnglish.setOnCheckedChangeListener(this);
-		checkBoxQuestionLanguageHebrew.setOnCheckedChangeListener(this);
+		checkBoxQuestionLanguageEnglish.setOnClickListener(this);
+		checkBoxQuestionLanguageHebrew.setOnClickListener(this);
 
 		checkBoxAllowUpdateUsingWifi.setChecked(m_SharedPreferences.getBoolean(
 				"checkBoxPreferenceAllowUpdateWifi", true));
@@ -126,6 +128,13 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 	public void onClick(View v) {
 		//
 		switch (v.getId()) {
+		case R.id.checkBoxQuestionLanguageEnglish:
+			checkBoxQuestionLanguageEnglish_Clicked();
+			break;
+
+		case R.id.checkBoxQuestionLanguageHebrew:
+			checkBoxQuestionLanguageHebrew_Clicked();
+			break;
 
 		case R.id.buttonNext:
 			buttonNext_Clicked();
@@ -189,13 +198,7 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 		//
 		switch (buttonView.getId()) {
-		case R.id.checkBoxQuestionLanguageEnglish:
-			checkBoxQuestionLanguageEnglish_Clicked();
-			break;
-
-		case R.id.checkBoxQuestionLanguageHebrew:
-			checkBoxQuestionLanguageHebrew_Clicked();
-			break;
+		
 		case R.id.checkBoxAllowUpdateUsingWifi:
 			m_SharedPreferencesEditor.putBoolean(
 					"checkBoxPreferenceAllowUpdateWifi", isChecked);
@@ -260,7 +263,9 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 				|| checkBoxQuestionLanguageHebrew.isChecked()) {
 			buttonNext.setVisibility(View.VISIBLE);
 		} else {
-			buttonNext.setVisibility(View.GONE);
+			
+				buttonNext.setVisibility(View.GONE);
+			
 		}
 	}
 

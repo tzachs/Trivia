@@ -74,6 +74,7 @@ public class TriviaDbEngine {
 		public void onCreate(SQLiteDatabase db) {
 			//
 			createTableQuestions(db);
+			createTableCategories(db);
 
 		}
 
@@ -197,7 +198,7 @@ public class TriviaDbEngine {
 		return ret;
 	}
 
-	public ArrayList<Question> getEnabledQuestions() {
+	public ArrayList<Question> getQuestionsEnabled(int[] i_QuestionLanguage) {
 		//
 		ContentValues map;
 		String[] columns = { KEY_ANSWER1, KEY_ANSWER2, KEY_ANSWER3,
@@ -214,6 +215,8 @@ public class TriviaDbEngine {
 		map = new ContentValues();
 		cursor = ourDatabase.query(TABLE_QUESTIONS, columns,
 				KEY_ENABLED + "=1", null, null, null, null);
+		
+		// TODO: add language where filter
 
 		ret = new ArrayList<Question>();
 
@@ -275,15 +278,15 @@ public class TriviaDbEngine {
 		return getCategories(categoryId);
 	}
 
-	public ArrayList<Question> getQuestionByLevel(int i_Level,
-			boolean i_SortByNewQuestionsFirst) {
+	public ArrayList<Question> getQuestionsByLevel(int i_Level,
+			boolean i_SortByNewQuestionsFirst, int[] i_QuestionsLanguages) {
 		//
 
-		return getQuestionByLevelAndCategories(i_Level, i_SortByNewQuestionsFirst, null);
+		return getQuestionsByLevelAndCategories(i_Level, i_SortByNewQuestionsFirst, null, i_QuestionsLanguages);
 	}
 
-	public ArrayList<Question> getQuestionByLevelAndCategories(int i_Level,
-			boolean i_SortByNewQuestionsFirst, int[] i_Categories) {
+	public ArrayList<Question> getQuestionsByLevelAndCategories(int i_Level,
+			boolean i_SortByNewQuestionsFirst, int[] i_Categories, int[] i_QuestionLanguages) {
 		//
 
 		StringBuilder orderBy = new StringBuilder();
@@ -319,6 +322,7 @@ public class TriviaDbEngine {
 				+ i_MaxLevel + " AND " + KEY_CORRECT_WRONG_RATIO + " >= "
 				+ i_MinLevel);
 
+		// checking if to add categories filter
 		if (i_Categories != null) {
 			
 			where.append(" AND (");
@@ -333,6 +337,23 @@ public class TriviaDbEngine {
 			where.append(KEY_CATEGORY);
 			where.append("=");
 			where.append(i_Categories[i]);
+			where.append(" ) ");
+			
+		}
+		
+		// checking if to add language filter
+		if ( i_QuestionLanguages != null){
+			
+			where.append(" AND (");
+			for (i = 0, length = i_QuestionLanguages.length - 1; i < length; i++){
+				where.append(KEY_LANGUAGE);
+				where.append(" = ");
+				where.append(i_QuestionLanguages[i]);
+				where.append(" OR ");
+			}
+			where.append(KEY_LANGUAGE);
+			where.append(" = ");
+			where.append(i_QuestionLanguages[i]);
 			where.append(" ) ");
 			
 		}

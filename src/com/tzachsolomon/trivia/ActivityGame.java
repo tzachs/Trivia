@@ -27,7 +27,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 	public static final String EXTRA_GAME_TYPE = "GameType";
 	public static final String EXTRA_GAME_CATEGORIES = "GameCategories";
 	public static final String EXTRA_GAME_START_LEVEL = "GameStartLevel";
-	
+
 	public static final int GAMETYPE_ALL_QUESTIONS = 1;
 	public static final int GAMETYPE_LEVELS = 2;
 	public static final int GAMETYPE_CATEGORIES = 3;
@@ -91,8 +91,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private StringParser m_StringParser;
 
-	
-	
+	private int[] m_QuestionLanguages;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -102,23 +101,21 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		m_SharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
-		
-		
 
 		initializeVariables();
 
 		m_Extras = getIntent().getExtras();
 		m_CurrentGameType = m_Extras.getInt(ActivityGame.EXTRA_GAME_TYPE);
-			
+
 		showInstructions();
 	}
-	
+
 	private void restartGame() {
 		initializeVariables();
 
 		m_Extras = getIntent().getExtras();
 		m_CurrentGameType = m_Extras.getInt(ActivityGame.EXTRA_GAME_TYPE);
-		
+
 		parseGameSetupAndStart();
 	}
 
@@ -144,16 +141,13 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	}
 
-	
-
-	
 	private void showInstructions() {
 		//
 		boolean showInstruction = true;
 
 		Intent intent = new Intent(ActivityGame.this, ActivityHowToPlay.class);
 		switch (m_CurrentGameType) {
-		
+
 		case ActivityGame.GAMETYPE_ALL_QUESTIONS:
 			showInstruction = m_SharedPreferences.getBoolean(
 					"checkBoxPreferenceShowHelpAllQuestions", true);
@@ -206,7 +200,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		//
-		
+
 		parseGameSetupAndStart();
 	}
 
@@ -214,9 +208,10 @@ public class ActivityGame extends Activity implements OnClickListener {
 		//
 		// checking if there are questions to be asked
 		if (m_TriviaDb.isEmpty() == false) {
-			
-			if ( m_CurrentGameType == GAMETYPE_CATEGORIES){
-				m_Categories = m_Extras.getIntArray(ActivityGame.EXTRA_GAME_CATEGORIES);
+
+			if (m_CurrentGameType == GAMETYPE_CATEGORIES) {
+				m_Categories = m_Extras
+						.getIntArray(ActivityGame.EXTRA_GAME_CATEGORIES);
 			}
 
 			m_CurrentLevel = 0;
@@ -231,8 +226,6 @@ public class ActivityGame extends Activity implements OnClickListener {
 			textViewLivesLeft
 					.setText(getString(R.string.textViewLivesLeftText)
 							+ (m_MaxWrongAnswersAllowed - m_CurrentWrongAnswersCounter));
-			
-			
 
 			startNewRoundGameLevels();
 
@@ -253,12 +246,12 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		if (m_CurrentLevel <= m_NumberOfLevels && !m_GameOver) {
 
-			if ( m_CurrentGameType == ActivityGame.GAMETYPE_LEVELS){
-			m_Questions = m_TriviaDb.getQuestionByLevel(m_CurrentLevel,
-					m_SortByNewQuestionFirst);
-			}else if ( m_CurrentGameType == ActivityGame.GAMETYPE_CATEGORIES){
-				m_Questions = m_TriviaDb.getQuestionByLevelAndCategories(m_CurrentLevel,
-						m_SortByNewQuestionFirst,m_Categories);
+			if (m_CurrentGameType == ActivityGame.GAMETYPE_LEVELS) {
+				m_Questions = m_TriviaDb.getQuestionsByLevel(m_CurrentLevel,
+						m_SortByNewQuestionFirst,m_QuestionLanguages);
+			} else if (m_CurrentGameType == ActivityGame.GAMETYPE_CATEGORIES) {
+				m_Questions = m_TriviaDb.getQuestionsByLevelAndCategories(
+						m_CurrentLevel, m_SortByNewQuestionFirst, m_Categories,m_QuestionLanguages);
 			}
 
 			m_QuestionLength = m_Questions.size();
@@ -306,7 +299,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		m_ResumeClock = false;
 		m_AllQuestionsLives = 0;
-		m_Questions = m_TriviaDb.getEnabledQuestions();
+		m_Questions = m_TriviaDb.getQuestionsEnabled(m_QuestionLanguages);
 
 		// Shuffling the order of the questions
 		Collections.shuffle(m_Questions);
@@ -384,7 +377,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		case GAMETYPE_LEVELS:
 			startNewQuestionLevels();
 			break;
-			
+
 		case GAMETYPE_CATEGORIES:
 			startNewQuestionLevels();
 			break;
@@ -395,14 +388,13 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	}
 
-
 	private void resetAnswerButtonBackground(int blueButton) {
-		// 
+		//
 		buttonAnswer1.setBackgroundResource(blueButton);
 		buttonAnswer2.setBackgroundResource(blueButton);
 		buttonAnswer3.setBackgroundResource(blueButton);
 		buttonAnswer4.setBackgroundResource(blueButton);
-		
+
 	}
 
 	private void startNewQuestionLevels() {
@@ -450,7 +442,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 				buttonAnswer2.setText(m_CurrentQuestion.getAnswer2());
 				buttonAnswer3.setText(m_CurrentQuestion.getAnswer3());
 				buttonAnswer4.setText(m_CurrentQuestion.getAnswer4());
-				
+
 				m_CountDownCounter.start();
 
 			}
@@ -543,9 +535,39 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		m_CurrentGameType = -1;
 
+		initializeQuestionsLanguages();
+
 		initializeTextViews();
 
 		initializeButtons();
+
+	}
+
+	private void initializeQuestionsLanguages() {
+		//
+		boolean hebrew = m_SharedPreferences.getBoolean(
+				"checkBoxPreferenceQuestionLanguageHebrew", true);
+		boolean english = m_SharedPreferences.getBoolean(
+				"checkBOxPreferenceQuestionLanguageEnglish",true);
+		ArrayList<Integer> array = new ArrayList<Integer>();
+		int i;
+		
+		// TODO: change this to add from the database
+		
+		if ( hebrew ){
+			array.add(2);
+		}
+		
+		if (english){
+			array.add(1);
+		}
+		
+		m_QuestionLanguages = new int[array.size()];
+		
+		for (i = 0; i < array.size(); i++){
+			m_QuestionLanguages[i] = array.get(i);
+		}
+		
 
 	}
 
@@ -651,15 +673,16 @@ public class ActivityGame extends Activity implements OnClickListener {
 			if (m_ReverseNumbersInQuestions) {
 				intent.putExtra(
 						ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
-						m_StringParser.reverseNumbersInStringHebrew(m_Questions.get(
-								m_QuestionIndex - 2).getQuestion()));
+						m_StringParser.reverseNumbersInStringHebrew(m_Questions
+								.get(m_QuestionIndex - 2).getQuestion()));
 			} else {
 				intent.putExtra(
 						ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
 						m_Questions.get(m_QuestionIndex - 2).getQuestion());
 			}
 		} else {
-			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID, "-1");
+			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID,
+					"-1");
 			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
 					"bla bla");
 		}
@@ -667,8 +690,9 @@ public class ActivityGame extends Activity implements OnClickListener {
 				m_CurrentQuestion.getQuestionId());
 		if (m_ReverseNumbersInQuestions) {
 			intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_STRING,
-					m_StringParser.reverseNumbersInStringHebrew(m_CurrentQuestion
-							.getQuestion()));
+					m_StringParser
+							.reverseNumbersInStringHebrew(m_CurrentQuestion
+									.getQuestion()));
 		} else {
 			intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_STRING,
 					m_CurrentQuestion.getQuestion());
@@ -758,27 +782,26 @@ public class ActivityGame extends Activity implements OnClickListener {
 	}
 
 	private void disableAnswerButtons() {
-		// 
+		//
 		buttonAnswer1.setEnabled(false);
 		buttonAnswer2.setEnabled(false);
 		buttonAnswer3.setEnabled(false);
 		buttonAnswer4.setEnabled(false);
-		
+
 	}
-	
+
 	private void enableAnswerButtons() {
-		// 
+		//
 		buttonAnswer1.setEnabled(true);
 		buttonAnswer2.setEnabled(true);
 		buttonAnswer3.setEnabled(true);
 		buttonAnswer4.setEnabled(true);
-		
+
 	}
 
 	private void incAllQuestionsLives() {
 		//
 		m_AllQuestionsLives += m_CurrentQuestion.getQuestionLevel();
-				
 
 	}
 
@@ -825,12 +848,12 @@ public class ActivityGame extends Activity implements OnClickListener {
 	private void incCurrentWrongAnswersCounter() {
 		//
 		switch (m_CurrentGameType) {
-		
+
 		case GAMETYPE_ALL_QUESTIONS:
 			incCurrentWrongAnswersCounter_AllQuestions();
 			break;
-		
-		case GAMETYPE_CATEGORIES:	
+
+		case GAMETYPE_CATEGORIES:
 		case GAMETYPE_LEVELS:
 			incCurrentWrongAnswersCounter_GameLevels();
 			break;
@@ -854,35 +877,36 @@ public class ActivityGame extends Activity implements OnClickListener {
 						finish();
 					}
 				});
-		gameOverDialog.setNegativeButton(getString(R.string.new_game), new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				// 
-				restartGame();
-			}
-		});
+		gameOverDialog.setNegativeButton(getString(R.string.new_game),
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						//
+						restartGame();
+					}
+				});
 		gameOverDialog.show();
 	}
 
 	private void updateLivesTextView() {
 		switch (m_CurrentGameType) {
 
-
 		case GAMETYPE_ALL_QUESTIONS:
 			if (m_ReverseNumbersInQuestions) {
-				textViewLivesLeft.setText(m_StringParser.reverseNumbersInStringHebrew(getString(R.string.textViewLivesLeftText)
-						+ m_AllQuestionsLives));
-				
-			} else {
-				textViewLivesLeft.setText(getString(R.string.textViewLivesLeftText)
-						+ m_AllQuestionsLives);
-				
-			}
-			
-			
-			break;
+				textViewLivesLeft
+						.setText(m_StringParser
+								.reverseNumbersInStringHebrew(getString(R.string.textViewLivesLeftText)
+										+ m_AllQuestionsLives));
 
+			} else {
+				textViewLivesLeft
+						.setText(getString(R.string.textViewLivesLeftText)
+								+ m_AllQuestionsLives);
+
+			}
+
+			break;
 
 		case GAMETYPE_CATEGORIES:
 		case GAMETYPE_LEVELS:
@@ -912,7 +936,6 @@ public class ActivityGame extends Activity implements OnClickListener {
 	private void incCurrentWrongAnswersCounter_AllQuestions() {
 		//
 		m_AllQuestionsLives -= m_CurrentQuestion.getQuestionLevel();
-				
 
 		if (m_AllQuestionsLives < 0) {
 			showGameOver();
@@ -938,8 +961,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 		} else {
 			buttonReportMistakeInQuestion.setVisibility(View.GONE);
 		}
-		
-		if ( m_ResumeFromHelp ){
+
+		if (m_ResumeFromHelp) {
 			m_ResumeClock = false;
 			m_ResumeFromHelp = false;
 		}
@@ -947,8 +970,6 @@ public class ActivityGame extends Activity implements OnClickListener {
 		if (m_ResumeClock) {
 			m_CountDownCounter.resume();
 		}
-		
-	
 
 	}
 

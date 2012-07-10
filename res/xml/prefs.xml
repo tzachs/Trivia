@@ -21,10 +21,7 @@
     <PreferenceCategory 
         android:key="preferenceCategoryGameRelated"
         android:title="@string/preferenceCategoryGameRelatedTitle" >
-        <CheckBoxPreference 
-            android:key=""
-            
-            />
+        
         <CheckBoxPreference 
             android:key="checkBoxPreferenceShowCorrectAnswer"
             android:title="@string/checkBoxPreferenceShowCorrectAnswerText"
