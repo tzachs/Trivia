@@ -248,10 +248,11 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 			if (m_CurrentGameType == ActivityGame.GAMETYPE_LEVELS) {
 				m_Questions = m_TriviaDb.getQuestionsByLevel(m_CurrentLevel,
-						m_SortByNewQuestionFirst,m_QuestionLanguages);
+						m_SortByNewQuestionFirst, m_QuestionLanguages);
 			} else if (m_CurrentGameType == ActivityGame.GAMETYPE_CATEGORIES) {
 				m_Questions = m_TriviaDb.getQuestionsByLevelAndCategories(
-						m_CurrentLevel, m_SortByNewQuestionFirst, m_Categories,m_QuestionLanguages);
+						m_CurrentLevel, m_SortByNewQuestionFirst, m_Categories,
+						m_QuestionLanguages);
 			}
 
 			m_QuestionLength = m_Questions.size();
@@ -299,7 +300,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		m_ResumeClock = false;
 		m_AllQuestionsLives = 0;
-		m_Questions = m_TriviaDb.getQuestionsEnabled(m_SortByNewQuestionFirst, m_QuestionLanguages);
+		m_Questions = m_TriviaDb.getQuestionsEnabled(m_SortByNewQuestionFirst,
+				m_QuestionLanguages);
 
 		// Shuffling the order of the questions
 		Collections.shuffle(m_Questions);
@@ -548,26 +550,25 @@ public class ActivityGame extends Activity implements OnClickListener {
 		boolean hebrew = m_SharedPreferences.getBoolean(
 				"checkBoxPreferenceQuestionLanguageHebrew", true);
 		boolean english = m_SharedPreferences.getBoolean(
-				"checkBOxPreferenceQuestionLanguageEnglish",true);
+				"checkBOxPreferenceQuestionLanguageEnglish", true);
 		ArrayList<Integer> array = new ArrayList<Integer>();
 		int i;
-		
+
 		// TODO: change this to add from the database
-		
-		if ( hebrew ){
+
+		if (hebrew) {
 			array.add(2);
 		}
-		
-		if (english){
+
+		if (english) {
 			array.add(1);
 		}
-		
+
 		m_QuestionLanguages = new int[array.size()];
-		
-		for (i = 0; i < array.size(); i++){
+
+		for (i = 0; i < array.size(); i++) {
 			m_QuestionLanguages[i] = array.get(i);
 		}
-		
 
 	}
 
@@ -666,28 +667,39 @@ public class ActivityGame extends Activity implements OnClickListener {
 	private void buttonReportMistakeInQuestion_Clicked() {
 
 		Intent intent = new Intent(this, ActivityReportErrorInQuestion.class);
-		if (m_QuestionIndex > 1) {
+		// checking if we are on the first question
 
+		int currentQuestionIndex = m_QuestionIndex - 1;
+		int previousQuestionIndex = currentQuestionIndex - 1;
+
+		if (previousQuestionIndex > -1) {
+			// we are not in the first question
 			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID,
-					m_Questions.get(m_QuestionIndex - 2).getQuestionId());
+					m_Questions.get(previousQuestionIndex).getQuestionId());
 			if (m_ReverseNumbersInQuestions) {
 				intent.putExtra(
 						ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
 						m_StringParser.reverseNumbersInStringHebrew(m_Questions
-								.get(m_QuestionIndex - 2).getQuestion()));
+								.get(previousQuestionIndex).getQuestion()));
 			} else {
 				intent.putExtra(
 						ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
-						m_Questions.get(m_QuestionIndex - 2).getQuestion());
+						m_Questions.get(previousQuestionIndex).getQuestion());
 			}
+
 		} else {
+			// we are in the first question ,filling the previous question with
+			// dud value
 			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID,
 					"-1");
 			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
 					"bla bla");
+
 		}
+
 		intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_ID,
 				m_CurrentQuestion.getQuestionId());
+
 		if (m_ReverseNumbersInQuestions) {
 			intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_STRING,
 					m_StringParser
