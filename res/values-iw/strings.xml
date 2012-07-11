@@ -138,6 +138,7 @@
     <string name="textViewQuestionLanguageDetailsText">בחר את השפה בה יוצגו השאלות. עלייך לבחור לפחות אחת</string>
     <string name="show_hebrew_questions">הראה שאלות בעברית</string>
     <string name="show_english_questions">הראה שאלות באנגלית</string>
-<string name="show_instruction_for_categories_game">הראה הוראות עבור משחק  נושאים</string>
-    <string name="show_categories_game_instructions"> הוראות עבו'ר משחק נושאים</string>
+    <string name="show_instruction_for_categories_game">הראה הוראות עבור משחק  נושאים</string>
+    <string name="show_categories_game_instructions"> הוראות עבור משחק נושאים</string>
+
 </resources>
