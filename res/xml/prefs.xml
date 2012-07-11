@@ -54,14 +54,14 @@
         <CheckBoxPreference 
             android:defaultValue="true"
             android:key="checkBoxPreferenceQuestionLanguageHebrew"
-            android:summary="Show Hebrew questions"
-            android:title="Shw Hebrew questions"
+            android:summary="@string/show_hebrew_questions"
+            android:title="@string/show_hebrew_questions"
             />
         <CheckBoxPreference 
             android:defaultValue="true"
             android:key="checkBoxPreferenceQuestionLanguageEnglish"
-            android:summary="Show English questions"
-            android:title="Show English questions"
+            android:summary="@string/show_english_questions"
+            android:title="@string/show_english_questions"
             />
     </PreferenceCategory>
     <PreferenceCategory 
@@ -72,6 +72,12 @@
             android:key="checkBoxPreferenceShowHelpNewGame"
             android:summary="@string/show_help_new_game"
             android:title="@string/show_help_new_game" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="checkBoxPreferenceShowHelpCategories"
+            android:summary="@string/show_instruction_for_categories_game"
+            android:title="@string/show_categories_game_instructions" />
+        
         <CheckBoxPreference
             android:defaultValue="true"
             android:key="checkBoxPreferenceShowHelpAllQuestions"

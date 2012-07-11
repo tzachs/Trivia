@@ -108,14 +108,14 @@
     <string name="instructions">הוראות</string>
     <string name="title">כותרת</string>
     <string name="show_game_instructions_before_starting_the_game">הראה הוראות לפני התחלת משחק</string>
-    <string name="howToPlayAllQuestions1">1. המשחק מתחיל עם 0 חיים \n</string>
+    <string name="howToPlayAllQuestions1">1. המשחק מתחיל עם 0 חיים</string>
     <string name="howToPlayAllQuestions2">2. תשובה נכונה מעלה את החיים בשווי קושי השאלה לדוגמא שאלה עם קושי 6 תזכה תעלה את החיים ב6</string>
     <string name="howToPlayAllQuestions3">3. תשובה לא נכונה תוריד מהחיים שלך בשווי החיים</string>
-    <string name="howToPlayAllQuestions4">4. כאשר החיים מגיעים מתחת ל0 המשחק נגמר\n</string>
+    <string name="howToPlayAllQuestions4">4. כאשר החיים מגיעים מתחת ל0 המשחק נגמ</string>
     <string name="howToPlayAllQuestionsTitle">כל השאלות - מבחן סובייטי</string>
-    <string name="howToPlayNewGame1">1. בתחילת המשחק יש לך 3 חיים\n</string>
-    <string name="howToPlayNewGame2">2. תשובה לא נכונה מוריד 1 חיים \n</string>
-    <string name="howToPlayNewGame3">3. המשחק נגמר כאשר החיים מגיעים ל0 או כאשר ענית על כל השאלות\n</string>
+    <string name="howToPlayNewGame1">1. בתחילת המשחק יש לך 3 חיים</string>
+    <string name="howToPlayNewGame2">2. תשובה לא נכונה מוריד 1 חיים</string>
+    <string name="howToPlayNewGame3">3. המשחק נגמר כאשר החיים מגיעים ל0 או כאשר ענית על כל השאלות</string>
     <string name="howToPlayNewGameTitle">משחק חדש</string>
     <string name="show_help_new_game">הראה הוראות עבור משחק חדש</string>
     <string name="show_help_all_questions">הראה הוראות עבור משחק כל השאלות</string>
@@ -135,5 +135,9 @@
     <string name="checkBoxQuestionLanguageEnglishText">אנגלית</string>
     <string name="exit">יציאה</string>
     <string name="new_game">משחק חדש</string>
-<string name="textViewQuestionLanguageDetailsText">בחר את השפה בה יוצגו השאלות. עלייך לבחור לפחות אחת</string>
+    <string name="textViewQuestionLanguageDetailsText">בחר את השפה בה יוצגו השאלות. עלייך לבחור לפחות אחת</string>
+    <string name="show_hebrew_questions">הראה שאלות בעברית</string>
+    <string name="show_english_questions">הראה שאלות באנגלית</string>
+<string name="show_instruction_for_categories_game">הראה הוראות עבור משחק  נושאים</string>
+    <string name="show_categories_game_instructions"> הוראות עבו'ר משחק נושאים</string>
 </resources>

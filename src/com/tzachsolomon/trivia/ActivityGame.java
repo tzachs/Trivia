@@ -154,9 +154,9 @@ public class ActivityGame extends Activity implements OnClickListener {
 			if (showInstruction) {
 				intent.putExtra(
 						ActivityHowToPlay.KEY_HOW_TO_PLAY_INSTRUCTIONS_MESSAGE,
-						getString(R.string.howToPlayAllQuestions1)
-								+ getString(R.string.howToPlayAllQuestions2)
-								+ getString(R.string.howToPlayAllQuestions3)
+						getString(R.string.howToPlayAllQuestions1) + "\n"
+								+ getString(R.string.howToPlayAllQuestions2) + "\n"
+								+ getString(R.string.howToPlayAllQuestions3) + "\n"
 								+ getString(R.string.howToPlayAllQuestions4));
 				intent.putExtra(
 						ActivityHowToPlay.KEY_HOW_TO_PLAY_INSTRUCTIONS_TITLE,
@@ -174,9 +174,9 @@ public class ActivityGame extends Activity implements OnClickListener {
 			if (showInstruction) {
 				intent.putExtra(
 						ActivityHowToPlay.KEY_HOW_TO_PLAY_INSTRUCTIONS_MESSAGE,
-						getString(R.string.howToPlayNewGame1)
-								+ getString(R.string.howToPlayNewGame2)
-								+ getString(R.string.howToPlayNewGame3));
+						getString(R.string.howToPlayNewGame1) + "\n"
+								+ getString(R.string.howToPlayNewGame2) + "\n"
+								+ getString(R.string.howToPlayNewGame3) ); 
 				intent.putExtra(
 						ActivityHowToPlay.KEY_HOW_TO_PLAY_INSTRUCTIONS_TITLE,
 						getString(R.string.instructions));
