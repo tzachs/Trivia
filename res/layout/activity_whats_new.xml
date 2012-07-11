@@ -1,15 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#99aabb"
     android:orientation="vertical" >
-    
-    <WebView 
-        android:id="@+id/webView1"
+
+    <WebView
+        android:id="@+id/webViewWhatsNew"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" 
+        android:layout_alignParentTop="true"
+        android:layout_margin="4dp"
+        android:background="#99aabb"
+        />
+
+    <Button
+        android:id="@+id/buttonWhatsNewClose"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        
+        android:layout_margin="4dp"
+        android:text="Close" 
+        android:background="@drawable/custom_menu_button"
+        android:layout_alignParentBottom="true"
         />
-    
 
-</LinearLayout>
+</RelativeLayout>

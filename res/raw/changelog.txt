@@ -1,0 +1,74 @@
+<html>
+<head>
+<style type='text/css'>
+
+* {
+	margin:0;
+	padding:0;
+}
+
+div.title {
+    background-color: #ADADB8;
+    font-weight: bolder;
+    color: white;
+    padding-left: 15px;
+    border-top-left-radius: 15px 15px;
+    border-top-right-radius: 15px 15px;
+    margin-top: 10px;
+}
+
+div.subtitle {
+
+    background-color: #898991;
+    padding-top: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 10px;
+    border-bottom-left-radius: 15px 15px;
+    border-bottom-right-radius: 15px 15px;
+    margin-bottom: 10px;
+    
+}
+
+p.subtitle_head {
+	text-decoration:underline;
+}
+
+
+body { 
+	background-color: #88aabb;
+	
+}
+
+</style>
+</head>
+<body>
+
+	<div class="title">
+		1.00 -  First release :)<br />
+	</div>
+	
+	<div class="subtitle">
+	
+		The main feature of this Trivia game is that it's based on social activity, meaning, the more you share your answers,
+		the more correct this game will be :) <br />
+	
+		<p class="subtitle_head">Featured games are: </p> <br />
+		1. Simple A.K.A New Game <br />
+		2. All Questions - Soviet Style <br />
+		3. Categories <br />
+		
+		<br />
+		Instructions appear before each game (unless disabled) <br /><br />
+		
+		Check the preferences for more settings. <br /><br />
+		
+		Got an Idea / Complaint / Anything that you think will improve the game? <br />
+		Don't hesitate to send a suggestions by going to Menu --> About and then press suggest.
+		
+	</div>
+		
+
+
+</body>
+</html>

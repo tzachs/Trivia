@@ -4,7 +4,6 @@ import java.util.Locale;
 
 import android.app.Activity;
 
-
 import android.content.Intent;
 
 import android.content.SharedPreferences;
@@ -25,15 +24,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-
 public class ActivityTrivia extends Activity implements OnClickListener {
 
-	// 
+	//
 	// TODO: sounds
 	// TODO: animation
 	// TODO: background
 	// TODO: instructions for categories
-	// TODO: whats new screen ( need to check if no already implemented) 
+	// TODO: whats new screen ( need to check if no already implemented)
 	// TODO: highest score
 	// TODO: create service to update the database daily
 	// TODO: initial settings with XML file
@@ -47,7 +45,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	private Button buttonUpdateDatabase;
 
 	private SharedPreferences m_SharedPreferences;
-	
+
 	private UpdateManager m_UpdateManager;
 
 	private Button buttonNewGameCategories;
@@ -57,22 +55,16 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		
+
 		m_SharedPreferences = PreferenceManager
-		.getDefaultSharedPreferences(getBaseContext());
-		
+				.getDefaultSharedPreferences(getBaseContext());
+
 		initializeVariables();
-
-		checkIfNeedToShowFirstTimeMessage();
 		
-		if (m_SharedPreferences.getBoolean("showFirstTimeConfiguration", true)) {
-			showWizardSetup();
-		}
-				
-
+		checkIfNeedToShowFirstTimeMessageOrConfiguration();
 	}
 
-	private void checkIfNeedToShowFirstTimeMessage() {
+	private void checkIfNeedToShowFirstTimeMessageOrConfiguration() {
 		//
 		PackageInfo packageInfo = null;
 		String i = m_SharedPreferences.getString("showFirstTimeMessageVersion",
@@ -83,11 +75,16 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 					"com.tzachsolomon.trivia", PackageManager.GET_META_DATA);
 
 			if (!packageInfo.versionName.contentEquals(i)) {
+				showWhatsNew();
 				showWizardSetup();
+				
 				m_SharedPreferences
 						.edit()
 						.putString("showFirstTimeMessageVersion",
 								packageInfo.versionName).commit();
+								
+			}else if (m_SharedPreferences.getBoolean("showFirstTimeConfiguration", true)) {
+				showWizardSetup();
 			}
 		} catch (NameNotFoundException e) {
 			//
@@ -96,10 +93,17 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	}
 
+	private void showWhatsNew() {
+		//
+		Intent intent = new Intent(this, ActivityWhatsNew.class);
+		startActivity(intent);
+
+	}
+
 	private void showWizardSetup() {
 		//
 		buttonWizardSetup_Clicked();
-		
+
 	}
 
 	@Override
@@ -108,23 +112,22 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		super.onResume();
 		changeLanguageTo(m_SharedPreferences.getString(
 				"listPreferenceLanguages", "iw"));
-		
 
 	}
 
 	private void changeLanguageTo(String string) {
 		//
-		
+
 		Locale locale = new Locale(string);
 		Locale.setDefault(locale);
-		Log.i(TAG,"Changed lang to " + string);
+		Log.i(TAG, "Changed lang to " + string);
 		Configuration config = new Configuration();
 		config.locale = locale;
 		getBaseContext().getResources().updateConfiguration(config,
 				getBaseContext().getResources().getDisplayMetrics());
-		
+
 		setContentView(R.layout.main);
-		
+
 		initializeButtons();
 
 	}
@@ -141,8 +144,8 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		buttonManageDatabase = (Button) findViewById(R.id.buttonManageDatabase);
 		buttonPreferences = (Button) findViewById(R.id.buttonPreferences);
 		buttonNewGameSimple = (Button) findViewById(R.id.buttonNewGameSimple);
-		buttonUpdateDatabase = (Button)findViewById(R.id.buttonUpdateDatabase);
-		buttonNewGameCategories = (Button)findViewById(R.id.buttonNewGameCategories);
+		buttonUpdateDatabase = (Button) findViewById(R.id.buttonUpdateDatabase);
+		buttonNewGameCategories = (Button) findViewById(R.id.buttonNewGameCategories);
 
 		buttonNewGameAllQuestions.setOnClickListener(this);
 		buttonManageDatabase.setOnClickListener(this);
@@ -157,8 +160,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		if (android.os.Build.VERSION.SDK_INT < 11) {
 			buttonPreferences.setVisibility(View.GONE);
 		}
-		
-		
+
 	}
 
 	@Override
@@ -168,11 +170,11 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		case R.id.buttonNewGameCategories:
 			buttonNewGameCategories_Clicked();
 			break;
-		
+
 		case R.id.buttonUpdateDatabase:
 			buttonUpdateDatabase_Clicked();
 			break;
-			
+
 		case R.id.buttonNewGameAllQuestions:
 			buttonNewGameAllQuestions_Clicked();
 			break;
@@ -191,36 +193,30 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		}
 
 	}
-	
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// 
-		if ( resultCode == 1){
-			
-			startNewGame(ActivityGame.GAMETYPE_CATEGORIES,data);
+		//
+		if (resultCode == 1) {
+
+			startNewGame(ActivityGame.GAMETYPE_CATEGORIES, data);
 		}
 	}
 
-
-
-
 	private void buttonNewGameCategories_Clicked() {
-		// 
+		//
 		//
 		Intent intent = new Intent(this, ActivityShowCategoryForGame.class);
 		startActivityForResult(intent, 1);
-		
-	}
 
+	}
 
 	private void buttonUpdateDatabase_Clicked() {
-		// 
-		
-		m_UpdateManager.updateQuestions();
-		
-		
-	}
+		//
 
+		m_UpdateManager.updateQuestions();
+
+	}
 
 	private void buttonWizardSetup_Clicked() {
 		//
@@ -259,21 +255,22 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	private void startNewGame(int i_GameType) {
 		//
-		
+
 		Intent intent = new Intent(this, ActivityGame.class);
 		intent.putExtra(ActivityGame.EXTRA_GAME_TYPE, i_GameType);
 		intent.putExtra(ActivityGame.EXTRA_GAME_START_LEVEL, 1);
-		
+
 		startActivity(intent);
 
 	}
-	
+
 	private void startNewGame(int i_GameType, Intent data) {
-		// 
+		//
 		Intent intent = new Intent(this, ActivityGame.class);
 		intent.putExtra(ActivityGame.EXTRA_GAME_TYPE, i_GameType);
-		intent.putExtra(ActivityGame.EXTRA_GAME_CATEGORIES, data.getIntArrayExtra(ActivityGame.EXTRA_GAME_CATEGORIES));
-		
+		intent.putExtra(ActivityGame.EXTRA_GAME_CATEGORIES,
+				data.getIntArrayExtra(ActivityGame.EXTRA_GAME_CATEGORIES));
+
 		startActivity(intent);
 	}
 
