@@ -45,7 +45,7 @@ body {
 <body>
 
 	<div class="title">
-		1.00 -  First release :)<br />
+		0.01 -  First release :)<br />
 	</div>
 	
 	<div class="subtitle">
