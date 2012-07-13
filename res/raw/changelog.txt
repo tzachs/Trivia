@@ -66,6 +66,9 @@ body {
 		Got an Idea / Complaint / Anything that you think will improve the game? <br />
 		Don't hesitate to send a suggestions by going to Menu --> About and then press suggest.
 		
+		P.S. Thanks Noya for the great Icon :)
+		P.S. 2 - Sounds have been taken from http://www.soundjay.com/
+		
 	</div>
 		
 
