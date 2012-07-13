@@ -1,6 +1,5 @@
 <resources>
 
-
     <string name="app_name">"טריוויה"</string>
     <string name="buttonNewGameAllQuestionsText">"כל השאלות"</string>
     <string name="textViewQuestionText">""</string>
@@ -141,5 +140,9 @@
     <string name="show_english_questions">הראה שאלות באנגלית</string>
     <string name="show_instruction_for_categories_game">הראה הוראות עבור משחק  נושאים</string>
     <string name="show_categories_game_instructions"> הוראות עבור משחק נושאים</string>
+    <string name="close">סגור</string>
+    <string name="database_deleted">מאגר נתונים נמחק</string>
+    <string name="play_in_game_sounds">נגן צלילים במהלך המשחק</string>
+    <string name="play_game_sounds">נגן צלילי משחק</string>
 
 </resources>

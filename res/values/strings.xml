@@ -142,6 +142,10 @@
     <string name="show_english_questions">Show English questions</string>
     <string name="show_instruction_for_categories_game">Show instruction for categories game</string>
     <string name="show_categories_game_instructions">Show categories game instructions</string>
+    <string name="close">Close</string>
+    <string name="database_deleted">Database deleted</string>
+    <string name="play_in_game_sounds">Play in game sounds</string>
+    <string name="play_game_sounds">Play game sounds</string>
     
 
 </resources>

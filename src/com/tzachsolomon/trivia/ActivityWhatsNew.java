@@ -9,7 +9,7 @@ import java.io.StringWriter;
 import java.io.Writer;
 
 import android.app.Activity;
-import android.content.Context;
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -66,7 +66,7 @@ public class ActivityWhatsNew extends Activity implements OnClickListener {
 		try {
 			html = readTitlesRaw();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// 
 			e.printStackTrace();
 		}
 

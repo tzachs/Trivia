@@ -21,7 +21,24 @@
     <PreferenceCategory 
         android:key="preferenceCategoryGameRelated"
         android:title="@string/preferenceCategoryGameRelatedTitle" >
-        
+        <CheckBoxPreference 
+            android:defaultValue="true"
+            android:key="checkBoxPreferenceQuestionLanguageHebrew"
+            android:summary="@string/show_hebrew_questions"
+            android:title="@string/show_hebrew_questions"
+            />
+        <CheckBoxPreference 
+            android:defaultValue="true"
+            android:key="checkBoxPreferenceQuestionLanguageEnglish"
+            android:summary="@string/show_english_questions"
+            android:title="@string/show_english_questions"
+            />
+        <CheckBoxPreference 
+            android:defaultValue="true"
+            android:key="checkBoxPreferencePlayGameSounds"
+            android:summary="@string/play_in_game_sounds"
+            android:title="@string/play_game_sounds"
+         />
         <CheckBoxPreference 
             android:key="checkBoxPreferenceShowCorrectAnswer"
             android:title="@string/checkBoxPreferenceShowCorrectAnswerText"
@@ -51,18 +68,7 @@
             android:key="checkBoxPreferenceShowReportQuestion"
             android:summary="@string/checkBoxPreferenceShowReportQuestionSummary"
             android:title="@string/checkBoxPreferenceShowReportQuestionTitle" />
-        <CheckBoxPreference 
-            android:defaultValue="true"
-            android:key="checkBoxPreferenceQuestionLanguageHebrew"
-            android:summary="@string/show_hebrew_questions"
-            android:title="@string/show_hebrew_questions"
-            />
-        <CheckBoxPreference 
-            android:defaultValue="true"
-            android:key="checkBoxPreferenceQuestionLanguageEnglish"
-            android:summary="@string/show_english_questions"
-            android:title="@string/show_english_questions"
-            />
+        
     </PreferenceCategory>
     <PreferenceCategory 
         android:key="preferenceCategoryShowInstructions"
@@ -107,8 +113,6 @@
             android:key="editTextPreferencePrimaryServerIP"
             android:summary="@string/editTextPreferencePrimaryServerIPSummary"
             android:title="@string/editTextPreferencePrimaryServerIPTitle" />
-
-     
 
         <CheckBoxPreference
             android:defaultValue="true"

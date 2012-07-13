@@ -10,6 +10,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -92,6 +93,10 @@ public class ActivityGame extends Activity implements OnClickListener {
 	private StringParser m_StringParser;
 
 	private int[] m_QuestionLanguages;
+
+	private MediaPlayer m_SoundCorrectAnwer;
+
+	private MediaPlayer m_SoundWrongAnswer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -505,6 +510,10 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private void initializeVariables() {
 		//
+		
+		m_SoundCorrectAnwer = MediaPlayer.create(this, R.raw.correct);
+		m_SoundWrongAnswer = MediaPlayer.create(this, R.raw.error);
+		
 		m_StringParser = new StringParser(m_SharedPreferences);
 		m_ReverseNumbersInQuestions = m_SharedPreferences.getBoolean(
 				"checkBoxPreferenceRevereseInHebrew", false);
@@ -741,6 +750,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 			ret = -1;
 			sb.append("Time is up!");
 			incCurrentWrongAnswersCounter();
+			m_SoundWrongAnswer.start();
+	
 
 		} else if (i == -2) {
 			// if pass question pressed
@@ -753,13 +764,16 @@ public class ActivityGame extends Activity implements OnClickListener {
 				ret = 0;
 				setButtonGreen(o_Button);
 
+				m_SoundCorrectAnwer.start();
+				
 				m_TriviaDb.incUserCorrectCounter(m_CurrentQuestion
 						.getQuestionId());
 
-				// if all questions game, inc lives
+				// if all questions game, increment lives
 				incAllQuestionsLives();
 
 			} else {
+				m_SoundWrongAnswer.start();
 				setButtonRed(o_Button);
 				m_TriviaDb.incUserWrongCounter(m_CurrentQuestion
 						.getQuestionId());

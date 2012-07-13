@@ -31,7 +31,6 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	// TODO: animation
 	// TODO: background
 	// TODO: instructions for categories
-	// TODO: whats new screen ( need to check if no already implemented)
 	// TODO: highest score
 	// TODO: create service to update the database daily
 	// TODO: initial settings with XML file
