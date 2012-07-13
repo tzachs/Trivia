@@ -89,7 +89,7 @@
     <string name="buttonManageDatabaseText">Manage Database</string>
     <string name="language">Language</string>
     <string name="ui_language">UI Language</string>
-    <string name="checkBoxShowCorrectAnswer">Show Correct Answer</string>
+    <string name="checkBoxShowCorrectAnswer">Show Correct Answer in case wrong answer was chosen</string>
     <string name="checkBoxPreferenceShowCorrectAnswerSummary">Show the correct answer in case wrong answer was answered (Marked Green)</string>
     <string name="checkBoxPreferenceShowCorrectAnswerText">Show Correct Answer</string>
     <string name="back">Back</string>

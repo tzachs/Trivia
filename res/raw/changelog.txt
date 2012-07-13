@@ -64,10 +64,10 @@ body {
 		Check the preferences for more settings. <br /><br />
 		
 		Got an Idea / Complaint / Anything that you think will improve the game? <br />
-		Don't hesitate to send a suggestions by going to Menu --> About and then press suggest.
+		Don't hesitate to send a suggestions by going to Menu --> About and then press suggest. <br />
 		
-		P.S. Thanks Noya for the great Icon :)
-		P.S. 2 - Sounds have been taken from http://www.soundjay.com/
+		P.S. Thanks Noya for the great Icon :) <br />
+		P.S. 2 - Sounds have been taken from http://www.soundjay.com/ <br />
 		
 	</div>
 		

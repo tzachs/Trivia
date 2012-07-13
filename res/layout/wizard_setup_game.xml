@@ -30,12 +30,32 @@
          android:layout_margin="4dp"
          android:layout_marginBottom="20dp"
          android:text="@string/textViewWizardSetupGameHintText" />
-
+     
+     <CheckBox
+         android:id="@+id/checkBoxShowCorrectAnwer"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/textViewWizardSetupGameHint"
+         android:layout_margin="4dp"
+         android:checked="true"
+         android:text="@string/checkBoxShowCorrectAnswer" />
+     
+     <CheckBox
+         android:id="@+id/checkBoxPlayGameSounds"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/checkBoxShowCorrectAnwer"
+         android:layout_margin="4dp"
+         android:checked="true"
+         android:text="@string/play_in_game_sounds"
+         
+         />
+
      <CheckBox
          android:id="@+id/checkBoxShowReportQuestion"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:layout_below="@+id/textViewWizardSetupGameHint"
+         android:layout_below="@+id/checkBoxPlayGameSounds"
          android:layout_margin="4dp"
          android:checked="true"
          android:text="@string/checkBoxShowReportQuestionText" />
@@ -58,14 +78,6 @@
          android:checked="true"
          android:text="@string/checkBoxCheckUpdateOnStartupText" />
      
-     <CheckBox
-         android:id="@+id/checkBoxShowCorrectAnwer"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:layout_below="@+id/checkBoxCheckUpdateOnStartup"
-         android:layout_margin="4dp"
-         android:checked="true"
-         android:text="@string/checkBoxShowCorrectAnswer" />
      
      
 
