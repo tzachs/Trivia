@@ -120,13 +120,13 @@
             android:summary="@string/checkBoxPreferenceAllowUpdateWifiSummary"
             android:title="@string/checkBoxPreferenceAllowUpdateWifiTitle" />
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="checkBoxPreferenceAllowUpdateMobileNetwork"
             android:summary="@string/checkBoxPreferenceAllowUpdateMobileNetworkSummary"
             android:title="@string/checkBoxPreferenceAllowUpdateMobileNetworkTitle" />
         <CheckBoxPreference
             android:defaultValue="true"
-            android:enabled="false"
+            android:enabled="true"
             android:key="checkBoxPreferenceAllowUpdateMobileNetwork3G"
             android:summary="@string/checkBoxPreferenceAllowUpdateMobileNetwork3GSummary"
             android:title="@string/checkBoxPreferenceAllowUpdateMobileNetwork3GTitle" />
