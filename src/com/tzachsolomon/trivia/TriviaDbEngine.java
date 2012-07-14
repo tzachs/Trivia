@@ -340,7 +340,7 @@ public class TriviaDbEngine {
 
 		}
 
-		Log.i(TAG, where.toString());
+		//Log.i(TAG, where.toString());
 
 		ArrayList<Question> ret;
 

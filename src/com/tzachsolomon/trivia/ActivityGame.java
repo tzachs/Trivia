@@ -1,5 +1,6 @@
 package com.tzachsolomon.trivia;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -10,7 +11,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+
+import android.media.SoundPool;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -94,9 +98,16 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private int[] m_QuestionLanguages;
 
-	private MediaPlayer m_SoundCorrectAnwer;
+	private SoundPool m_SoundPool;
 
-	private MediaPlayer m_SoundWrongAnswer;
+	// each of the sounds is initialize with -1 i order to prevent a state where
+	// we try
+	// to play and the sound was not yet loaded.
+	private int m_SoundAnswerCorrect = -1;
+	private int m_SoundAnswerWrong = -1;
+
+	private boolean m_SoundEnabled;
+	private MediaPlayer m_ClockSound;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +119,9 @@ public class ActivityGame extends Activity implements OnClickListener {
 				.getDefaultSharedPreferences(getBaseContext());
 
 		initializeVariables();
+
+		m_ClockSound = MediaPlayer.create(this, R.raw.clock);
+		m_ClockSound.setLooping(true);
 
 		m_Extras = getIntent().getExtras();
 		m_CurrentGameType = m_Extras.getInt(ActivityGame.EXTRA_GAME_TYPE);
@@ -160,8 +174,10 @@ public class ActivityGame extends Activity implements OnClickListener {
 				intent.putExtra(
 						ActivityHowToPlay.KEY_HOW_TO_PLAY_INSTRUCTIONS_MESSAGE,
 						getString(R.string.howToPlayAllQuestions1) + "\n"
-								+ getString(R.string.howToPlayAllQuestions2) + "\n"
-								+ getString(R.string.howToPlayAllQuestions3) + "\n"
+								+ getString(R.string.howToPlayAllQuestions2)
+								+ "\n"
+								+ getString(R.string.howToPlayAllQuestions3)
+								+ "\n"
 								+ getString(R.string.howToPlayAllQuestions4));
 				intent.putExtra(
 						ActivityHowToPlay.KEY_HOW_TO_PLAY_INSTRUCTIONS_TITLE,
@@ -181,7 +197,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 						ActivityHowToPlay.KEY_HOW_TO_PLAY_INSTRUCTIONS_MESSAGE,
 						getString(R.string.howToPlayNewGame1) + "\n"
 								+ getString(R.string.howToPlayNewGame2) + "\n"
-								+ getString(R.string.howToPlayNewGame3) ); 
+								+ getString(R.string.howToPlayNewGame3));
 				intent.putExtra(
 						ActivityHowToPlay.KEY_HOW_TO_PLAY_INSTRUCTIONS_TITLE,
 						getString(R.string.instructions));
@@ -450,7 +466,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 				buttonAnswer3.setText(m_CurrentQuestion.getAnswer3());
 				buttonAnswer4.setText(m_CurrentQuestion.getAnswer4());
 
-				m_CountDownCounter.start();
+				startOrResumeCountDownTimer(true);
 
 			}
 
@@ -459,6 +475,17 @@ public class ActivityGame extends Activity implements OnClickListener {
 			startNewRoundGameLevels();
 
 		}
+
+	}
+
+	private void startOrResumeCountDownTimer(boolean i_Start) {
+		//
+		if (i_Start) {
+			m_CountDownCounter.start();
+		} else {
+			m_CountDownCounter.resume();
+		}
+		m_ClockSound.start();
 
 	}
 
@@ -502,7 +529,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 			buttonAnswer3.setText(m_CurrentQuestion.getAnswer3());
 			buttonAnswer4.setText(m_CurrentQuestion.getAnswer4());
 
-			m_CountDownCounter.start();
+			startOrResumeCountDownTimer(true);
 
 		}
 
@@ -510,10 +537,11 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private void initializeVariables() {
 		//
-		
-		m_SoundCorrectAnwer = MediaPlayer.create(this, R.raw.correct);
-		m_SoundWrongAnswer = MediaPlayer.create(this, R.raw.error);
-		
+		// initialize the sounds
+
+		m_SoundEnabled = m_SharedPreferences.getBoolean(
+				"checkBoxPreferencePlayGameSounds", true);
+
 		m_StringParser = new StringParser(m_SharedPreferences);
 		m_ReverseNumbersInQuestions = m_SharedPreferences.getBoolean(
 				"checkBoxPreferenceRevereseInHebrew", false);
@@ -619,6 +647,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		@Override
 		public void onTick(long millisUntilFinished) {
 			//
+			
 			textViewTime.setText(Long.toString(millisUntilFinished / 1000));
 
 		}
@@ -626,6 +655,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		@Override
 		public void onFinish() {
 			//
+			textViewTime.setText("0");
 			checkAnswer(-1, null);
 		}
 
@@ -741,7 +771,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		// user already click but the timer
 		// is still running
 
-		stopCountdownCounter();
+		stopOrPauseCountdownTimer(true);
 		// this is implemented in order to prevent double click
 		disableAnswerButtons();
 
@@ -750,8 +780,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 			ret = -1;
 			sb.append("Time is up!");
 			incCurrentWrongAnswersCounter();
-			m_SoundWrongAnswer.start();
-	
+			startSoundFromSoundPool(m_SoundAnswerWrong, 0);
 
 		} else if (i == -2) {
 			// if pass question pressed
@@ -764,8 +793,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 				ret = 0;
 				setButtonGreen(o_Button);
 
-				m_SoundCorrectAnwer.start();
-				
+				startSoundFromSoundPool(m_SoundAnswerCorrect, 0);
+
 				m_TriviaDb.incUserCorrectCounter(m_CurrentQuestion
 						.getQuestionId());
 
@@ -773,7 +802,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 				incAllQuestionsLives();
 
 			} else {
-				m_SoundWrongAnswer.start();
+				startSoundFromSoundPool(m_SoundAnswerWrong, 0);
+
 				setButtonRed(o_Button);
 				m_TriviaDb.incUserWrongCounter(m_CurrentQuestion
 						.getQuestionId());
@@ -804,6 +834,16 @@ public class ActivityGame extends Activity implements OnClickListener {
 		}
 
 		return ret;
+
+	}
+
+	private void startSoundFromSoundPool(int i_Sound, int i_LoopEnabled) {
+		//
+		// checking if the user has enabled the sound and the sound is loaded.
+		if (m_SoundEnabled && i_Sound != -1) {
+
+			m_SoundPool.play(i_Sound, 1, 1, 0, i_LoopEnabled, 1);
+		}
 
 	}
 
@@ -889,7 +929,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private void showGameOver() {
 		m_GameOver = true;
-		m_CountDownCounter.cancel();
+		stopOrPauseCountdownTimer(true);
+
 		AlertDialog.Builder gameOverDialog = new AlertDialog.Builder(
 				ActivityGame.this);
 		gameOverDialog.setTitle(getString(R.string.game_over));
@@ -969,15 +1010,32 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	}
 
-	private void stopCountdownCounter() {
+	private void stopOrPauseCountdownTimer(boolean i_StopCounter) {
 		//
-		m_CountDownCounter.cancel();
+		m_ClockSound.stop();
+		try {
+			m_ClockSound.prepare();
+		} catch (IllegalStateException e) {
+			//
+			e.printStackTrace();
+		} catch (IOException e) {
+			//
+			e.printStackTrace();
+		}
+		if (i_StopCounter) {
+			m_CountDownCounter.cancel();
+		} else {
+			m_CountDownCounter.pause();
+		}
+
 	}
 
 	@Override
 	protected void onResume() {
 		//
 		super.onResume();
+
+		loadSoundPool();
 
 		// checking if to show the report question button
 		if (m_SharedPreferences.getBoolean(
@@ -994,8 +1052,17 @@ public class ActivityGame extends Activity implements OnClickListener {
 		}
 
 		if (m_ResumeClock) {
-			m_CountDownCounter.resume();
+
+			startOrResumeCountDownTimer(false);
 		}
+
+	}
+
+	private void loadSoundPool() {
+		//
+		m_SoundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+		m_SoundAnswerCorrect = m_SoundPool.load(this, R.raw.correct, 0);
+		m_SoundAnswerWrong = m_SoundPool.load(this, R.raw.wrong, 0);
 
 	}
 
@@ -1004,7 +1071,9 @@ public class ActivityGame extends Activity implements OnClickListener {
 		//
 		super.onPause();
 
-		m_CountDownCounter.pause();
+		m_SoundPool.release();
+
+		stopOrPauseCountdownTimer(false);
 		m_ResumeClock = true;
 
 	}

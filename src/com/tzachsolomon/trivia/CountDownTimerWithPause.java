@@ -150,7 +150,7 @@ public abstract class CountDownTimerWithPause {
                 if (!mPaused) {
                     final long millisLeft = mStopTimeInFuture - SystemClock.elapsedRealtime();
 
-                    if (millisLeft <= 0) {
+                    if (millisLeft <= mCountdownInterval) {
                         onFinish();
                     } else if (millisLeft < mCountdownInterval) {
                         // no tick, just delay until done

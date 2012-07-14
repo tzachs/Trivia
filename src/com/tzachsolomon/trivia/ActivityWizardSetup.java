@@ -1,6 +1,6 @@
 package com.tzachsolomon.trivia;
 
-import java.text.ChoiceFormat;
+
 import java.util.Locale;
 
 import android.app.Activity;
@@ -9,7 +9,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
-import android.util.Log;
+
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
