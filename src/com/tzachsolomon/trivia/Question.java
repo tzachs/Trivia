@@ -19,8 +19,8 @@ public class Question {
 
 	private int m_CorrectAnswerIndex;
 	private int m_Category;
+	private int m_TimesPlayed;
 	
-
 	private int m_CorrectWrongRatio;
 
 	public Question(ContentValues i_Value) {
@@ -40,6 +40,7 @@ public class Question {
 				.getAsInteger(TriviaDbEngine.KEY_ANSWER_INDEX);
 
 		m_Category = i_Value.getAsInteger(TriviaDbEngine.KEY_CATEGORY);
+		m_TimesPlayed = i_Value.getAsInteger(TriviaDbEngine.KEY_PLAYED_COUNTER);
 		
 		double x = i_Value.getAsDouble(TriviaDbEngine.KEY_CORRECT_WRONG_RATIO);
 		
@@ -133,6 +134,11 @@ public class Question {
 	public int getCategory() {
 		// 
 		return m_Category;
+	}
+
+	public int getQuestionTimesPlayed() {
+		//
+		return m_TimesPlayed;
 	}
 
 }

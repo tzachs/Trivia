@@ -109,6 +109,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 	private boolean m_SoundEnabled;
 	private MediaPlayer m_ClockSound;
 
+	private TextView textViewTimesPlayedTitle;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//
@@ -446,25 +448,9 @@ public class ActivityGame extends Activity implements OnClickListener {
 				textViewNumberOfQuestionsLeft.setText(Integer
 						.toString(m_MaxNumberOfQuestionInLevel
 								- m_CurrentQuestionInThisLevel));
-
-				// setting question difficulty
-				textViewQuestionDifficulty.setText(Integer
-						.toString(m_CurrentQuestion.getQuestionLevel()));
-
-				// randomize answer places (indices)
-				m_CurrentQuestion.randomizeAnswerPlaces(m_Random);
-
-				if (m_ReverseNumbersInQuestions) {
-					textViewQuestion.setText(m_StringParser
-							.reverseNumbersInStringHebrew(m_CurrentQuestion
-									.getQuestion()));
-				} else {
-					textViewQuestion.setText(m_CurrentQuestion.getQuestion());
-				}
-				buttonAnswer1.setText(m_CurrentQuestion.getAnswer1());
-				buttonAnswer2.setText(m_CurrentQuestion.getAnswer2());
-				buttonAnswer3.setText(m_CurrentQuestion.getAnswer3());
-				buttonAnswer4.setText(m_CurrentQuestion.getAnswer4());
+				
+				// initialize common text views
+				initializeQuestionTextViews();
 
 				startOrResumeCountDownTimer(true);
 
@@ -476,6 +462,35 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		}
 
+	}
+
+	private void initializeQuestionTextViews() {
+		// 
+
+		if (m_ReverseNumbersInQuestions) {
+			textViewQuestion.setText(m_StringParser
+					.reverseNumbersInStringHebrew(m_CurrentQuestion
+							.getQuestion()));
+
+			textViewTimesPlayedTitle.setText(m_StringParser.reverseNumbersInStringHebrew(					
+					getString(R.string.textViewTimesPlayedTitleText) +  m_CurrentQuestion.getQuestionTimesPlayed()));
+		} else {
+			textViewQuestion.setText(m_CurrentQuestion.getQuestion());
+			textViewTimesPlayedTitle.setText(getString(R.string.textViewTimesPlayedTitleText) + " " + m_CurrentQuestion.getQuestionTimesPlayed());
+		}
+		// setting question difficulty
+		textViewQuestionDifficulty.setText(Integer
+				.toString(m_CurrentQuestion.getQuestionLevel()));
+
+		// randomize answer places (indices)
+		m_CurrentQuestion.randomizeAnswerPlaces(m_Random);
+		
+		buttonAnswer1.setText(m_CurrentQuestion.getAnswer1());
+		buttonAnswer2.setText(m_CurrentQuestion.getAnswer2());
+		buttonAnswer3.setText(m_CurrentQuestion.getAnswer3());
+		buttonAnswer4.setText(m_CurrentQuestion.getAnswer4());
+
+		
 	}
 
 	private void startOrResumeCountDownTimer(boolean i_Start) {
@@ -515,19 +530,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 			// getting reference to the current question
 			m_CurrentQuestion = m_Questions.get(m_QuestionIndex);
-
-			// setting question difficulty
-			textViewQuestionDifficulty.setText(Integer
-					.toString(m_CurrentQuestion.getQuestionLevel()));
-
-			// randomize answer places (indices)
-			m_CurrentQuestion.randomizeAnswerPlaces(m_Random);
-
-			textViewQuestion.setText(m_CurrentQuestion.getQuestion());
-			buttonAnswer1.setText(m_CurrentQuestion.getAnswer1());
-			buttonAnswer2.setText(m_CurrentQuestion.getAnswer2());
-			buttonAnswer3.setText(m_CurrentQuestion.getAnswer3());
-			buttonAnswer4.setText(m_CurrentQuestion.getAnswer4());
+			
+			initializeQuestionTextViews();
 
 			startOrResumeCountDownTimer(true);
 
@@ -635,6 +639,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		textViewNumberOfQuestionsLeft = (TextView) findViewById(R.id.textViewNumberOfQuestionsLeft);
 		textViewQuestionDifficulty = (TextView) findViewById(R.id.textViewQuestionDifficulty);
 		textViewLivesLeft = (TextView) findViewById(R.id.textViewLivesLeft);
+		textViewTimesPlayedTitle = (TextView) findViewById(R.id.textViewTimesPlayedTitle);
 	}
 
 	public class MyCountDownCounter extends CountDownTimerWithPause {
@@ -647,7 +652,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		@Override
 		public void onTick(long millisUntilFinished) {
 			//
-			
+
 			textViewTime.setText(Long.toString(millisUntilFinished / 1000));
 
 		}

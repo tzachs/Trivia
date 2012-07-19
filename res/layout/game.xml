@@ -10,8 +10,16 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:text="@string/textViewLivesLeftText"
-        
         />
+    
+     <TextView
+        android:id="@+id/textViewTimesPlayedTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_vertical"
+        android:text="@string/textViewTimesPlayedTitleText" />
     
     <TextView
         android:id="@+id/textViewTimeTitle"
@@ -129,7 +137,7 @@
         android:layout_margin="4dp"
         android:layout_alignParentBottom="true"
         />
-        
-        
+
+   
 
 </RelativeLayout>

@@ -146,6 +146,7 @@
     <string name="database_deleted">Database deleted</string>
     <string name="play_in_game_sounds">Play in game sounds</string>
     <string name="play_game_sounds">Play game sounds</string>
+    <string name="textViewTimesPlayedTitleText">Times played </string>
     
 
 </resources>

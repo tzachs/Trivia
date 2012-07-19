@@ -144,5 +144,6 @@
     <string name="database_deleted">מאגר נתונים נמחק</string>
     <string name="play_in_game_sounds">נגן צלילים במהלך המשחק</string>
     <string name="play_game_sounds">נגן צלילי משחק</string>
+    <string name="textViewTimesPlayedTitleText">פעמים שנשאלה </string>
 
 </resources>
