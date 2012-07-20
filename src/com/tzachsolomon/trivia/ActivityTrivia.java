@@ -48,6 +48,8 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	private Button buttonNewGameCategories;
 
+	private Button buttonManageUsers;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -144,6 +146,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		buttonNewGameSimple = (Button) findViewById(R.id.buttonNewGameSimple);
 		buttonUpdateDatabase = (Button) findViewById(R.id.buttonUpdateDatabase);
 		buttonNewGameCategories = (Button) findViewById(R.id.buttonNewGameCategories);
+		buttonManageUsers = (Button)findViewById(R.id.buttonManageUsers);
 
 		buttonNewGameAllQuestions.setOnClickListener(this);
 		buttonManageDatabase.setOnClickListener(this);
@@ -151,6 +154,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		buttonNewGameSimple.setOnClickListener(this);
 		buttonUpdateDatabase.setOnClickListener(this);
 		buttonNewGameCategories.setOnClickListener(this);
+		buttonManageUsers.setOnClickListener(this);
 
 		// checking if the device is with API 11 and earlier,
 		// if so, hide the preferences button since it can be done through menu
@@ -165,6 +169,10 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	public void onClick(View v) {
 		//
 		switch (v.getId()) {
+		case R.id.buttonManageUsers:
+			buttonManagerUsers_Clicked();
+			break;
+		
 		case R.id.buttonNewGameCategories:
 			buttonNewGameCategories_Clicked();
 			break;
@@ -190,6 +198,15 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 			break;
 		}
 
+	}
+
+	private void buttonManagerUsers_Clicked() {
+		// 
+		Intent intent = new Intent(this, ActivityManageUsers.class);
+
+		startActivity(intent);
+		
+		
 	}
 
 	@Override
@@ -239,7 +256,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	private void buttonManageDatabase_Clicked() {
 		//
-		Intent intent = new Intent(this, ActivityDatabaseMenu.class);
+		Intent intent = new Intent(this, ActivityManageDatabase.class);
 
 		startActivity(intent);
 

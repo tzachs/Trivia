@@ -46,10 +46,21 @@
         android:text="@string/buttonUpdateDatabaseText" />
 
     <Button
-        android:id="@+id/buttonManageDatabase"
+        android:id="@+id/buttonManageUsers"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonUpdateDatabase"
+        android:layout_margin="4dp"
+        android:background="@drawable/custom_menu_button"
+        android:text="@string/buttonManageUsersText"
+        
+        />
+    
+    <Button
+        android:id="@+id/buttonManageDatabase"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonManageUsers"
         android:layout_margin="4dp"
         android:background="@drawable/custom_menu_button"
         android:text="@string/buttonManageDatabaseText" />

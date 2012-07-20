@@ -57,6 +57,16 @@ public class JSONHandler {
 	private static final String TAG_GET_LAST_UPDATE_QUESTIONS = "getLastUpdateQuestions";
 	private static final String TAG_GET_LAST_UPDATE_CATEGORIES = "getLastUpdateCategories";
 	private static final String TAG_GET_CATEGORIES = "getCategories";
+	private static final String TAG_USER_REGISTER = "tagUserRegister";
+	private static final String TAG_USER_LOGIN = "tagUserLogin";
+
+	private static final String SUCCESS_CODE = "success";
+	private static final String ERROR_CODE = "error";
+	private static final int SUCCUESS_USER_REGISTERED = 2001;
+	private static final int SUCCUESS_USER_EXIST = 2002;
+	private static final int ERROR_CODE_USER_DOES_NOT_EXISTS = 1003;
+	private static final int ERROR_USER_EXIST = 1001;
+	private static final int ERROR_CODE_USER_WRONG_PASSWORD = 1004;
 
 	private String m_ServerUrl;
 	private HttpClient m_HttpClient;
@@ -274,7 +284,7 @@ public class JSONHandler {
 				data = new String(EntityUtils.toString(httpEntity).getBytes(),
 						"UTF-8");
 
-				//Log.v(TAG, "the raw JSON response is " + data);
+				// Log.v(TAG, "the raw JSON response is " + data);
 
 				// try parse the string to a JSON object
 				try {
@@ -753,5 +763,82 @@ public class JSONHandler {
 		}
 
 		return ret;
+	}
+
+	public String userLogin(String[] i_Params) {
+		//
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		JSONObject result;
+		String ret = "";
+
+		params.add(new BasicNameValuePair("tag", TAG_USER_LOGIN));
+		params.add(new BasicNameValuePair("username", i_Params[0]));
+		params.add(new BasicNameValuePair("userpass", i_Params[1]));
+		params.add(new BasicNameValuePair("usermail", i_Params[2]));
+
+		result = getJSONObjectFromUrl(m_ServerUrl, params);
+
+		try {
+			if (result != null) {
+				// checking if user added successfully
+				int successCode = result.getInt(SUCCESS_CODE);
+				int errorCode = result.getInt(ERROR_CODE);
+
+				if (successCode == SUCCUESS_USER_EXIST) {
+					ret = "User authenticated succesfully";
+				} else if (errorCode == ERROR_CODE_USER_DOES_NOT_EXISTS) {
+					ret = "User does not exits";
+				} else if (errorCode == ERROR_CODE_USER_WRONG_PASSWORD) {
+					ret = "Wrong password!";
+				}
+			} else {
+				//
+				ret = "Error connecting to server";
+			}
+		} catch (JSONException e) {
+			//
+			ret = "General error";
+			e.printStackTrace();
+		}
+
+		return ret;
+	}
+
+	public String userRegister(String[] i_Params) {
+		//
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		JSONObject result;
+		String ret = "";
+
+		params.add(new BasicNameValuePair("tag", TAG_USER_REGISTER));
+		params.add(new BasicNameValuePair("username", i_Params[0]));
+		params.add(new BasicNameValuePair("userpass", i_Params[1]));
+		params.add(new BasicNameValuePair("usermail", i_Params[2]));
+
+		result = getJSONObjectFromUrl(m_ServerUrl, params);
+
+		try {
+			if (result != null) {
+				// checking if user added successfully
+				int successCode = result.getInt(SUCCESS_CODE);
+				int errorCode = result.getInt(ERROR_CODE);
+
+				if (successCode == SUCCUESS_USER_REGISTERED) {
+					ret = "User registered succesfully";
+				} else if (errorCode == ERROR_USER_EXIST) {
+					ret = "User already exits";
+				}
+			} else {
+				//
+				ret = "Error connecting to server";
+			}
+		} catch (JSONException e) {
+			//
+			ret = "General error";
+			e.printStackTrace();
+		}
+
+		return ret;
+
 	}
 }

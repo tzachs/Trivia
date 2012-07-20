@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/buttonUserRegister"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:background="@drawable/custom_menu_button"
+        android:text="Register" />
+
+    
+    <Button
+        android:id="@+id/buttonUserLogin"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:background="@drawable/custom_menu_button"
+        android:text="Login" />
+    
+    <LinearLayout
+        android:id="@+id/linearLayoutUserRequestDetails"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" 
+        android:visibility="gone">
+        
+        <EditText 
+            android:id="@+id/editTextUsername"
+            android:hint="Fill in username"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:padding="5dip"
+            android:background="@drawable/round_edittext"
+            
+            />
+        <EditText
+            android:id="@+id/editTextPassword"
+            android:hint="Fill in password"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:padding="3dip"
+            android:background="@drawable/round_edittext"
+            android:password="true"
+            
+            />
+        
+        <EditText 
+            android:id="@+id/editTextEmail"
+            android:hint="Fill in email"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:padding="5dip"
+            android:background="@drawable/round_edittext"
+            
+            />
+        <Button 
+            android:id="@+id/buttonUserRequestSend"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:background="@drawable/custom_menu_button"
+            android:text="Send"
+            
+            />
+        
+        <Button 
+            android:id="@+id/buttonUserRequestClose"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_menu_button"
+            android:layout_margin="4dp"
+            android:text="Close"
+            
+            />
+        
+    </LinearLayout>
+    
+
+</LinearLayout>

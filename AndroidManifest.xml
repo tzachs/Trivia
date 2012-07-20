@@ -45,7 +45,12 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name=".ActivityDatabaseMenu"
+            android:name=".ActivityManageDatabase"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".ActivityManageUsers"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
         </activity>

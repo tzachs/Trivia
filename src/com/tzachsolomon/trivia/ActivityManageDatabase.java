@@ -9,9 +9,9 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class ActivityDatabaseMenu extends Activity implements OnClickListener {
+public class ActivityManageDatabase extends Activity implements OnClickListener {
 
-	public static final String TAG = ActivityDatabaseMenu.class.getSimpleName();
+	public static final String TAG = ActivityManageDatabase.class.getSimpleName();
 
 	private Button buttonDeleteDatabase;
 	private Button buttonUpdateDatabaseQuestions;
@@ -36,7 +36,7 @@ public class ActivityDatabaseMenu extends Activity implements OnClickListener {
 		//
 
 		m_UpdateManager = new UpdateManager(this);
-		m_TriviaDb = new TriviaDbEngine(ActivityDatabaseMenu.this);
+		m_TriviaDb = new TriviaDbEngine(ActivityManageDatabase.this);
 
 		initializeButtons();
 
@@ -106,7 +106,7 @@ public class ActivityDatabaseMenu extends Activity implements OnClickListener {
 				m_TriviaDb.deleteDatabase();
 				
 				
-				Toast.makeText(ActivityDatabaseMenu.this,getString(R.string.database_deleted), Toast.LENGTH_LONG).show();
+				Toast.makeText(ActivityManageDatabase.this,getString(R.string.database_deleted), Toast.LENGTH_LONG).show();
 				
 			}
 		});
