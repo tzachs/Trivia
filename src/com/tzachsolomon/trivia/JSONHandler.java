@@ -21,6 +21,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
+
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -62,10 +64,10 @@ public class JSONHandler {
 
 	private static final String SUCCESS_CODE = "success";
 	private static final String ERROR_CODE = "error";
-	private static final int SUCCUESS_USER_REGISTERED = 2001;
-	private static final int SUCCUESS_USER_EXIST = 2002;
+	private static final int SUCCUESS_CODE_USER_REGISTERED = 2001;
+	private static final int SUCCUESS_CODE_USER_EXIST = 2002;
 	private static final int ERROR_CODE_USER_DOES_NOT_EXISTS = 1003;
-	private static final int ERROR_USER_EXIST = 1001;
+	private static final int ERROR_CODE_USER_EXIST = 1001;
 	private static final int ERROR_CODE_USER_WRONG_PASSWORD = 1004;
 
 	private String m_ServerUrl;
@@ -74,6 +76,8 @@ public class JSONHandler {
 	private ConnectivityManager m_ConnectivityManager;
 	private TelephonyManager m_TelephonyManager;
 	private SharedPreferences m_SharedPreferences;
+	private UserManageListener m_UserManagerListener;
+	private DatabaseUpdateListener m_DatabaseUpdateListener;
 
 	/**
 	 * CTOR
@@ -102,7 +106,7 @@ public class JSONHandler {
 	 * Function starts an asynchronous worker thread to receive update from the
 	 * database server
 	 */
-	public void updateFromInternetAsync(long i_LastUserUpdate) {
+	public void updateQuestionFromInternet(long i_LastUserUpdate) {
 		ContentValues[] ret = new ContentValues[1];
 
 		ret[0] = new ContentValues();
@@ -112,7 +116,7 @@ public class JSONHandler {
 
 	}
 
-	public void updateCategoriesFromInternetAsync(long i_LastUserUpdate) {
+	public void updateCategoriesFromInternet(long i_LastUserUpdate) {
 		ContentValues[] ret = new ContentValues[1];
 
 		ret[0] = new ContentValues();
@@ -372,7 +376,7 @@ public class JSONHandler {
 		return ret;
 	}
 
-	public void reportMistakeInQuestion(String i_QuestionId,
+	private void reportMistakeInQuestionSync(String i_QuestionId,
 			String i_Description) throws ClientProtocolException, IOException {
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -403,7 +407,7 @@ public class JSONHandler {
 		protected Void doInBackground(String... params) {
 			//
 			try {
-				reportMistakeInQuestion(params[0], params[1]);
+				reportMistakeInQuestionSync(params[0], params[1]);
 			} catch (ClientProtocolException e) {
 				//
 				Log.e(TAG, e.getMessage().toString());
@@ -548,19 +552,13 @@ public class JSONHandler {
 		protected void onPostExecute(ContentValues[] result) {
 			//
 			m_ProgressDialog.dismiss();
-
-			if (result != null) {
-				TriviaDbEngine dbEngine = new TriviaDbEngine(m_ActivityContext);
-				dbEngine.updateCategoriesAysnc(result);
-
-			} else {
-				Toast.makeText(
-						m_ActivityContext,
-						m_ActivityContext
-								.getString(R.string.error_while_trying_to_update_from_server),
-						Toast.LENGTH_SHORT).show();
+			
+			if ( m_DatabaseUpdateListener != null ){
+				m_DatabaseUpdateListener.onDownloadedCategories(result);	
 			}
-
+			
+			
+			
 		}
 
 		@Override
@@ -647,18 +645,11 @@ public class JSONHandler {
 		protected void onPostExecute(ContentValues[] result) {
 			//
 			m_ProgressDialog.dismiss();
+			
+			m_DatabaseUpdateListener.onDownloadedQuestions(result);
+			
 
-			if (result != null) {
-				TriviaDbEngine dbEngine = new TriviaDbEngine(m_ActivityContext);
-				dbEngine.updateFromInternetAsync(result);
-
-			} else {
-				Toast.makeText(
-						m_ActivityContext,
-						m_ActivityContext
-								.getString(R.string.error_while_trying_to_update_from_server),
-						Toast.LENGTH_SHORT).show();
-			}
+		
 
 		}
 
@@ -765,11 +756,12 @@ public class JSONHandler {
 		return ret;
 	}
 
-	public String userLogin(String[] i_Params) {
+	public void userLogin(String[] i_Params) {
 		//
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		JSONObject result;
 		String ret = "";
+		int userId = -1;
 
 		params.add(new BasicNameValuePair("tag", TAG_USER_LOGIN));
 		params.add(new BasicNameValuePair("username", i_Params[0]));
@@ -784,7 +776,7 @@ public class JSONHandler {
 				int successCode = result.getInt(SUCCESS_CODE);
 				int errorCode = result.getInt(ERROR_CODE);
 
-				if (successCode == SUCCUESS_USER_EXIST) {
+				if (successCode == SUCCUESS_CODE_USER_EXIST) {
 					ret = "User authenticated succesfully";
 				} else if (errorCode == ERROR_CODE_USER_DOES_NOT_EXISTS) {
 					ret = "User does not exits";
@@ -801,14 +793,17 @@ public class JSONHandler {
 			e.printStackTrace();
 		}
 
-		return ret;
+		m_UserManagerListener.onUserLogin(ret, userId);
+		
+		
 	}
 
-	public String userRegister(String[] i_Params) {
+	public void userRegister(String[] i_Params) {
 		//
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		JSONObject result;
 		String ret = "";
+		int userId = -1;
 
 		params.add(new BasicNameValuePair("tag", TAG_USER_REGISTER));
 		params.add(new BasicNameValuePair("username", i_Params[0]));
@@ -823,9 +818,10 @@ public class JSONHandler {
 				int successCode = result.getInt(SUCCESS_CODE);
 				int errorCode = result.getInt(ERROR_CODE);
 
-				if (successCode == SUCCUESS_USER_REGISTERED) {
+				if (successCode == SUCCUESS_CODE_USER_REGISTERED) {
 					ret = "User registered succesfully";
-				} else if (errorCode == ERROR_USER_EXIST) {
+					userId = result.getInt("userId");
+				} else if (errorCode == ERROR_CODE_USER_EXIST) {
 					ret = "User already exits";
 				}
 			} else {
@@ -838,7 +834,31 @@ public class JSONHandler {
 			e.printStackTrace();
 		}
 
-		return ret;
+		m_UserManagerListener.onUserRegister(ret,userId);
 
 	}
+	
+	static public interface UserManageListener {
+		
+		public void onUserLogin(String i_Response, int i_UserId);
+		public void onUserRegister(String i_Response, int i_UserId);
+	}
+	
+	static public interface DatabaseUpdateListener {
+		
+		public void onDownloadedQuestions (ContentValues[] i_DownloadedQuestions);
+		public void onDownloadedCategories (ContentValues[] i_DownloadedCategories);
+		
+	}
+	
+	public void setUserManageListener (UserManageListener listener){
+		this.m_UserManagerListener = listener;
+	}
+
+	public void setUpdateManager(DatabaseUpdateListener listener){
+		this.m_DatabaseUpdateListener = listener;
+		// 
+		
+	}
+
 }

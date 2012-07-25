@@ -1,5 +1,7 @@
 package com.tzachsolomon.trivia;
 
+import com.tzachsolomon.trivia.JSONHandler.UserManageListener;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -11,7 +13,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-public class ActivityManageUsers extends Activity implements OnClickListener {
+public class ActivityManageUsers extends Activity implements OnClickListener,
+		UserManageListener {
 
 	private Button buttonUserRegister;
 	private Button buttonUserLogin;
@@ -37,6 +40,8 @@ public class ActivityManageUsers extends Activity implements OnClickListener {
 
 		//
 		m_JSONHandler = new JSONHandler(this);
+
+		m_JSONHandler.setUserManageListener(this);
 
 		linearLayoutUserRequestDetails = (LinearLayout) findViewById(R.id.linearLayoutUserRequestDetails);
 
@@ -125,8 +130,8 @@ public class ActivityManageUsers extends Activity implements OnClickListener {
 			} else {
 				AsyncTaskUserRegister asyncTaskUserRegister = new AsyncTaskUserRegister();
 
-				asyncTaskUserRegister.execute(new String[] { username, password,
-						email });
+				asyncTaskUserRegister.execute(new String[] { username,
+						password, email });
 
 			}
 		}
@@ -145,7 +150,7 @@ public class ActivityManageUsers extends Activity implements OnClickListener {
 		linearLayoutUserRequestDetails.setVisibility(View.VISIBLE);
 	}
 
-	public class AsyncTaskUserLogin extends AsyncTask<String, Integer, String> {
+	public class AsyncTaskUserLogin extends AsyncTask<String, Integer, Void> {
 
 		private ProgressDialog m_ProgressDialog;
 		private boolean enabled;
@@ -169,26 +174,27 @@ public class ActivityManageUsers extends Activity implements OnClickListener {
 
 			detailedResult.setLength(0);
 
+		}
+
+		@Override
+		protected Void doInBackground(String... params) {
+			//
+			m_JSONHandler.userLogin(params);
+			return null;
+
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			//
 			
-		}
-
-		@Override
-		protected String doInBackground(String... params) {
-			//
-			return m_JSONHandler.userLogin(params);
-
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			//
+			super.onPostExecute(result);
 			m_ProgressDialog.dismiss();
-			Toast.makeText(ActivityManageUsers.this, result, Toast.LENGTH_LONG).show();
 		}
 
 	}
-	
-	public class AsyncTaskUserRegister extends AsyncTask<String, Integer, String> {
+
+	public class AsyncTaskUserRegister extends AsyncTask<String, Integer, Void> {
 
 		private ProgressDialog m_ProgressDialog;
 		private boolean enabled;
@@ -212,23 +218,45 @@ public class ActivityManageUsers extends Activity implements OnClickListener {
 
 			detailedResult.setLength(0);
 
-			
 		}
 
 		@Override
-		protected String doInBackground(String... params) {
+		protected Void doInBackground(String... params) {
 			//
-			return m_JSONHandler.userRegister(params);
+			m_JSONHandler.userRegister(params);
+			return null;
 
 		}
-
+		
 		@Override
-		protected void onPostExecute(String result) {
-			//
+		protected void onPostExecute(Void result) {
+			// 
+
+			super.onPostExecute(result);
 			m_ProgressDialog.dismiss();
-			Toast.makeText(ActivityManageUsers.this, result, Toast.LENGTH_LONG).show();
 		}
 
+	}
+
+	@Override
+	public void onUserLogin(String i_Response, int i_UserId) {
+		//
+		if (i_UserId != -1) {
+
+		}
+
+		Toast.makeText(ActivityManageUsers.this, i_Response, Toast.LENGTH_LONG)
+				.show();
+	}
+
+	@Override
+	public void onUserRegister(String i_Respone, int i_UserId) {
+		//
+		if (i_UserId != -1) {
+			// adding the user locally
+		}
+		Toast.makeText(ActivityManageUsers.this, i_Respone, Toast.LENGTH_LONG)
+				.show();
 	}
 
 }

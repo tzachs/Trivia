@@ -9,7 +9,9 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
-        android:text="@string/buttonStartCategoryGameText" />
+        android:text="@string/buttonStartCategoryGameText" 
+        android:background="@drawable/custom_menu_button"
+        />
 
     <ExpandableListView
         android:id="@android:id/list"
@@ -30,6 +32,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="4dp"
         android:visibility="gone"
+        android:background="@drawable/custom_menu_button"
         android:text="@string/buttonUpdateDatabaseCategoriesText" />
 
 </LinearLayout>

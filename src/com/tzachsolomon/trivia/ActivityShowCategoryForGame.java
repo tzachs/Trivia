@@ -2,6 +2,9 @@ package com.tzachsolomon.trivia;
 
 import java.util.ArrayList;
 
+import com.tzachsolomon.trivia.TriviaDbEngine.TriviaDbEngineUpdateListener;
+import com.tzachsolomon.trivia.UpdateManager.CategoriesListener;
+
 import android.app.ExpandableListActivity;
 
 import android.content.ContentValues;
@@ -26,7 +29,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ExpandableListView;
 
 public class ActivityShowCategoryForGame extends ExpandableListActivity
-		implements OnClickListener {
+		implements OnClickListener,  CategoriesListener {
 
 	private static final String TAG = ActivityShowCategoryForGame.class
 			.getSimpleName();
@@ -37,6 +40,7 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 	private Button buttonStartCategoryGame;
 	private Button buttonUpdateCategories;
 	private TriviaDbEngine m_DbEngine;
+	private UpdateManager m_UpdateManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -58,12 +62,23 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 		
 		m_DbEngine = new TriviaDbEngine(this);
 		
+		
+		
+		m_UpdateManager = new UpdateManager(this);
+		m_UpdateManager.setCategoriesListener(this);
+		
 		buttonStartCategoryGame = (Button) findViewById(R.id.buttonStartCategoryGame);
 		buttonUpdateCategories = (Button)findViewById(R.id.buttonUpdateCategories);
 
 		buttonStartCategoryGame.setOnClickListener(this);
 		buttonUpdateCategories.setOnClickListener(this);
 		
+		setButtonsVisibilaty();
+		
+
+	}
+
+	private void setButtonsVisibilaty() {
 		if ( m_DbEngine.isCategoriesEmpty() ){
 			buttonUpdateCategories.setVisibility(View.VISIBLE);
 			buttonStartCategoryGame.setVisibility(View.GONE);
@@ -71,8 +86,6 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 			buttonUpdateCategories.setVisibility(View.GONE);
 			buttonStartCategoryGame.setVisibility(View.VISIBLE);
 		}
-		
-
 	}
 
 	private void initItemsFromDatabase() {
@@ -119,6 +132,8 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 		m_ExpandableList = getExpandableListView();
 
 		m_ExpandableList.setAdapter(m_Adapter);
+		
+		setButtonsVisibilaty();
 
 	}
 
@@ -504,8 +519,8 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 
 	private void buttonUpdateCategories_Clicked() {
 		// 
-		UpdateManager updateManager = new UpdateManager(this);
-		updateManager.updateCategories();
+		
+		m_UpdateManager.updateCategories();
 		
 	}
 
@@ -533,5 +548,12 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 					Toast.LENGTH_SHORT).show();
 		}
 
+	}
+
+	@Override
+	public void onCategoriesUpdated() {
+		// TODO Auto-generated method stub
+		initItemsFromDatabase();
+		
 	}
 }

@@ -230,6 +230,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		//
 
 		m_UpdateManager.updateQuestions();
+		
 
 	}
 

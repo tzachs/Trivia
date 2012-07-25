@@ -132,7 +132,7 @@
     <string name="buttonUpdateDatabaseCategoriesText">Update Categories</string>
     <string name="you_must_choose_at_least_1_category">You must choose at least 1 category</string>
     <string name="buttonStartCategoryGameText">Start Category Game</string>
-    <string name="no_categories_found_update_categories">No categories found, Please press the Update Categories button. Please return to home screen and press Categories Game when update is finished.</string>
+    <string name="no_categories_found_update_categories">No categories found, Please press the Update Categories button. The categories should be automatically filled when the update is done.</string>
     <string name="checkBoxQuestionLanguageHebrewText">Hebrew</string>
     <string name="checkBoxQuestionLanguageEnglishText">English</string>
     <string name="exit">Exit</string>

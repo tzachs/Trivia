@@ -45,6 +45,8 @@
          android:id="@+id/buttonCloseHowToPlay"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
-         android:text="@string/buttonCloseHowToPlayText" />
+         android:text="@string/buttonCloseHowToPlayText"
+         android:background="@drawable/custom_menu_button"
+          />
 
 </LinearLayout>

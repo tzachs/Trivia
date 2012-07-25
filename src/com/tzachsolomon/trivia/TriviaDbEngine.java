@@ -2,6 +2,7 @@ package com.tzachsolomon.trivia;
 
 import java.util.ArrayList;
 
+
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -62,6 +63,8 @@ public class TriviaDbEngine {
 	private DbHelper ourHelper;
 	private Context ourContext;
 	private SQLiteDatabase ourDatabase;
+
+	private TriviaDbEngineUpdateListener m_UpdateListener;
 
 	private static class DbHelper extends SQLiteOpenHelper {
 
@@ -575,7 +578,7 @@ public class TriviaDbEngine {
 		return ret;
 	}
 
-	public void updateFromInternetAsync(ContentValues[] values) {
+	public void updateQuestionFromInternetAsync(ContentValues[] values) {
 		//
 		new UpdateQuestionsAsyncTask().execute(values);
 
@@ -770,6 +773,9 @@ public class TriviaDbEngine {
 		protected void onPostExecute(Void result) {
 			//
 			m_ProgressDialog.dismiss();
+			if ( m_UpdateListener != null ){
+				m_UpdateListener.onUpdateCategoriesFinished();
+			}
 
 		}
 
@@ -832,6 +838,15 @@ public class TriviaDbEngine {
 		this.deleteQuestions();
 		this.deleteCategories();
 
+	}
+	
+	static public interface TriviaDbEngineUpdateListener {
+		public void onUpdateCategoriesFinished();
+		public void onUpdateQuestionsFinished();
+	}
+	
+	public void setUpdateListener(TriviaDbEngineUpdateListener listener){
+		this.m_UpdateListener = listener;
 	}
 
 }

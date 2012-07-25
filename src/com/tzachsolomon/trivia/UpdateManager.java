@@ -1,5 +1,8 @@
 package com.tzachsolomon.trivia;
 
+import com.tzachsolomon.trivia.JSONHandler.DatabaseUpdateListener;
+import com.tzachsolomon.trivia.TriviaDbEngine.TriviaDbEngineUpdateListener;
+
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -11,7 +14,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-public class UpdateManager {
+public class UpdateManager implements DatabaseUpdateListener,
+		TriviaDbEngineUpdateListener {
 
 	public static final String TAG = UpdateManager.class.getSimpleName();
 
@@ -22,36 +26,46 @@ public class UpdateManager {
 	private SharedPreferences m_SharedPreferences;
 	private StringParser m_StringParser;
 
+	private CategoriesListener m_CategoriesListener;
+
+	private QuestionsListener m_QuestionsListener;
+
 	public UpdateManager(Context i_Context) {
 
 		m_Context = i_Context;
 
 		m_SharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(m_Context);
-		
+
 		m_StringParser = new StringParser(m_SharedPreferences);
 
 		m_TriviaDb = new TriviaDbEngine(m_Context);
+		m_TriviaDb.setUpdateListener(this);
+
 		m_JSONHandler = new JSONHandler(m_Context);
+		m_JSONHandler.setUpdateManager(this);
+
 	}
 
 	public void updateQuestions() {
+
 		if (m_SharedPreferences.getBoolean(
 				"checkBoxPreferenceUploadCorrectWrongUserStat", true)) {
 			new AsyncTaskUpdateCorrectWrongAsync().execute();
 		} else {
-			checkIsUpdateAvailableAsync(true);
+			checkIsUpdateAvailable(true);
 		}
 	}
 
 	public void updateCategories() {
 		//
+
 		AsyncTaskCheckUpdateIsAvailable a = new AsyncTaskCheckUpdateIsAvailable();
 		a.setUpdateType(JSONHandler.TYPE_UPDATE_CATEGORIES);
 		a.execute(true);
 	}
 
-	private void checkIsUpdateAvailableAsync(boolean i_DisplayInfoIfNoUpdate) {
+	private void checkIsUpdateAvailable(boolean i_DisplayInfoIfNoUpdate) {
 		AsyncTaskCheckUpdateIsAvailable a = new AsyncTaskCheckUpdateIsAvailable();
 
 		a.setUpdateType(JSONHandler.TYPE_UPDATE_QUESTIONS);
@@ -62,7 +76,7 @@ public class UpdateManager {
 	public class AsyncTaskUpdateCorrectWrongAsync extends
 			AsyncTask<Void, Integer, String> {
 
-		boolean enabled;
+		boolean isInternetAvailable;
 		ContentValues[] wrongCorrectStat;
 		private ProgressDialog m_ProgressDialog;
 
@@ -71,8 +85,9 @@ public class UpdateManager {
 			StringBuilder detailedResult = new StringBuilder();
 			//
 
-			enabled = m_JSONHandler.isInternetAvailable(detailedResult);
-			if (enabled) {
+			isInternetAvailable = m_JSONHandler
+					.isInternetAvailable(detailedResult);
+			if (isInternetAvailable) {
 
 				m_ProgressDialog = new ProgressDialog(m_Context);
 				m_ProgressDialog
@@ -92,19 +107,21 @@ public class UpdateManager {
 		@Override
 		protected void onPostExecute(String result) {
 			//
-			if (enabled) {
+			if (isInternetAvailable) {
 				if (result.length() > 0) {
 					Toast.makeText(m_Context, result, Toast.LENGTH_LONG).show();
 				} else {
-					Toast.makeText(
-							m_Context,
-							m_Context
-									.getString(R.string.thank_you_for_making_this_trivia_better_),
-							Toast.LENGTH_SHORT).show();
+					/*
+					 * Toast.makeText( m_Context, m_Context
+					 * .getString(R.string.thank_you_for_making_this_trivia_better_
+					 * ),
+					 * 
+					 * Toast.LENGTH_SHORT).show();
+					 */
 				}
 
 				m_ProgressDialog.dismiss();
-				checkIsUpdateAvailableAsync(true);
+				checkIsUpdateAvailable(true);
 			}
 
 		}
@@ -114,7 +131,7 @@ public class UpdateManager {
 			//
 			StringBuilder sb = new StringBuilder();
 
-			if (enabled) {
+			if (isInternetAvailable) {
 				int i = 0;
 				int length;
 				wrongCorrectStat = m_TriviaDb.getWrongCorrectStat();
@@ -122,19 +139,27 @@ public class UpdateManager {
 				length = wrongCorrectStat.length;
 				m_ProgressDialog.setMax(length);
 
-				while (i < length) {
-					if (m_JSONHandler
-							.uploadCorrectWrongStatistics(wrongCorrectStat[i])) {
-						m_TriviaDb
-								.clearUserCorrectWrongStat(wrongCorrectStat[i]
-										.getAsString(TriviaDbEngine.KEY_QUESTIONID));
-					} else {
-						i = length;
-						sb.append(m_Context
-								.getString(R.string.error_occoured_stopping_upload_check_server_url_or_connectivity));
-						Log.e(TAG, sb.toString());
+				if (length > 0) {
+
+					while (i < length) {
+						if (m_JSONHandler
+								.uploadCorrectWrongStatistics(wrongCorrectStat[i])) {
+							m_TriviaDb
+									.clearUserCorrectWrongStat(wrongCorrectStat[i]
+											.getAsString(TriviaDbEngine.KEY_QUESTIONID));
+						} else {
+							i = length;
+							sb.append(m_Context
+									.getString(R.string.error_occoured_stopping_upload_check_server_url_or_connectivity));
+							Log.e(TAG, sb.toString());
+						}
+						publishProgress(++i);
+
 					}
-					publishProgress(++i);
+
+					if (m_QuestionsListener != null) {
+						m_QuestionsListener.onQuestionsCorrectRatioSent();
+					}
 
 				}
 
@@ -158,7 +183,6 @@ public class UpdateManager {
 
 		private int m_UpdateType = -1;
 		private long m_LastUserUpdate;
-		
 
 		public void setUpdateType(int i_UpdateType) {
 			m_UpdateType = i_UpdateType;
@@ -167,7 +191,7 @@ public class UpdateManager {
 		@Override
 		protected void onPreExecute() {
 			//
-			
+
 			StringBuilder detailedResult = new StringBuilder();
 
 			enabled = m_JSONHandler.isInternetAvailable(detailedResult);
@@ -213,13 +237,8 @@ public class UpdateManager {
 				AlertDialog.Builder dialog = new AlertDialog.Builder(m_Context);
 				dialog.setCancelable(false);
 
-				if (m_SharedPreferences.getBoolean(
-						"checkBoxPreferenceRevereseInHebrew", false)) {
-					dialog.setMessage(m_StringParser
-							.reverseNumbersInString(message.toString()));
-				} else {
-					dialog.setMessage(message.toString());
-				}
+				dialog.setMessage(m_StringParser
+						.reverseNumbersInStringHebrew(message.toString()));
 
 				dialog.setPositiveButton(m_Context.getString(R.string.update),
 						new DialogInterface.OnClickListener() {
@@ -232,11 +251,11 @@ public class UpdateManager {
 								if (m_UpdateType == JSONHandler.TYPE_UPDATE_CATEGORIES) {
 
 									m_JSONHandler
-											.updateCategoriesFromInternetAsync(m_LastUserUpdate);
+											.updateCategoriesFromInternet(m_LastUserUpdate);
 
 								} else if (m_UpdateType == JSONHandler.TYPE_UPDATE_QUESTIONS) {
 									m_JSONHandler
-											.updateFromInternetAsync(m_LastUserUpdate);
+											.updateQuestionFromInternet(m_LastUserUpdate);
 								}
 
 							}
@@ -287,6 +306,76 @@ public class UpdateManager {
 
 			return ret;
 		}
+
+	}
+
+	@Override
+	public void onDownloadedQuestions(ContentValues[] i_DownloadedQuestions) {
+		//
+
+		if (i_DownloadedQuestions != null) {
+			m_TriviaDb.updateQuestionFromInternetAsync(i_DownloadedQuestions);
+
+		} else {
+			Toast.makeText(
+					m_Context,
+					m_Context
+							.getString(R.string.error_while_trying_to_update_from_server),
+					Toast.LENGTH_SHORT).show();
+		}
+
+	}
+
+	@Override
+	public void onDownloadedCategories(ContentValues[] i_DownloadedCategories) {
+		//
+
+		if (i_DownloadedCategories != null) {
+
+			m_TriviaDb.updateCategoriesAysnc(i_DownloadedCategories);
+
+		} else {
+			Toast.makeText(
+					m_Context,
+					m_Context
+							.getString(R.string.error_while_trying_to_update_from_server),
+					Toast.LENGTH_SHORT).show();
+		}
+
+	}
+
+	static public interface CategoriesListener {
+		public void onCategoriesUpdated();
+	}
+
+	static public interface QuestionsListener {
+		public void onQuestionsCorrectRatioSent();
+
+		public void onQuestionsUpdated();
+	}
+
+	public void setCategoriesListener(CategoriesListener listener) {
+		this.m_CategoriesListener = listener;
+	}
+
+	public void setQuestionsListener(QuestionsListener listener) {
+		this.m_QuestionsListener = listener;
+	}
+
+	@Override
+	public void onUpdateCategoriesFinished() {
+		//
+
+		// sending event that the categories have been updated
+		if (m_CategoriesListener != null) {
+			m_CategoriesListener.onCategoriesUpdated();
+		}
+
+	}
+
+	@Override
+	public void onUpdateQuestionsFinished() {
+		// TODO Auto-generated method stub
 
 	}
 
