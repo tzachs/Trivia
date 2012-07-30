@@ -19,7 +19,7 @@ public class TriviaDbEngine {
 	public static final String TAG = TriviaDbEngine.class.getSimpleName();
 
 	private static final String DATABASE_NAME = "TriviaDb";
-	private static final int DATABASE_VERSION = 8;
+	private static final int DATABASE_VERSION = 1;
 
 	// TABLE QUESTIONS
 
@@ -59,6 +59,14 @@ public class TriviaDbEngine {
 	public static final String KEY_COL_PARENT_ID = "colParentId";
 	public static final String KEY_COL_EN_NAME = "colEnName";
 	public static final String KEY_COL_HE_NAME = "colHeName";
+	
+	// TABLE USERS
+	
+	private static final String TABLE_USERS = "tblUsers";
+	
+	public static final String KEY_COL_USERNAME = "colUsername";
+	public static final String KEY_COL_PASSWORD = "colPassword";
+	public static final String KEY_COL_USER_ID = "colUserId";
 
 	private DbHelper ourHelper;
 	private Context ourContext;
@@ -76,9 +84,30 @@ public class TriviaDbEngine {
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			//
+			createTableUsers(db);
 			createTableQuestions(db);
 			createTableCategories(db);
 
+		}
+
+		private void createTableUsers(SQLiteDatabase db) {
+			// 
+			StringBuilder sb = new StringBuilder();
+			
+			sb.append("CREATE TABLE ");
+			sb.append(TABLE_USERS);
+			sb.append(" ( ");
+			sb.append(KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, ");
+			sb.append(KEY_COL_USER_ID + " INTEGER NOT NULL, ");
+			sb.append(KEY_COL_USERNAME + " TEXT NOT NULL, ");
+			sb.append(KEY_COL_PASSWORD + " TEXT NOT NULL ");
+			sb.append(" );");
+
+			db.execSQL(sb.toString());
+
+			sb.setLength(0);
+			
+			
 		}
 
 		private void createTableCategories(SQLiteDatabase db) {
@@ -132,10 +161,8 @@ public class TriviaDbEngine {
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			//
-			db.execSQL("DROP TABLE IF EXISTS " + TABLE_QUESTIONS);
-			db.execSQL("DROP TABLE IF EXISTS " + TABLE_CATEGORIES);
-			createTableCategories(db);
-			createTableQuestions(db);
+			
+			
 
 		}
 
@@ -393,7 +420,7 @@ public class TriviaDbEngine {
 		// any other column could be chosen
 		String[] columns = { KEY_ANSWER1 };
 
-		this.openDbReadable();
+		this.openDbWritable();
 		Cursor cursor = ourDatabase.query(TABLE_QUESTIONS, columns, null, null,
 				null, null, null);
 		if (cursor.getCount() > 0) {
@@ -847,6 +874,22 @@ public class TriviaDbEngine {
 	
 	public void setUpdateListener(TriviaDbEngineUpdateListener listener){
 		this.m_UpdateListener = listener;
+	}
+
+	public void insertUser(int i_UserId, String i_Username, String i_Password) {
+		// 
+		this.openDbWritable();
+		
+		ContentValues cv = new ContentValues();
+		
+		cv.put(KEY_COL_USERNAME, i_Username);
+		cv.put(KEY_COL_PASSWORD, i_Password);
+		cv.put(KEY_COL_USER_ID, i_UserId);
+		
+		ourDatabase.insert(TABLE_USERS,null, cv);		
+		
+		this.closeDb();
+		
 	}
 
 }
