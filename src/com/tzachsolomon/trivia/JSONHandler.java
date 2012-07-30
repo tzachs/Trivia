@@ -97,9 +97,7 @@ public class JSONHandler {
 		m_SharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(m_ActivityContext);
 
-		m_ServerUrl = m_SharedPreferences.getString(
-				"editTextPreferencePrimaryServerIP",
-				"http://23.23.238.181/index.php");
+		updateServerIpFromPreferences();
 	}
 
 	/**
@@ -859,6 +857,14 @@ public class JSONHandler {
 		this.m_DatabaseUpdateListener = listener;
 		// 
 		
+	}
+
+	public void updateServerIpFromPreferences() {
+		//
+		
+				m_ServerUrl = m_SharedPreferences.getString(
+						"editTextPreferencePrimaryServerIP",
+						"http://23.23.238.181/index.php");
 	}
 
 }

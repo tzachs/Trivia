@@ -379,4 +379,10 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 	}
 
+	public void updateServerIpFromPreferences() {
+		// 
+		m_JSONHandler.updateServerIpFromPreferences();
+		
+	}
+
 }

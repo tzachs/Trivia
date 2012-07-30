@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class ActivityTrivia extends Activity implements OnClickListener {
 
@@ -35,6 +36,9 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	// TODO: initial settings with XML file
 
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
+
+	private static final int REQUEST_CODE_START_GAME_CATEGORIES = 1;
+	private static final int REQUEST_CODE_BACK_FROM_PREFERENCES = 2;
 
 	private Button buttonNewGameAllQuestions;
 	private Button buttonManageDatabase;
@@ -60,7 +64,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 				.getDefaultSharedPreferences(getBaseContext());
 
 		initializeVariables();
-		
+
 		checkIfNeedToShowFirstTimeMessageOrConfiguration();
 	}
 
@@ -77,13 +81,14 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 			if (!packageInfo.versionName.contentEquals(i)) {
 				showWhatsNew();
 				showWizardSetup();
-				
+
 				m_SharedPreferences
 						.edit()
 						.putString("showFirstTimeMessageVersion",
 								packageInfo.versionName).commit();
-								
-			}else if (m_SharedPreferences.getBoolean("showFirstTimeConfiguration", true)) {
+
+			} else if (m_SharedPreferences.getBoolean(
+					"showFirstTimeConfiguration", true)) {
 				showWizardSetup();
 			}
 		} catch (NameNotFoundException e) {
@@ -146,7 +151,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		buttonNewGameSimple = (Button) findViewById(R.id.buttonNewGameSimple);
 		buttonUpdateDatabase = (Button) findViewById(R.id.buttonUpdateDatabase);
 		buttonNewGameCategories = (Button) findViewById(R.id.buttonNewGameCategories);
-		buttonManageUsers = (Button)findViewById(R.id.buttonManageUsers);
+		buttonManageUsers = (Button) findViewById(R.id.buttonManageUsers);
 
 		buttonNewGameAllQuestions.setOnClickListener(this);
 		buttonManageDatabase.setOnClickListener(this);
@@ -172,7 +177,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		case R.id.buttonManageUsers:
 			buttonManagerUsers_Clicked();
 			break;
-		
+
 		case R.id.buttonNewGameCategories:
 			buttonNewGameCategories_Clicked();
 			break;
@@ -201,20 +206,24 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	}
 
 	private void buttonManagerUsers_Clicked() {
-		// 
+		//
 		Intent intent = new Intent(this, ActivityManageUsers.class);
 
 		startActivity(intent);
-		
-		
+
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		//
-		if (resultCode == 1) {
-
+		switch (requestCode) {
+		case REQUEST_CODE_BACK_FROM_PREFERENCES:
+			m_UpdateManager.updateServerIpFromPreferences();
+			break;
+		case REQUEST_CODE_START_GAME_CATEGORIES:
 			startNewGame(ActivityGame.GAMETYPE_CATEGORIES, data);
+			break;
+
 		}
 	}
 
@@ -222,15 +231,13 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		//
 		//
 		Intent intent = new Intent(this, ActivityShowCategoryForGame.class);
-		startActivityForResult(intent, 1);
-
+		startActivityForResult(intent, REQUEST_CODE_START_GAME_CATEGORIES);
 	}
 
 	private void buttonUpdateDatabase_Clicked() {
 		//
 
 		m_UpdateManager.updateQuestions();
-		
 
 	}
 
@@ -332,7 +339,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		//
 		Intent pref = new Intent(ActivityTrivia.this, ActivityPrefs.class);
 
-		startActivity(pref);
+		startActivityForResult(pref, REQUEST_CODE_BACK_FROM_PREFERENCES);
 
 	}
 
