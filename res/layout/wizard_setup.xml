@@ -42,6 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
+        android:background="@drawable/custom_menu_button"
         android:text="@string/next" />
 
     <Button
@@ -51,6 +52,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:text="@string/back"
+        android:background="@drawable/custom_menu_button"
         android:visibility="gone" />
 
 </RelativeLayout>

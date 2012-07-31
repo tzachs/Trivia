@@ -21,8 +21,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
-
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -550,13 +548,11 @@ public class JSONHandler {
 		protected void onPostExecute(ContentValues[] result) {
 			//
 			m_ProgressDialog.dismiss();
-			
-			if ( m_DatabaseUpdateListener != null ){
-				m_DatabaseUpdateListener.onDownloadedCategories(result);	
+
+			if (m_DatabaseUpdateListener != null) {
+				m_DatabaseUpdateListener.onDownloadedCategories(result);
 			}
-			
-			
-			
+
 		}
 
 		@Override
@@ -643,11 +639,8 @@ public class JSONHandler {
 		protected void onPostExecute(ContentValues[] result) {
 			//
 			m_ProgressDialog.dismiss();
-			
-			m_DatabaseUpdateListener.onDownloadedQuestions(result);
-			
 
-		
+			m_DatabaseUpdateListener.onDownloadedQuestions(result);
 
 		}
 
@@ -792,8 +785,7 @@ public class JSONHandler {
 		}
 
 		m_UserManagerListener.onUserLogin(ret, userId);
-		
-		
+
 	}
 
 	public void userRegister(String[] i_Params) {
@@ -832,39 +824,42 @@ public class JSONHandler {
 			e.printStackTrace();
 		}
 
-		m_UserManagerListener.onUserRegister(ret,userId);
+		m_UserManagerListener.onUserRegister(ret, userId);
 
 	}
-	
+
 	static public interface UserManageListener {
-		
+
 		public void onUserLogin(String i_Response, int i_UserId);
+
 		public void onUserRegister(String i_Response, int i_UserId);
 	}
-	
+
 	static public interface DatabaseUpdateListener {
-		
-		public void onDownloadedQuestions (ContentValues[] i_DownloadedQuestions);
-		public void onDownloadedCategories (ContentValues[] i_DownloadedCategories);
-		
+
+		public void onDownloadedQuestions(ContentValues[] i_DownloadedQuestions);
+
+		public void onDownloadedCategories(
+				ContentValues[] i_DownloadedCategories);
+
 	}
-	
-	public void setUserManageListener (UserManageListener listener){
+
+	public void setUserManageListener(UserManageListener listener) {
 		this.m_UserManagerListener = listener;
 	}
 
-	public void setUpdateManager(DatabaseUpdateListener listener){
+	public void setUpdateManager(DatabaseUpdateListener listener) {
 		this.m_DatabaseUpdateListener = listener;
-		// 
-		
+		//
+
 	}
 
 	public void updateServerIpFromPreferences() {
 		//
-		
-				m_ServerUrl = m_SharedPreferences.getString(
-						"editTextPreferencePrimaryServerIP",
-						"http://23.23.238.181/index.php");
+
+		m_ServerUrl = m_SharedPreferences.getString(
+				"editTextPreferencePrimaryServerIP",
+				"http://23.23.238.181/index.php");
 	}
 
 }
