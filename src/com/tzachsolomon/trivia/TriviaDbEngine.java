@@ -2,7 +2,6 @@ package com.tzachsolomon.trivia;
 
 import java.util.ArrayList;
 
-
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -59,14 +58,22 @@ public class TriviaDbEngine {
 	public static final String KEY_COL_PARENT_ID = "colParentId";
 	public static final String KEY_COL_EN_NAME = "colEnName";
 	public static final String KEY_COL_HE_NAME = "colHeName";
-	
+
 	// TABLE USERS
-	
+
 	private static final String TABLE_USERS = "tblUsers";
-	
+
 	public static final String KEY_COL_USERNAME = "colUsername";
 	public static final String KEY_COL_PASSWORD = "colPassword";
 	public static final String KEY_COL_USER_ID = "colUserId";
+
+	// TABLE GAMES
+
+	private static final String TABLE_GAMES = "tblGames";
+
+	private static final String KEY_COL_GAME_ID = "colGameId";
+	private static final String KEY_COL_GAME_TYPE = "colGameType";
+	private static final String KEY_COL_GAME_SCORE = "colGameScore";
 
 	private DbHelper ourHelper;
 	private Context ourContext;
@@ -87,13 +94,34 @@ public class TriviaDbEngine {
 			createTableUsers(db);
 			createTableQuestions(db);
 			createTableCategories(db);
+			createTableGames(db);
+
+		}
+
+		private void createTableGames(SQLiteDatabase db) {
+
+			StringBuilder sb = new StringBuilder();
+
+			sb.append("CREATE TABLE ");
+			sb.append(TABLE_GAMES);
+			sb.append(" ( ");
+			sb.append(KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, ");
+			sb.append(KEY_COL_GAME_ID + " INTEGER NOT NULL, ");
+			sb.append(KEY_COL_USER_ID + " INTEGER NOT NULL, ");
+			sb.append(KEY_COL_GAME_TYPE + " INTEGER NOT NULL, ");
+			sb.append(KEY_COL_GAME_SCORE + " INTEGER NOT NULL ");
+			sb.append(" );");
+
+			db.execSQL(sb.toString());
+
+			sb.setLength(0);
 
 		}
 
 		private void createTableUsers(SQLiteDatabase db) {
-			// 
+			//
 			StringBuilder sb = new StringBuilder();
-			
+
 			sb.append("CREATE TABLE ");
 			sb.append(TABLE_USERS);
 			sb.append(" ( ");
@@ -106,8 +134,7 @@ public class TriviaDbEngine {
 			db.execSQL(sb.toString());
 
 			sb.setLength(0);
-			
-			
+
 		}
 
 		private void createTableCategories(SQLiteDatabase db) {
@@ -116,7 +143,7 @@ public class TriviaDbEngine {
 
 			sb.append("CREATE TABLE ");
 			sb.append(TABLE_CATEGORIES);
-			sb.append(" (");
+			sb.append(" ( ");
 			sb.append(KEY_ROWID + " INTEGER PRIMARY KEY, ");
 			sb.append(KEY_COL_PARENT_ID + " INTEGER NOT NULL, ");
 			sb.append(KEY_COL_EN_NAME + " TEXT NOT NULL, ");
@@ -161,8 +188,6 @@ public class TriviaDbEngine {
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			//
-			
-			
 
 		}
 
@@ -370,7 +395,7 @@ public class TriviaDbEngine {
 
 		}
 
-		//Log.i(TAG, where.toString());
+		// Log.i(TAG, where.toString());
 
 		ArrayList<Question> ret;
 
@@ -744,6 +769,7 @@ public class TriviaDbEngine {
 	}
 
 	public long getCategoriesLastUpdate() {
+
 		//
 		String[] columns = new String[] { "MAX(" + KEY_LAST_UPDATE + ")" };
 		long ret;
@@ -774,6 +800,27 @@ public class TriviaDbEngine {
 		this.closeDb();
 		return ret;
 	}
+	
+	public void addScoreToDatabase (int i_UserId, int i_GameType, int i_GameScore){
+		
+		this.openDbWritable();
+		
+		ContentValues cv = new ContentValues();
+		
+		// TODO: get epoch time and use it as GAME ID
+		cv.put(KEY_COL_GAME_ID, 1);
+		cv.put(KEY_COL_GAME_SCORE, i_GameScore);
+		cv.put(KEY_COL_GAME_TYPE, i_GameType);
+		cv.put(KEY_COL_USER_ID,i_UserId);
+		
+		if ( ourDatabase.insert(TABLE_GAMES, null, cv) == -1){
+			// TODO: send error inserting to database
+		}
+		
+		
+		this.closeDb();
+		
+	}
 
 	public void updateCategoriesAysnc(ContentValues[] result) {
 		//
@@ -800,7 +847,7 @@ public class TriviaDbEngine {
 		protected void onPostExecute(Void result) {
 			//
 			m_ProgressDialog.dismiss();
-			if ( m_UpdateListener != null ){
+			if (m_UpdateListener != null) {
 				m_UpdateListener.onUpdateCategoriesFinished();
 			}
 
@@ -866,30 +913,31 @@ public class TriviaDbEngine {
 		this.deleteCategories();
 
 	}
-	
+
 	static public interface TriviaDbEngineUpdateListener {
 		public void onUpdateCategoriesFinished();
+
 		public void onUpdateQuestionsFinished();
 	}
-	
-	public void setUpdateListener(TriviaDbEngineUpdateListener listener){
+
+	public void setUpdateListener(TriviaDbEngineUpdateListener listener) {
 		this.m_UpdateListener = listener;
 	}
 
 	public void insertUser(int i_UserId, String i_Username, String i_Password) {
-		// 
+		//
 		this.openDbWritable();
-		
+
 		ContentValues cv = new ContentValues();
-		
+
 		cv.put(KEY_COL_USERNAME, i_Username);
 		cv.put(KEY_COL_PASSWORD, i_Password);
 		cv.put(KEY_COL_USER_ID, i_UserId);
-		
-		ourDatabase.insert(TABLE_USERS,null, cv);		
-		
+
+		ourDatabase.insert(TABLE_USERS, null, cv);
+
 		this.closeDb();
-		
+
 	}
 
 }

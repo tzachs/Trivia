@@ -747,7 +747,7 @@ public class JSONHandler {
 		return ret;
 	}
 
-	public void userLogin(String[] i_Params) {
+	public String userLogin(String[] i_Params) {
 		//
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		JSONObject result;
@@ -785,10 +785,10 @@ public class JSONHandler {
 		}
 
 		m_UserManagerListener.onUserLogin(ret, userId);
-
+		return ret;
 	}
 
-	public void userRegister(String[] i_Params) {
+	public String userRegister(String[] i_Params) {
 		//
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		JSONObject result;
@@ -825,6 +825,7 @@ public class JSONHandler {
 		}
 
 		m_UserManagerListener.onUserRegister(ret, userId);
+		return ret;
 
 	}
 

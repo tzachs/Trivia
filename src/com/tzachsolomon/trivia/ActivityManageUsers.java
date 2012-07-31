@@ -43,7 +43,7 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 		m_JSONHandler = new JSONHandler(this);
 
 		m_JSONHandler.setUserManageListener(this);
-		
+
 		m_TriviaDb = new TriviaDbEngine(this);
 
 		linearLayoutUserRequestDetails = (LinearLayout) findViewById(R.id.linearLayoutUserRequestDetails);
@@ -153,7 +153,7 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 		linearLayoutUserRequestDetails.setVisibility(View.VISIBLE);
 	}
 
-	public class AsyncTaskUserLogin extends AsyncTask<String, Integer, Void> {
+	public class AsyncTaskUserLogin extends AsyncTask<String, Integer, String> {
 
 		private ProgressDialog m_ProgressDialog;
 		private boolean enabled;
@@ -180,24 +180,24 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 		}
 
 		@Override
-		protected Void doInBackground(String... params) {
+		protected String doInBackground(String... params) {
 			//
-			m_JSONHandler.userLogin(params);
-			return null;
+			return m_JSONHandler.userLogin(params);
+			
 
 		}
 
 		@Override
-		protected void onPostExecute(Void result) {
+		protected void onPostExecute(String result) {
 			//
-			
-			super.onPostExecute(result);
+
 			m_ProgressDialog.dismiss();
+			Toast.makeText(ActivityManageUsers.this, result, Toast.LENGTH_SHORT).show();
 		}
 
 	}
 
-	public class AsyncTaskUserRegister extends AsyncTask<String, Integer, Void> {
+	public class AsyncTaskUserRegister extends AsyncTask<String, Integer, String> {
 
 		private ProgressDialog m_ProgressDialog;
 		private boolean enabled;
@@ -220,23 +220,25 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 			}
 
 			detailedResult.setLength(0);
+			
+			
 
 		}
 
 		@Override
-		protected Void doInBackground(String... params) {
+		protected String doInBackground(String... params) {
 			//
-			m_JSONHandler.userRegister(params);
-			return null;
+			return m_JSONHandler.userRegister(params);
+			
 
 		}
-		
-		@Override
-		protected void onPostExecute(Void result) {
-			// 
 
-			super.onPostExecute(result);
+		@Override
+		protected void onPostExecute(String result) {
+			//
+
 			m_ProgressDialog.dismiss();
+			Toast.makeText(ActivityManageUsers.this, result, Toast.LENGTH_LONG).show();
 		}
 
 	}
@@ -248,8 +250,7 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 			Toast.makeText(this, "User logged in", Toast.LENGTH_SHORT);
 		}
 
-		Toast.makeText(ActivityManageUsers.this, i_Response, Toast.LENGTH_LONG)
-				.show();
+		//Toast.makeText(ActivityManageUsers.this, i_Response, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -257,10 +258,10 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 		//
 		if (i_UserId != -1) {
 			// adding the user locally
-			m_TriviaDb.insertUser(i_UserId, editTextUsername.getText().toString(), editTextPassword.getText().toString());
+			m_TriviaDb.insertUser(i_UserId, editTextUsername.getText()
+					.toString(), editTextPassword.getText().toString());
 		}
-		Toast.makeText(ActivityManageUsers.this, i_Respone, Toast.LENGTH_LONG)
-				.show();
+		//
 	}
 
 }
