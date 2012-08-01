@@ -385,4 +385,11 @@ public class UpdateManager implements DatabaseUpdateListener,
 		
 	}
 
+	@Override
+	public void onAddedScoreToDatabase(long returnCode) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 }

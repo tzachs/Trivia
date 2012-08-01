@@ -59,7 +59,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 	private TextView textViewQuestionDifficulty;
 	private TextView textViewLivesLeft;
 
-	private ArrayList<Question> m_Questions;
+	private Questions m_Questions;
 	private Question m_CurrentQuestion;
 
 	private int m_QuestionIndex;
@@ -278,7 +278,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 						m_QuestionLanguages);
 			}
 
-			m_QuestionLength = m_Questions.size();
+			m_QuestionLength = m_Questions.getNumberOfQustions();
 			if (m_QuestionLength < 10) {
 				m_MaxNumberOfQuestionInLevel = m_QuestionLength;
 			} else {
@@ -286,8 +286,10 @@ public class ActivityGame extends Activity implements OnClickListener {
 			}
 
 			m_QuestionIndex = 0;
-
-			Collections.shuffle(m_Questions);
+			
+			m_Questions.shuffle(m_SortByNewQuestionFirst);
+			
+			
 
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(
 					ActivityGame.this);
@@ -327,12 +329,13 @@ public class ActivityGame extends Activity implements OnClickListener {
 				m_QuestionLanguages);
 
 		// Shuffling the order of the questions
-		Collections.shuffle(m_Questions);
+		m_Questions.shuffle(m_SortByNewQuestionFirst);
+		
 
-		m_QuestionLength = m_Questions.size() - 1;
+		m_QuestionLength = m_Questions.getNumberOfQustions() - 1;
 
 		// checking if there are questions to be asked
-		if (m_Questions.size() > 0) {
+		if (m_Questions.getNumberOfQustions() > 0) {
 			m_QuestionIndex = -1;
 
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(
@@ -510,7 +513,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		if (m_QuestionIndex < m_QuestionLength) {
 
-			ret = m_Questions.get(m_QuestionIndex);
+			ret = m_Questions.getQuestionAtIndex(m_QuestionIndex);
 
 			m_QuestionIndex++;
 		}
@@ -529,7 +532,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 			m_QuestionIndex++;
 
 			// getting reference to the current question
-			m_CurrentQuestion = m_Questions.get(m_QuestionIndex);
+			m_CurrentQuestion = m_Questions.getQuestionAtIndex(m_QuestionIndex);
 			
 			initializeQuestionTextViews();
 
@@ -719,16 +722,16 @@ public class ActivityGame extends Activity implements OnClickListener {
 		if (previousQuestionIndex > -1) {
 			// we are not in the first question
 			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID,
-					m_Questions.get(previousQuestionIndex).getQuestionId());
+					m_Questions.getQuestionAtIndex(previousQuestionIndex).getQuestionId());
 			if (m_ReverseNumbersInQuestions) {
 				intent.putExtra(
 						ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
 						m_StringParser.reverseNumbersInStringHebrew(m_Questions
-								.get(previousQuestionIndex).getQuestion()));
+								.getQuestionAtIndex(previousQuestionIndex).getQuestion()));
 			} else {
 				intent.putExtra(
 						ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
-						m_Questions.get(previousQuestionIndex).getQuestion());
+						m_Questions.getQuestionAtIndex(previousQuestionIndex).getQuestion());
 			}
 
 		} else {

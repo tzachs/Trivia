@@ -253,7 +253,7 @@ public class TriviaDbEngine {
 		return ret;
 	}
 
-	public ArrayList<Question> getQuestionsEnabled(
+	public Questions getQuestionsEnabled(
 			boolean i_SortByNewQuestionsFirst, int[] i_QuestionLanguages) {
 		//
 		return getQuestionsByLevelAndCategories(-2, i_SortByNewQuestionsFirst,
@@ -303,7 +303,7 @@ public class TriviaDbEngine {
 		return getCategories(categoryId);
 	}
 
-	public ArrayList<Question> getQuestionsByLevel(int i_Level,
+	public Questions getQuestionsByLevel(int i_Level,
 			boolean i_SortByNewQuestionsFirst, int[] i_QuestionsLanguages) {
 		//
 
@@ -311,11 +311,11 @@ public class TriviaDbEngine {
 				i_SortByNewQuestionsFirst, null, i_QuestionsLanguages);
 	}
 
-	public ArrayList<Question> getQuestionsByLevelAndCategories(int i_Level,
+	public Questions getQuestionsByLevelAndCategories(int i_Level,
 			boolean i_SortByNewQuestionsFirst, int[] i_Categories,
 			int[] i_QuestionLanguages) {
 		//
-
+		Questions ret;
 		StringBuilder orderBy = new StringBuilder();
 		ContentValues map;
 		String sum = "SUM(" + KEY_CORRECT_USER + " + " + KEY_WRONG_USER
@@ -397,7 +397,7 @@ public class TriviaDbEngine {
 
 		// Log.i(TAG, where.toString());
 
-		ArrayList<Question> ret;
+		
 
 		// ordering by
 		// the category
@@ -419,13 +419,13 @@ public class TriviaDbEngine {
 
 		orderBy.setLength(0);
 
-		ret = new ArrayList<Question>();
+		ret = new Questions();
 
 		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
 
 			DatabaseUtils.cursorRowToContentValues(cursor, map);
 
-			ret.add(new Question(map));
+			ret.addNewQuestion(new Question(map));
 
 		}
 
@@ -800,26 +800,30 @@ public class TriviaDbEngine {
 		this.closeDb();
 		return ret;
 	}
-	
-	public void addScoreToDatabase (int i_UserId, int i_GameType, int i_GameScore){
-		
+
+	public void addScoreToDatabase(int i_UserId, int i_GameType, int i_GameScore) {
+
+		long retCode;
+
 		this.openDbWritable();
-		
+
 		ContentValues cv = new ContentValues();
-		
+
 		// TODO: get epoch time and use it as GAME ID
 		cv.put(KEY_COL_GAME_ID, 1);
 		cv.put(KEY_COL_GAME_SCORE, i_GameScore);
 		cv.put(KEY_COL_GAME_TYPE, i_GameType);
-		cv.put(KEY_COL_USER_ID,i_UserId);
-		
-		if ( ourDatabase.insert(TABLE_GAMES, null, cv) == -1){
-			// TODO: send error inserting to database
+		cv.put(KEY_COL_USER_ID, i_UserId);
+
+		retCode = ourDatabase.insert(TABLE_GAMES, null, cv);
+
+		if (m_UpdateListener != null) {
+
+			m_UpdateListener.onAddedScoreToDatabase(retCode);
 		}
-		
-		
+
 		this.closeDb();
-		
+
 	}
 
 	public void updateCategoriesAysnc(ContentValues[] result) {
@@ -918,6 +922,8 @@ public class TriviaDbEngine {
 		public void onUpdateCategoriesFinished();
 
 		public void onUpdateQuestionsFinished();
+
+		public void onAddedScoreToDatabase(long returnCode);
 	}
 
 	public void setUpdateListener(TriviaDbEngineUpdateListener listener) {
