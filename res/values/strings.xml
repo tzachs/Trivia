@@ -148,6 +148,8 @@
     <string name="play_game_sounds">Play game sounds</string>
     <string name="textViewTimesPlayedTitleText">Times played </string>
     <string name="buttonManageUsersText">Manage Users</string>
+    <string name="textViewGameScoreLabel">Score: </string>
+    <string name="pass">Pass</string>
     
 
 </resources>

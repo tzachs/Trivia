@@ -552,7 +552,7 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 
 	@Override
 	public void onCategoriesUpdated() {
-		// TODO Auto-generated method stub
+		// 
 		initItemsFromDatabase();
 		
 	}

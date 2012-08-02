@@ -1,26 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
- 
-    <TextView 
+    <TextView
         android:id="@+id/textViewLivesLeft"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:text="@string/textViewLivesLeftText"
-        />
-    
-     <TextView
-        android:id="@+id/textViewTimesPlayedTitle"
+        android:layout_height="wrap_content"
+        android:text="@string/textViewLivesLeftText" />
+
+    <TextView
+        android:id="@+id/textViewGameScoreLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:text="@string/textViewGameScoreLabel" />
+
+    <TextView
+        android:id="@+id/textViewGameScoreText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/textViewGameScoreLabel"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/textViewGameScoreLabel"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/textViewTimesPlayedTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:gravity="center_vertical"
         android:text="@string/textViewTimesPlayedTitleText" />
-    
+
     <TextView
         android:id="@+id/textViewTimeTitle"
         android:layout_width="fill_parent"
@@ -118,26 +134,23 @@
             android:layout_margin="4dp"
             android:text="@string/buttonAnswer1" />
     </LinearLayout>
-    
-     <Button 
+
+    <Button
         android:id="@+id/buttonPassQuestion"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Pass"
-        android:layout_margin="4dp"
-        android:visibility="gone"
         android:layout_above="@+id/buttonReportMistakeInQuestion"
-        />
-    
-    <Button 
+        android:layout_margin="4dp"
+        android:text="@string/pass"
+        android:visibility="gone" />
+
+    <Button
         android:id="@+id/buttonReportMistakeInQuestion"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="@string/buttonReportMistakeInQuestion"
-        android:layout_margin="4dp"
         android:layout_alignParentBottom="true"
-        />
-
-   
+        android:layout_margin="4dp"
+        android:background="@drawable/custom_menu_button"
+        android:text="@string/buttonReportMistakeInQuestion" />
 
 </RelativeLayout>

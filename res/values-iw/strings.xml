@@ -145,5 +145,8 @@
     <string name="play_in_game_sounds">נגן צלילים במהלך המשחק</string>
     <string name="play_game_sounds">נגן צלילי משחק</string>
     <string name="textViewTimesPlayedTitleText">פעמים שנשאלה </string>
-	<string name="buttonManageUsersText">נהל משתמשים</string>	
+    <string name="buttonManageUsersText">נהל משתמשים</string>
+    <string name="textViewGameScoreLabel">תוצאה: </string>
+    <string name="pass">עבור</string>
+
 </resources>
