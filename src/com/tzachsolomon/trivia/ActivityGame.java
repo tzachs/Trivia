@@ -111,6 +111,14 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private TextView textViewTimesPlayedTitle;
 
+	private int m_GameScore;
+
+	public long m_MillisUntilFinished;
+
+	private int m_TimeToAnswerQuestion;
+
+	private TextView textViewGameScoreText;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//
@@ -559,10 +567,10 @@ public class ActivityGame extends Activity implements OnClickListener {
 		m_TriviaDb = new TriviaDbEngine(ActivityGame.this);
 		// m_Random = new Random(1);
 		m_Random = new Random(System.currentTimeMillis());
-		int total = 7;
+		m_TimeToAnswerQuestion = 7;
 
 		try {
-			total = Integer.parseInt(m_SharedPreferences.getString(
+			m_TimeToAnswerQuestion = Integer.parseInt(m_SharedPreferences.getString(
 					"editTextPreferenceCountDownTimer", "7"));
 		} catch (ClassCastException e) {
 			Log.e(TAG, e.getMessage().toString());
@@ -575,9 +583,9 @@ public class ActivityGame extends Activity implements OnClickListener {
 			Log.e(TAG, e.getMessage().toString());
 		}
 
-		total *= 1000;
+		m_TimeToAnswerQuestion *= 1000;
 
-		m_CountDownCounter = new MyCountDownCounter(total, 1000);
+		m_CountDownCounter = new MyCountDownCounter(m_TimeToAnswerQuestion, 1000);
 
 		m_CurrentGameType = -1;
 
@@ -643,6 +651,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		textViewQuestionDifficulty = (TextView) findViewById(R.id.textViewQuestionDifficulty);
 		textViewLivesLeft = (TextView) findViewById(R.id.textViewLivesLeft);
 		textViewTimesPlayedTitle = (TextView) findViewById(R.id.textViewTimesPlayedTitle);
+		textViewGameScoreText =  (TextView)findViewById(R.id.textViewGameScoreText);
 	}
 
 	public class MyCountDownCounter extends CountDownTimerWithPause {
@@ -655,7 +664,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		@Override
 		public void onTick(long millisUntilFinished) {
 			//
-
+			m_MillisUntilFinished = millisUntilFinished;
 			textViewTime.setText(Long.toString(millisUntilFinished / 1000));
 
 		}
@@ -664,6 +673,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		public void onFinish() {
 			//
 			textViewTime.setText("0");
+			m_MillisUntilFinished = 0;
 			checkAnswer(-1, null);
 		}
 
@@ -808,6 +818,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 				// if all questions game, increment lives
 				incAllQuestionsLives();
+				
+				addScore();
 
 			} else {
 				startSoundFromSoundPool(m_SoundAnswerWrong, 0);
@@ -843,6 +855,27 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		return ret;
 
+	}
+
+	private void addScore() {
+		//
+		int questionLevel = m_CurrentQuestion.getQuestionLevel() * 10;
+		// adding game score according to question level ( difficulty) 
+		m_GameScore +=  questionLevel;
+		
+		// adding time bonus
+		double bonus = (double)m_MillisUntilFinished / (double)m_TimeToAnswerQuestion;
+		bonus *= questionLevel;
+		m_GameScore += bonus;
+		
+		setGameScoreText("" + m_GameScore + " (+ " + bonus + ")"); 
+		
+	}
+
+	private void setGameScoreText(String i_Text){
+		// 
+		textViewGameScoreText.setText(i_Text);
+		
 	}
 
 	private void startSoundFromSoundPool(int i_Sound, int i_LoopEnabled) {

@@ -27,7 +27,7 @@ import android.widget.Toast;
 
 public class ActivityTrivia extends Activity implements OnClickListener {
 
-	// TODO: fix shuffle with random
+	// 
 	// TODO: sounds
 	// TODO: animation
 	// TODO: background
