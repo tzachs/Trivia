@@ -151,6 +151,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 	private void parseGameSetupAndStart() {
 		//
 		updateLivesTextView();
+		m_GameScore = 0;
+		textViewGameScoreText.setText("0");
 
 		switch (m_CurrentGameType) {
 		case GAMETYPE_ALL_QUESTIONS:
@@ -294,10 +296,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 			}
 
 			m_QuestionIndex = 0;
-			
+
 			m_Questions.shuffle(m_SortByNewQuestionFirst);
-			
-			
 
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(
 					ActivityGame.this);
@@ -338,7 +338,6 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		// Shuffling the order of the questions
 		m_Questions.shuffle(m_SortByNewQuestionFirst);
-		
 
 		m_QuestionLength = m_Questions.getNumberOfQustions() - 1;
 
@@ -459,7 +458,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 				textViewNumberOfQuestionsLeft.setText(Integer
 						.toString(m_MaxNumberOfQuestionInLevel
 								- m_CurrentQuestionInThisLevel));
-				
+
 				// initialize common text views
 				initializeQuestionTextViews();
 
@@ -476,32 +475,36 @@ public class ActivityGame extends Activity implements OnClickListener {
 	}
 
 	private void initializeQuestionTextViews() {
-		// 
+		//
 
 		if (m_ReverseNumbersInQuestions) {
 			textViewQuestion.setText(m_StringParser
 					.reverseNumbersInStringHebrew(m_CurrentQuestion
 							.getQuestion()));
 
-			textViewTimesPlayedTitle.setText(m_StringParser.reverseNumbersInStringHebrew(					
-					getString(R.string.textViewTimesPlayedTitleText) +  m_CurrentQuestion.getQuestionTimesPlayed()));
+			textViewTimesPlayedTitle
+					.setText(m_StringParser
+							.reverseNumbersInStringHebrew(getString(R.string.textViewTimesPlayedTitleText)
+									+ m_CurrentQuestion
+											.getQuestionTimesPlayed()));
 		} else {
 			textViewQuestion.setText(m_CurrentQuestion.getQuestion());
-			textViewTimesPlayedTitle.setText(getString(R.string.textViewTimesPlayedTitleText) + " " + m_CurrentQuestion.getQuestionTimesPlayed());
+			textViewTimesPlayedTitle
+					.setText(getString(R.string.textViewTimesPlayedTitleText)
+							+ " " + m_CurrentQuestion.getQuestionTimesPlayed());
 		}
 		// setting question difficulty
-		textViewQuestionDifficulty.setText(Integer
-				.toString(m_CurrentQuestion.getQuestionLevel()));
+		textViewQuestionDifficulty.setText(Integer.toString(m_CurrentQuestion
+				.getQuestionLevel()));
 
 		// randomize answer places (indices)
 		m_CurrentQuestion.randomizeAnswerPlaces(m_Random);
-		
+
 		buttonAnswer1.setText(m_CurrentQuestion.getAnswer1());
 		buttonAnswer2.setText(m_CurrentQuestion.getAnswer2());
 		buttonAnswer3.setText(m_CurrentQuestion.getAnswer3());
 		buttonAnswer4.setText(m_CurrentQuestion.getAnswer4());
 
-		
 	}
 
 	private void startOrResumeCountDownTimer(boolean i_Start) {
@@ -511,7 +514,9 @@ public class ActivityGame extends Activity implements OnClickListener {
 		} else {
 			m_CountDownCounter.resume();
 		}
-		m_ClockSound.start();
+		if (m_SoundEnabled) {
+			m_ClockSound.start();
+		}
 
 	}
 
@@ -541,7 +546,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 			// getting reference to the current question
 			m_CurrentQuestion = m_Questions.getQuestionAtIndex(m_QuestionIndex);
-			
+
 			initializeQuestionTextViews();
 
 			startOrResumeCountDownTimer(true);
@@ -570,8 +575,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 		m_TimeToAnswerQuestion = 7;
 
 		try {
-			m_TimeToAnswerQuestion = Integer.parseInt(m_SharedPreferences.getString(
-					"editTextPreferenceCountDownTimer", "7"));
+			m_TimeToAnswerQuestion = Integer.parseInt(m_SharedPreferences
+					.getString("editTextPreferenceCountDownTimer", "7"));
 		} catch (ClassCastException e) {
 			Log.e(TAG, e.getMessage().toString());
 		}
@@ -585,7 +590,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		m_TimeToAnswerQuestion *= 1000;
 
-		m_CountDownCounter = new MyCountDownCounter(m_TimeToAnswerQuestion, 1000);
+		m_CountDownCounter = new MyCountDownCounter(m_TimeToAnswerQuestion,
+				1000);
 
 		m_CurrentGameType = -1;
 
@@ -651,7 +657,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		textViewQuestionDifficulty = (TextView) findViewById(R.id.textViewQuestionDifficulty);
 		textViewLivesLeft = (TextView) findViewById(R.id.textViewLivesLeft);
 		textViewTimesPlayedTitle = (TextView) findViewById(R.id.textViewTimesPlayedTitle);
-		textViewGameScoreText =  (TextView)findViewById(R.id.textViewGameScoreText);
+		textViewGameScoreText = (TextView) findViewById(R.id.textViewGameScoreText);
 	}
 
 	public class MyCountDownCounter extends CountDownTimerWithPause {
@@ -732,16 +738,19 @@ public class ActivityGame extends Activity implements OnClickListener {
 		if (previousQuestionIndex > -1) {
 			// we are not in the first question
 			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID,
-					m_Questions.getQuestionAtIndex(previousQuestionIndex).getQuestionId());
+					m_Questions.getQuestionAtIndex(previousQuestionIndex)
+							.getQuestionId());
 			if (m_ReverseNumbersInQuestions) {
 				intent.putExtra(
 						ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
 						m_StringParser.reverseNumbersInStringHebrew(m_Questions
-								.getQuestionAtIndex(previousQuestionIndex).getQuestion()));
+								.getQuestionAtIndex(previousQuestionIndex)
+								.getQuestion()));
 			} else {
 				intent.putExtra(
 						ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
-						m_Questions.getQuestionAtIndex(previousQuestionIndex).getQuestion());
+						m_Questions.getQuestionAtIndex(previousQuestionIndex)
+								.getQuestion());
 			}
 
 		} else {
@@ -818,7 +827,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 				// if all questions game, increment lives
 				incAllQuestionsLives();
-				
+
 				addScore();
 
 			} else {
@@ -859,23 +868,27 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private void addScore() {
 		//
+		int addScore = 0;
 		int questionLevel = m_CurrentQuestion.getQuestionLevel() * 10;
-		// adding game score according to question level ( difficulty) 
-		m_GameScore +=  questionLevel;
-		
+		// adding game score according to question level ( difficulty)
+		addScore += questionLevel;
+
 		// adding time bonus
-		double bonus = (double)m_MillisUntilFinished / (double)m_TimeToAnswerQuestion;
+		double bonus = (double) m_MillisUntilFinished
+				/ (double) m_TimeToAnswerQuestion;
 		bonus *= questionLevel;
-		m_GameScore += bonus;
-		
-		setGameScoreText("" + m_GameScore + " (+ " + bonus + ")"); 
-		
+		addScore += bonus;
+
+		m_GameScore += addScore;
+
+		setGameScoreText("" + m_GameScore + " (+" + addScore + ")");
+
 	}
 
-	private void setGameScoreText(String i_Text){
-		// 
+	private void setGameScoreText(String i_Text) {
+		//
 		textViewGameScoreText.setText(i_Text);
-		
+
 	}
 
 	private void startSoundFromSoundPool(int i_Sound, int i_LoopEnabled) {
