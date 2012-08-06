@@ -32,6 +32,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 	public static final String EXTRA_GAME_TYPE = "GameType";
 	public static final String EXTRA_GAME_CATEGORIES = "GameCategories";
 	public static final String EXTRA_GAME_START_LEVEL = "GameStartLevel";
+	public static final String EXTRA_GAME_USER_ID = "GameUserId";
 
 	public static final int GAMETYPE_ALL_QUESTIONS = 1;
 	public static final int GAMETYPE_LEVELS = 2;
@@ -41,8 +42,11 @@ public class ActivityGame extends Activity implements OnClickListener {
 	public static final String INTENT_EXTRA_PREVIOUS_QUESTION_STRING = "previousQuestionString";
 	public static final String INTENT_EXTRA_CURRENT_QUESTION_ID = "currentQuestionId";
 	public static final String INTENT_EXTRA_CURRENT_QUESTION_STRING = "currentQuestionString";
+	
 
 	public static final String INTENT_EXTRA_GAME_TYPE = "keyGameType";
+
+	
 
 	private MyCountDownCounter m_CountDownCounter;
 
@@ -119,6 +123,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private TextView textViewGameScoreText;
 
+	private int m_UserId;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//
@@ -135,6 +141,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		m_Extras = getIntent().getExtras();
 		m_CurrentGameType = m_Extras.getInt(ActivityGame.EXTRA_GAME_TYPE);
+		m_UserId = m_Extras.getInt(ActivityGame.EXTRA_GAME_USER_ID);
+		
 
 		showInstructions();
 	}
@@ -559,6 +567,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 		//
 		// initialize the sounds
 
+		m_UserId = -1;
+		
 		m_SoundEnabled = m_SharedPreferences.getBoolean(
 				"checkBoxPreferencePlayGameSounds", true);
 
@@ -600,6 +610,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 		initializeTextViews();
 
 		initializeButtons();
+		
+		
 
 	}
 
@@ -984,6 +996,12 @@ public class ActivityGame extends Activity implements OnClickListener {
 	private void showGameOver() {
 		m_GameOver = true;
 		stopOrPauseCountdownTimer(true);
+		
+		// if m_UserId is of logged in user than enter it to the database
+		if ( m_UserId > -1 ){
+			m_TriviaDb.addScoreToDatabase(m_UserId, m_CurrentGameType, m_GameScore);
+			
+		}
 
 		AlertDialog.Builder gameOverDialog = new AlertDialog.Builder(
 				ActivityGame.this);

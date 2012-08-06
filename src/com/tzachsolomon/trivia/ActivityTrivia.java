@@ -40,6 +40,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	private static final int REQUEST_CODE_START_GAME_CATEGORIES = 1;
 	private static final int REQUEST_CODE_BACK_FROM_PREFERENCES = 2;
+	private static final int REQUEST_CODE_BACK_FROM_ACTIVITY_USER_MANAGER = 3;
 
 	private Button buttonNewGameAllQuestions;
 	private Button buttonManageDatabase;
@@ -54,6 +55,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	private Button buttonNewGameCategories;
 
 	private Button buttonManageUsers;
+	private int m_CurrentUserId;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -209,8 +211,9 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	private void buttonManagerUsers_Clicked() {
 		//
 		Intent intent = new Intent(this, ActivityManageUsers.class);
-
-		startActivity(intent);
+		
+		startActivityForResult(intent, REQUEST_CODE_BACK_FROM_ACTIVITY_USER_MANAGER);
+		
 
 	}
 
@@ -218,6 +221,9 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		//
 		switch (requestCode) {
+		case REQUEST_CODE_BACK_FROM_ACTIVITY_USER_MANAGER:
+			m_CurrentUserId = resultCode;
+			break;
 		case REQUEST_CODE_BACK_FROM_PREFERENCES:
 			m_UpdateManager.updateServerIpFromPreferences();
 			break;
@@ -249,6 +255,9 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		startActivity(pref);
 
 	}
+	
+	
+	
 
 	private void buttonNewGameSimple_Clicked() {
 		//
@@ -277,19 +286,21 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	}
 
-	private void startNewGame(int i_GameType) {
+	private void startNewGame(int i_GameType){
 		//
 
 		Intent intent = new Intent(this, ActivityGame.class);
 		intent.putExtra(ActivityGame.EXTRA_GAME_TYPE, i_GameType);
 		intent.putExtra(ActivityGame.EXTRA_GAME_START_LEVEL, 1);
+		intent.putExtra(ActivityGame.EXTRA_GAME_USER_ID, m_CurrentUserId);
+		
 
 		startActivity(intent);
 
 	}
 
 	private void startNewGame(int i_GameType, Intent data) {
-		//
+		// TODO: change data to type bundle and remove EXTRA_GAME_CATEGORIES from this function
 		Intent intent = new Intent(this, ActivityGame.class);
 		intent.putExtra(ActivityGame.EXTRA_GAME_TYPE, i_GameType);
 		intent.putExtra(ActivityGame.EXTRA_GAME_CATEGORIES,

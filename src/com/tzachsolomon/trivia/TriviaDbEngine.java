@@ -74,6 +74,7 @@ public class TriviaDbEngine {
 	private static final String KEY_COL_GAME_ID = "colGameId";
 	private static final String KEY_COL_GAME_TYPE = "colGameType";
 	private static final String KEY_COL_GAME_SCORE = "colGameScore";
+	private static final String KEY_COL_GAME_UPLOADED = "colGameUploaded";
 
 	private DbHelper ourHelper;
 	private Context ourContext;
@@ -110,6 +111,7 @@ public class TriviaDbEngine {
 			sb.append(KEY_COL_USER_ID + " INTEGER NOT NULL, ");
 			sb.append(KEY_COL_GAME_TYPE + " INTEGER NOT NULL, ");
 			sb.append(KEY_COL_GAME_SCORE + " INTEGER NOT NULL ");
+			sb.append(KEY_COL_GAME_UPLOADED + " INTEGER NOT NULL ");
 			sb.append(" );");
 
 			db.execSQL(sb.toString());
@@ -809,16 +811,15 @@ public class TriviaDbEngine {
 
 		ContentValues cv = new ContentValues();
 
-		// TODO: get epoch time and use it as GAME ID
-		cv.put(KEY_COL_GAME_ID, 1);
+		cv.put(KEY_COL_GAME_ID, System.currentTimeMillis());
 		cv.put(KEY_COL_GAME_SCORE, i_GameScore);
 		cv.put(KEY_COL_GAME_TYPE, i_GameType);
 		cv.put(KEY_COL_USER_ID, i_UserId);
+		cv.put(KEY_COL_GAME_UPLOADED, 0);
 
 		retCode = ourDatabase.insert(TABLE_GAMES, null, cv);
 
 		if (m_UpdateListener != null) {
-
 			m_UpdateListener.onAddedScoreToDatabase(retCode);
 		}
 

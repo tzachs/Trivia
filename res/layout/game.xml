@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        
         android:text="@string/textViewGameScoreLabel" />
 
     <TextView
@@ -35,6 +36,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:gravity="center_vertical"
+        android:visibility="gone"
         android:text="@string/textViewTimesPlayedTitleText" />
 
     <TextView

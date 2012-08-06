@@ -1,5 +1,6 @@
 package com.tzachsolomon.trivia;
 
+
 import com.tzachsolomon.trivia.JSONHandler.UserManageListener;
 
 import android.app.Activity;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 public class ActivityManageUsers extends Activity implements OnClickListener,
 		UserManageListener {
 
+	public static final int ANNONYMOUS_USER = -2;
 	private Button buttonUserRegister;
 	private Button buttonUserLogin;
 	private EditText editTextUsername;
@@ -27,6 +29,7 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 	private Button buttonUserRequestClose;
 	private Button buttonUserRequestSend;
 	private TriviaDbEngine m_TriviaDb;
+	private ActivityManagerUserListener m_ActivityManagerUserListener;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,8 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 
 	private void initializeVariables() {
 
+		// -2 means no user login was done
+		setResult(ANNONYMOUS_USER);
 		//
 		m_JSONHandler = new JSONHandler(this);
 
@@ -193,6 +198,7 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 
 			m_ProgressDialog.dismiss();
 			Toast.makeText(ActivityManageUsers.this, result, Toast.LENGTH_SHORT).show();
+			
 		}
 
 	}
@@ -248,7 +254,14 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 		//
 		if (i_UserId != -1) {
 			Toast.makeText(this, "User logged in", Toast.LENGTH_SHORT);
+		} 
+		
+		if ( m_ActivityManagerUserListener != null){
+			m_ActivityManagerUserListener.onUserRegister(i_UserId);
 		}
+		
+		setResult(i_UserId);
+		finish();
 
 		//Toast.makeText(ActivityManageUsers.this, i_Response, Toast.LENGTH_LONG).show();
 	}
@@ -260,8 +273,23 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 			// adding the user locally
 			m_TriviaDb.insertUser(i_UserId, editTextUsername.getText()
 					.toString(), editTextPassword.getText().toString());
-		}
+			
+		} 
+		
+		
+		
+		
 		//
+	}
+	
+	
+	
+	static public interface ActivityManagerUserListener {
+		public void onUserRegister ( int  i_UserId );
+	}
+	
+	public void setActivityManagerUserListener ( ActivityManagerUserListener i_Listener ){
+		this.m_ActivityManagerUserListener = i_Listener;
 	}
 
 }
