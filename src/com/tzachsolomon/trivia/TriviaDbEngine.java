@@ -1,6 +1,6 @@
 package com.tzachsolomon.trivia;
 
-import java.util.ArrayList;
+
 
 import android.app.ProgressDialog;
 import android.content.ContentValues;

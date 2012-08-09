@@ -2,7 +2,7 @@ package com.tzachsolomon.trivia;
 
 import java.util.ArrayList;
 
-import com.tzachsolomon.trivia.TriviaDbEngine.TriviaDbEngineUpdateListener;
+
 import com.tzachsolomon.trivia.UpdateManager.CategoriesListener;
 
 import android.app.ExpandableListActivity;

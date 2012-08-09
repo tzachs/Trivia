@@ -12,6 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ActivityManageUsers extends Activity implements OnClickListener,
@@ -148,14 +149,16 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 
 	private void buttonUserLogin_Clicked() {
 		//
-		buttonUserRegister.setVisibility(View.GONE);
 		linearLayoutUserRequestDetails.setVisibility(View.VISIBLE);
+		buttonUserRegister.setVisibility(View.GONE);
+		editTextEmail.setVisibility(View.GONE);
 	}
 
 	private void buttonUserRegister_Clicked() {
 		//
 		buttonUserLogin.setVisibility(View.GONE);
 		linearLayoutUserRequestDetails.setVisibility(View.VISIBLE);
+		editTextEmail.setVisibility(View.VISIBLE);
 	}
 
 	public class AsyncTaskUserLogin extends AsyncTask<String, Integer, String> {

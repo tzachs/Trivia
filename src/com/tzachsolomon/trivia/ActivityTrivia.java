@@ -23,14 +23,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
 public class ActivityTrivia extends Activity implements OnClickListener {
 
 	// 
-	// TODO: sounds
+	// 
 	// TODO: animation
-	// TODO: background
+	// 
 	// TODO: highest score
 	// TODO: create service to update the database daily
 	// TODO: initial settings with XML file
@@ -228,10 +227,22 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 			m_UpdateManager.updateServerIpFromPreferences();
 			break;
 		case REQUEST_CODE_START_GAME_CATEGORIES:
-			startNewGame(ActivityGame.GAMETYPE_CATEGORIES, data);
+			Bundle extras = data.getExtras();
+			
+			extras.putInt(ActivityGame.EXTRA_GAME_TYPE, ActivityGame.GAMETYPE_CATEGORIES);
+			startNewGame(extras);
+			
 			break;
 
 		}
+	}
+
+	private void startNewGame(Bundle extras) {
+		// 
+		Intent intent = new Intent(this, ActivityGame.class);
+		intent.putExtra(ActivityGame.EXTRA_GAME_USER_ID, m_CurrentUserId);
+		intent.putExtras(extras);
+		startActivity(intent);
 	}
 
 	private void buttonNewGameCategories_Clicked() {
@@ -261,8 +272,12 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	private void buttonNewGameSimple_Clicked() {
 		//
-		startNewGame(ActivityGame.GAMETYPE_LEVELS);
-		// TODO: add start level, max level;
+		Bundle extras = new Bundle();
+		extras.putInt(ActivityGame.EXTRA_GAME_TYPE, ActivityGame.GAMETYPE_LEVELS);
+		extras.putInt(ActivityGame.EXTRA_GAME_START_LEVEL, 1);
+		
+		startNewGame(extras);
+		
 
 	}
 
@@ -281,32 +296,14 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	}
 
 	private void buttonNewGameAllQuestions_Clicked() {
+		
 		//
-		startNewGame(ActivityGame.GAMETYPE_ALL_QUESTIONS);
-
-	}
-
-	private void startNewGame(int i_GameType){
-		//
-
-		Intent intent = new Intent(this, ActivityGame.class);
-		intent.putExtra(ActivityGame.EXTRA_GAME_TYPE, i_GameType);
-		intent.putExtra(ActivityGame.EXTRA_GAME_START_LEVEL, 1);
-		intent.putExtra(ActivityGame.EXTRA_GAME_USER_ID, m_CurrentUserId);
+		Bundle extras = new Bundle();
+		
+		extras.putInt(ActivityGame.EXTRA_GAME_TYPE, ActivityGame.GAMETYPE_ALL_QUESTIONS);
+		startNewGame(extras);
 		
 
-		startActivity(intent);
-
-	}
-
-	private void startNewGame(int i_GameType, Intent data) {
-		// TODO: change data to type bundle and remove EXTRA_GAME_CATEGORIES from this function
-		Intent intent = new Intent(this, ActivityGame.class);
-		intent.putExtra(ActivityGame.EXTRA_GAME_TYPE, i_GameType);
-		intent.putExtra(ActivityGame.EXTRA_GAME_CATEGORIES,
-				data.getIntArrayExtra(ActivityGame.EXTRA_GAME_CATEGORIES));
-
-		startActivity(intent);
 	}
 
 	@Override

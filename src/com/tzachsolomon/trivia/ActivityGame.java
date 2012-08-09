@@ -2,7 +2,7 @@ package com.tzachsolomon.trivia;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+
 
 import java.util.Random;
 
@@ -19,6 +19,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -893,7 +894,14 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		m_GameScore += addScore;
 
-		setGameScoreText("" + m_GameScore + " (+" + addScore + ")");
+		// TODO: find better solution, have custom toast
+		
+		Toast t = Toast.makeText(this, "" + "(+" + addScore + ")",Toast.LENGTH_SHORT);
+		t.setGravity(Gravity.TOP, textViewGameScoreText.getLeft(), textViewGameScoreText.getTop());
+		t.setMargin(0, 0);
+		t.show();
+		
+		setGameScoreText("" + m_GameScore);
 
 	}
 
