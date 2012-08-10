@@ -54,6 +54,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/checkBoxShowConfigurationWizard"
         android:layout_margin="4dp"
+        android:background="@drawable/custom_menu_button"
         android:text="@string/buttonSetupFinishText" />
 
   
