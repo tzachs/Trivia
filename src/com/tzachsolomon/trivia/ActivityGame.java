@@ -818,6 +818,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		// checking if time is up
 		if (i == -1) {
 			ret = -1;
+			// TODO: use resources
 			sb.append("Time is up!");
 			incCurrentWrongAnswersCounter();
 			startSoundFromSoundPool(m_SoundAnswerWrong, 0);
@@ -897,8 +898,10 @@ public class ActivityGame extends Activity implements OnClickListener {
 		// TODO: find better solution, have custom toast
 		
 		Toast t = Toast.makeText(this, "" + "(+" + addScore + ")",Toast.LENGTH_SHORT);
+		
 		t.setGravity(Gravity.TOP, textViewGameScoreText.getLeft(), textViewGameScoreText.getTop());
 		t.setMargin(0, 0);
+		
 		t.show();
 		
 		setGameScoreText("" + m_GameScore);
@@ -1006,6 +1009,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		stopOrPauseCountdownTimer(true);
 		
 		// if m_UserId is of logged in user than enter it to the database
+		// TODO: debug this one.
 		if ( m_UserId > -1 ){
 			m_TriviaDb.addScoreToDatabase(m_UserId, m_CurrentGameType, m_GameScore);
 			

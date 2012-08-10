@@ -81,13 +81,13 @@ public class ActivityManageDatabase extends Activity implements OnClickListener 
 
 	private void buttonUpdateDatabaseCategories_Clicked() {
 		// 
-		m_UpdateManager.updateCategories();
+		m_UpdateManager.updateCategories(false);
 		
 	}
 
 	private void buttonUpdateDatabase_Clicked() {
 		// checking if to upload user correct wrong statistics before
-		m_UpdateManager.updateQuestions();
+		m_UpdateManager.updateQuestions(false);
 
 	}
 

@@ -71,9 +71,9 @@ public class TriviaDbEngine {
 
 	private static final String TABLE_GAMES = "tblGames";
 
-	private static final String KEY_COL_GAME_ID = "colGameId";
-	private static final String KEY_COL_GAME_TYPE = "colGameType";
-	private static final String KEY_COL_GAME_SCORE = "colGameScore";
+	public static final String KEY_COL_GAME_ID = "colGameId";
+	public static final String KEY_COL_GAME_TYPE = "colGameType";
+	public static final String KEY_COL_GAME_SCORE = "colGameScore";
 	private static final String KEY_COL_GAME_UPLOADED = "colGameUploaded";
 
 	private DbHelper ourHelper;
@@ -110,7 +110,7 @@ public class TriviaDbEngine {
 			sb.append(KEY_COL_GAME_ID + " INTEGER NOT NULL, ");
 			sb.append(KEY_COL_USER_ID + " INTEGER NOT NULL, ");
 			sb.append(KEY_COL_GAME_TYPE + " INTEGER NOT NULL, ");
-			sb.append(KEY_COL_GAME_SCORE + " INTEGER NOT NULL ");
+			sb.append(KEY_COL_GAME_SCORE + " INTEGER NOT NULL, ");
 			sb.append(KEY_COL_GAME_UPLOADED + " INTEGER NOT NULL ");
 			sb.append(" );");
 
@@ -254,6 +254,27 @@ public class TriviaDbEngine {
 
 		return ret;
 	}
+	
+	
+
+	public ContentValues[] getGameScores() {
+		// 
+		ContentValues[] ret = null;
+		
+		this.openDbReadable();
+
+		String[] columns = new String[] { KEY_ROWID, KEY_COL_GAME_ID, KEY_COL_USER_ID, KEY_COL_GAME_TYPE, KEY_COL_GAME_SCORE, KEY_COL_GAME_UPLOADED};
+		
+		Cursor cursor =  ourDatabase.query(TABLE_GAMES, columns, null, null, null, null, KEY_COL_GAME_SCORE);
+		
+		ret = getContentValues(cursor);
+		
+		cursor.close();
+		
+		this.closeDb();
+
+		return ret;
+	}
 
 	public Questions getQuestionsEnabled(
 			boolean i_SortByNewQuestionsFirst, int[] i_QuestionLanguages) {
@@ -268,19 +289,34 @@ public class TriviaDbEngine {
 
 	private ContentValues[] getCategories(int i_CategoryId) {
 		//
-		ContentValues map;
+		Cursor cursor;
+		ContentValues[] ret;
+		
 		String[] columns = { KEY_ROWID, KEY_COL_PARENT_ID, KEY_COL_EN_NAME,
 				KEY_COL_HE_NAME, KEY_LAST_UPDATE };
 
-		Cursor cursor;
-		int i;
-
-		ContentValues[] ret;
 		this.openDbReadable();
 
 		cursor = ourDatabase.query(TABLE_CATEGORIES, columns, KEY_COL_PARENT_ID
 				+ "=" + i_CategoryId, null, null, null, null);
+		
+		ret = getContentValues(cursor);
+		
+		cursor.close();
 
+		this.closeDb();
+
+		return ret;
+
+	}
+
+	private ContentValues[] getContentValues(Cursor cursor) {
+		// 
+		
+		ContentValues[] ret;
+		int i = 0;
+		ContentValues map;
+		
 		ret = new ContentValues[cursor.getCount()];
 		i = 0;
 
@@ -292,12 +328,7 @@ public class TriviaDbEngine {
 
 		}
 
-		cursor.close();
-
-		this.closeDb();
-
 		return ret;
-
 	}
 
 	public ContentValues[] getSubCategories(int categoryId) {
@@ -607,7 +638,7 @@ public class TriviaDbEngine {
 		Cursor cursor;
 		int i;
 
-		this.openDbReadable();
+		this.openDbWritable();
 
 		cursor = ourDatabase.query(TABLE_QUESTIONS, columns, KEY_CORRECT_USER
 				+ ">0 OR " + KEY_WRONG_USER + ">0", null, null, null, null);
@@ -946,5 +977,6 @@ public class TriviaDbEngine {
 		this.closeDb();
 
 	}
+
 
 }

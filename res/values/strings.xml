@@ -81,6 +81,7 @@
     <string name="_questions_update_database_">"Questions. Update database?"</string>
     <string name="update">Update</string>
     <string name="cancel">Cancel</string>
+    <string name="later">Later</string>
     <string name="checking_for_updates_">Checking for updates …</string>
     <string name="error_occoured_stopping_upload_check_server_url_or_connectivity">Error occurred stopping upload, check Server URL or Connectivity</string>
     <string name="inserting_questions_to_database">Inserting questions to Database</string>

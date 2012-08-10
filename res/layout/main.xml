@@ -35,6 +35,15 @@
         android:layout_margin="4dp"
         android:background="@drawable/custom_menu_button"
         android:text="@string/buttonNewGameCategoriesText" />
+    
+    <Button
+        android:id="@+id/buttonGameScores"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonNewGameCategories"
+        android:layout_margin="4dp"
+        android:background="@drawable/custom_menu_button"
+        android:text="High Scores" />
 
     <Button
         android:id="@+id/buttonUpdateDatabase"

@@ -63,7 +63,6 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 		m_DbEngine = new TriviaDbEngine(this);
 		
 		
-		
 		m_UpdateManager = new UpdateManager(this);
 		m_UpdateManager.setCategoriesListener(this);
 		
@@ -76,6 +75,14 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 		setButtonsVisibilaty();
 		
 
+	}
+	
+	@Override
+	protected void onResume() {
+		// 
+		super.onResume();
+		
+		m_UpdateManager.updateCategories(true);
 	}
 
 	private void setButtonsVisibilaty() {
@@ -520,7 +527,7 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 	private void buttonUpdateCategories_Clicked() {
 		// 
 		
-		m_UpdateManager.updateCategories();
+		m_UpdateManager.updateCategories(false);
 		
 	}
 

@@ -47,35 +47,41 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 	}
 
-	public void updateQuestions() {
+	public void updateQuestions(boolean i_SilentMode) {
 
 		if (m_SharedPreferences.getBoolean(
 				"checkBoxPreferenceUploadCorrectWrongUserStat", true)) {
-			new AsyncTaskUpdateCorrectWrongAsync().execute();
+			AsyncTaskUpdateCorrectWrongAsync a = new AsyncTaskUpdateCorrectWrongAsync();
+			a.m_SilentMode = i_SilentMode;
+			a.execute();
 		} else {
-			checkIsUpdateAvailable(true);
+			checkIsUpdateAvailable(i_SilentMode);
 		}
 	}
 
-	public void updateCategories() {
+	public void updateCategories(boolean i_SilentMode) {
 		//
 
 		AsyncTaskCheckUpdateIsAvailable a = new AsyncTaskCheckUpdateIsAvailable();
+		a.m_SilentMode = i_SilentMode;
 		a.setUpdateType(JSONHandler.TYPE_UPDATE_CATEGORIES);
 		a.execute(true);
 	}
 
-	private void checkIsUpdateAvailable(boolean i_DisplayInfoIfNoUpdate) {
+	private void checkIsUpdateAvailable(boolean i_SilentMode) {
 		AsyncTaskCheckUpdateIsAvailable a = new AsyncTaskCheckUpdateIsAvailable();
 
+		a.m_SilentMode = i_SilentMode;
+
 		a.setUpdateType(JSONHandler.TYPE_UPDATE_QUESTIONS);
-		a.execute(i_DisplayInfoIfNoUpdate);
+		a.execute(i_SilentMode);
 
 	}
 
 	public class AsyncTaskUpdateCorrectWrongAsync extends
 			AsyncTask<Void, Integer, String> {
 
+		public boolean m_SilentMode;
 		boolean isInternetAvailable;
 		ContentValues[] wrongCorrectStat;
 		private ProgressDialog m_ProgressDialog;
@@ -95,7 +101,9 @@ public class UpdateManager implements DatabaseUpdateListener,
 				m_ProgressDialog
 						.setTitle(m_Context
 								.getString(R.string.uploading_correct_wrong_statistics));
-				m_ProgressDialog.show();
+				if (m_SilentMode == false) {
+					m_ProgressDialog.show();
+				}
 			} else {
 				Toast.makeText(m_Context, detailedResult.toString(),
 						Toast.LENGTH_LONG).show();
@@ -109,6 +117,7 @@ public class UpdateManager implements DatabaseUpdateListener,
 			//
 			if (isInternetAvailable) {
 				if (result.length() > 0) {
+
 					Toast.makeText(m_Context, result, Toast.LENGTH_LONG).show();
 				} else {
 					/*
@@ -184,6 +193,8 @@ public class UpdateManager implements DatabaseUpdateListener,
 		private int m_UpdateType = -1;
 		private long m_LastUserUpdate;
 
+		public boolean m_SilentMode;
+
 		public void setUpdateType(int i_UpdateType) {
 			m_UpdateType = i_UpdateType;
 		}
@@ -201,7 +212,9 @@ public class UpdateManager implements DatabaseUpdateListener,
 				m_ProgressDialog.setTitle(m_Context
 						.getString(R.string.checking_for_updates_));
 				m_ProgressDialog.setCancelable(true);
-				m_ProgressDialog.show();
+				if (m_SilentMode == false) {
+					m_ProgressDialog.show();
+				}
 			} else {
 				Toast.makeText(m_Context, detailedResult.toString(),
 						Toast.LENGTH_LONG).show();
@@ -260,7 +273,7 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 							}
 						});
-				dialog.setNegativeButton(m_Context.getString(R.string.cancel),
+				dialog.setNegativeButton(m_Context.getString(R.string.later),
 						new DialogInterface.OnClickListener() {
 
 							@Override
@@ -274,9 +287,11 @@ public class UpdateManager implements DatabaseUpdateListener,
 				dialog.show();
 
 			} else {
-				Toast.makeText(m_Context,
-						m_Context.getString(R.string.no_update_available),
-						Toast.LENGTH_SHORT).show();
+				if (m_SilentMode == false) {
+					Toast.makeText(m_Context,
+							m_Context.getString(R.string.no_update_available),
+							Toast.LENGTH_SHORT).show();
+				}
 
 			}
 		}
@@ -375,21 +390,20 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 	@Override
 	public void onUpdateQuestionsFinished() {
-		// 
+		//
 
 	}
 
 	public void updateServerIpFromPreferences() {
-		// 
+		//
 		m_JSONHandler.updateServerIpFromPreferences();
-		
+
 	}
 
 	@Override
 	public void onAddedScoreToDatabase(long returnCode) {
-		// 
-		
-	}
+		//
 
+	}
 
 }
