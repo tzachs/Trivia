@@ -30,7 +30,7 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 	private Button buttonUserRequestClose;
 	private Button buttonUserRequestSend;
 	private TriviaDbEngine m_TriviaDb;
-	private ActivityManagerUserListener m_ActivityManagerUserListener;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -255,13 +255,9 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 	@Override
 	public void onUserLogin(String i_Response, int i_UserId) {
 		//
-		if (i_UserId != -1) {
-			Toast.makeText(this, "User logged in", Toast.LENGTH_SHORT);
-		} 
+
 		
-		if ( m_ActivityManagerUserListener != null){
-			m_ActivityManagerUserListener.onUserRegister(i_UserId);
-		}
+		
 		
 		setResult(i_UserId);
 		finish();
@@ -277,8 +273,8 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 			m_TriviaDb.insertUser(i_UserId, editTextUsername.getText()
 					.toString(), editTextPassword.getText().toString());
 			
+			
 		} 
-		
 		
 		
 		
@@ -287,12 +283,5 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 	
 	
 	
-	static public interface ActivityManagerUserListener {
-		public void onUserRegister ( int  i_UserId );
-	}
-	
-	public void setActivityManagerUserListener ( ActivityManagerUserListener i_Listener ){
-		this.m_ActivityManagerUserListener = i_Listener;
-	}
 
 }

@@ -58,6 +58,8 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	private Button buttonGameScores;
 
+	private boolean m_FirstTimeStartingDoNotTryToUpdate;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -69,7 +71,6 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 		initializeVariables();
 
-		
 		checkIfNeedToShowFirstTimeMessageOrConfiguration();
 	}
 
@@ -79,8 +80,8 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		String i = m_SharedPreferences.getString("showFirstTimeMessageVersion",
 				"1.0");
 
-		// TODO: check if this is the first time starting, if so, do not try to update questions!!!
-		
+		m_FirstTimeStartingDoNotTryToUpdate = false;
+
 		try {
 			packageInfo = getPackageManager().getPackageInfo(
 					"com.tzachsolomon.trivia", PackageManager.GET_META_DATA);
@@ -88,6 +89,8 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 			if (!packageInfo.versionName.contentEquals(i)) {
 				showWhatsNew();
 				showWizardSetup();
+
+				m_FirstTimeStartingDoNotTryToUpdate = true;
 
 				m_SharedPreferences
 						.edit()
@@ -125,7 +128,10 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		changeLanguageTo(m_SharedPreferences.getString(
 				"listPreferenceLanguages", "iw"));
 
-		m_UpdateManager.updateQuestions(true);
+		if (m_FirstTimeStartingDoNotTryToUpdate == false) {
+
+			m_UpdateManager.updateQuestions(true);
+		}
 
 	}
 
@@ -148,6 +154,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	private void initializeVariables() {
 		//
+		m_CurrentUserId = -1;
 		m_UpdateManager = new UpdateManager(this);
 
 	}
@@ -161,7 +168,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		buttonUpdateDatabase = (Button) findViewById(R.id.buttonUpdateDatabase);
 		buttonNewGameCategories = (Button) findViewById(R.id.buttonNewGameCategories);
 		buttonManageUsers = (Button) findViewById(R.id.buttonManageUsers);
-		buttonGameScores = (Button)findViewById(R.id.buttonGameScores);
+		buttonGameScores = (Button) findViewById(R.id.buttonGameScores);
 
 		buttonNewGameAllQuestions.setOnClickListener(this);
 		buttonManageDatabase.setOnClickListener(this);
@@ -188,7 +195,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		case R.id.buttonGameScores:
 			buttonGameScores_Clicked();
 			break;
-			
+
 		case R.id.buttonManageUsers:
 			buttonManagerUsers_Clicked();
 			break;
@@ -221,9 +228,9 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	}
 
 	private void buttonGameScores_Clicked() {
-		// 
+		//
 		Intent intent = new Intent(this, ActivityHighScores.class);
-		
+
 		startActivity(intent);
 	}
 

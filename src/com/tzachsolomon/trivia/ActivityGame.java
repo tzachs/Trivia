@@ -1009,7 +1009,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 		stopOrPauseCountdownTimer(true);
 		
 		// if m_UserId is of logged in user than enter it to the database
-		// TODO: debug this one.
+		// 
 		if ( m_UserId > -1 ){
 			m_TriviaDb.addScoreToDatabase(m_UserId, m_CurrentGameType, m_GameScore);
 			

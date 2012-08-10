@@ -438,7 +438,7 @@ public class JSONHandler {
 			allowUpdateWifi = m_SharedPreferences.getBoolean(
 					"checkBoxPreferenceAllowUpdateWifi", true);
 			allowUpdateMobile = m_SharedPreferences.getBoolean(
-					"checkBoxPreferenceAllowUpdateMobileNetwork", false);
+					"checkBoxPreferenceAllowUpdateMobileNetwork", true);
 			allowOnlyUpdate3G = m_SharedPreferences.getBoolean(
 					"checkBoxPreferenceAllowUpdateMobileNetwork3G", true);
 			allowUpdateRoaming = m_SharedPreferences.getBoolean(
@@ -769,6 +769,7 @@ public class JSONHandler {
 
 				if (successCode == SUCCUESS_CODE_USER_EXIST) {
 					ret = "User authenticated succesfully";
+					userId = result.getInt("userId");
 				} else if (errorCode == ERROR_CODE_USER_DOES_NOT_EXISTS) {
 					ret = "User does not exits";
 				} else if (errorCode == ERROR_CODE_USER_WRONG_PASSWORD) {

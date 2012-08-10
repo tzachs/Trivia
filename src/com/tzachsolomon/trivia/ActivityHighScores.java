@@ -59,6 +59,11 @@ public class ActivityHighScores extends Activity implements OnClickListener {
 			TextView type = new TextView(this);
 			TextView date = new TextView(this);
 			
+			user.setGravity(Gravity.CENTER);
+			score.setGravity(Gravity.CENTER);
+			type.setGravity(Gravity.CENTER);
+			date.setGravity(Gravity.CENTER);
+			
 			user.setText(row.getAsString(TriviaDbEngine.KEY_COL_USER_ID));
 			score.setText(row.getAsString(TriviaDbEngine.KEY_COL_USER_ID));
 			type.setText(row.getAsString(TriviaDbEngine.KEY_COL_GAME_TYPE));
