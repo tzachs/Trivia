@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class ActivityTrivia extends Activity implements OnClickListener {
@@ -63,6 +64,8 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	private boolean m_FirstTimeStartingDoNotTryToUpdate;
 
 	private TriviaDbEngine m_TrivaDbEngine;
+
+	private TextView textViewCurrentUser;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -140,6 +143,12 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		}
 		
 		
+		
+		String username = m_TrivaDbEngine.getUsername(m_CurrentUserId);
+		
+		textViewCurrentUser.setText(getString(R.string.current_user_is_) + username);
+		
+		
 
 	}
 
@@ -186,6 +195,8 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		buttonNewGameCategories.setOnClickListener(this);
 		buttonManageUsers.setOnClickListener(this);
 		buttonGameScores.setOnClickListener(this);
+		
+		textViewCurrentUser = (TextView)findViewById(R.id.textViewCurrentUser);
 
 		// checking if the device is with API 11 and earlier,
 		// if so, hide the preferences button since it can be done through menu

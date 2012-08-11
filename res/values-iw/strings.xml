@@ -161,5 +161,6 @@
     <string name="send">שלח</string>
     <string name="fill_in_email">אנא הכנס אימייל</string>
     <string name="high_scores">תוצאות הכי טובות</string>
+    <string name="current_user_is_">"שם משתמש מחובר:  "</string>
 
 </resources>

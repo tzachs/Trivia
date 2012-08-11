@@ -82,5 +82,17 @@
         android:layout_margin="4dp"
         android:background="@drawable/custom_menu_button"
         android:text="@string/buttonPreferencesText" />
+    
+    <TextView 
+        android:id="@+id/textViewCurrentUser"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_margin="4dp"
+        android:textSize="16dp"
+        android:layout_alignParentBottom="true"
+        android:text="@string/current_user_is_"
+        android:textColor="#000000"
+        
+        />
 
 </RelativeLayout>

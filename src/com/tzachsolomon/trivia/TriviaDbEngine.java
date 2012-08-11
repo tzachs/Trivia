@@ -1,6 +1,5 @@
 package com.tzachsolomon.trivia;
 
-
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,6 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.util.SparseArray;
+import android.webkit.WebChromeClient.CustomViewCallback;
 
 public class TriviaDbEngine {
 
@@ -265,7 +265,8 @@ public class TriviaDbEngine {
 				KEY_COL_USER_ID, KEY_COL_GAME_TYPE, KEY_COL_GAME_SCORE,
 				KEY_COL_GAME_UPLOADED };
 
-		Cursor cursor =  ourDatabase.query(TABLE_GAMES, columns, null, null, null, null, KEY_COL_GAME_SCORE + " DESC");
+		Cursor cursor = ourDatabase.query(TABLE_GAMES, columns, null, null,
+				null, null, KEY_COL_GAME_SCORE + " DESC");
 
 		ret = getContentValues(cursor);
 
@@ -513,9 +514,9 @@ public class TriviaDbEngine {
 		return ret;
 
 	}
-	
+
 	public boolean isUsersEmpty() {
-		// 
+		//
 		boolean ret = true;
 		// the column KEY_ANSWER1 doesn't matter, Just need to check if there
 		// are any rows
@@ -523,8 +524,8 @@ public class TriviaDbEngine {
 		String[] columns = { KEY_ROWID };
 
 		this.openDbReadable();
-		Cursor cursor = ourDatabase.query(TABLE_USERS, columns, null,
-				null, null, null, null);
+		Cursor cursor = ourDatabase.query(TABLE_USERS, columns, null, null,
+				null, null, null);
 		if (cursor.getCount() > 0) {
 			ret = false;
 		}
@@ -535,7 +536,6 @@ public class TriviaDbEngine {
 
 		return ret;
 
-		
 	}
 
 	public int deleteQuestions() {
@@ -558,29 +558,28 @@ public class TriviaDbEngine {
 
 		return ret;
 	}
-	
+
 	private int deleteGames() {
-		// 
+		//
 		int ret;
 		this.openDbWritable();
 		ret = ourDatabase.delete(TABLE_GAMES, null, null);
 		this.closeDb();
 
 		return ret;
-		
+
 	}
 
 	private int deleteUsers() {
-		// 
+		//
 		int ret;
 		this.openDbWritable();
 		ret = ourDatabase.delete(TABLE_USERS, null, null);
 		this.closeDb();
 
 		return ret;
-		
-	}
 
+	}
 
 	public void incPlayedCounter(String i_QuestionId) {
 		StringBuilder sb = new StringBuilder();
@@ -997,7 +996,6 @@ public class TriviaDbEngine {
 
 	}
 
-
 	static public interface TriviaDbEngineUpdateListener {
 		public void onUpdateCategoriesFinished();
 
@@ -1019,35 +1017,59 @@ public class TriviaDbEngine {
 		cv.put(KEY_COL_USERNAME, i_Username);
 		cv.put(KEY_COL_PASSWORD, i_Password);
 		cv.put(KEY_COL_USER_ID, i_UserId);
-		
-		ourDatabase.insertWithOnConflict(TABLE_USERS, null, cv,SQLiteDatabase.CONFLICT_IGNORE);
+
+		ourDatabase.insertWithOnConflict(TABLE_USERS, null, cv,
+				SQLiteDatabase.CONFLICT_IGNORE);
 
 		this.closeDb();
 
 	}
 
 	public SparseArray<String> getUserNames() {
-		// 
-		
+		//
+
 		SparseArray<String> ret;
-		
-		String[] columns = new String[] { KEY_COL_USER_ID,	KEY_COL_USERNAME};
-		
+
+		String[] columns = new String[] { KEY_COL_USER_ID, KEY_COL_USERNAME };
+
 		this.openDbWritable();
-		
-		Cursor cursor = ourDatabase.query(TABLE_USERS, columns, null, null, null, null, KEY_COL_USER_ID);
-		
+
+		Cursor cursor = ourDatabase.query(TABLE_USERS, columns, null, null,
+				null, null, KEY_COL_USER_ID);
+
 		ret = new SparseArray<String>();
-		
-		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
-			 ret.put(cursor.getInt(0), cursor.getString(1));
+
+		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()) {
+			ret.put(cursor.getInt(0), cursor.getString(1));
 		}
-		
+
 		this.closeDb();
-		
+
 		return ret;
 	}
 
-	
+	public String getUsername(int i_UserId) {
+		//
+		String[] columns = new String[] { KEY_COL_USER_ID, KEY_COL_USERNAME };
+
+		String ret;
+
+		this.openDbWritable();
+
+		Cursor cursor = ourDatabase.query(TABLE_USERS, columns, KEY_COL_USER_ID
+				+ "=" + i_UserId, null, null, null, null);
+
+		if (cursor.getCount() == 0) {
+			ret = "";
+		} else {
+			cursor.moveToFirst();
+			ret = cursor.getString(1);
+		}
+
+		this.closeDb();
+
+		return ret;
+
+	}
 
 }

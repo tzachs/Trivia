@@ -163,6 +163,7 @@
     <string name="send">Send</string>
     <string name="fill_in_email">Fill in email</string>
     <string name="high_scores">High Scores</string>
+    <string name="current_user_is_">"Current user is: "</string>
     
 
 </resources>

@@ -2,7 +2,10 @@ package com.tzachsolomon.trivia;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -753,7 +756,7 @@ public class JSONHandler {
 		asyncTaskUserLogin.execute(i_Params);
 	}
 
-	public String userLogin(String[] i_Params) {
+	public String userLogin(String[] i_Params) throws NoSuchAlgorithmException {
 		//
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		JSONObject result;
@@ -762,7 +765,7 @@ public class JSONHandler {
 
 		params.add(new BasicNameValuePair("tag", TAG_USER_LOGIN));
 		params.add(new BasicNameValuePair("username", i_Params[0]));
-		params.add(new BasicNameValuePair("userpass", i_Params[1]));
+		params.add(new BasicNameValuePair("userpass", md5hash(i_Params[1])));
 		params.add(new BasicNameValuePair("usermail", i_Params[2]));
 
 		result = getJSONObjectFromUrl(m_ServerUrl, params);
@@ -795,13 +798,23 @@ public class JSONHandler {
 		return ret;
 	}
 	
+	private String md5hash(String i_Password) throws NoSuchAlgorithmException {
+		// 
+		
+        MessageDigest md5 = MessageDigest.getInstance("MD5");
+        md5.update(i_Password.getBytes(),0,i_Password.length());
+        String hash = new BigInteger(1,md5.digest()).toString(16);
+        
+		return hash;
+	}
+
 	public void userRegisterAsync(String[] i_Params){
 		AsyncTaskUserRegister asyncTaskUserRegister = new AsyncTaskUserRegister();
 
 		asyncTaskUserRegister.execute(i_Params);
 	}
 
-	public String userRegister(String[] i_Params) {
+	public String userRegister(String[] i_Params) throws NoSuchAlgorithmException {
 		//
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		JSONObject result;
@@ -810,7 +823,7 @@ public class JSONHandler {
 
 		params.add(new BasicNameValuePair("tag", TAG_USER_REGISTER));
 		params.add(new BasicNameValuePair("username", i_Params[0]));
-		params.add(new BasicNameValuePair("userpass", i_Params[1]));
+		params.add(new BasicNameValuePair("userpass", md5hash(i_Params[1])));
 		params.add(new BasicNameValuePair("usermail", i_Params[2]));
 
 		result = getJSONObjectFromUrl(m_ServerUrl, params);
@@ -905,7 +918,12 @@ public class JSONHandler {
 		@Override
 		protected String doInBackground(String... params) {
 			//
-			return userRegister(params);
+			try {
+				return userRegister(params);
+			} catch (NoSuchAlgorithmException e) {
+				// 
+				return "MD5 algorithm was not found!";
+			}
 			
 
 		}
@@ -949,7 +967,13 @@ public class JSONHandler {
 		@Override
 		protected String doInBackground(String... params) {
 			//
-			return userLogin(params);
+			try {
+				return userLogin(params);
+			} catch (NoSuchAlgorithmException e) {
+				// 
+				return "MD5 algorithm was not found!";
+				
+			}
 			
 
 		}
