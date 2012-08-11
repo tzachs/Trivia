@@ -583,11 +583,11 @@ public class ActivityGame extends Activity implements OnClickListener {
 		m_TriviaDb = new TriviaDbEngine(ActivityGame.this);
 		// m_Random = new Random(1);
 		m_Random = new Random(System.currentTimeMillis());
-		m_TimeToAnswerQuestion = 7;
+		m_TimeToAnswerQuestion = 10;
 
 		try {
 			m_TimeToAnswerQuestion = Integer.parseInt(m_SharedPreferences
-					.getString("editTextPreferenceCountDownTimer", "7"));
+					.getString("editTextPreferenceCountDownTimer", "10"));
 		} catch (ClassCastException e) {
 			Log.e(TAG, e.getMessage().toString());
 		}
