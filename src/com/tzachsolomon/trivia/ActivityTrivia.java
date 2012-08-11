@@ -3,7 +3,9 @@ package com.tzachsolomon.trivia;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 
 import android.content.SharedPreferences;
@@ -23,13 +25,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class ActivityTrivia extends Activity implements OnClickListener {
 
-	//
-	//
+	// TODO: auto login
 	// TODO: animation
-	//
 	// TODO: highest score
 	// TODO: create service to update the database daily
 	// TODO: initial settings with XML file
@@ -40,6 +41,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	private static final int REQUEST_CODE_START_GAME_CATEGORIES = 1;
 	private static final int REQUEST_CODE_BACK_FROM_PREFERENCES = 2;
 	private static final int REQUEST_CODE_BACK_FROM_ACTIVITY_USER_MANAGER = 3;
+	private static final int REQUEST_CODE_BACK_FROM_ACTIVITY_WIZARD_SETUP = 4;
 
 	private Button buttonNewGameAllQuestions;
 	private Button buttonManageDatabase;
@@ -59,6 +61,8 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	private Button buttonGameScores;
 
 	private boolean m_FirstTimeStartingDoNotTryToUpdate;
+
+	private TriviaDbEngine m_TrivaDbEngine;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -120,6 +124,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		buttonWizardSetup_Clicked();
 
 	}
+	
 
 	@Override
 	protected void onResume() {
@@ -131,7 +136,10 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		if (m_FirstTimeStartingDoNotTryToUpdate == false) {
 
 			m_UpdateManager.updateQuestions(true);
+			showUserRegister();
 		}
+		
+		
 
 	}
 
@@ -247,6 +255,11 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		//
 		switch (requestCode) {
+		case REQUEST_CODE_BACK_FROM_ACTIVITY_WIZARD_SETUP:
+			m_CurrentUserId = resultCode;
+			// checking if there is an update of questions
+			buttonUpdateDatabase_Clicked();
+			break;
 		case REQUEST_CODE_BACK_FROM_ACTIVITY_USER_MANAGER:
 			m_CurrentUserId = resultCode;
 			break;
@@ -266,6 +279,42 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 			break;
 
 		}
+	}
+
+	private void showUserRegister() {
+		//
+		m_TrivaDbEngine = new TriviaDbEngine(this);
+
+		if (m_TrivaDbEngine.isUsersEmpty()) {
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			alert.setTitle("Register user");
+			alert.setMessage("Register a user?");
+			alert.setPositiveButton(getString(R.string.yes),
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							//
+							buttonManagerUsers_Clicked();
+
+						}
+
+					});
+			alert.setNegativeButton("Later",
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							//
+							Toast.makeText(
+									ActivityTrivia.this,
+									"Registering a user gives you the ability to publish scores, play against other players, etc",
+									Toast.LENGTH_LONG).show();
+						}
+					});
+			alert.show();
+		}
+
 	}
 
 	private void startNewGame(Bundle extras) {
@@ -292,9 +341,11 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	private void buttonWizardSetup_Clicked() {
 		//
-		Intent pref = new Intent(ActivityTrivia.this, ActivityWizardSetup.class);
+		Intent intent = new Intent(ActivityTrivia.this,
+				ActivityWizardSetup.class);
 
-		startActivity(pref);
+		startActivityForResult(intent,
+				REQUEST_CODE_BACK_FROM_ACTIVITY_WIZARD_SETUP);
 
 	}
 

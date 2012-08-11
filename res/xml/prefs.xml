@@ -149,12 +149,17 @@
     </PreferenceScreen>
 
     <CheckBoxPreference
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:key="showFirstTimeConfiguration"
         android:title="@string/show_first_time_configuration" />
 
     <EditTextPreference
         android:defaultValue="0"
         android:key="showFirstTimeMessageVersion" />
+    
+    <EditTextPreference
+        android:defaultValue="-2"
+        android:key="defaultUserId" />
+    
 
 </PreferenceScreen>

@@ -1,32 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/wizard_setup_user1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/buttonUserRegister"
+    <TextView
+        android:id="@+id/textViewWizardSetupUser"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="4dp"
-        android:background="@drawable/custom_menu_button"
-        android:text="@string/register" />
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="4dp"
+        android:text="User"
+        android:textSize="20dp" />
 
-    
-    <Button
-        android:id="@+id/buttonUserLogin"
+    <View
+        android:id="@+id/viewLineLanguage"
+        android:layout_width="fill_parent"
+        android:layout_height="4dip"
+        android:layout_below="@+id/textViewWizardSetupUser"
+        android:background="@drawable/custom_line_purple" />
+
+    <TextView
+        android:id="@+id/textViewWizardSetupLanguageMessage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/viewLineLanguage"
         android:layout_margin="4dp"
-        android:background="@drawable/custom_menu_button"
-        android:text="@string/login" />
+        android:layout_marginBottom="20dp"
+        android:text="Register a user in order to publish scores, get updates, publish questions(TBD) and more"/>
     
     <LinearLayout
+        android:layout_below="@+id/textViewWizardSetupLanguageMessage"
         android:id="@+id/linearLayoutUserRequestDetails"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" 
-        android:visibility="gone">
+        >
         
         <EditText 
             android:id="@+id/editTextUsername"
@@ -62,7 +72,7 @@
             
             />
         <Button 
-            android:id="@+id/buttonUserRequestSend"
+            android:id="@+id/buttonUserRegister"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
@@ -71,17 +81,11 @@
             
             />
         
-        <Button 
-            android:id="@+id/buttonUserRequestClose"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_menu_button"
-            android:layout_margin="4dp"
-            android:text="@string/close"
-            
-            />
+       
         
     </LinearLayout>
     
+    
+        
 
-</LinearLayout>
+</RelativeLayout>

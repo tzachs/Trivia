@@ -3,9 +3,14 @@ package com.tzachsolomon.trivia;
 
 import java.util.Locale;
 
+import com.tzachsolomon.trivia.JSONHandler.UserManageListener;
+
+
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
@@ -17,6 +22,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
+
 import android.widget.Toast;
 
 import android.widget.CompoundButton.OnCheckedChangeListener;
@@ -24,9 +31,12 @@ import android.widget.ListView;
 import android.widget.ViewFlipper;
 
 public class ActivityWizardSetup extends Activity implements OnClickListener,
-		OnCheckedChangeListener, OnItemClickListener {
+		OnCheckedChangeListener, OnItemClickListener, UserManageListener {
 
 	public static final String TAG = ActivityWizardSetup.class.getSimpleName();
+	
+	private JSONHandler m_JSONHandler;
+	private TriviaDbEngine m_TriviaDb;
 
 	private ViewFlipper viewFlipper;
 	private Button buttonNext;
@@ -39,6 +49,7 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 	private CheckBox checkBoxUploadWrongCorrectStatistics;
 	private CheckBox checkBoxCheckUpdateOnStartup;
 
+	private Button buttonUserRegister;
 	private Button buttonFinish;
 	private ListView listViewLanguages;
 	private Button buttonBack;
@@ -51,6 +62,14 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 	private CheckBox checkBoxPlayGameSounds;
 
 	private boolean m_ChoseLanguage;
+
+	private EditText editTextUsername;
+
+	private EditText editTextPassword;
+
+	private EditText editTextEmail;
+
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +88,11 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 	private void initializeVariables() {
 		//
-
+		m_TriviaDb = new TriviaDbEngine(ActivityWizardSetup.this);
+		m_JSONHandler = new JSONHandler(ActivityWizardSetup.this);
+		
+		m_JSONHandler.setUserManageListener(this);
+		
 		m_SharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
 		m_SharedPreferencesEditor = m_SharedPreferences.edit();
@@ -78,14 +101,21 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		buttonNext = (Button) findViewById(R.id.buttonNext);
 		buttonBack = (Button) findViewById(R.id.buttonBack);
 		buttonFinish = (Button) findViewById(R.id.buttonSetupFinish);
-
+		buttonUserRegister = (Button)findViewById(R.id.buttonUserRegister);
+		
 		buttonNext.setOnClickListener(this);
 		buttonBack.setOnClickListener(this);
 		buttonFinish.setOnClickListener(this);
+		buttonUserRegister.setOnClickListener(this);
 
 		listViewLanguages = (ListView) findViewById(R.id.listViewLanguages);
 
 		listViewLanguages.setOnItemClickListener(this);
+		
+		editTextUsername = (EditText) findViewById(R.id.editTextUsername);
+		editTextPassword = (EditText) findViewById(R.id.editTextPassword);
+		editTextEmail = (EditText) findViewById(R.id.editTextEmail);
+		
 
 		initializeCheckBoxes();
 
@@ -142,6 +172,11 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 	public void onClick(View v) {
 		//
 		switch (v.getId()) {
+		case R.id.buttonUserRegister:
+			buttonUserRegister_Clicked();
+			break;
+		
+			
 		case R.id.checkBoxQuestionLanguageEnglish:
 			checkBoxQuestionLanguageEnglish_Clicked();
 			break;
@@ -166,6 +201,34 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 			break;
 		}
 
+	}
+
+
+
+	private void buttonUserRegister_Clicked() {
+		// 
+		String email = editTextEmail.getText().toString();
+		String password = editTextPassword.getText().toString();
+		String username = editTextUsername.getText().toString();
+
+		if (email.length() == 0) {
+			email = "nomail";
+		}
+
+		if (password.length() == 0 || username.length() == 0) {
+			Toast.makeText(ActivityWizardSetup.this,
+					"Please fill in username and password", Toast.LENGTH_SHORT)
+					.show();
+		} else {
+
+		
+				m_JSONHandler.userRegisterAsync(new String[] { username,
+						password, email });
+
+		}
+
+		
+		
 	}
 
 	private void buttonBack_Clicked() {
@@ -346,6 +409,30 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		setContentView(R.layout.wizard_setup);
 		initializeVariables();
 
+	}
+
+	@Override
+	public void onUserLogin(String i_Response, int i_UserId) {
+		// 
+		
+	}
+
+	@Override
+	public void onUserRegister(String i_Response, int i_UserId) {
+		// 
+		if ( i_UserId != -1){
+			if (i_UserId != -1) {
+				// adding the user locally
+				m_TriviaDb.insertUser(i_UserId, editTextUsername.getText()
+						.toString(), editTextPassword.getText().toString());
+				
+				
+			}
+			
+			m_SharedPreferencesEditor.putInt("defaultUserId", i_UserId);
+			setResult(i_UserId);
+		}
+		
 	}
 
 }

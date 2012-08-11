@@ -43,7 +43,7 @@
         android:layout_below="@+id/buttonNewGameCategories"
         android:layout_margin="4dp"
         android:background="@drawable/custom_menu_button"
-        android:text="High Scores" />
+        android:text="@string/high_scores" />
 
     <Button
         android:id="@+id/buttonUpdateDatabase"

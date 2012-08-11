@@ -43,7 +43,7 @@
         android:layout_below="@+id/textViewSetupFinishMessage1"
         android:layout_centerVertical="true"
         android:layout_margin="4dp"
-        android:checked="true"
+        android:checked="false"
         android:text="@string/checkBoxShowConfigurationWizardText" />
      
 

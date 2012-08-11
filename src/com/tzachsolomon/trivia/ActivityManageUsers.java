@@ -4,15 +4,15 @@ package com.tzachsolomon.trivia;
 import com.tzachsolomon.trivia.JSONHandler.UserManageListener;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.os.AsyncTask;
+
+
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 public class ActivityManageUsers extends Activity implements OnClickListener,
@@ -132,14 +132,10 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 		} else {
 
 			if (buttonUserLogin.getVisibility() == View.VISIBLE) {
-				AsyncTaskUserLogin asyncTaskUserLogin = new AsyncTaskUserLogin();
-
-				asyncTaskUserLogin.execute(new String[] { username, password,
+				m_JSONHandler.userLoginAsync(new String[] { username, password,
 						email });
 			} else {
-				AsyncTaskUserRegister asyncTaskUserRegister = new AsyncTaskUserRegister();
-
-				asyncTaskUserRegister.execute(new String[] { username,
+				m_JSONHandler.userRegisterAsync(new String[] { username,
 						password, email });
 
 			}
@@ -161,108 +157,23 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 		editTextEmail.setVisibility(View.VISIBLE);
 	}
 
-	public class AsyncTaskUserLogin extends AsyncTask<String, Integer, String> {
-
-		private ProgressDialog m_ProgressDialog;
-		private boolean enabled;
-
-		@Override
-		protected void onPreExecute() {
-			//
-			StringBuilder detailedResult = new StringBuilder();
-
-			enabled = m_JSONHandler.isInternetAvailable(detailedResult);
-			if (enabled) {
-				m_ProgressDialog = new ProgressDialog(ActivityManageUsers.this);
-				m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				m_ProgressDialog.setTitle("Login");
-				m_ProgressDialog.setCancelable(true);
-				m_ProgressDialog.show();
-			} else {
-				Toast.makeText(ActivityManageUsers.this,
-						detailedResult.toString(), Toast.LENGTH_LONG).show();
-			}
-
-			detailedResult.setLength(0);
-
-		}
-
-		@Override
-		protected String doInBackground(String... params) {
-			//
-			return m_JSONHandler.userLogin(params);
-			
-
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			//
-
-			m_ProgressDialog.dismiss();
-			Toast.makeText(ActivityManageUsers.this, result, Toast.LENGTH_SHORT).show();
-			
-		}
-
-	}
-
-	public class AsyncTaskUserRegister extends AsyncTask<String, Integer, String> {
-
-		private ProgressDialog m_ProgressDialog;
-		private boolean enabled;
-
-		@Override
-		protected void onPreExecute() {
-			//
-			StringBuilder detailedResult = new StringBuilder();
-
-			enabled = m_JSONHandler.isInternetAvailable(detailedResult);
-			if (enabled) {
-				m_ProgressDialog = new ProgressDialog(ActivityManageUsers.this);
-				m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				m_ProgressDialog.setTitle("Register");
-				m_ProgressDialog.setCancelable(true);
-				m_ProgressDialog.show();
-			} else {
-				Toast.makeText(ActivityManageUsers.this,
-						detailedResult.toString(), Toast.LENGTH_LONG).show();
-			}
-
-			detailedResult.setLength(0);
-			
-			
-
-		}
-
-		@Override
-		protected String doInBackground(String... params) {
-			//
-			return m_JSONHandler.userRegister(params);
-			
-
-		}
-
-		@Override
-		protected void onPostExecute(String result) {
-			//
-
-			m_ProgressDialog.dismiss();
-			Toast.makeText(ActivityManageUsers.this, result, Toast.LENGTH_LONG).show();
-		}
-
-	}
+	
+	
 
 	@Override
 	public void onUserLogin(String i_Response, int i_UserId) {
 		//
 
-		
-		
-		
 		setResult(i_UserId);
-		finish();
+		if (i_UserId != -1) {
+			// adding the user locally
+			m_TriviaDb.insertUser(i_UserId, editTextUsername.getText()
+					.toString(), editTextPassword.getText().toString());
+			
+		}
+		
+		
 
-		//Toast.makeText(ActivityManageUsers.this, i_Response, Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -275,10 +186,7 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 			
 			
 		} 
-		
-		
-		
-		//
+
 	}
 	
 	

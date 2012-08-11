@@ -70,7 +70,7 @@ public class JSONHandler {
 
 	private String m_ServerUrl;
 	private HttpClient m_HttpClient;
-	private Context m_ActivityContext;
+	private Context m_Context;
 	private ConnectivityManager m_ConnectivityManager;
 	private TelephonyManager m_TelephonyManager;
 	private SharedPreferences m_SharedPreferences;
@@ -85,15 +85,15 @@ public class JSONHandler {
 	 */
 	public JSONHandler(Context i_Context) {
 		m_HttpClient = new DefaultHttpClient();
-		m_ActivityContext = i_Context;
-		m_ConnectivityManager = (ConnectivityManager) m_ActivityContext
+		m_Context = i_Context;
+		m_ConnectivityManager = (ConnectivityManager) m_Context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-		m_TelephonyManager = (TelephonyManager) m_ActivityContext
+		m_TelephonyManager = (TelephonyManager) m_Context
 				.getSystemService(Context.TELEPHONY_SERVICE);
 
 		m_SharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(m_ActivityContext);
+				.getDefaultSharedPreferences(m_Context);
 
 		updateServerIpFromPreferences();
 	}
@@ -204,7 +204,7 @@ public class JSONHandler {
 				}
 
 			} else {
-				Toast.makeText(m_ActivityContext, detailedResult.toString(),
+				Toast.makeText(m_Context, detailedResult.toString(),
 						Toast.LENGTH_SHORT).show();
 			}
 		} catch (Exception e1) {
@@ -239,7 +239,7 @@ public class JSONHandler {
 				}
 
 			} else {
-				Toast.makeText(m_ActivityContext, detailedResult.toString(),
+				Toast.makeText(m_Context, detailedResult.toString(),
 						Toast.LENGTH_SHORT).show();
 			}
 		} catch (Exception e1) {
@@ -450,7 +450,7 @@ public class JSONHandler {
 					ret = info.isConnected();
 					if (!ret) {
 						i_DetailedResult
-								.append(m_ActivityContext
+								.append(m_Context
 										.getString(R.string.wifi_is_enabled_but_isn_t_connected_please_check_wifi_connection));
 					}
 				} else {
@@ -466,18 +466,18 @@ public class JSONHandler {
 							ret = info.isConnected();
 							if (!ret) {
 								i_DetailedResult
-										.append(m_ActivityContext
+										.append(m_Context
 												.getString(R.string.mobile_network_found_but_only_3g_mobile_network_connection_is_allowed_));
 								i_DetailedResult
-										.append(m_ActivityContext
+										.append(m_Context
 												.getString(R.string.check_preferencs_to_allow_slow_networks));
 							}
 						} else {
 							i_DetailedResult
-									.append(m_ActivityContext
+									.append(m_Context
 											.getString(R.string.mobile_network_found_but_only_3g_mobile_network_connection_is_allowed_));
 							i_DetailedResult
-									.append(m_ActivityContext
+									.append(m_Context
 											.getString(R.string.check_preferencs_to_allow_slow_networks));
 						}
 					} else {
@@ -492,7 +492,7 @@ public class JSONHandler {
 							ret = true;
 						} else {
 							i_DetailedResult
-									.append(m_ActivityContext
+									.append(m_Context
 											.getString(R.string.mobile_connection_was_found_but_it_is_in_roaming));
 						}
 
@@ -500,14 +500,14 @@ public class JSONHandler {
 
 				} else {
 					i_DetailedResult
-							.append(m_ActivityContext
+							.append(m_Context
 									.getString(R.string.mobile_device_is_online_but_option_is_disabled_please_check_preferences));
 				}
 			}
 
 		} else {
 			i_DetailedResult
-					.append(m_ActivityContext
+					.append(m_Context
 							.getString(R.string.no_network_devices_are_available_check_your_wifi_or_mobile_network_connection));
 
 		}
@@ -527,16 +527,16 @@ public class JSONHandler {
 
 			detailedResult = new StringBuilder();
 
-			m_ProgressDialog = new ProgressDialog(m_ActivityContext);
+			m_ProgressDialog = new ProgressDialog(m_Context);
 			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			m_ProgressDialog.setTitle(m_ActivityContext
+			m_ProgressDialog.setTitle(m_Context
 					.getString(R.string.downloading_categories));
 			m_ProgressDialog.show();
 
 			isInternetAvailable = isInternetAvailable(detailedResult);
 
 			if (isInternetAvailable == false) {
-				Toast.makeText(m_ActivityContext, detailedResult.toString(),
+				Toast.makeText(m_Context, detailedResult.toString(),
 						Toast.LENGTH_SHORT).show();
 			}
 
@@ -618,16 +618,16 @@ public class JSONHandler {
 
 			detailedResult = new StringBuilder();
 
-			m_ProgressDialog = new ProgressDialog(m_ActivityContext);
+			m_ProgressDialog = new ProgressDialog(m_Context);
 			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			m_ProgressDialog.setTitle(m_ActivityContext
+			m_ProgressDialog.setTitle(m_Context
 					.getString(R.string.downloading_questions));
 			m_ProgressDialog.show();
 
 			isInternetAvailable = isInternetAvailable(detailedResult);
 
 			if (isInternetAvailable == false) {
-				Toast.makeText(m_ActivityContext, detailedResult.toString(),
+				Toast.makeText(m_Context, detailedResult.toString(),
 						Toast.LENGTH_SHORT).show();
 			}
 
@@ -746,6 +746,12 @@ public class JSONHandler {
 
 		return ret;
 	}
+	
+	public void userLoginAsync(String[]i_Params){
+		AsyncTaskUserLogin asyncTaskUserLogin = new AsyncTaskUserLogin();
+
+		asyncTaskUserLogin.execute(i_Params);
+	}
 
 	public String userLogin(String[] i_Params) {
 		//
@@ -787,6 +793,12 @@ public class JSONHandler {
 
 		m_UserManagerListener.onUserLogin(ret, userId);
 		return ret;
+	}
+	
+	public void userRegisterAsync(String[] i_Params){
+		AsyncTaskUserRegister asyncTaskUserRegister = new AsyncTaskUserRegister();
+
+		asyncTaskUserRegister.execute(i_Params);
 	}
 
 	public String userRegister(String[] i_Params) {
@@ -863,5 +875,95 @@ public class JSONHandler {
 				"editTextPreferencePrimaryServerIP",
 				"http://23.23.238.181/index.php");
 	}
+	
+	public class AsyncTaskUserRegister extends AsyncTask<String, Integer, String> {
+
+		private ProgressDialog m_ProgressDialog;
+		private boolean enabled;
+
+		@Override
+		protected void onPreExecute() {
+			//
+			StringBuilder detailedResult = new StringBuilder();
+
+			enabled = isInternetAvailable(detailedResult);
+			if (enabled) {
+				m_ProgressDialog = new ProgressDialog(m_Context);
+				m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				m_ProgressDialog.setTitle("Register");
+				m_ProgressDialog.setCancelable(true);
+				m_ProgressDialog.show();
+			} else {
+				Toast.makeText(m_Context,
+						detailedResult.toString(), Toast.LENGTH_LONG).show();
+			}
+
+			detailedResult.setLength(0);
+
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			//
+			return userRegister(params);
+			
+
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			//
+
+			m_ProgressDialog.dismiss();
+			Toast.makeText(m_Context, result, Toast.LENGTH_LONG).show();
+		}
+
+	}
+	
+	public class AsyncTaskUserLogin extends AsyncTask<String, Integer, String> {
+
+		private ProgressDialog m_ProgressDialog;
+		private boolean enabled;
+
+		@Override
+		protected void onPreExecute() {
+			//
+			StringBuilder detailedResult = new StringBuilder();
+
+			enabled = isInternetAvailable(detailedResult);
+			if (enabled) {
+				m_ProgressDialog = new ProgressDialog(m_Context);
+				m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				m_ProgressDialog.setTitle("Login");
+				m_ProgressDialog.setCancelable(true);
+				m_ProgressDialog.show();
+			} else {
+				Toast.makeText(m_Context,
+						detailedResult.toString(), Toast.LENGTH_LONG).show();
+			}
+
+			detailedResult.setLength(0);
+
+		}
+
+		@Override
+		protected String doInBackground(String... params) {
+			//
+			return userLogin(params);
+			
+
+		}
+
+		@Override
+		protected void onPostExecute(String result) {
+			//
+
+			m_ProgressDialog.dismiss();
+			Toast.makeText(m_Context, result, Toast.LENGTH_SHORT).show();
+			
+		}
+
+	}
+
 
 }

@@ -89,7 +89,7 @@
         <activity
             android:name=".ActivityHighScores"
             android:label="@string/app_name"
-            android:screenOrientation="portrait" >
+            >
         </activity>
     </application>
 

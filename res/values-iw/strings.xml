@@ -77,6 +77,7 @@
     <string name="_questions_update_database_">" שאלות. לעדכן את מסד הנתונים?"</string>
     <string name="update">"עדכן"</string>
     <string name="cancel">"ביטול"</string>
+    <string name="later">לא עכשיו</string>
     <string name="checking_for_updates_">"מחפש עדכונים … "</string>
     <string name="error_occoured_stopping_upload_check_server_url_or_connectivity">"שגיאה קרתה בזמן העלאה, בדוק הגדרות שרת או קישוריות"</string>
     <string name="inserting_questions_to_database">"הוספת שאלות למאגר"</string>
@@ -148,5 +149,17 @@
     <string name="buttonManageUsersText">נהל משתמשים</string>
     <string name="textViewGameScoreLabel">תוצאה: </string>
     <string name="pass">עבור</string>
+    <string name="number_sign">#</string>
+    <string name="user">שם</string>
+    <string name="score">תוצאה</string>
+    <string name="type">משחק</string>
+    <string name="date">תאריך</string>
+    <string name="register">הרשם</string>
+    <string name="login">התחבר</string>
+    <string name="fill_in_username">אנא הכנס שם משתמש</string>
+    <string name="fill_in_password">אנא הכנס סיסמא</string>
+    <string name="send">שלח</string>
+    <string name="fill_in_email">אנא הכנס אימייל</string>
+    <string name="high_scores">תוצאות הכי טובות</string>
 
 </resources>

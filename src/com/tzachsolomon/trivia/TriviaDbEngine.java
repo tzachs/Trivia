@@ -1,7 +1,6 @@
 package com.tzachsolomon.trivia;
 
 
-
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -12,6 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.util.SparseArray;
 
 public class TriviaDbEngine {
 
@@ -254,30 +254,30 @@ public class TriviaDbEngine {
 
 		return ret;
 	}
-	
-	
 
 	public ContentValues[] getGameScores() {
-		// 
+		//
 		ContentValues[] ret = null;
-		
+
 		this.openDbReadable();
 
-		String[] columns = new String[] { KEY_ROWID, KEY_COL_GAME_ID, KEY_COL_USER_ID, KEY_COL_GAME_TYPE, KEY_COL_GAME_SCORE, KEY_COL_GAME_UPLOADED};
-		
-		Cursor cursor =  ourDatabase.query(TABLE_GAMES, columns, null, null, null, null, KEY_COL_GAME_SCORE);
-		
+		String[] columns = new String[] { KEY_ROWID, KEY_COL_GAME_ID,
+				KEY_COL_USER_ID, KEY_COL_GAME_TYPE, KEY_COL_GAME_SCORE,
+				KEY_COL_GAME_UPLOADED };
+
+		Cursor cursor =  ourDatabase.query(TABLE_GAMES, columns, null, null, null, null, KEY_COL_GAME_SCORE + " DESC");
+
 		ret = getContentValues(cursor);
-		
+
 		cursor.close();
-		
+
 		this.closeDb();
 
 		return ret;
 	}
 
-	public Questions getQuestionsEnabled(
-			boolean i_SortByNewQuestionsFirst, int[] i_QuestionLanguages) {
+	public Questions getQuestionsEnabled(boolean i_SortByNewQuestionsFirst,
+			int[] i_QuestionLanguages) {
 		//
 		return getQuestionsByLevelAndCategories(-2, i_SortByNewQuestionsFirst,
 				null, i_QuestionLanguages);
@@ -291,7 +291,7 @@ public class TriviaDbEngine {
 		//
 		Cursor cursor;
 		ContentValues[] ret;
-		
+
 		String[] columns = { KEY_ROWID, KEY_COL_PARENT_ID, KEY_COL_EN_NAME,
 				KEY_COL_HE_NAME, KEY_LAST_UPDATE };
 
@@ -299,9 +299,9 @@ public class TriviaDbEngine {
 
 		cursor = ourDatabase.query(TABLE_CATEGORIES, columns, KEY_COL_PARENT_ID
 				+ "=" + i_CategoryId, null, null, null, null);
-		
+
 		ret = getContentValues(cursor);
-		
+
 		cursor.close();
 
 		this.closeDb();
@@ -311,12 +311,12 @@ public class TriviaDbEngine {
 	}
 
 	private ContentValues[] getContentValues(Cursor cursor) {
-		// 
-		
+		//
+
 		ContentValues[] ret;
 		int i = 0;
 		ContentValues map;
-		
+
 		ret = new ContentValues[cursor.getCount()];
 		i = 0;
 
@@ -430,8 +430,6 @@ public class TriviaDbEngine {
 
 		// Log.i(TAG, where.toString());
 
-		
-
 		// ordering by
 		// the category
 		if (i_SortByNewQuestionsFirst) {
@@ -515,6 +513,30 @@ public class TriviaDbEngine {
 		return ret;
 
 	}
+	
+	public boolean isUsersEmpty() {
+		// 
+		boolean ret = true;
+		// the column KEY_ANSWER1 doesn't matter, Just need to check if there
+		// are any rows
+		// any other column could be chosen
+		String[] columns = { KEY_ROWID };
+
+		this.openDbReadable();
+		Cursor cursor = ourDatabase.query(TABLE_USERS, columns, null,
+				null, null, null, null);
+		if (cursor.getCount() > 0) {
+			ret = false;
+		}
+
+		cursor.close();
+
+		this.closeDb();
+
+		return ret;
+
+		
+	}
 
 	public int deleteQuestions() {
 		//
@@ -536,6 +558,29 @@ public class TriviaDbEngine {
 
 		return ret;
 	}
+	
+	private int deleteGames() {
+		// 
+		int ret;
+		this.openDbWritable();
+		ret = ourDatabase.delete(TABLE_GAMES, null, null);
+		this.closeDb();
+
+		return ret;
+		
+	}
+
+	private int deleteUsers() {
+		// 
+		int ret;
+		this.openDbWritable();
+		ret = ourDatabase.delete(TABLE_USERS, null, null);
+		this.closeDb();
+
+		return ret;
+		
+	}
+
 
 	public void incPlayedCounter(String i_QuestionId) {
 		StringBuilder sb = new StringBuilder();
@@ -947,8 +992,11 @@ public class TriviaDbEngine {
 		//
 		this.deleteQuestions();
 		this.deleteCategories();
+		this.deleteUsers();
+		this.deleteGames();
 
 	}
+
 
 	static public interface TriviaDbEngineUpdateListener {
 		public void onUpdateCategoriesFinished();
@@ -971,12 +1019,35 @@ public class TriviaDbEngine {
 		cv.put(KEY_COL_USERNAME, i_Username);
 		cv.put(KEY_COL_PASSWORD, i_Password);
 		cv.put(KEY_COL_USER_ID, i_UserId);
-
-		ourDatabase.insert(TABLE_USERS, null, cv);
+		
+		ourDatabase.insertWithOnConflict(TABLE_USERS, null, cv,SQLiteDatabase.CONFLICT_IGNORE);
 
 		this.closeDb();
 
 	}
 
+	public SparseArray<String> getUserNames() {
+		// 
+		
+		SparseArray<String> ret;
+		
+		String[] columns = new String[] { KEY_COL_USER_ID,	KEY_COL_USERNAME};
+		
+		this.openDbWritable();
+		
+		Cursor cursor = ourDatabase.query(TABLE_USERS, columns, null, null, null, null, KEY_COL_USER_ID);
+		
+		ret = new SparseArray<String>();
+		
+		for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor.moveToNext()){
+			 ret.put(cursor.getInt(0), cursor.getString(1));
+		}
+		
+		this.closeDb();
+		
+		return ret;
+	}
+
+	
 
 }

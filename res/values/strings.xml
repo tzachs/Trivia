@@ -148,9 +148,21 @@
     <string name="play_in_game_sounds">Play in game sounds</string>
     <string name="play_game_sounds">Play game sounds</string>
     <string name="textViewTimesPlayedTitleText">Times played </string>
-    <string name="buttonManageUsersText">Manage Users</string>
+    <string name="buttonManageUsersText">Users</string>
     <string name="textViewGameScoreLabel">Score: </string>
     <string name="pass">Pass</string>
+    <string name="number_sign">#</string>
+    <string name="user">User</string>
+    <string name="score">Score</string>
+    <string name="type">Type</string>
+    <string name="date">Date</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="fill_in_username">Fill in username</string>
+    <string name="fill_in_password">Fill in password</string>
+    <string name="send">Send</string>
+    <string name="fill_in_email">Fill in email</string>
+    <string name="high_scores">High Scores</string>
     
 
 </resources>
