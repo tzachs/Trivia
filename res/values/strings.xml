@@ -33,7 +33,7 @@
     <string name="preferenceCategoryDatabaseServerTitle">Database configuration</string>
     <string name="checkBoxPreferenceUploadCorrectWrongUserStatSummary">Upload how many times you were wrong/correct</string>
     <string name="checkBoxPreferenceUploadCorrectWrongUserStatTitle">Upload statistics</string>
-    <string name="buttonNewGameSimpleText">New Game</string>
+    <string name="buttonNewGameSimpleText">Levels Game</string>
     <string name="preferenceCategoryGameRelatedTitle">Game Configuration</string>
     <string name="checkBoxPreferenceCheckUpdateOnStartupSummary">Check update on the startup of the app</string>
     <string name="checkBoxPreferenceCheckUpdateOnStartupTitle">Check update on startup</string>
@@ -164,6 +164,7 @@
     <string name="fill_in_email">Fill in email</string>
     <string name="high_scores">High Scores</string>
     <string name="current_user_is_">"Current user is: "</string>
+    <string name="time_is_up_">Time is up!</string>
     
 
 </resources>

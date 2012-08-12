@@ -2,6 +2,10 @@ package com.tzachsolomon.trivia;
 
 import java.util.Locale;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 
@@ -32,10 +36,9 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	// TODO: auto login
 	// TODO: animation
-	// TODO: highest score
 	// TODO: create service to update the database daily
 	// TODO: initial settings with XML file
-	// TODO: user game correlation
+	// 
 
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
 
@@ -94,6 +97,15 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 					"com.tzachsolomon.trivia", PackageManager.GET_META_DATA);
 
 			if (!packageInfo.versionName.contentEquals(i)) {
+				try {
+					m_TrivaDbEngine.importFromXml();
+				} catch (ParserConfigurationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SAXException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				showWhatsNew();
 				showWizardSetup();
 
@@ -171,8 +183,12 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	private void initializeVariables() {
 		//
+		
 		m_CurrentUserId = -1;
+		
+		m_TrivaDbEngine = new TriviaDbEngine(this);
 		m_UpdateManager = new UpdateManager(this);
+
 
 	}
 
@@ -294,7 +310,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	private void showUserRegister() {
 		//
-		m_TrivaDbEngine = new TriviaDbEngine(this);
+		
 
 		if (m_TrivaDbEngine.isUsersEmpty()) {
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);

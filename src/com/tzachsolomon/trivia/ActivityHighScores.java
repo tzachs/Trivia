@@ -39,10 +39,10 @@ public class ActivityHighScores extends Activity {
 		
 		m_GameTypes = new SparseArray<String>();
 
-		// TODO: change to using resource name
-		m_GameTypes.put(ActivityGame.GAMETYPE_ALL_QUESTIONS, "All Questions");
-		m_GameTypes.put(ActivityGame.GAMETYPE_CATEGORIES, "Categories");
-		m_GameTypes.put(ActivityGame.GAMETYPE_LEVELS, "Levels");
+		// 
+		m_GameTypes.put(ActivityGame.GAMETYPE_ALL_QUESTIONS, getString(R.string.buttonNewGameAllQuestionsText));
+		m_GameTypes.put(ActivityGame.GAMETYPE_CATEGORIES, getString(R.string.buttonNewGameCategoriesText));
+		m_GameTypes.put(ActivityGame.GAMETYPE_LEVELS, getString(R.string.buttonNewGameSimpleText));
 
 		table = (TableLayout) findViewById(R.id.tableLayoutHighScores);
 

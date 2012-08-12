@@ -818,8 +818,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 		// checking if time is up
 		if (i == -1) {
 			ret = -1;
-			// TODO: use resources
-			sb.append("Time is up!");
+			// 
+			sb.append(getString(R.string.time_is_up_));
 			incCurrentWrongAnswersCounter();
 			startSoundFromSoundPool(m_SoundAnswerWrong, 0);
 
