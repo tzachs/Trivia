@@ -34,6 +34,8 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 	private boolean inColEnabled;
 	private boolean inColQuestionId;
 	private boolean inColQuestion;
+	
+	private StringBuilder currentQuestion;
 
 	private XmlDataHandlerListener m_Listener;
 
@@ -111,7 +113,7 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
 		//
-		//Log.v(TAG, "start element " + localName);
+		// Log.v(TAG, "start element " + localName);
 		try {
 			if (localName.contentEquals("table_data")) {
 
@@ -210,7 +212,12 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 		//
 
 		String chars = new String(ch, start, length);
+		// replacing the &quot; with "
+
+		
+
 		if (inColAnswer1) {
+			// TODO: same solution of question with quotation mark
 			m_Question.put(TriviaDbEngine.KEY_ANSWER1, chars);
 			inColAnswer1 = false;
 		} else if (inColAnswer2) {
@@ -245,8 +252,23 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 			m_Question.put(TriviaDbEngine.KEY_LAST_UPDATE, chars);
 			inColLastUpdate = false;
 		} else if (inColQuestion) {
-			m_Question.put(TriviaDbEngine.KEY_QUESTION, chars);
-			inColQuestion = false;
+			
+			// only \n means the question parser ended, this section can be called multiple times if
+			// there are special characters such as &quot; that is why we need to check \n
+			if ( chars.contentEquals("\n")){
+				m_Question.put(TriviaDbEngine.KEY_QUESTION, currentQuestion.toString());
+				currentQuestion = null;
+				inColQuestion = false;
+			} else{
+				// checking if this is the start of the question, if so, create the StringBuilder
+				if ( currentQuestion == null ){
+					currentQuestion = new StringBuilder();
+				}
+				// append the current part
+				currentQuestion.append(chars);
+			}
+			
+			
 		} else if (inColQuestionId) {
 			m_Question.put(TriviaDbEngine.KEY_QUESTIONID, chars);
 			inColQuestionId = false;

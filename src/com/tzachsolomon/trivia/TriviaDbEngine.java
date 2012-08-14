@@ -1006,7 +1006,7 @@ public class TriviaDbEngine {
 									+ "=?", new String[] { categoryId });
 						} else {
 							// insert if the category is new
-							Log.v(TAG, "insert new category");
+							
 
 							ourDatabase.insert(TABLE_CATEGORIES, null, cv);
 						}

@@ -22,6 +22,23 @@
 	</table_structure>
 	<table_data name="questions">
 	<row>
+		<field name="_id">33</field>
+		<field name="colQuestionId">1335877424</field>
+		<field name="colQuestion">כינוי הרמב&quot;ם</field>
+		<field name="colAnswer1">הנשר הגדול</field>
+		<field name="colAnswer2">הראשון לציון</field>
+		<field name="colAnswer3">הנס מספרד</field>
+		<field name="colAnswer4">חכם ישראל</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">10</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">18</field>
+		<field name="colWrong">2</field>
+		<field name="colCorrectWrongRatio">0.1</field>
+		<field name="colLastUpdate">1341723873</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
 		<field name="_id">12</field>
 		<field name="colQuestionId">1335808253</field>
 		<field name="colQuestion">ממציא הנורה</field>

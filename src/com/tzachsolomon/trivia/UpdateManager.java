@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -516,23 +518,26 @@ public class UpdateManager implements DatabaseUpdateListener,
 				e1.printStackTrace();
 			}
 
-			Reader reader = new InputStreamReader(raw);
-			InputSource inputSource = new InputSource(reader);
-			inputSource.setEncoding("UTF-8");
-			xmlDataHandler = new XmlDataHandlerQuestions();
-			
-
+			Reader reader;
 			try {
+				reader = new InputStreamReader(raw,"UTF-8");
+				InputSource inputSource = new InputSource(reader);
+				inputSource.setEncoding("UTF-8");
+				xmlDataHandler = new XmlDataHandlerQuestions();
 				try {
 					saxParser.parse(inputSource, xmlDataHandler);
 				} catch (SAXException e) {
 					// 
 					Log.e(TAG, "Error at AsyncTaskImportQuestionsFromXml->doInBackground");
-					e.printStackTrace();
+					
+				} catch (IOException e) {
+					
+					
 				}
-			} catch (IOException e) {
+			} catch (UnsupportedEncodingException e1) {
 				// 
-				e.printStackTrace();
+				Log.e(TAG,"unsupported encoding of questions");
+				e1.printStackTrace();
 			}
 			return null;
 		}
