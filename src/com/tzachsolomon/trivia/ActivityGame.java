@@ -1123,7 +1123,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 		// checking if to show the report question button
 		if (m_SharedPreferences.getBoolean(
-				"checkBoxPreferenceShowReportQuestion", false)) {
+				"checkBoxPreferenceShowReportQuestion", true)) {
 
 			buttonReportMistakeInQuestion.setVisibility(View.VISIBLE);
 		} else {
