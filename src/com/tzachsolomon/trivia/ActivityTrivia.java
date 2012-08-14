@@ -2,9 +2,12 @@ package com.tzachsolomon.trivia;
 
 import java.util.Locale;
 
-import javax.xml.parsers.ParserConfigurationException;
+import com.tzachsolomon.trivia.UpdateManager.CategoriesListener;
+import com.tzachsolomon.trivia.UpdateManager.QuestionsListener;
 
-import org.xml.sax.SAXException;
+
+
+
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -32,7 +35,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ActivityTrivia extends Activity implements OnClickListener {
+public class ActivityTrivia extends Activity implements OnClickListener, CategoriesListener, QuestionsListener {
 
 	// TODO: auto login
 	// TODO: animation
@@ -52,22 +55,18 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	private Button buttonPreferences;
 	private Button buttonNewGameSimple;
 	private Button buttonUpdateDatabase;
-
+	private Button buttonNewGameCategories;
+	private Button buttonGameScores;
+	private Button buttonManageUsers;
+	
 	private SharedPreferences m_SharedPreferences;
 
 	private UpdateManager m_UpdateManager;
 
-	private Button buttonNewGameCategories;
-
-	private Button buttonManageUsers;
 	private int m_CurrentUserId;
 
-	private Button buttonGameScores;
-
 	private boolean m_FirstTimeStartingDoNotTryToUpdate;
-
 	private TriviaDbEngine m_TrivaDbEngine;
-
 	private TextView textViewCurrentUser;
 
 	/** Called when the activity is first created. */
@@ -91,6 +90,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 				"1.0");
 
 		m_FirstTimeStartingDoNotTryToUpdate = false;
+		
 
 		try {
 			packageInfo = getPackageManager().getPackageInfo(
@@ -98,11 +98,15 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 			if (!packageInfo.versionName.contentEquals(i)) {
 
-				m_TrivaDbEngine.importQuestionsFromXml();
+				m_FirstTimeStartingDoNotTryToUpdate = true;
+				
+				Log.v(TAG, "Starting import questions from xml");
+				m_UpdateManager.importQuestionsFromXml();
+				
 				showWhatsNew();
 				showWizardSetup();
 
-				m_FirstTimeStartingDoNotTryToUpdate = true;
+				
 
 				m_SharedPreferences
 						.edit()
@@ -177,7 +181,8 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 		m_TrivaDbEngine = new TriviaDbEngine(this);
 		m_UpdateManager = new UpdateManager(this);
-
+		m_UpdateManager.setCategoriesListener(this);
+		m_UpdateManager.setQuestionsListener(this);
 	}
 
 	private void initializeButtons() {
@@ -272,8 +277,6 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		switch (requestCode) {
 		case REQUEST_CODE_BACK_FROM_ACTIVITY_WIZARD_SETUP:
 			m_CurrentUserId = resultCode;
-			// checking if there is an update of questions
-			buttonUpdateDatabase_Clicked();
 			break;
 		case REQUEST_CODE_BACK_FROM_ACTIVITY_USER_MANAGER:
 			m_CurrentUserId = resultCode;
@@ -450,6 +453,57 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		Intent intent = new Intent(ActivityTrivia.this, ActivityAbout.class);
 		startActivity(intent);
 
+	}
+
+	@Override
+	public void onCategoriesUpdated(int i_UpdateFrom) {
+		// 
+		switch (i_UpdateFrom){
+		case TriviaDbEngine.TYPE_UPDATE_FROM_INTERNET:
+			Toast.makeText(ActivityTrivia.this, "Finished updating categories from internet", Toast.LENGTH_LONG).show();
+			break;
+		case TriviaDbEngine.TYPE_UPDATE_FROM_XML_FILE:
+			// checking if import in first time after install or update of app
+			if ( !m_FirstTimeStartingDoNotTryToUpdate){
+				m_FirstTimeStartingDoNotTryToUpdate = false;
+				buttonUpdateDatabase_Clicked();
+			}
+			 
+			Toast.makeText(ActivityTrivia.this, "Finished updating categories from initial file", Toast.LENGTH_LONG).show();
+			break;
+
+		default:
+			break;
+		}
+		
+	}
+
+	@Override
+	public void onQuestionsCorrectRatioSent() {
+		// 
+		Toast.makeText(ActivityTrivia.this, "Thank you for making Social Trivia better! :)",Toast.LENGTH_LONG).show();
+		
+	}
+
+	@Override
+	public void onQuestionsUpdated(int i_UpdateFrom) {
+		// // 
+		switch (i_UpdateFrom){
+		case TriviaDbEngine.TYPE_UPDATE_FROM_INTERNET:
+			Toast.makeText(ActivityTrivia.this, "Finished updating questions from internet", Toast.LENGTH_LONG).show();
+			break;
+		case TriviaDbEngine.TYPE_UPDATE_FROM_XML_FILE:
+			// starting to update the categories
+			Toast.makeText(ActivityTrivia.this, "Finished updating questions from initial file", Toast.LENGTH_LONG).show();
+			Log.v(TAG, "Starting import categories from xml");
+			m_UpdateManager.importCategoriesFromXml();
+			
+			break;
+
+		default:
+			break;
+		}
+		
 	}
 
 }

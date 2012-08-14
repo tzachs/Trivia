@@ -1,19 +1,5 @@
 package com.tzachsolomon.trivia;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
-
-
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -25,7 +11,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.util.SparseArray;
-import android.widget.Toast;
 
 public class TriviaDbEngine {
 
@@ -89,6 +74,9 @@ public class TriviaDbEngine {
 	public static final String KEY_COL_GAME_TYPE = "colGameType";
 	public static final String KEY_COL_GAME_SCORE = "colGameScore";
 	private static final String KEY_COL_GAME_UPLOADED = "colGameUploaded";
+
+	public static final int TYPE_UPDATE_FROM_XML_FILE = 1001;
+	public static final int TYPE_UPDATE_FROM_INTERNET = 1002;
 
 	private DbHelper ourHelper;
 	private Context ourContext;
@@ -229,6 +217,7 @@ public class TriviaDbEngine {
 	}
 
 	private void closeDb() {
+		
 		ourHelper.close();
 	}
 
@@ -689,6 +678,21 @@ public class TriviaDbEngine {
 		return ret;
 	}
 
+	public boolean isCategoryExist(String categoryId) {
+		//
+		boolean ret = false;
+		String query = String.format("SELECT 1 FROM %1$s WHERE %2$s =%3$s",
+				TABLE_CATEGORIES, KEY_ROWID, categoryId);
+
+		Cursor cursor = ourDatabase.rawQuery(query, null);
+
+		ret = (cursor.getCount() > 0);
+		cursor.close();
+
+		return ret;
+
+	}
+
 	public ContentValues[] getWrongCorrectStat() {
 		//
 		ContentValues[] ret = null;
@@ -721,33 +725,48 @@ public class TriviaDbEngine {
 		return ret;
 	}
 
-	public void updateQuestionAsync(ContentValues[] values) {
+	public void updateQuestionAsync(ContentValues[] values, int i_UpdateFrom,
+			boolean i_SilentMode) {
 		//
-		new UpdateQuestionsAsyncTask().execute(values);
+		AsyncTaskUpdateQuestions a = new AsyncTaskUpdateQuestions();
+		a.m_UpdateFrom = i_UpdateFrom;
+		a.m_SilentMode = i_SilentMode;
+		a.execute(values);
 
 	}
 
-	public class UpdateQuestionsAsyncTask extends
+	public class AsyncTaskUpdateQuestions extends
 			AsyncTask<ContentValues, Integer, Void> {
 
+		public boolean m_SilentMode;
+		public int m_UpdateFrom;
 		private ProgressDialog m_ProgressDialog;
 
 		@Override
 		protected void onPreExecute() {
 			//
+
 			m_ProgressDialog = new ProgressDialog(ourContext);
 			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			m_ProgressDialog.setTitle(ourContext
 					.getString(R.string.inserting_questions_to_database));
-			m_ProgressDialog.show();
+			if (!m_SilentMode) {
+				m_ProgressDialog.show();
+			}
 
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			//
-			m_ProgressDialog.dismiss();
-			//Toast.makeText(ourContext, "Ended inserting to database", Toast.LENGTH_LONG).show();
+			if (!m_SilentMode) {
+				m_ProgressDialog.dismiss();
+			}
+			if (m_UpdateListener != null) {
+				m_UpdateListener.onUpdateQuestionsFinished(m_UpdateFrom);
+			}
+			// Toast.makeText(ourContext, "Ended inserting to database",
+			// Toast.LENGTH_LONG).show();
 		}
 
 		@Override
@@ -787,9 +806,12 @@ public class TriviaDbEngine {
 						}
 
 					} catch (Exception e) {
-						String message = e.getMessage().toString();
+						String message = e.getMessage();
 						if (message != null) {
-							Log.e(TAG, message);
+							Log.e(TAG, message.toString());
+						}else
+						{
+							Log.e(TAG,"error at AsyncTaskUpdateQuestions->doInBackground");
 						}
 
 					}
@@ -801,6 +823,7 @@ public class TriviaDbEngine {
 				Log.e(TAG, "params are null, database wasn't updated");
 			}
 
+			ourDatabase.close();
 			ourHelper.close();
 			return null;
 		}
@@ -916,33 +939,46 @@ public class TriviaDbEngine {
 
 	}
 
-	public void updateCategoriesAysnc(ContentValues[] result) {
+	public void updateCategoriesAysnc(ContentValues[] values, int i_UpdateFrom,
+			boolean i_SilentMode) {
 		//
-		new UpdateCategoriesAsyncTask().execute(result);
+		AsyncTaskUpdateCategories a = new AsyncTaskUpdateCategories();
+
+		a.m_UpdateFrom = i_UpdateFrom;
+		a.m_SilentMode = i_SilentMode;
+		a.execute(values);
+
 	}
 
-	public class UpdateCategoriesAsyncTask extends
+	public class AsyncTaskUpdateCategories extends
 			AsyncTask<ContentValues, Integer, Void> {
 
+		public boolean m_SilentMode;
+		public int m_UpdateFrom;
 		private ProgressDialog m_ProgressDialog;
 
 		@Override
 		protected void onPreExecute() {
 			//
+
 			m_ProgressDialog = new ProgressDialog(ourContext);
 			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			m_ProgressDialog.setTitle(ourContext
 					.getString(R.string.inserting_questions_to_database));
-			m_ProgressDialog.show();
+			if (!m_SilentMode) {
+				m_ProgressDialog.show();
+			}
 
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			//
-			m_ProgressDialog.dismiss();
+			if (!m_SilentMode) {
+				m_ProgressDialog.dismiss();
+			}
 			if (m_UpdateListener != null) {
-				m_UpdateListener.onUpdateCategoriesFinished();
+				m_UpdateListener.onUpdateCategoriesFinished(m_UpdateFrom);
 			}
 
 		}
@@ -964,20 +1000,23 @@ public class TriviaDbEngine {
 					try {
 
 						// if the questions exits then it only updates
-						String questionId = cv.getAsString(KEY_ROWID);
-						if (isQuestionExist(questionId)) {
+						String categoryId = cv.getAsString(KEY_ROWID);
+						if (isCategoryExist(categoryId)) {
 							ourDatabase.update(TABLE_CATEGORIES, cv, KEY_ROWID
-									+ "=?", new String[] { questionId });
+									+ "=?", new String[] { categoryId });
 						} else {
 							// insert if the category is new
+							Log.v(TAG, "insert new category");
 
 							ourDatabase.insert(TABLE_CATEGORIES, null, cv);
 						}
 
 					} catch (Exception e) {
-						String message = e.getMessage().toString();
+						String message = e.getMessage();
 						if (message != null) {
-							Log.e(TAG, message);
+							Log.e(TAG, message.toString());
+						}else{
+							Log.e(TAG, "Error at AsyncTaskUpdateCategories->doInBackground");
 						}
 
 					}
@@ -989,6 +1028,7 @@ public class TriviaDbEngine {
 				Log.e(TAG, "params are null, database wasn't updated");
 			}
 
+			ourDatabase.close();
 			ourHelper.close();
 			return null;
 		}
@@ -1011,11 +1051,12 @@ public class TriviaDbEngine {
 	}
 
 	static public interface TriviaDbEngineUpdateListener {
-		public void onUpdateCategoriesFinished();
+		public void onUpdateCategoriesFinished(int i_UpdateFrom);
 
-		public void onUpdateQuestionsFinished();
+		public void onUpdateQuestionsFinished(int i_UpdateFrom);
 
 		public void onAddedScoreToDatabase(long returnCode);
+
 	}
 
 	public void setUpdateListener(TriviaDbEngineUpdateListener listener) {
@@ -1086,118 +1127,4 @@ public class TriviaDbEngine {
 
 	}
 
-	public void importQuestionsFromXml(){
-		//
-		new AsyncTaskImportQuestionsFromXml().execute();
-
-	}
-	
-	public void importCategoriesFromXml (){
-		new AsyncTaskImportCategoriesFromXml().execute();
-	}
-	
-	public class AsyncTaskImportCategoriesFromXml extends AsyncTask<Void, Integer, Void>{
-
-		private XmlDataHandler xmlDataHandler;
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			//
-			InputStream raw = ourContext.getResources().openRawResource(
-					R.raw.questions);
-
-			SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-			SAXParser saxParser = null;
-			try {
-				saxParser = saxParserFactory.newSAXParser();
-			} catch (ParserConfigurationException e1) {
-				// 
-				e1.printStackTrace();
-			} catch (SAXException e1) {
-				// 
-				e1.printStackTrace();
-			}
-
-			Reader reader = new InputStreamReader(raw);
-			InputSource inputSource = new InputSource(reader);
-			inputSource.setEncoding("UTF-8");
-			xmlDataHandler = new XmlDataHandler();
-			
-			try {
-				try {
-					saxParser.parse(inputSource, xmlDataHandler);
-				} catch (SAXException e) {
-					// 
-					e.printStackTrace();
-				}
-			} catch (IOException e) {
-				// 
-				e.printStackTrace();
-			}
-
-			return null;
-		}
-		
-	}
-
-	public class AsyncTaskImportQuestionsFromXml extends AsyncTask<Void, Integer, Void> {
-
-		private XmlDataHandler xmlDataHandler;
-
-		@Override
-		protected void onPostExecute(Void result) {
-			
-			//
-			//Toast.makeText(ourContext, "ended importing from xml", Toast.LENGTH_LONG).show();
-			updateQuestionAsync(xmlDataHandler.getQuestions());
-
-		}
-
-		@Override
-		protected void onPreExecute() {
-			//
-
-		}
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			//
-			InputStream raw = ourContext.getResources().openRawResource(
-					R.raw.questions);
-
-			SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
-			SAXParser saxParser = null;
-			try {
-				saxParser = saxParserFactory.newSAXParser();
-			} catch (ParserConfigurationException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			} catch (SAXException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
-			Reader reader = new InputStreamReader(raw);
-			InputSource inputSource = new InputSource(reader);
-			inputSource.setEncoding("UTF-8");
-			xmlDataHandler = new XmlDataHandler();
-			
-
-			try {
-				try {
-					saxParser.parse(inputSource, xmlDataHandler);
-				} catch (SAXException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			return null;
-		}
-
-	}
-
-	
 }

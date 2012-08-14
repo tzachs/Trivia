@@ -165,6 +165,8 @@
     <string name="high_scores">High Scores</string>
     <string name="current_user_is_">"Current user is: "</string>
     <string name="time_is_up_">Time is up!</string>
+    <string name="register_you_user">Register you User</string>
+    <string name="register_a_user_in_order_to_publish_scores_get_updates_publish_questions_tbd_and_more">Register a user in order to publish scores, get updates, publish questions(TBD) and more</string>
     
 
 </resources>

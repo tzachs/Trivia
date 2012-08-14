@@ -31,8 +31,7 @@ import android.widget.ExpandableListView;
 public class ActivityShowCategoryForGame extends ExpandableListActivity
 		implements OnClickListener,  CategoriesListener {
 
-	private static final String TAG = ActivityShowCategoryForGame.class
-			.getSimpleName();
+	
 	private MyBaseExpandableListAdapter m_Adapter;
 	private Items m_Items;
 
@@ -558,7 +557,7 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 	}
 
 	@Override
-	public void onCategoriesUpdated() {
+	public void onCategoriesUpdated(int i_UpdateFrom) {
 		// 
 		initItemsFromDatabase();
 		

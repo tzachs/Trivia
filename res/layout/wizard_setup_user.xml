@@ -11,27 +11,27 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_marginBottom="4dp"
-        android:text="Register you User"
+        android:text="@string/register_you_user"
         android:textSize="20dp" />
 
     <View
-        android:id="@+id/viewLineLanguage"
+        android:id="@+id/viewLineRegisterUser"
         android:layout_width="fill_parent"
         android:layout_height="4dip"
         android:layout_below="@+id/textViewWizardSetupUser"
         android:background="@drawable/custom_line_purple" />
 
     <TextView
-        android:id="@+id/textViewWizardSetupLanguageMessage"
+        android:id="@+id/textViewWizardSetupUserRegisterMessage"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/viewLineLanguage"
+        android:layout_below="@+id/viewLineRegisterUser"
         android:layout_margin="4dp"
         android:layout_marginBottom="20dp"
-        android:text="Register a user in order to publish scores, get updates, publish questions(TBD) and more"/>
+        android:text="@string/register_a_user_in_order_to_publish_scores_get_updates_publish_questions_tbd_and_more"/>
     
     <LinearLayout
-        android:layout_below="@+id/textViewWizardSetupLanguageMessage"
+        android:layout_below="@+id/textViewWizardSetupUserRegisterMessage"
         android:id="@+id/linearLayoutUserRequestDetails"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

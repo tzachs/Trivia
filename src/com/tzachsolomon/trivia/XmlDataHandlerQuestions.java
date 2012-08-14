@@ -10,13 +10,12 @@ import android.content.ContentValues;
 import android.util.Log;
 
 public class XmlDataHandlerQuestions extends DefaultHandler {
-	
-	
-	public static final String TAG = XmlDataHandlerQuestions.class.getSimpleName();
-	
+
+	public static final String TAG = XmlDataHandlerQuestions.class
+			.getSimpleName();
+
 	private boolean inQuestionsData;
-	private boolean inCategoriesData;
-	private boolean inCategoriesDataRow;
+
 	private boolean inQuestionsDataRow;
 
 	ArrayList<ContentValues> m_Questions;
@@ -55,7 +54,7 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 	public void startDocument() throws SAXException {
 		//
 		super.startDocument();
-		if ( m_Listener != null ){
+		if (m_Listener != null) {
 			m_Listener.onStartDocument();
 		}
 	}
@@ -64,7 +63,7 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 	public void endDocument() throws SAXException {
 		//
 		super.endDocument();
-		if ( m_Listener != null ){
+		if (m_Listener != null) {
 			m_Listener.onEndDocument();
 		}
 	}
@@ -76,12 +75,10 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 		if (localName.contentEquals("table_data")) {
 
 			inQuestionsData = false;
-			inCategoriesData = false;
+
 		} else if (localName.contentEquals("row")) {
 
-			if (inCategoriesDataRow) {
-
-			} else if (inQuestionsDataRow) {
+			if (inQuestionsDataRow) {
 				m_Questions.add(m_Question);
 			}
 
@@ -91,7 +88,7 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 	}
 
 	private void setInColFalse() {
-		inCategoriesDataRow = false;
+
 		inQuestionsDataRow = false;
 		inColAnswer1 = false;
 		inColAnswer2 = false;
@@ -114,39 +111,29 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 	public void startElement(String uri, String localName, String qName,
 			Attributes attributes) throws SAXException {
 		//
+		//Log.v(TAG, "start element " + localName);
 		try {
 			if (localName.contentEquals("table_data")) {
 
 				inQuestionsData = false;
-				inCategoriesData = false;
 
 				if (attributes.getValue(0).contentEquals("questions")) {
 					inQuestionsData = true;
-				} else if (attributes.getValue(0)
-						.contentEquals("questions")) {
-					inCategoriesData = true;
 				}
 			} else if (localName.contentEquals("row")) {
 
-				inCategoriesDataRow = false;
 				inQuestionsDataRow = false;
 
 				setInColFalse();
 
-				if (inCategoriesData) {
-					inCategoriesDataRow = true;
-
-				} else if (inQuestionsData) {
+				if (inQuestionsData) {
 					inQuestionsDataRow = true;
 					m_Question = new ContentValues();
 				}
 			} else if (localName.contentEquals("field")) {
-				if (inCategoriesDataRow) {
+				if (inQuestionsDataRow) {
 
-				} else if (inQuestionsDataRow) {
-
-					if (attributes.getValue(0).contentEquals(
-							"colQuestionId")) {
+					if (attributes.getValue(0).contentEquals("colQuestionId")) {
 						inColQuestionId = true;
 
 					} else if (attributes.getValue(0).contentEquals(
@@ -156,8 +143,7 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 
 					}
 
-					else if (attributes.getValue(0).contentEquals(
-							"colAnswer1")) {
+					else if (attributes.getValue(0).contentEquals("colAnswer1")) {
 
 						inColAnswer1 = true;
 
@@ -193,8 +179,7 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 							"colCorrect")) {
 						inColCorrect = true;
 
-					} else if (attributes.getValue(0).contentEquals(
-							"colWrong")) {
+					} else if (attributes.getValue(0).contentEquals("colWrong")) {
 						inColWrong = true;
 
 					} else if (attributes.getValue(0).contentEquals(
@@ -272,13 +257,13 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 	}
 
 	public static interface XmlDataHandlerListener {
-		public void onEndDocument ();
+		public void onEndDocument();
 
 		public void onStartDocument();
 	}
-	
-	public void setXmlDataHandlerListener ( XmlDataHandlerListener i_Listener ){
+
+	public void setXmlDataHandlerListener(XmlDataHandlerListener i_Listener) {
 		m_Listener = i_Listener;
 	}
-	
+
 }

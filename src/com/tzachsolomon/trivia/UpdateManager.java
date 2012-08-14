@@ -1,5 +1,17 @@
 package com.tzachsolomon.trivia;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
 import com.tzachsolomon.trivia.JSONHandler.DatabaseUpdateListener;
 import com.tzachsolomon.trivia.TriviaDbEngine.TriviaDbEngineUpdateListener;
 
@@ -329,7 +341,7 @@ public class UpdateManager implements DatabaseUpdateListener,
 		//
 
 		if (i_DownloadedQuestions != null) {
-			m_TriviaDb.updateQuestionAsync(i_DownloadedQuestions);
+			m_TriviaDb.updateQuestionAsync(i_DownloadedQuestions,TriviaDbEngine.TYPE_UPDATE_FROM_INTERNET,false);
 
 		} else {
 			Toast.makeText(
@@ -347,7 +359,7 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 		if (i_DownloadedCategories != null) {
 
-			m_TriviaDb.updateCategoriesAysnc(i_DownloadedCategories);
+			m_TriviaDb.updateCategoriesAysnc(i_DownloadedCategories,TriviaDbEngine.TYPE_UPDATE_FROM_INTERNET,false);
 
 		} else {
 			Toast.makeText(
@@ -360,13 +372,12 @@ public class UpdateManager implements DatabaseUpdateListener,
 	}
 
 	static public interface CategoriesListener {
-		public void onCategoriesUpdated();
+		public void onCategoriesUpdated(int i_UpdateFrom);
 	}
 
 	static public interface QuestionsListener {
 		public void onQuestionsCorrectRatioSent();
-
-		public void onQuestionsUpdated();
+		public void onQuestionsUpdated(int i_UpdateFrom);
 	}
 
 	public void setCategoriesListener(CategoriesListener listener) {
@@ -378,20 +389,21 @@ public class UpdateManager implements DatabaseUpdateListener,
 	}
 
 	@Override
-	public void onUpdateCategoriesFinished() {
+	public void onUpdateCategoriesFinished(int i_UpdateFrom) {
 		//
-
 		// sending event that the categories have been updated
 		if (m_CategoriesListener != null) {
-			m_CategoriesListener.onCategoriesUpdated();
+			m_CategoriesListener.onCategoriesUpdated( i_UpdateFrom);
 		}
 
 	}
 
 	@Override
-	public void onUpdateQuestionsFinished() {
+	public void onUpdateQuestionsFinished(int i_UpdateFrom) {
 		//
-
+		if (m_QuestionsListener != null){
+			m_QuestionsListener.onQuestionsUpdated(i_UpdateFrom);
+		}
 	}
 
 	public void updateServerIpFromPreferences() {
@@ -405,5 +417,128 @@ public class UpdateManager implements DatabaseUpdateListener,
 		//
 
 	}
+
+	public void importQuestionsFromXml() {
+		// 
+		
+		new AsyncTaskImportQuestionsFromXml().execute();
+	}
+	
+	public class AsyncTaskImportCategoriesFromXml extends AsyncTask<Void, Integer, Void>{
+		
+		@Override
+		protected void onPostExecute(Void result) {
+			// 
+			m_TriviaDb.updateCategoriesAysnc(xmlDataHandler.getCategories(), TriviaDbEngine.TYPE_UPDATE_FROM_XML_FILE,true);
+		}
+
+		private XmlDataHandlerCategories xmlDataHandler;
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			//
+			InputStream raw = m_Context.getResources().openRawResource(
+					R.raw.categories);
+
+			SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+			SAXParser saxParser = null;
+			try {
+				saxParser = saxParserFactory.newSAXParser();
+			} catch (ParserConfigurationException e1) {
+				// 
+				e1.printStackTrace();
+			} catch (SAXException e1) {
+				// 
+				e1.printStackTrace();
+			}
+
+			Reader reader = new InputStreamReader(raw);
+			InputSource inputSource = new InputSource(reader);
+			inputSource.setEncoding("UTF-8");
+			xmlDataHandler = new XmlDataHandlerCategories();
+			
+			try {
+				try {
+					saxParser.parse(inputSource, xmlDataHandler);
+				} catch (SAXException e) {
+					// 
+					
+					e.printStackTrace();
+				}
+			} catch (IOException e) {
+				// s
+				e.printStackTrace();
+			}
+
+			return null;
+		}
+		
+	}
+	
+	public void importCategoriesFromXml (){
+		new AsyncTaskImportCategoriesFromXml().execute();
+	}
+	
+	
+	public class AsyncTaskImportQuestionsFromXml extends AsyncTask<Void, Integer, Void> {
+
+		private XmlDataHandlerQuestions xmlDataHandler;
+
+		@Override
+		protected void onPostExecute(Void result) {
+			
+			//
+			m_TriviaDb.updateQuestionAsync(xmlDataHandler.getQuestions(), TriviaDbEngine.TYPE_UPDATE_FROM_XML_FILE,true);
+
+		}
+
+		@Override
+		protected void onPreExecute() {
+			//
+
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			//
+			InputStream raw = m_Context.getResources().openRawResource(
+					R.raw.questions);
+
+			SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+			SAXParser saxParser = null;
+			try {
+				saxParser = saxParserFactory.newSAXParser();
+			} catch (ParserConfigurationException e1) {
+				// 
+				e1.printStackTrace();
+			} catch (SAXException e1) {
+				// 
+				e1.printStackTrace();
+			}
+
+			Reader reader = new InputStreamReader(raw);
+			InputSource inputSource = new InputSource(reader);
+			inputSource.setEncoding("UTF-8");
+			xmlDataHandler = new XmlDataHandlerQuestions();
+			
+
+			try {
+				try {
+					saxParser.parse(inputSource, xmlDataHandler);
+				} catch (SAXException e) {
+					// 
+					Log.e(TAG, "Error at AsyncTaskImportQuestionsFromXml->doInBackground");
+					e.printStackTrace();
+				}
+			} catch (IOException e) {
+				// 
+				e.printStackTrace();
+			}
+			return null;
+		}
+
+	}
+
+
 
 }

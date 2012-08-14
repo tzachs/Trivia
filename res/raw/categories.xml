@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+<mysqldump xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<database name="triviadb">
+	<table_structure name="categories">
+		<field Field="_id" Type="int(11)" Null="NO" Key="PRI" Extra="auto_increment" Comment="" />
+		<field Field="colParentId" Type="int(11)" Null="NO" Key="" Default="-1" Extra="" Comment="" />
+		<field Field="colEnName" Type="text" Null="NO" Key="" Extra="" Comment="English Name" />
+		<field Field="colHeName" Type="text" Null="NO" Key="" Extra="" Comment="Hebrew name" />
+		<field Field="colLastUpdate" Type="int(11)" Null="NO" Key="" Extra="" Comment="" />
+		<key Table="categories" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="_id" Collation="A" Cardinality="27" Null="" Index_type="BTREE" Comment="" Index_comment="" />
+		<options Name="categories" Engine="InnoDB" Version="10" Row_format="Compact" Rows="27" Avg_row_length="606" Data_length="16384" Max_data_length="0" Index_length="0" Data_free="4194304" Auto_increment="30" Create_time="2012-06-23 07:55:22" Collation="latin1_swedish_ci" Create_options="" Comment="" />
+	</table_structure>
+	<table_data name="categories">
+	<row>
+		<field name="_id">1</field>
+		<field name="colParentId">-1</field>
+		<field name="colEnName">Arts</field>
+		<field name="colHeName">אומנות</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">3</field>
+		<field name="colParentId">-1</field>
+		<field name="colEnName">History</field>
+		<field name="colHeName">היסטוריה</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">4</field>
+		<field name="colParentId">16</field>
+		<field name="colEnName">Physics</field>
+		<field name="colHeName">פיזיקה</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">5</field>
+		<field name="colParentId">16</field>
+		<field name="colEnName">Chemistry</field>
+		<field name="colHeName">כימיה</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">6</field>
+		<field name="colParentId">-1</field>
+		<field name="colEnName">Personages</field>
+		<field name="colHeName">אישים</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">7</field>
+		<field name="colParentId">-1</field>
+		<field name="colEnName">Sport</field>
+		<field name="colHeName">ספורט</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">8</field>
+		<field name="colParentId">-1</field>
+		<field name="colEnName">Geography</field>
+		<field name="colHeName">גיאורפיה</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">9</field>
+		<field name="colParentId">16</field>
+		<field name="colEnName">Biology</field>
+		<field name="colHeName">ביולוגיה</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">10</field>
+		<field name="colParentId">-1</field>
+		<field name="colEnName">General knowledge</field>
+		<field name="colHeName">ידע כללי</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">11</field>
+		<field name="colParentId">-1</field>
+		<field name="colEnName">TV and Movies</field>
+		<field name="colHeName">טלוויזיה וסרטים</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">12</field>
+		<field name="colParentId">-1</field>
+		<field name="colEnName">Bible</field>
+		<field name="colHeName">תנ&quot;ך</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">13</field>
+		<field name="colParentId">11</field>
+		<field name="colEnName">Friends</field>
+		<field name="colHeName">חברים</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">14</field>
+		<field name="colParentId">1</field>
+		<field name="colEnName">Music</field>
+		<field name="colHeName">מוזיקה</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">15</field>
+		<field name="colParentId">1</field>
+		<field name="colEnName">Painting</field>
+		<field name="colHeName">ציור</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">16</field>
+		<field name="colParentId">-1</field>
+		<field name="colEnName">Science</field>
+		<field name="colHeName">מדעים</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">17</field>
+		<field name="colParentId">-1</field>
+		<field name="colEnName">Judaism</field>
+		<field name="colHeName">יהדות</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">18</field>
+		<field name="colParentId">10</field>
+		<field name="colEnName">Capital Cities</field>
+		<field name="colHeName">ערי בירה</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">19</field>
+		<field name="colParentId">10</field>
+		<field name="colEnName">Quotes</field>
+		<field name="colHeName">ציטוטים</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">20</field>
+		<field name="colParentId">10</field>
+		<field name="colEnName">Inventors</field>
+		<field name="colHeName">ממציאים</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">21</field>
+		<field name="colParentId">11</field>
+		<field name="colEnName">Quotes</field>
+		<field name="colHeName">ציטוטים</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">22</field>
+		<field name="colParentId">1</field>
+		<field name="colEnName">Literature
+</field>
+		<field name="colHeName">ספרות</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">23</field>
+		<field name="colParentId">10</field>
+		<field name="colEnName">Expressions</field>
+		<field name="colHeName">ביטויים</field>
+		<field name="colLastUpdate">1340438491</field>
+	</row>
+	<row>
+		<field name="_id">24</field>
+		<field name="colParentId">7</field>
+		<field name="colEnName">Israeli Sport</field>
+		<field name="colHeName">ספורט ישראלי</field>
+		<field name="colLastUpdate">1340438492</field>
+	</row>
+	<row>
+		<field name="_id">26</field>
+		<field name="colParentId">7</field>
+		<field name="colEnName">NBA</field>
+		<field name="colHeName">NBA</field>
+		<field name="colLastUpdate">1340438492</field>
+	</row>
+	<row>
+		<field name="_id">27</field>
+		<field name="colParentId">16</field>
+		<field name="colEnName">Computers</field>
+		<field name="colHeName">מחשבים</field>
+		<field name="colLastUpdate">1341491597</field>
+	</row>
+	<row>
+		<field name="_id">28</field>
+		<field name="colParentId">-1</field>
+		<field name="colEnName">food</field>
+		<field name="colHeName">אוכל</field>
+		<field name="colLastUpdate">1341491600</field>
+	</row>
+	</table_data>
+</database>
+</mysqldump>
