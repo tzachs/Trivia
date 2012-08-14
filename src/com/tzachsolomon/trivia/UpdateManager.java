@@ -329,7 +329,7 @@ public class UpdateManager implements DatabaseUpdateListener,
 		//
 
 		if (i_DownloadedQuestions != null) {
-			m_TriviaDb.updateQuestionFromInternetAsync(i_DownloadedQuestions);
+			m_TriviaDb.updateQuestionAsync(i_DownloadedQuestions);
 
 		} else {
 			Toast.makeText(

@@ -1,29 +1,22 @@
 package com.tzachsolomon.trivia;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
 
-import com.tzachsolomon.trivia.TriviaDbEngine.XmlDataHandler;
+
 
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
@@ -32,7 +25,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.util.SparseArray;
-import android.webkit.WebChromeClient.CustomViewCallback;
+import android.widget.Toast;
 
 public class TriviaDbEngine {
 
@@ -268,7 +261,6 @@ public class TriviaDbEngine {
 		cv.put(KEY_QUESTIONID, i_QuestionId);
 
 		cv.put(KEY_WRONG_USER, i_WrongUser);
-		
 
 		ret = ourDatabase.insert(TABLE_QUESTIONS, null, cv);
 
@@ -729,7 +721,7 @@ public class TriviaDbEngine {
 		return ret;
 	}
 
-	public void updateQuestionFromInternetAsync(ContentValues[] values) {
+	public void updateQuestionAsync(ContentValues[] values) {
 		//
 		new UpdateQuestionsAsyncTask().execute(values);
 
@@ -755,7 +747,7 @@ public class TriviaDbEngine {
 		protected void onPostExecute(Void result) {
 			//
 			m_ProgressDialog.dismiss();
-
+			//Toast.makeText(ourContext, "Ended inserting to database", Toast.LENGTH_LONG).show();
 		}
 
 		@Override
@@ -1100,21 +1092,29 @@ public class TriviaDbEngine {
 		new AsyncTaskImportFromXml().execute();
 
 	}
-	
-	public class AsyncTaskImportFromXml extends AsyncTask<Void, Integer, Void>{
+
+	public class AsyncTaskImportFromXml extends AsyncTask<Void, Integer, Void> {
 
 		private XmlDataHandler xmlDataHandler;
+
 		@Override
 		protected void onPostExecute(Void result) {
-			// 
-			updateQuestionFromInternetAsync(xmlDataHandler.getQuestions());
 			
-			
+			//
+			//Toast.makeText(ourContext, "ended importing from xml", Toast.LENGTH_LONG).show();
+			updateQuestionAsync(xmlDataHandler.getQuestions());
+
 		}
-		
+
 		@Override
 		protected void onPreExecute() {
-			// 
+			//
+
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			//
 			InputStream raw = ourContext.getResources().openRawResource(
 					R.raw.questions);
 
@@ -1134,6 +1134,7 @@ public class TriviaDbEngine {
 			InputSource inputSource = new InputSource(reader);
 			inputSource.setEncoding("UTF-8");
 			xmlDataHandler = new XmlDataHandler();
+			
 
 			try {
 				try {
@@ -1146,208 +1147,10 @@ public class TriviaDbEngine {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-		}
-		@Override
-		protected Void doInBackground(Void... params) {
-			// 
 			return null;
 		}
-		
-	}
-
-	public class XmlDataHandler extends DefaultHandler {
-		private boolean inQuestionsData;
-		private boolean inCategoriesData;
-		private boolean inCategoriesDataRow;
-		private boolean inQuestionsDataRow;
-
-		ArrayList<ContentValues> m_Questions;
-		ContentValues m_Question;
-		private boolean colQuestionId;
-		private boolean inQuestion;
-		private boolean inColAnswer1;
-		private boolean inColAnswer2;
-		private boolean inColAnswer3;
-
-		public XmlDataHandler() {
-			m_Questions = new ArrayList<ContentValues>();
-		}
-
-		public ContentValues[] getQuestions() {
-			// 
-			ContentValues[] ret = new ContentValues[m_Questions.size()];
-			
-			m_Questions.toArray(ret);
-			
-			return ret;
-		}
-
-		@Override
-		public void startDocument() throws SAXException {
-			//
-			super.startDocument();
-		}
-
-		@Override
-		public void endDocument() throws SAXException {
-			//
-			super.endDocument();
-		}
-
-		@Override
-		public void endElement(String uri, String localName, String qName)
-				throws SAXException {
-			//
-			if (localName.contentEquals("table_data")) {
-
-				inQuestionsData = false;
-				inCategoriesData = false;
-			} else if (localName.contentEquals("row")) {
-
-				if (inCategoriesDataRow) {
-
-				} else if (inQuestionsDataRow) {
-					m_Questions.add(m_Question);
-				}
-
-				inCategoriesDataRow = false;
-				inQuestionsDataRow = false;
-
-			}
-		}
-
-		@Override
-		public void startElement(String uri, String localName, String qName,
-				Attributes attributes) throws SAXException {
-			//
-			try {
-				if (localName.contentEquals("table_data")) {
-
-					inQuestionsData = false;
-					inCategoriesData = false;
-
-					if (attributes.getValue(0).contentEquals("questions")) {
-						inQuestionsData = true;
-					} else if (attributes.getValue(0)
-							.contentEquals("questions")) {
-						inCategoriesData = true;
-					}
-				} else if (localName.contentEquals("row")) {
-
-					inCategoriesDataRow = false;
-					inQuestionsDataRow = false;
-
-					if (inCategoriesData) {
-						inCategoriesDataRow = true;
-
-					} else if (inQuestionsData) {
-						inQuestionsDataRow = true;
-						m_Question = new ContentValues();
-					}
-				} else if (localName.contentEquals("field")) {
-					if (inCategoriesDataRow) {
-
-					} else if (inQuestionsDataRow) {
-						Log.v(TAG, attributes.getLocalName(0));
-						Log.v(TAG, attributes.getQName(0));
-						Log.v(TAG,attributes.getValue(0));
-						
-						if (attributes.getValue(0).contentEquals(
-								"colQuestionId")) {
-							colQuestionId = true;
-									
-						} else if (attributes.getValue(0).contentEquals(
-								"colQuestion")) {
-							
-							inQuestion = true;
-							
-							
-						}
-
-						else if (attributes.getValue(0).contentEquals(
-								"colAnswer1")) {
-							
-							inColAnswer1 = true;
-
-						} else if (attributes.getLocalName(0).contentEquals(
-								"colAnswer2")) {
-							
-							inColAnswer2 = true;
-
-						} else if (attributes.getLocalName(0).contentEquals(
-								"colAnswer3")) {
-							
-							inColAnswer3 = true;
-
-						} else if (attributes.getLocalName(0).contentEquals(
-								"colAnswer4")) {
-							m_Question.put(TriviaDbEngine.KEY_ANSWER4,
-									attributes.getValue(0));
-							
-							//TODO: continue here!!!!!
-							inColAnswer3 = true;
-
-						} else if (attributes.getLocalName(0).contentEquals(
-								"colAnswerIndex")) {
-							m_Question.put(TriviaDbEngine.KEY_ANSWER_INDEX,
-									attributes.getValue(0));
-
-						} else if (attributes.getLocalName(0).contentEquals(
-								"colCategory")) {
-							m_Question.put(TriviaDbEngine.KEY_CATEGORY,
-									attributes.getValue(0));
-
-						} else if (attributes.getLocalName(0).contentEquals(
-								"colLanguage")) {
-							m_Question.put(TriviaDbEngine.KEY_LANGUAGE,
-									attributes.getValue(0));
-
-						} else if (attributes.getLocalName(0).contentEquals(
-								"colCorrect")) {
-
-						} else if (attributes.getLocalName(0).contentEquals(
-								"colWrong")) {
-
-						} else if (attributes.getLocalName(0).contentEquals(
-								"colCorrectWrongRatio")) {
-							m_Question.put(
-									TriviaDbEngine.KEY_CORRECT_WRONG_RATIO,
-									attributes.getValue(0));
-
-						} else if (attributes.getLocalName(0).contentEquals(
-								"colLastUpdate")) {
-							m_Question.put(TriviaDbEngine.KEY_LAST_UPDATE,
-									attributes.getValue(0));
-
-						} else if (attributes.getLocalName(0).contentEquals(
-								"colEnabled")) {
-							m_Question.put(TriviaDbEngine.KEY_ENABLED,
-									attributes.getValue(0));
-
-						}
-
-					}
-				}
-			} catch (Exception e) {
-				Log.e(TAG, e.getMessage().toString());
-			}
-		}
-		
-		@Override
-		public void characters(char[] ch, int start, int length)
-				throws SAXException {
-			// 
-			
-			String chars = new String(ch,start,length);
-			if ( inQuestionId ){
-				
-			}else if ( in)
-			
-			Log.v(TAG, chars);
-			
-		}
 
 	}
 
+	
 }

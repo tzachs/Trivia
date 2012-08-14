@@ -97,15 +97,17 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 					"com.tzachsolomon.trivia", PackageManager.GET_META_DATA);
 
 			if (!packageInfo.versionName.contentEquals(i)) {
+				
 				try {
 					m_TrivaDbEngine.importFromXml();
 				} catch (ParserConfigurationException e) {
-					// TODO Auto-generated catch block
+					// 
 					e.printStackTrace();
 				} catch (SAXException e) {
-					// TODO Auto-generated catch block
+					//
 					e.printStackTrace();
 				}
+				
 				showWhatsNew();
 				showWizardSetup();
 
