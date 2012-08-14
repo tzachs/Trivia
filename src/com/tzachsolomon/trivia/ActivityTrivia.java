@@ -38,7 +38,7 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 	// TODO: animation
 	// TODO: create service to update the database daily
 	// TODO: initial settings with XML file
-	// 
+	//
 
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
 
@@ -97,17 +97,8 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 					"com.tzachsolomon.trivia", PackageManager.GET_META_DATA);
 
 			if (!packageInfo.versionName.contentEquals(i)) {
-				
-				try {
-					m_TrivaDbEngine.importFromXml();
-				} catch (ParserConfigurationException e) {
-					// 
-					e.printStackTrace();
-				} catch (SAXException e) {
-					//
-					e.printStackTrace();
-				}
-				
+
+				m_TrivaDbEngine.importQuestionsFromXml();
 				showWhatsNew();
 				showWizardSetup();
 
@@ -141,7 +132,6 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		buttonWizardSetup_Clicked();
 
 	}
-	
 
 	@Override
 	protected void onResume() {
@@ -155,14 +145,11 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 			m_UpdateManager.updateQuestions(true);
 			showUserRegister();
 		}
-		
-		
-		
+
 		String username = m_TrivaDbEngine.getUsername(m_CurrentUserId);
-		
-		textViewCurrentUser.setText(getString(R.string.current_user_is_) + username);
-		
-		
+
+		textViewCurrentUser.setText(getString(R.string.current_user_is_)
+				+ username);
 
 	}
 
@@ -185,12 +172,11 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	private void initializeVariables() {
 		//
-		
+
 		m_CurrentUserId = -1;
-		
+
 		m_TrivaDbEngine = new TriviaDbEngine(this);
 		m_UpdateManager = new UpdateManager(this);
-
 
 	}
 
@@ -213,8 +199,8 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 		buttonNewGameCategories.setOnClickListener(this);
 		buttonManageUsers.setOnClickListener(this);
 		buttonGameScores.setOnClickListener(this);
-		
-		textViewCurrentUser = (TextView)findViewById(R.id.textViewCurrentUser);
+
+		textViewCurrentUser = (TextView) findViewById(R.id.textViewCurrentUser);
 
 		// checking if the device is with API 11 and earlier,
 		// if so, hide the preferences button since it can be done through menu
@@ -312,7 +298,6 @@ public class ActivityTrivia extends Activity implements OnClickListener {
 
 	private void showUserRegister() {
 		//
-		
 
 		if (m_TrivaDbEngine.isUsersEmpty()) {
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);

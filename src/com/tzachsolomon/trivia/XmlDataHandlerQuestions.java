@@ -9,10 +9,10 @@ import org.xml.sax.helpers.DefaultHandler;
 import android.content.ContentValues;
 import android.util.Log;
 
-public class XmlDataHandler extends DefaultHandler {
+public class XmlDataHandlerQuestions extends DefaultHandler {
 	
 	
-	public static final String TAG = XmlDataHandler.class.getSimpleName();
+	public static final String TAG = XmlDataHandlerQuestions.class.getSimpleName();
 	
 	private boolean inQuestionsData;
 	private boolean inCategoriesData;
@@ -38,7 +38,7 @@ public class XmlDataHandler extends DefaultHandler {
 
 	private XmlDataHandlerListener m_Listener;
 
-	public XmlDataHandler() {
+	public XmlDataHandlerQuestions() {
 		m_Questions = new ArrayList<ContentValues>();
 	}
 

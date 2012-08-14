@@ -1086,14 +1086,61 @@ public class TriviaDbEngine {
 
 	}
 
-	public void importFromXml() throws ParserConfigurationException,
-			SAXException {
+	public void importQuestionsFromXml(){
 		//
-		new AsyncTaskImportFromXml().execute();
+		new AsyncTaskImportQuestionsFromXml().execute();
 
 	}
+	
+	public void importCategoriesFromXml (){
+		new AsyncTaskImportCategoriesFromXml().execute();
+	}
+	
+	public class AsyncTaskImportCategoriesFromXml extends AsyncTask<Void, Integer, Void>{
 
-	public class AsyncTaskImportFromXml extends AsyncTask<Void, Integer, Void> {
+		private XmlDataHandler xmlDataHandler;
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			//
+			InputStream raw = ourContext.getResources().openRawResource(
+					R.raw.questions);
+
+			SAXParserFactory saxParserFactory = SAXParserFactory.newInstance();
+			SAXParser saxParser = null;
+			try {
+				saxParser = saxParserFactory.newSAXParser();
+			} catch (ParserConfigurationException e1) {
+				// 
+				e1.printStackTrace();
+			} catch (SAXException e1) {
+				// 
+				e1.printStackTrace();
+			}
+
+			Reader reader = new InputStreamReader(raw);
+			InputSource inputSource = new InputSource(reader);
+			inputSource.setEncoding("UTF-8");
+			xmlDataHandler = new XmlDataHandler();
+			
+			try {
+				try {
+					saxParser.parse(inputSource, xmlDataHandler);
+				} catch (SAXException e) {
+					// 
+					e.printStackTrace();
+				}
+			} catch (IOException e) {
+				// 
+				e.printStackTrace();
+			}
+
+			return null;
+		}
+		
+	}
+
+	public class AsyncTaskImportQuestionsFromXml extends AsyncTask<Void, Integer, Void> {
 
 		private XmlDataHandler xmlDataHandler;
 
