@@ -34,10 +34,12 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 	private boolean inColEnabled;
 	private boolean inColQuestionId;
 	private boolean inColQuestion;
-	
-	private StringBuilder currentQuestion;
 
-	private XmlDataHandlerListener m_Listener;
+	private StringBuilder currentString;
+
+	private XmlDataHandlerQuestionListener m_Listener;
+
+	private boolean m_SkipQuestionDueToParseError;
 
 	public XmlDataHandlerQuestions() {
 		m_Questions = new ArrayList<ContentValues>();
@@ -81,7 +83,11 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 		} else if (localName.contentEquals("row")) {
 
 			if (inQuestionsDataRow) {
-				m_Questions.add(m_Question);
+				
+				// checking if there was error in parsing
+				if ( !m_SkipQuestionDueToParseError){
+					m_Questions.add(m_Question);
+				}
 			}
 
 			setInColFalse();
@@ -130,6 +136,7 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 
 				if (inQuestionsData) {
 					inQuestionsDataRow = true;
+					m_SkipQuestionDueToParseError = false;
 					m_Question = new ContentValues();
 				}
 			} else if (localName.contentEquals("field")) {
@@ -211,80 +218,175 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 			throws SAXException {
 		//
 
-		String chars = new String(ch, start, length);
-		// replacing the &quot; with "
+		try {
+			String chars = new String(ch, start, length);
+			Log.v(TAG, chars);
 
-		
+			if (inColAnswer1) {
 
-		if (inColAnswer1) {
-			// TODO: same solution of question with quotation mark
-			m_Question.put(TriviaDbEngine.KEY_ANSWER1, chars);
-			inColAnswer1 = false;
-		} else if (inColAnswer2) {
-			m_Question.put(TriviaDbEngine.KEY_ANSWER2, chars);
-			inColAnswer2 = false;
-		} else if (inColAnswer3) {
-			m_Question.put(TriviaDbEngine.KEY_ANSWER3, chars);
-			inColAnswer3 = false;
-		} else if (inColAnswer4) {
-			m_Question.put(TriviaDbEngine.KEY_ANSWER4, chars);
-			inColAnswer4 = false;
+				// only \n means the question parser ended, this section can be
+				// called multiple times if
+				// there are special characters such as &quot; that is why we
+				// need
+				// to check \n
+				if (chars.contentEquals("\n")) {
 
-		} else if (inColAnswerIndex) {
-			m_Question.put(TriviaDbEngine.KEY_ANSWER_INDEX, chars);
-			inColAnswerIndex = false;
-		} else if (inColCategory) {
-			m_Question.put(TriviaDbEngine.KEY_CATEGORY, chars);
-			inColCategory = false;
-		} else if (inColCorrect) {
+					inColAnswer1 = false;
+					m_Question.put(TriviaDbEngine.KEY_ANSWER1,
+							currentString.toString());
+					currentString = null;
 
-			inColCorrect = false;
-		} else if (inColCorrectWrongRatio) {
-			m_Question.put(TriviaDbEngine.KEY_CORRECT_WRONG_RATIO, chars);
-			inColCorrectWrongRatio = false;
-		} else if (inColEnabled) {
-			m_Question.put(TriviaDbEngine.KEY_ENABLED, chars);
-			inColEnabled = false;
-		} else if (inColLanguage) {
-			m_Question.put(TriviaDbEngine.KEY_LANGUAGE, chars);
-			inColLanguage = false;
-		} else if (inColLastUpdate) {
-			m_Question.put(TriviaDbEngine.KEY_LAST_UPDATE, chars);
-			inColLastUpdate = false;
-		} else if (inColQuestion) {
-			
-			// only \n means the question parser ended, this section can be called multiple times if
-			// there are special characters such as &quot; that is why we need to check \n
-			if ( chars.contentEquals("\n")){
-				m_Question.put(TriviaDbEngine.KEY_QUESTION, currentQuestion.toString());
-				currentQuestion = null;
-				inColQuestion = false;
-			} else{
-				// checking if this is the start of the question, if so, create the StringBuilder
-				if ( currentQuestion == null ){
-					currentQuestion = new StringBuilder();
+				} else {
+					// checking if this is the start of t he question, if so,
+					// create
+					// the StringBuilder
+					if (currentString == null) {
+						currentString = new StringBuilder();
+					}
+					// append the current part
+					currentString.append(chars);
 				}
-				// append the current part
-				currentQuestion.append(chars);
-			}
-			
-			
-		} else if (inColQuestionId) {
-			m_Question.put(TriviaDbEngine.KEY_QUESTIONID, chars);
-			inColQuestionId = false;
-		} else if (inColWrong) {
-			inColWrong = false;
-		}
 
+			} else if (inColAnswer2) {
+				// only \n means the question parser ended, this section can be
+				// called multiple times if
+				// there are special characters such as &quot; that is why we
+				// need
+				// to check \n
+				if (chars.contentEquals("\n")) {
+
+					inColAnswer2 = false;
+					m_Question.put(TriviaDbEngine.KEY_ANSWER2,
+							currentString.toString());
+					currentString = null;
+
+				} else {
+					// checking if this is the start of the question, if so,
+					// create
+					// the StringBuilder
+					if (currentString == null) {
+						currentString = new StringBuilder();
+					}
+					// append the current part
+					currentString.append(chars);
+				}
+
+			} else if (inColAnswer3) {
+				// only \n means the question parser ended, this section can be
+				// called multiple times if
+				// there are special characters such as &quot; that is why we
+				// need
+				// to check \n
+				if (chars.contentEquals("\n")) {
+
+					inColAnswer3 = false;
+					m_Question.put(TriviaDbEngine.KEY_ANSWER3,
+							currentString.toString());
+					currentString = null;
+
+				} else {
+					// checking if this is the start of the question, if so,
+					// create
+					// the StringBuilder
+					if (currentString == null) {
+						currentString = new StringBuilder();
+					}
+					// append the current part
+					currentString.append(chars);
+				}
+
+			} else if (inColAnswer4) {
+
+				// only \n means the question parser ended, this section can be
+				// called multiple times if
+				// there are special characters such as &quot; that is why we
+				// need
+				// to check \n
+				if (chars.contentEquals("\n")) {
+
+					inColAnswer4 = false;
+					m_Question.put(TriviaDbEngine.KEY_ANSWER4,
+							currentString.toString());
+					currentString = null;
+
+				} else {
+					// checking if this is the start of the question, if so,
+					// create
+					// the StringBuilder
+					if (currentString == null) {
+						currentString = new StringBuilder();
+					}
+					// append the current part
+					currentString.append(chars);
+				}
+
+			} else if (inColAnswerIndex) {
+				m_Question.put(TriviaDbEngine.KEY_ANSWER_INDEX, chars);
+				inColAnswerIndex = false;
+			} else if (inColCategory) {
+				m_Question.put(TriviaDbEngine.KEY_CATEGORY, chars);
+				inColCategory = false;
+			} else if (inColCorrect) {
+
+				inColCorrect = false;
+			} else if (inColCorrectWrongRatio) {
+				m_Question.put(TriviaDbEngine.KEY_CORRECT_WRONG_RATIO, chars);
+				inColCorrectWrongRatio = false;
+			} else if (inColEnabled) {
+				m_Question.put(TriviaDbEngine.KEY_ENABLED, chars);
+				inColEnabled = false;
+			} else if (inColLanguage) {
+				m_Question.put(TriviaDbEngine.KEY_LANGUAGE, chars);
+				inColLanguage = false;
+			} else if (inColLastUpdate) {
+				m_Question.put(TriviaDbEngine.KEY_LAST_UPDATE, chars);
+				inColLastUpdate = false;
+			} else if (inColQuestion) {
+
+				// only \n means the question parser ended, this section can be
+				// called multiple times if
+				// there are special characters such as &quot; that is why we
+				// need
+				// to check \n
+				if (chars.contentEquals("\n")) {
+					m_Question.put(TriviaDbEngine.KEY_QUESTION,
+							currentString.toString());
+					currentString = null;
+					inColQuestion = false;
+				} else {
+					// checking if this is the start of the question, if so,
+					// create
+					// the StringBuilder
+					if (currentString == null) {
+						currentString = new StringBuilder();
+					}
+					// append the current part
+					currentString.append(chars);
+				}
+
+			} else if (inColQuestionId) {
+				m_Question.put(TriviaDbEngine.KEY_QUESTIONID, chars);
+				inColQuestionId = false;
+			} else if (inColWrong) {
+				inColWrong = false;
+			}
+		} catch (NullPointerException e) {
+			m_SkipQuestionDueToParseError = true;
+			Log.e(TAG, e.getMessage());
+		} catch (Exception e) {
+			m_SkipQuestionDueToParseError = true;
+			Log.e(TAG, e.getMessage());
+		}
 	}
 
-	public static interface XmlDataHandlerListener {
+	public static interface XmlDataHandlerQuestionListener {
 		public void onEndDocument();
 
 		public void onStartDocument();
 	}
 
-	public void setXmlDataHandlerListener(XmlDataHandlerListener i_Listener) {
+	public void setXmlDataHandlerListener(
+			XmlDataHandlerQuestionListener i_Listener) {
 		m_Listener = i_Listener;
 	}
 
