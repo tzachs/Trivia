@@ -220,7 +220,7 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 
 		try {
 			String chars = new String(ch, start, length);
-			Log.v(TAG, chars);
+			//Log.v(TAG, chars);
 
 			if (inColAnswer1) {
 
@@ -371,11 +371,12 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 				inColWrong = false;
 			}
 		} catch (NullPointerException e) {
+			// there is an error parsing the question
 			m_SkipQuestionDueToParseError = true;
-			Log.e(TAG, e.getMessage());
+			//Log.e(TAG, e.getMessage());
 		} catch (Exception e) {
 			m_SkipQuestionDueToParseError = true;
-			Log.e(TAG, e.getMessage());
+			//Log.e(TAG, e.getMessage());
 		}
 	}
 
