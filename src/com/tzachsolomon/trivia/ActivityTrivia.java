@@ -100,7 +100,7 @@ public class ActivityTrivia extends Activity implements OnClickListener, Categor
 
 				m_FirstTimeStartingDoNotTryToUpdate = true;
 				
-				Log.v(TAG, "Starting import questions from xml");
+				//Log.v(TAG, "Starting import questions from xml");
 				m_UpdateManager.importQuestionsFromXml();
 				
 				showWhatsNew();
@@ -495,7 +495,7 @@ public class ActivityTrivia extends Activity implements OnClickListener, Categor
 		case TriviaDbEngine.TYPE_UPDATE_FROM_XML_FILE:
 			// starting to update the categories
 			Toast.makeText(ActivityTrivia.this, "Finished updating questions from initial file", Toast.LENGTH_LONG).show();
-			Log.v(TAG, "Starting import categories from xml");
+			//Log.v(TAG, "Starting import categories from xml");
 			m_UpdateManager.importCategoriesFromXml();
 			
 			break;

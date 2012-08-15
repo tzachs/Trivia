@@ -84,8 +84,13 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 
 			if (inQuestionsDataRow) {
 				
-				// checking if there was error in parsing
-				if ( !m_SkipQuestionDueToParseError){
+				// checking if there was error during question parsing
+				if ( m_SkipQuestionDueToParseError){
+					// error was detected, checking if we need to send event
+					if ( m_Listener != null ){
+						m_Listener.errorQuestionParsingDetected(m_Question);
+					}
+				} else {
 					m_Questions.add(m_Question);
 				}
 			}
@@ -382,8 +387,8 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 
 	public static interface XmlDataHandlerQuestionListener {
 		public void onEndDocument();
-
 		public void onStartDocument();
+		public void errorQuestionParsingDetected(ContentValues i_Question);
 	}
 
 	public void setXmlDataHandlerListener(
