@@ -22,11 +22,15 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ViewSwitcher.ViewFactory;
 
-public class ActivityGame extends Activity implements OnClickListener {
+public class ActivityGame extends Activity implements OnClickListener, ViewFactory {
 
 	public static final String TAG = ActivityGame.class.getSimpleName();
 
@@ -58,7 +62,7 @@ public class ActivityGame extends Activity implements OnClickListener {
 	private Button buttonReportMistakeInQuestion;
 	private Button buttonPassQuestion;
 
-	private TextView textViewTime;
+
 	private TextView textViewQuestion;
 	private TextView textViewNumberOfQuestionsLeft;
 	private TextView textViewQuestionDifficulty;
@@ -125,6 +129,8 @@ public class ActivityGame extends Activity implements OnClickListener {
 	private TextView textViewGameScoreText;
 
 	private int m_UserId;
+
+	private TextSwitcher textSwitcherTime;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -665,12 +671,22 @@ public class ActivityGame extends Activity implements OnClickListener {
 
 	private void initializeTextViews() {
 		textViewQuestion = (TextView) findViewById(R.id.textViewQuestion);
-		textViewTime = (TextView) findViewById(R.id.textViewTime);
+		
 		textViewNumberOfQuestionsLeft = (TextView) findViewById(R.id.textViewNumberOfQuestionsLeft);
 		textViewQuestionDifficulty = (TextView) findViewById(R.id.textViewQuestionDifficulty);
 		textViewLivesLeft = (TextView) findViewById(R.id.textViewLivesLeft);
 		textViewTimesPlayedTitle = (TextView) findViewById(R.id.textViewTimesPlayedTitle);
 		textViewGameScoreText = (TextView) findViewById(R.id.textViewGameScoreText);
+		
+		textSwitcherTime = (TextSwitcher) findViewById(R.id.textViewTime);
+		
+		textSwitcherTime.setFactory(this);
+		
+		Animation inAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
+		Animation outAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
+		
+		textSwitcherTime.setInAnimation(inAnimation);
+		textSwitcherTime.setOutAnimation(outAnimation);
 	}
 
 	public class MyCountDownCounter extends CountDownTimerWithPause {
@@ -684,14 +700,22 @@ public class ActivityGame extends Activity implements OnClickListener {
 		public void onTick(long millisUntilFinished) {
 			//
 			m_MillisUntilFinished = millisUntilFinished;
-			textViewTime.setText(Long.toString(millisUntilFinished / 1000));
+			updateTime(Long.toString(millisUntilFinished / 1000));
+			
 
+		}
+
+		private void updateTime(String string) {
+			// 
+			textSwitcherTime.setText(string);
+			
 		}
 
 		@Override
 		public void onFinish() {
 			//
-			textViewTime.setText("0");
+			updateLivesTextView();
+			updateTime("0");
 			m_MillisUntilFinished = 0;
 			checkAnswer(-1, null);
 		}
@@ -1160,6 +1184,17 @@ public class ActivityGame extends Activity implements OnClickListener {
 		stopOrPauseCountdownTimer(false);
 		m_ResumeClock = true;
 
+	}
+
+	@Override
+	public View makeView() {
+		// 
+		TextView t = new TextView(this);
+		t.setGravity(Gravity.CENTER);
+		t.setTextSize(18);
+		
+		return t;
+		
 	}
 
 }

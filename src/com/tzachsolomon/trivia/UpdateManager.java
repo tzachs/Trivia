@@ -380,6 +380,7 @@ public class UpdateManager implements DatabaseUpdateListener,
 	static public interface QuestionsListener {
 		public void onQuestionsCorrectRatioSent();
 		public void onQuestionsUpdated(int i_UpdateFrom);
+		public void updateQuestionProgress(int i_Progress,int i_Max);
 	}
 
 	public void setCategoriesListener(CategoriesListener listener) {
@@ -488,7 +489,6 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 		@Override
 		protected void onPostExecute(Void result) {
-			
 			//
 			m_TriviaDb.updateQuestionAsync(xmlDataHandler.getQuestions(), TriviaDbEngine.TYPE_UPDATE_FROM_XML_FILE,true);
 
@@ -542,6 +542,15 @@ public class UpdateManager implements DatabaseUpdateListener,
 			return null;
 		}
 
+	}
+
+	@Override
+	public void updateProgressQuestionsInsertToDatabase(int i_Progress, int i_Max) {
+		// 
+		if ( m_QuestionsListener != null){
+			m_QuestionsListener.updateQuestionProgress(i_Progress,i_Max);
+		}
+		
 	}
 
 

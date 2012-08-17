@@ -6,6 +6,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import android.os.AsyncTask;
@@ -203,6 +204,7 @@ public class TriviaDbEngine {
 
 	private TriviaDbEngine openDbWritable() {
 		ourHelper = new DbHelper(ourContext);
+
 		ourDatabase = ourHelper.getWritableDatabase();
 
 		return this;
@@ -217,7 +219,7 @@ public class TriviaDbEngine {
 	}
 
 	private void closeDb() {
-		
+
 		ourHelper.close();
 	}
 
@@ -741,6 +743,7 @@ public class TriviaDbEngine {
 		public boolean m_SilentMode;
 		public int m_UpdateFrom;
 		private ProgressDialog m_ProgressDialog;
+		private int m_MaxValue;
 
 		@Override
 		protected void onPreExecute() {
@@ -779,7 +782,9 @@ public class TriviaDbEngine {
 
 				int i = 0;
 
-				m_ProgressDialog.setMax(params.length);
+				m_MaxValue = params.length;
+				
+				m_ProgressDialog.setMax(m_MaxValue);
 
 				for (ContentValues cv : params) {
 
@@ -809,9 +814,9 @@ public class TriviaDbEngine {
 						String message = e.getMessage();
 						if (message != null) {
 							Log.e(TAG, message.toString());
-						}else
-						{
-							Log.e(TAG,"error at AsyncTaskUpdateQuestions->doInBackground");
+						} else {
+							Log.e(TAG,
+									"error at AsyncTaskUpdateQuestions->doInBackground");
 						}
 
 					}
@@ -832,6 +837,10 @@ public class TriviaDbEngine {
 		protected void onProgressUpdate(Integer... values) {
 			//
 			m_ProgressDialog.setProgress(values[0]);
+			
+			if ( m_UpdateListener!= null){
+				m_UpdateListener.updateProgressQuestionsInsertToDatabase(values[0],m_MaxValue);
+			}
 		}
 
 	}
@@ -1006,7 +1015,6 @@ public class TriviaDbEngine {
 									+ "=?", new String[] { categoryId });
 						} else {
 							// insert if the category is new
-							
 
 							ourDatabase.insert(TABLE_CATEGORIES, null, cv);
 						}
@@ -1015,8 +1023,9 @@ public class TriviaDbEngine {
 						String message = e.getMessage();
 						if (message != null) {
 							Log.e(TAG, message.toString());
-						}else{
-							Log.e(TAG, "Error at AsyncTaskUpdateCategories->doInBackground");
+						} else {
+							Log.e(TAG,
+									"Error at AsyncTaskUpdateCategories->doInBackground");
 						}
 
 					}
@@ -1052,7 +1061,7 @@ public class TriviaDbEngine {
 
 	static public interface TriviaDbEngineUpdateListener {
 		public void onUpdateCategoriesFinished(int i_UpdateFrom);
-
+		public void updateProgressQuestionsInsertToDatabase (int i_Progress,int i_Max);
 		public void onUpdateQuestionsFinished(int i_UpdateFrom);
 
 		public void onAddedScoreToDatabase(long returnCode);
@@ -1107,21 +1116,29 @@ public class TriviaDbEngine {
 		//
 		String[] columns = new String[] { KEY_COL_USER_ID, KEY_COL_USERNAME };
 
-		String ret;
+		String ret = "";
 
-		this.openDbWritable();
+		try {
 
-		Cursor cursor = ourDatabase.query(TABLE_USERS, columns, KEY_COL_USER_ID
-				+ "=" + i_UserId, null, null, null, null);
+			this.openDbWritable();
 
-		if (cursor.getCount() == 0) {
-			ret = "";
-		} else {
-			cursor.moveToFirst();
-			ret = cursor.getString(1);
+			Cursor cursor = ourDatabase.query(TABLE_USERS, columns,
+					KEY_COL_USER_ID + "=" + i_UserId, null, null, null, null);
+
+			if (cursor.getCount() > 0) {
+
+				cursor.moveToFirst();
+				ret = cursor.getString(1);
+			}
+
+			this.closeDb();
+
+		} catch (SQLiteException e) {
+			Log.e(TAG, e.getMessage());
+
+		} catch (Exception e) {
+
 		}
-
-		this.closeDb();
 
 		return ret;
 

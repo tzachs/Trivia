@@ -5,12 +5,9 @@ import java.util.Locale;
 import com.tzachsolomon.trivia.UpdateManager.CategoriesListener;
 import com.tzachsolomon.trivia.UpdateManager.QuestionsListener;
 
-
-
-
-
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -35,13 +32,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ActivityTrivia extends Activity implements OnClickListener, CategoriesListener, QuestionsListener {
+public class ActivityTrivia extends Activity implements OnClickListener,
+		CategoriesListener, QuestionsListener {
 
 	// TODO: auto login
-	// TODO: animation
 	// TODO: create service to update the database daily
-	// TODO: initial settings with XML file
-	//
 
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
 
@@ -58,7 +53,7 @@ public class ActivityTrivia extends Activity implements OnClickListener, Categor
 	private Button buttonNewGameCategories;
 	private Button buttonGameScores;
 	private Button buttonManageUsers;
-	
+
 	private SharedPreferences m_SharedPreferences;
 
 	private UpdateManager m_UpdateManager;
@@ -68,6 +63,12 @@ public class ActivityTrivia extends Activity implements OnClickListener, Categor
 	private boolean m_FirstTimeStartingDoNotTryToUpdate;
 	private TriviaDbEngine m_TrivaDbEngine;
 	private TextView textViewCurrentUser;
+
+	private boolean m_ButtonsLocckedDueToImportFromXML;
+
+	protected boolean m_RegisterLater;
+
+	private ProgressDialog m_ProgressDialog;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -79,7 +80,7 @@ public class ActivityTrivia extends Activity implements OnClickListener, Categor
 				.getDefaultSharedPreferences(getBaseContext());
 
 		initializeVariables();
-
+		initializeButtons();
 		checkIfNeedToShowFirstTimeMessageOrConfiguration();
 	}
 
@@ -90,7 +91,6 @@ public class ActivityTrivia extends Activity implements OnClickListener, Categor
 				"1.0");
 
 		m_FirstTimeStartingDoNotTryToUpdate = false;
-		
 
 		try {
 			packageInfo = getPackageManager().getPackageInfo(
@@ -99,14 +99,17 @@ public class ActivityTrivia extends Activity implements OnClickListener, Categor
 			if (!packageInfo.versionName.contentEquals(i)) {
 
 				m_FirstTimeStartingDoNotTryToUpdate = true;
-				
-				//Log.v(TAG, "Starting import questions from xml");
+
+				// Log.v(TAG, "Starting import questions from xml");
+				Toast.makeText(this,
+						"Starting importing questions from initial file",
+						Toast.LENGTH_LONG).show();
+				m_ButtonsLocckedDueToImportFromXML = true;
+
 				m_UpdateManager.importQuestionsFromXml();
-				
+
 				showWhatsNew();
 				showWizardSetup();
-
-				
 
 				m_SharedPreferences
 						.edit()
@@ -122,6 +125,29 @@ public class ActivityTrivia extends Activity implements OnClickListener, Categor
 			Log.e(TAG, "Could not get meta data info for Trivia");
 		}
 
+	}
+
+	private void lockButtonOnImportFromXMLFile() {
+		//
+
+		setLockReleaseButtons(false);
+
+	}
+
+	private void releaseButtonsOnImportFromXMLFile() {
+		setLockReleaseButtons(true);
+
+	}
+
+	private void setLockReleaseButtons(boolean b) {
+		//
+		buttonGameScores.setEnabled(b);
+		buttonNewGameAllQuestions.setEnabled(b);
+		buttonNewGameCategories.setEnabled(b);
+		// dbuttonNewGameSimple.setEnabled(b);
+		buttonUpdateDatabase.setEnabled(b);
+		buttonManageDatabase.setEnabled(b);
+		buttonManageUsers.setEnabled(b);
 	}
 
 	private void showWhatsNew() {
@@ -144,16 +170,23 @@ public class ActivityTrivia extends Activity implements OnClickListener, Categor
 		changeLanguageTo(m_SharedPreferences.getString(
 				"listPreferenceLanguages", "iw"));
 
-		if (m_FirstTimeStartingDoNotTryToUpdate == false) {
-
-			m_UpdateManager.updateQuestions(true);
-			showUserRegister();
-		}
-
 		String username = m_TrivaDbEngine.getUsername(m_CurrentUserId);
 
 		textViewCurrentUser.setText(getString(R.string.current_user_is_)
 				+ username);
+
+		if (m_ButtonsLocckedDueToImportFromXML
+				&& !m_FirstTimeStartingDoNotTryToUpdate) {
+			
+			m_ProgressDialog.setCancelable(false);
+			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			m_ProgressDialog.setTitle("Questions import from initial file");
+			m_ProgressDialog.show();
+			
+		} else if (!m_FirstTimeStartingDoNotTryToUpdate) {
+			m_UpdateManager.updateQuestions(true);
+			showUserRegister();
+		}
 
 	}
 
@@ -171,6 +204,11 @@ public class ActivityTrivia extends Activity implements OnClickListener, Categor
 		setContentView(R.layout.main);
 
 		initializeButtons();
+		if (m_ButtonsLocckedDueToImportFromXML) {
+			lockButtonOnImportFromXMLFile();
+		} else {
+			releaseButtonsOnImportFromXMLFile();
+		}
 
 	}
 
@@ -179,10 +217,13 @@ public class ActivityTrivia extends Activity implements OnClickListener, Categor
 
 		m_CurrentUserId = -1;
 
+		m_ProgressDialog = new ProgressDialog(this);
 		m_TrivaDbEngine = new TriviaDbEngine(this);
 		m_UpdateManager = new UpdateManager(this);
 		m_UpdateManager.setCategoriesListener(this);
 		m_UpdateManager.setQuestionsListener(this);
+
+		m_RegisterLater = false;
 	}
 
 	private void initializeButtons() {
@@ -276,6 +317,7 @@ public class ActivityTrivia extends Activity implements OnClickListener, Categor
 		//
 		switch (requestCode) {
 		case REQUEST_CODE_BACK_FROM_ACTIVITY_WIZARD_SETUP:
+			m_FirstTimeStartingDoNotTryToUpdate = false;
 			m_CurrentUserId = resultCode;
 			break;
 		case REQUEST_CODE_BACK_FROM_ACTIVITY_USER_MANAGER:
@@ -327,9 +369,12 @@ public class ActivityTrivia extends Activity implements OnClickListener, Categor
 									ActivityTrivia.this,
 									"Registering a user gives you the ability to publish scores, play against other players, etc",
 									Toast.LENGTH_LONG).show();
+							m_RegisterLater = true;
 						}
 					});
-			alert.show();
+			if (!m_RegisterLater) {
+				alert.show();
+			}
 		}
 
 	}
@@ -457,53 +502,71 @@ public class ActivityTrivia extends Activity implements OnClickListener, Categor
 
 	@Override
 	public void onCategoriesUpdated(int i_UpdateFrom) {
-		// 
-		switch (i_UpdateFrom){
+		//
+		switch (i_UpdateFrom) {
 		case TriviaDbEngine.TYPE_UPDATE_FROM_INTERNET:
-			Toast.makeText(ActivityTrivia.this, "Finished updating categories from internet", Toast.LENGTH_LONG).show();
+			Toast.makeText(ActivityTrivia.this,
+					"Finished updating categories from internet",
+					Toast.LENGTH_LONG).show();
 			break;
 		case TriviaDbEngine.TYPE_UPDATE_FROM_XML_FILE:
-			// checking if import in first time after install or update of app
-			if ( !m_FirstTimeStartingDoNotTryToUpdate){
-				m_FirstTimeStartingDoNotTryToUpdate = false;
-				buttonUpdateDatabase_Clicked();
-			}
-			 
-			Toast.makeText(ActivityTrivia.this, "Finished updating categories from initial file", Toast.LENGTH_LONG).show();
+
+			Toast.makeText(ActivityTrivia.this,
+					"Finished updating categories from initial file",
+					Toast.LENGTH_LONG).show();
+			m_ButtonsLocckedDueToImportFromXML = false;
+			m_ProgressDialog.dismiss();
 			break;
 
 		default:
 			break;
 		}
-		
+
 	}
 
 	@Override
 	public void onQuestionsCorrectRatioSent() {
-		// 
-		Toast.makeText(ActivityTrivia.this, "Thank you for making Social Trivia better! :)",Toast.LENGTH_LONG).show();
-		
+		//
+		Toast.makeText(ActivityTrivia.this,
+				"Thank you for making Social Trivia better! :)",
+				Toast.LENGTH_LONG).show();
+
 	}
 
 	@Override
 	public void onQuestionsUpdated(int i_UpdateFrom) {
-		// // 
-		switch (i_UpdateFrom){
+		// //
+		switch (i_UpdateFrom) {
 		case TriviaDbEngine.TYPE_UPDATE_FROM_INTERNET:
-			Toast.makeText(ActivityTrivia.this, "Finished updating questions from internet", Toast.LENGTH_LONG).show();
+			Toast.makeText(ActivityTrivia.this,
+					"Finished updating questions from internet",
+					Toast.LENGTH_LONG).show();
 			break;
 		case TriviaDbEngine.TYPE_UPDATE_FROM_XML_FILE:
 			// starting to update the categories
-			Toast.makeText(ActivityTrivia.this, "Finished updating questions from initial file", Toast.LENGTH_LONG).show();
-			//Log.v(TAG, "Starting import categories from xml");
+			releaseButtonsOnImportFromXMLFile();
+			Toast.makeText(ActivityTrivia.this,
+					"Finished updating questions from initial file",
+					Toast.LENGTH_LONG).show();
+			Toast.makeText(this,
+					"Starting importing categories from initial file",
+					Toast.LENGTH_LONG).show();
+			// Log.v(TAG, "Starting import categories from xml");
 			m_UpdateManager.importCategoriesFromXml();
-			
+
 			break;
 
 		default:
 			break;
 		}
-		
+
+	}
+
+	@Override
+	public void updateQuestionProgress(int i_Progress, int i_Max) {
+		//
+		m_ProgressDialog.setMax(i_Max);
+		m_ProgressDialog.setProgress(i_Progress);
 	}
 
 }

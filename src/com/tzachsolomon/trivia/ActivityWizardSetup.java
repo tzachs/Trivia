@@ -408,6 +408,14 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 		setContentView(R.layout.wizard_setup);
 		initializeVariables();
+		
+		if ( string.contentEquals("iw")){
+			checkBoxQuestionLanguageEnglish.setChecked(false);
+			checkBoxQuestionLanguageHebrew.setChecked(true);
+		} else if ( string.contentEquals("en")){
+			checkBoxQuestionLanguageEnglish.setChecked(true);
+			checkBoxQuestionLanguageHebrew.setChecked(false);
+		}
 
 	}
 

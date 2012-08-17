@@ -47,7 +47,7 @@
         android:text="@string/textViewTimeTitleText"
         android:textSize="18dp" />
 
-    <TextView
+    <TextSwitcher
         android:id="@+id/textViewTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
