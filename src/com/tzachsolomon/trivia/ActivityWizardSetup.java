@@ -1,11 +1,8 @@
 package com.tzachsolomon.trivia;
 
-
 import java.util.Locale;
 
 import com.tzachsolomon.trivia.JSONHandler.UserManageListener;
-
-
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -13,7 +10,6 @@ import android.content.res.Configuration;
 
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
 
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,7 +30,7 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		OnCheckedChangeListener, OnItemClickListener, UserManageListener {
 
 	public static final String TAG = ActivityWizardSetup.class.getSimpleName();
-	
+
 	private JSONHandler m_JSONHandler;
 	private TriviaDbEngine m_TriviaDb;
 
@@ -69,8 +65,6 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 	private EditText editTextEmail;
 
-	
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//
@@ -90,9 +84,9 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		//
 		m_TriviaDb = new TriviaDbEngine(ActivityWizardSetup.this);
 		m_JSONHandler = new JSONHandler(ActivityWizardSetup.this);
-		
+
 		m_JSONHandler.setUserManageListener(this);
-		
+
 		m_SharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
 		m_SharedPreferencesEditor = m_SharedPreferences.edit();
@@ -101,8 +95,8 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		buttonNext = (Button) findViewById(R.id.buttonNext);
 		buttonBack = (Button) findViewById(R.id.buttonBack);
 		buttonFinish = (Button) findViewById(R.id.buttonSetupFinish);
-		buttonUserRegister = (Button)findViewById(R.id.buttonUserRegister);
-		
+		buttonUserRegister = (Button) findViewById(R.id.buttonUserRegister);
+
 		buttonNext.setOnClickListener(this);
 		buttonBack.setOnClickListener(this);
 		buttonFinish.setOnClickListener(this);
@@ -111,11 +105,10 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		listViewLanguages = (ListView) findViewById(R.id.listViewLanguages);
 
 		listViewLanguages.setOnItemClickListener(this);
-		
+
 		editTextUsername = (EditText) findViewById(R.id.editTextUsername);
 		editTextPassword = (EditText) findViewById(R.id.editTextPassword);
 		editTextEmail = (EditText) findViewById(R.id.editTextEmail);
-		
 
 		initializeCheckBoxes();
 
@@ -175,8 +168,7 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		case R.id.buttonUserRegister:
 			buttonUserRegister_Clicked();
 			break;
-		
-			
+
 		case R.id.checkBoxQuestionLanguageEnglish:
 			checkBoxQuestionLanguageEnglish_Clicked();
 			break;
@@ -203,10 +195,8 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 	}
 
-
-
 	private void buttonUserRegister_Clicked() {
-		// 
+		//
 		String email = editTextEmail.getText().toString();
 		String password = editTextPassword.getText().toString();
 		String username = editTextUsername.getText().toString();
@@ -221,32 +211,58 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 					.show();
 		} else {
 
-		
-				m_JSONHandler.userRegisterAsync(new String[] { username,
-						password, email });
+			m_JSONHandler.userRegisterAsync(new String[] { username, password,
+					email });
 
 		}
 
-		
-		
 	}
 
 	private void buttonBack_Clicked() {
 		//
 		viewFlipper.showPrevious();
 
-
-			showHideNextBackButtons();
-		
+		showHideNextBackButtons();
 
 	}
 
 	private void buttonSetupFinish_Clicked() {
 		//
-		m_SharedPreferencesEditor.putBoolean("showFirstTimeConfiguration",
-				checkBoxShowConfigurationWizard.isChecked()).commit();
+
+		saveChoices();
 
 		finish();
+
+	}
+
+	private void saveChoices() {
+		//
+		m_SharedPreferencesEditor.putBoolean("showFirstTimeConfiguration",
+				checkBoxShowConfigurationWizard.isChecked());
+		m_SharedPreferencesEditor.putBoolean(
+				"checkBoxPreferenceAllowUpdateWifi",
+				checkBoxAllowUpdateUsingWifi.isChecked());
+		m_SharedPreferencesEditor.putBoolean(
+				"checkBoxPreferenceShowReportQuestion",
+				checkBoxShowReportQuestion.isChecked());
+
+		m_SharedPreferencesEditor.putBoolean(
+				"checkBoxPreferenceUploadCorrectWrongUserStat",
+				checkBoxUploadWrongCorrectStatistics.isChecked());
+
+		m_SharedPreferencesEditor.putBoolean(
+				"checkBoxPreferenceCheckUpdateOnStartup",
+				checkBoxCheckUpdateOnStartup.isChecked());
+		
+		m_SharedPreferencesEditor.putBoolean(
+				"checkBoxPreferenceQuestionLanguageHebrew",
+				checkBoxQuestionLanguageHebrew.isChecked());
+		
+		m_SharedPreferencesEditor.putBoolean(
+				"checkBoxPreferenceQuestionLanguageEnglish",
+				checkBoxQuestionLanguageEnglish.isChecked());
+
+		m_SharedPreferencesEditor.commit();
 
 	}
 
@@ -277,7 +293,7 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 			}
 		} else {
 
-		showHideNextBackButtons();
+			showHideNextBackButtons();
 		}
 
 	}
@@ -291,12 +307,6 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 			checkBoxPlayGameSounds_Clicked();
 			break;
 
-		case R.id.checkBoxAllowUpdateUsingWifi:
-			m_SharedPreferencesEditor.putBoolean(
-					"checkBoxPreferenceAllowUpdateWifi", isChecked);
-			m_SharedPreferencesEditor.commit();
-
-			break;
 		case R.id.checkBoxAllowUpdateUsingMobileNetwork:
 			m_SharedPreferencesEditor.putBoolean(
 					"checkBoxPreferenceAllowUpdateMobileNetwork", isChecked);
@@ -309,27 +319,6 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		case R.id.checkBoxAllowUpdateUsing3GOnly:
 			m_SharedPreferencesEditor.putBoolean(
 					"checkBoxPreferenceAllowUpdateMobileNetwork3G", isChecked);
-			m_SharedPreferencesEditor.commit();
-
-			break;
-
-		case R.id.checkBoxShowReportQuestion:
-			m_SharedPreferencesEditor.putBoolean(
-					"checkBoxPreferenceShowReportQuestion", isChecked);
-			m_SharedPreferencesEditor.commit();
-
-			break;
-
-		case R.id.checkBoxUploadWrongCorrectStatistics:
-			m_SharedPreferencesEditor.putBoolean(
-					"checkBoxPreferenceUploadCorrectWrongUserStat", isChecked);
-			m_SharedPreferencesEditor.commit();
-
-			break;
-
-		case R.id.checkBoxCheckUpdateOnStartup:
-			m_SharedPreferencesEditor.putBoolean(
-					"checkBoxPreferenceCheckUpdateOnStartup", isChecked);
 			m_SharedPreferencesEditor.commit();
 
 			break;
@@ -351,9 +340,7 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 	private void checkBoxQuestionLanguageHebrew_Clicked() {
 		//
-		m_SharedPreferencesEditor.putBoolean(
-				"checkBoxPreferenceQuestionLanguageHebrew",
-				checkBoxQuestionLanguageHebrew.isChecked()).commit();
+		
 
 		checkBoxQuestionLanguageChangeNextVisibilty();
 	}
@@ -372,9 +359,7 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 	private void checkBoxQuestionLanguageEnglish_Clicked() {
 		//
 
-		m_SharedPreferencesEditor.putBoolean(
-				"checkBoxPreferenceQuestionLanguageEnglish",
-				checkBoxQuestionLanguageEnglish.isChecked()).commit();
+		
 
 		checkBoxQuestionLanguageChangeNextVisibilty();
 
@@ -408,11 +393,11 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 		setContentView(R.layout.wizard_setup);
 		initializeVariables();
-		
-		if ( string.contentEquals("iw")){
+
+		if (string.contentEquals("iw")) {
 			checkBoxQuestionLanguageEnglish.setChecked(false);
 			checkBoxQuestionLanguageHebrew.setChecked(true);
-		} else if ( string.contentEquals("en")){
+		} else if (string.contentEquals("en")) {
 			checkBoxQuestionLanguageEnglish.setChecked(true);
 			checkBoxQuestionLanguageHebrew.setChecked(false);
 		}
@@ -421,26 +406,23 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 	@Override
 	public void onUserLogin(String i_Response, int i_UserId) {
-		// 
-		
+		//
+
 	}
 
 	@Override
 	public void onUserRegister(String i_Response, int i_UserId) {
-		// 
-		if ( i_UserId != -1){
-			if (i_UserId != -1) {
-				// adding the user locally
-				m_TriviaDb.insertUser(i_UserId, editTextUsername.getText()
-						.toString(), editTextPassword.getText().toString());
-				
-				
-			}
-			
-			m_SharedPreferencesEditor.putInt("defaultUserId", i_UserId);
-			setResult(i_UserId);
-		}
-		
+
+		if (i_UserId != -1) {
+			// adding the user locally
+			m_TriviaDb.insertUser(i_UserId, editTextUsername.getText()
+					.toString(), editTextPassword.getText().toString());
+
+		} 
+ 
+
+		m_SharedPreferencesEditor.putInt("defaultUserId", i_UserId);
+		setResult(i_UserId);
 	}
 
 }

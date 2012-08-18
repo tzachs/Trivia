@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    
     <string name="app_name">Trivia</string>
     <string name="buttonNewGameAllQuestionsText">All Questions</string>
     <string name="textViewQuestionText"></string>
     <string name="buttonAnswer1"></string>
-    <string name="textViewTimeText">0</string>
     <string name="buttonUpdateDatabaseText">Update Questions</string>
     <string name="textViewTimeTitleText">Time</string>
     <string name="textViewNumberOfQuestionsLeftTitle">Questions</string>
@@ -101,7 +99,7 @@
     <string name="buttonSendSuggestionText">Send Suggestion</string>
     <string name="textViewAboutText">This Trivia game was created as a project to learn JSON. I hope you enjoy it</string>
     <string name="textViewAboutVersionText">"Version: "</string>
-    <string name="textViewLivesLeftText">"Lives left: "</string>
+    <string name="textViewLivesLeftText">"Lives left"</string>
     <string name="delete_database_">Delete database?</string>
     <string name="are_you_sure_you_want_to_delete_the_database_">Are you sure you want to delete the database?</string>
     <string name="yes">Yes</string>
@@ -149,7 +147,7 @@
     <string name="play_game_sounds">Play game sounds</string>
     <string name="textViewTimesPlayedTitleText">Times played </string>
     <string name="buttonManageUsersText">Users</string>
-    <string name="textViewGameScoreLabel">Score: </string>
+    <string name="textViewGameScoreLabel">Score</string>
     <string name="pass">Pass</string>
     <string name="number_sign">#</string>
     <string name="user">User</string>
@@ -168,6 +166,5 @@
     <string name="register_you_user">Register you User</string>
     <string name="register_a_user_in_order_to_publish_scores_get_updates_publish_questions_tbd_and_more">Register a user in order to publish scores, get updates, publish questions(TBD) and more</string>
     <string name="zero">0</string>
-    
 
 </resources>

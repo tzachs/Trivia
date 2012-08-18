@@ -65,8 +65,8 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 
 	private TextView textViewQuestion;
 	private TextView textViewNumberOfQuestionsLeft;
-	private TextView textViewQuestionDifficulty;
-	private TextView textViewLivesLeft;
+	private TextView textViewQuestionLevel;
+	private TextView textViewLivesLeftValue;
 
 	private Questions m_Questions;
 	private Question m_CurrentQuestion;
@@ -271,9 +271,8 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 			m_SortByNewQuestionFirst = m_SharedPreferences.getBoolean(
 					"checkBoxPreferencePreferNewQuestions", true);
 
-			textViewLivesLeft
-					.setText(getString(R.string.textViewLivesLeftText)
-							+ (m_MaxWrongAnswersAllowed - m_CurrentWrongAnswersCounter));
+			textViewLivesLeftValue
+					.setText(""	+ (m_MaxWrongAnswersAllowed - m_CurrentWrongAnswersCounter));
 
 			startNewRoundGameLevels();
 
@@ -509,7 +508,7 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 							+ " " + m_CurrentQuestion.getQuestionTimesPlayed());
 		}
 		// setting question difficulty
-		textViewQuestionDifficulty.setText(Integer.toString(m_CurrentQuestion
+		textViewQuestionLevel.setText(Integer.toString(m_CurrentQuestion
 				.getQuestionLevel()));
 
 		// randomize answer places (indices)
@@ -673,8 +672,8 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 		textViewQuestion = (TextView) findViewById(R.id.textViewQuestion);
 		
 		textViewNumberOfQuestionsLeft = (TextView) findViewById(R.id.textViewNumberOfQuestionsLeft);
-		textViewQuestionDifficulty = (TextView) findViewById(R.id.textViewQuestionDifficulty);
-		textViewLivesLeft = (TextView) findViewById(R.id.textViewLivesLeft);
+		textViewQuestionLevel = (TextView) findViewById(R.id.textViewQuestionLevel);
+		textViewLivesLeftValue = (TextView) findViewById(R.id.textViewLivesLeftValue);
 		textViewTimesPlayedTitle = (TextView) findViewById(R.id.textViewTimesPlayedTitle);
 		textViewGameScoreText = (TextView) findViewById(R.id.textViewGameScoreText);
 		
@@ -1068,27 +1067,14 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 		switch (m_CurrentGameType) {
 
 		case GAMETYPE_ALL_QUESTIONS:
-			if (m_ReverseNumbersInQuestions) {
-				textViewLivesLeft
-						.setText(m_StringParser
-								.reverseNumbersInStringHebrew(getString(R.string.textViewLivesLeftText)
-										+ m_AllQuestionsLives));
-
-			} else {
-				textViewLivesLeft
-						.setText(getString(R.string.textViewLivesLeftText)
-								+ m_AllQuestionsLives);
-
-			}
-
+			textViewLivesLeftValue.setText(String.valueOf(m_AllQuestionsLives));
+			
 			break;
 
 		case GAMETYPE_CATEGORIES:
 		case GAMETYPE_LEVELS:
 
-			textViewLivesLeft
-					.setText(getString(R.string.textViewLivesLeftText)
-							+ (m_MaxWrongAnswersAllowed - m_CurrentWrongAnswersCounter));
+			textViewLivesLeftValue.setText(String.valueOf(m_MaxWrongAnswersAllowed - m_CurrentWrongAnswersCounter));
 
 			break;
 

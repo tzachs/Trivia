@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
@@ -99,6 +98,7 @@ public class UpdateManager implements DatabaseUpdateListener,
 		boolean isInternetAvailable;
 		ContentValues[] wrongCorrectStat;
 		private ProgressDialog m_ProgressDialog;
+		private int m_NumberOfQuestionsToSend;
 
 		@Override
 		protected void onPreExecute() {
@@ -134,18 +134,23 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 					Toast.makeText(m_Context, result, Toast.LENGTH_LONG).show();
 				} else {
-					/*
-					 * Toast.makeText( m_Context, m_Context
-					 * .getString(R.string.thank_you_for_making_this_trivia_better_
-					 * ),
-					 * 
-					 * Toast.LENGTH_SHORT).show();
-					 */
+					
+				
 				}
 
 				m_ProgressDialog.dismiss();
 				checkIsUpdateAvailable(true);
 			}
+			
+			
+			// checking if we sent any questions
+			if ( m_NumberOfQuestionsToSend > 0 && !m_SilentMode){
+				if (m_QuestionsListener != null) {
+					m_QuestionsListener.onQuestionsCorrectRatioSent();
+				}
+			}
+			
+			
 
 		}
 
@@ -156,22 +161,22 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 			if (isInternetAvailable) {
 				int i = 0;
-				int length;
+				
 				wrongCorrectStat = m_TriviaDb.getWrongCorrectStat();
 
-				length = wrongCorrectStat.length;
-				m_ProgressDialog.setMax(length);
+				m_NumberOfQuestionsToSend = wrongCorrectStat.length;
+				m_ProgressDialog.setMax(m_NumberOfQuestionsToSend);
 
-				if (length > 0) {
+				if (m_NumberOfQuestionsToSend > 0) {
 
-					while (i < length) {
+					while (i < m_NumberOfQuestionsToSend) {
 						if (m_JSONHandler
 								.uploadCorrectWrongStatistics(wrongCorrectStat[i])) {
 							m_TriviaDb
 									.clearUserCorrectWrongStat(wrongCorrectStat[i]
 											.getAsString(TriviaDbEngine.KEY_QUESTIONID));
 						} else {
-							i = length;
+							i = m_NumberOfQuestionsToSend;
 							sb.append(m_Context
 									.getString(R.string.error_occoured_stopping_upload_check_server_url_or_connectivity));
 							Log.e(TAG, sb.toString());
@@ -180,9 +185,7 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 					}
 
-					if (m_QuestionsListener != null) {
-						m_QuestionsListener.onQuestionsCorrectRatioSent();
-					}
+					
 
 				}
 

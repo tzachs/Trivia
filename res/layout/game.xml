@@ -6,27 +6,59 @@
     android:orientation="vertical" >
 
     <TextView
-        android:id="@+id/textViewLivesLeft"
+        android:id="@+id/textViewNumberOfQuestionsLeftTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/textViewLivesLeftText" />
+        android:layout_alignParentTop="true"
+        android:gravity="center"
+        android:text="@string/textViewNumberOfQuestionsLeftTitle" />
+
+    <TextView
+        android:id="@+id/textViewNumberOfQuestionsLeft"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewNumberOfQuestionsLeftTitle"
+        android:layout_alignRight="@+id/textViewNumberOfQuestionsLeftTitle"
+        android:layout_below="@+id/textViewNumberOfQuestionsLeftTitle"
+        android:gravity="center"
+        android:text="@string/zero" />
+
+    <TextView
+        android:id="@+id/textViewQuestionLevelTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/textViewNumberOfQuestionsLeftTitle"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:text="@string/textViewQuestionDifficultyTitle" />
+
+    <TextView
+        android:id="@+id/textViewQuestionLevel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewQuestionLevelTitle"
+        android:layout_alignRight="@+id/textViewQuestionLevelTitle"
+        android:layout_below="@+id/textViewQuestionLevelTitle"
+        android:gravity="center"
+        android:text="@string/zero" />
 
     <TextView
         android:id="@+id/textViewGameScoreLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
+        android:layout_alignTop="@+id/textViewLivesLeftTitle"
+        android:layout_centerInParent="true"
         android:text="@string/textViewGameScoreLabel" />
 
     <TextView
         android:id="@+id/textViewGameScoreText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textViewGameScoreLabel"
-        android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/textViewGameScoreLabel"
-        android:text="" />
+        android:layout_alignLeft="@+id/textViewGameScoreLabel"
+        android:layout_alignRight="@+id/textViewGameScoreLabel"
+        android:layout_below="@+id/textViewGameScoreLabel"
+        android:gravity="center"
+        android:text="@string/zero" />
 
     <TextView
         android:id="@+id/textViewTimesPlayedTitle"
@@ -43,9 +75,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/textViewLivesLeft"
-        android:text="@string/textViewTimeTitleText"
-        android:textSize="18dp" />
+        android:layout_alignTop="@+id/textViewLivesLeftTitle"
+        android:text="@string/textViewTimeTitleText" />
 
     <TextSwitcher
         android:id="@+id/textViewTime"
@@ -55,48 +86,26 @@
         android:layout_alignRight="@+id/textViewTimeTitle"
         android:layout_below="@+id/textViewTimeTitle"
         android:gravity="center"
-        android:text="@string/textViewTimeText"
-        android:textSize="18dp" />
+        android:text="@string/zero" />
 
     <TextView
-        android:id="@+id/textViewNumberOfQuestionsLeftTitle"
+        android:id="@+id/textViewLivesLeftTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textViewTimeTitle"
-        android:gravity="center"
-        android:text="@string/textViewNumberOfQuestionsLeftTitle"
-        android:textSize="18dp" />
+        android:layout_below="@+id/textViewNumberOfQuestionsLeft"
+        android:layout_alignLeft="@+id/textViewNumberOfQuestionsLeft"
+        android:layout_alignRight="@+id/textViewNumberOfQuestionsLeft"
+        android:text="@string/textViewLivesLeftText" />
 
     <TextView
-        android:id="@+id/textViewNumberOfQuestionsLeft"
+        android:id="@+id/textViewLivesLeftValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textViewNumberOfQuestionsLeftTitle"
-        android:layout_alignRight="@+id/textViewNumberOfQuestionsLeftTitle"
-        android:layout_below="@+id/textViewNumberOfQuestionsLeftTitle"
+        android:layout_below="@+id/textViewLivesLeftTitle"
+        android:layout_alignLeft="@+id/textViewLivesLeftTitle"
+        android:layout_alignRight="@+id/textViewLivesLeftTitle"
         android:gravity="center"
-        android:text="@string/zero"
-        android:textSize="18dp" />
-
-    <TextView
-        android:id="@+id/textViewQuestionDifficultyTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textViewNumberOfQuestionsLeftTitle"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:text="@string/textViewQuestionDifficultyTitle"
-        android:textSize="20dp" />
-
-    <TextView
-        android:id="@+id/textViewQuestionDifficulty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewQuestionDifficultyTitle"
-        android:layout_centerInParent="true"
-        android:gravity="center"
-        android:text="@string/zero"
-        android:textSize="20dp" />
+        android:text="@string/zero" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -110,8 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:gravity="center_vertical|center_horizontal"
-            android:text="@string/textViewQuestionText"
-            android:textSize="22dp" />
+            android:text="@string/textViewQuestionText" />
 
         <Button
             android:id="@+id/buttonAnswer1"
