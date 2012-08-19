@@ -87,8 +87,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private void checkIfNeedToShowFirstTimeMessageOrConfiguration() {
 		//
 		PackageInfo packageInfo = null;
-		String i = m_SharedPreferences.getString("showFirstTimeMessageVersion",
-				"1.0");
+		String i = m_SharedPreferences.getString("showWhatsNew", "1.0");
 
 		m_FirstTimeStartingDoNotTryToUpdate = false;
 
@@ -111,10 +110,9 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 				showWhatsNew();
 				showWizardSetup();
 
-				m_SharedPreferences
-						.edit()
-						.putString("showFirstTimeMessageVersion",
-								packageInfo.versionName).commit();
+				m_SharedPreferences.edit()
+						.putString("showWhatsNew", packageInfo.versionName)
+						.commit();
 
 			} else if (m_SharedPreferences.getBoolean(
 					"showFirstTimeConfiguration", true)) {
@@ -162,6 +160,19 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		buttonWizardSetup_Clicked();
 
 	}
+	
+	@Override
+	protected void onStart() {
+		// 
+		super.onStart();
+		
+		try{
+			m_CurrentUserId = Integer.valueOf(m_SharedPreferences.getInt("defaultUserId", -2));	
+		}catch (Exception e){
+			m_CurrentUserId = -2;
+		}
+		
+	}
 
 	@Override
 	protected void onResume() {
@@ -170,19 +181,21 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		changeLanguageTo(m_SharedPreferences.getString(
 				"listPreferenceLanguages", "iw"));
 
-		String username = m_TrivaDbEngine.getUsername(m_CurrentUserId);
+		if (m_CurrentUserId > 0) {
 
-		textViewCurrentUser.setText(getString(R.string.current_user_is_)
-				+ username);
+			String username = m_TrivaDbEngine.getUsername(m_CurrentUserId);
+			textViewCurrentUser.setText(getString(R.string.current_user_is_)
+					+ username);
+		}
 
 		if (m_ButtonsLocckedDueToImportFromXML
 				&& !m_FirstTimeStartingDoNotTryToUpdate) {
-			
+
 			m_ProgressDialog.setCancelable(false);
 			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			m_ProgressDialog.setTitle("Questions import from initial file");
 			m_ProgressDialog.show();
-			
+
 		} else if (!m_FirstTimeStartingDoNotTryToUpdate) {
 			m_UpdateManager.updateQuestions(true);
 			showUserRegister();
@@ -319,9 +332,11 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		case REQUEST_CODE_BACK_FROM_ACTIVITY_WIZARD_SETUP:
 			m_FirstTimeStartingDoNotTryToUpdate = false;
 			m_CurrentUserId = resultCode;
+			changeToDefault();
 			break;
 		case REQUEST_CODE_BACK_FROM_ACTIVITY_USER_MANAGER:
 			m_CurrentUserId = resultCode;
+			changeToDefault();
 			break;
 		case REQUEST_CODE_BACK_FROM_PREFERENCES:
 			m_UpdateManager.updateServerIpFromPreferences();
@@ -338,6 +353,41 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 			break;
 
+		}
+	}
+
+	private void changeToDefault() {
+
+		//
+		if (m_CurrentUserId > 0) {
+			AlertDialog.Builder alert = new AlertDialog.Builder(this);
+			alert.setTitle("Defaut user");
+			alert.setMessage("Use user "
+					+ m_TrivaDbEngine.getUsername(m_CurrentUserId)
+					+ " as default?");
+			alert.setPositiveButton(getString(R.string.yes),
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							//
+							m_SharedPreferences
+									.edit()
+									.putString("defaultUserId",
+											String.valueOf(m_CurrentUserId))
+									.commit();
+						}
+					});
+			alert.setNegativeButton("No",
+					new DialogInterface.OnClickListener() {
+
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							//
+
+						}
+					});
+			alert.show();
 		}
 	}
 

@@ -3,6 +3,7 @@
 
     <PreferenceScreen
         android:key="preferenceScreenUI"
+        android:summary="Advanced UI Language settings"
         android:title="UI" >
         <PreferenceCategory
             android:key="preferenceCategoryGenerlUI"
@@ -24,6 +25,7 @@
     </PreferenceScreen>
     <PreferenceScreen
         android:key="prefernceScreenGameRelated"
+        android:summary="Game settings such as: Questions languages, Question Time, Show Report Error, etc "
         android:title="Game Related" >
         <PreferenceCategory
             android:key="preferenceScreenGameRelated"
@@ -38,11 +40,6 @@
                 android:key="checkBoxPreferenceQuestionLanguageEnglish"
                 android:summary="@string/show_english_questions"
                 android:title="@string/show_english_questions" />
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="checkBoxPreferencePlayGameSounds"
-                android:summary="@string/play_in_game_sounds"
-                android:title="@string/play_game_sounds" />
             <CheckBoxPreference
                 android:defaultValue="true"
                 android:key="checkBoxPreferenceShowCorrectAnswer"
@@ -113,6 +110,7 @@
     </PreferenceScreen>
     <PreferenceScreen
         android:key="prefernceScreenNetwork"
+        android:summary="Advanced Network settings such as: Server IP, Network prefered allowed methods, etc"
         android:title="Network" >
         <PreferenceCategory
             android:key="preferenceCategoryDatabaseServerAdvanced"
@@ -149,17 +147,26 @@
     </PreferenceScreen>
 
     <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="checkBoxPreferencePlayGameSounds"
+        android:summary="@string/play_in_game_sounds"
+        android:title="@string/play_game_sounds" />
+    <CheckBoxPreference
         android:defaultValue="false"
         android:key="showFirstTimeConfiguration"
         android:title="@string/show_first_time_configuration" />
 
-    <EditTextPreference
-        android:defaultValue="0"
-        android:key="showFirstTimeMessageVersion" />
-    
-    <EditTextPreference
-        android:defaultValue="-2"
-        android:key="defaultUserId" />
-    
+    <PreferenceCategory android:key="invisible" >
+-
+        <EditTextPreference
+            android:defaultValue="0"
+            android:key="showConfigWizard" />
+        <EditTextPreference
+            android:defaultValue="0"
+            android:key="showWhatsNew" />
+        <EditTextPreference
+            android:defaultValue="-2"
+            android:key="defaultUserId" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

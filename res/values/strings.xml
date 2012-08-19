@@ -22,8 +22,8 @@
     <string name="checkBoxPreferenceAllowUpdateWifiSummary">Allow update using WiFi</string>
     <string name="checkBoxPreferenceShowReportQuestionTitle">Report error</string>
     <string name="checkBoxPreferenceShowReportQuestionSummary">Will show a report error in questions</string>
-    <string name="preferenceCategoryDatabaseServerAdvancedTitle">Questions Network Server</string>
-    <string name="editTextPreferencePrimaryServerIPSummary">Questions Network Server IP</string>
+    <string name="preferenceCategoryDatabaseServerAdvancedTitle">Database Server</string>
+    <string name="editTextPreferencePrimaryServerIPSummary">Database Server IP</string>
     <string name="editTextPreferencePrimaryServerIPTitle">Server IP</string>
     <string name="editTextPreferenceCountDownTimerSummary">Time for each question to answer</string>
     <string name="editTextPreferenceCountDownTimerTitle">Question\'s Time</string>

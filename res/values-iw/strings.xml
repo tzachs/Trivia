@@ -4,7 +4,6 @@
     <string name="buttonNewGameAllQuestionsText">"כל השאלות"</string>
     <string name="textViewQuestionText">""</string>
     <string name="buttonAnswer1">""</string>
-    <string name="textViewTimeText">"0"</string>
     <string name="buttonUpdateDatabaseText">"עדכן מאגר שאלות"</string>
     <string name="textViewTimeTitleText">"זמן"</string>
     <string name="textViewNumberOfQuestionsLeftTitle">"שאלות"</string>
@@ -23,7 +22,7 @@
     <string name="checkBoxPreferenceShowReportQuestionTitle">"דווח על שגיאה"</string>
     <string name="checkBoxPreferenceShowReportQuestionSummary">"הראה אפשרות לדווח שגיאה בשאלה"</string>
     <string name="preferenceCategoryDatabaseServerAdvancedTitle">"שאלות שרת רשת"</string>
-    <string name="editTextPreferencePrimaryServerIPSummary">"שאלות שרת רשת ה-IP"</string>
+    <string name="editTextPreferencePrimaryServerIPSummary">"כתובת השרת"</string>
     <string name="editTextPreferencePrimaryServerIPTitle">"שרת ה-IP"</string>
     <string name="editTextPreferenceCountDownTimerSummary">"כמה זמן עבור כל שאלה לענות"</string>
     <string name="editTextPreferenceCountDownTimerTitle">"כמה זמן לשאלה"</string>

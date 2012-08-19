@@ -7,6 +7,7 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
+import android.preference.PreferenceCategory;
 
 import android.preference.PreferenceActivity;
 
@@ -45,8 +46,9 @@ public class ActivityPrefs extends PreferenceActivity implements
 		getPreferenceScreen().getSharedPreferences()
 				.registerOnSharedPreferenceChangeListener(this);
 		
-		EditTextPreference showFirstTimeMessageVersion = (EditTextPreference)findPreference("showFirstTimeMessageVersion");
-		getPreferenceScreen().removePreference(showFirstTimeMessageVersion);
+		PreferenceCategory invisible = (PreferenceCategory)findPreference("invisible");
+		
+		invisible.removeAll();
 		
 		
 	}
