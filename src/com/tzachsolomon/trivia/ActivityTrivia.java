@@ -102,7 +102,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 				// Log.v(TAG, "Starting import questions from xml");
 				Toast.makeText(this,
-						"Starting importing questions from initial file",
+						getString(R.string.importing_questions_from_initial_file),
 						Toast.LENGTH_LONG).show();
 				m_ButtonsLocckedDueToImportFromXML = true;
 
@@ -197,7 +197,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 			m_ProgressDialog.setCancelable(false);
 			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			m_ProgressDialog.setTitle("Questions import from initial file");
+			m_ProgressDialog.setTitle(getString(R.string.importing_questions_from_initial_file));
 			m_ProgressDialog.show();
 
 		} else if (!m_FirstTimeStartingDoNotTryToUpdate) {
@@ -213,7 +213,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		
 		Locale locale = new Locale(string);
 		Locale.setDefault(locale);
-		Log.i(TAG, "Changed lang to " + string);
+		//Log.i(TAG, "Changed lang to " + string);
 		Configuration config = new Configuration();
 		config.locale = locale;
 		getBaseContext().getResources().updateConfiguration(config,
@@ -373,10 +373,10 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		//
 		if (m_CurrentUserId > 0) {
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
-			alert.setTitle("Defaut user");
-			alert.setMessage("Use user "
+			alert.setTitle(getString(R.string.defaut_user));
+			alert.setMessage(getString(R.string.use_user_)
 					+ m_TrivaDbEngine.getUsername(m_CurrentUserId)
-					+ " as default?");
+					+ getString(R.string._as_default_));
 			alert.setPositiveButton(getString(R.string.yes),
 					new DialogInterface.OnClickListener() {
 
@@ -390,7 +390,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 									.commit();
 						}
 					});
-			alert.setNegativeButton("No",
+			alert.setNegativeButton(getString(R.string.no),
 					new DialogInterface.OnClickListener() {
 
 						@Override
@@ -408,8 +408,8 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 		if (m_TrivaDbEngine.isUsersEmpty()) {
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
-			alert.setTitle("Register user");
-			alert.setMessage("Register a user?");
+			alert.setTitle(getString(R.string.register_user));
+			alert.setMessage(getString(R.string.register_a_user_));
 			alert.setPositiveButton(getString(R.string.yes),
 					new DialogInterface.OnClickListener() {
 
@@ -421,7 +421,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 						}
 
 					});
-			alert.setNegativeButton("Later",
+			alert.setNegativeButton(getString(R.string.later),
 					new DialogInterface.OnClickListener() {
 
 						@Override
@@ -429,7 +429,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 							//
 							Toast.makeText(
 									ActivityTrivia.this,
-									"Registering a user gives you the ability to publish scores, play against other players, etc",
+									getString(R.string.registering_a_user_gives_you_the_ability_to_publish_scores_play_against_other_players_etc),
 									Toast.LENGTH_LONG).show();
 							m_RegisterLater = true;
 						}
@@ -568,13 +568,13 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		switch (i_UpdateFrom) {
 		case TriviaDbEngine.TYPE_UPDATE_FROM_INTERNET:
 			Toast.makeText(ActivityTrivia.this,
-					"Finished updating categories from internet",
+					getString(R.string.finished_updating_categories_from_internet),
 					Toast.LENGTH_LONG).show();
 			break;
 		case TriviaDbEngine.TYPE_UPDATE_FROM_XML_FILE:
 
 			Toast.makeText(ActivityTrivia.this,
-					"Finished updating categories from initial file",
+					getString(R.string.finished_importing_categories_from_initial_file),
 					Toast.LENGTH_LONG).show();
 			m_ButtonsLocckedDueToImportFromXML = false;
 			m_ProgressDialog.dismiss();
@@ -590,7 +590,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	public void onQuestionsCorrectRatioSent() {
 		//
 		Toast.makeText(ActivityTrivia.this,
-				"Thank you for making Social Trivia better! :)",
+				getString(R.string.thank_you_for_making_social_trivia_better_),
 				Toast.LENGTH_LONG).show();
 
 	}
@@ -601,17 +601,17 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		switch (i_UpdateFrom) {
 		case TriviaDbEngine.TYPE_UPDATE_FROM_INTERNET:
 			Toast.makeText(ActivityTrivia.this,
-					"Finished updating questions from internet",
+					getString(R.string.finished_importing_questions_from_internet),
 					Toast.LENGTH_LONG).show();
 			break;
 		case TriviaDbEngine.TYPE_UPDATE_FROM_XML_FILE:
 			// starting to update the categories
 			releaseButtonsOnImportFromXMLFile();
 			Toast.makeText(ActivityTrivia.this,
-					"Finished updating questions from initial file",
+					getString(R.string.finished_importing_questions_from_initial_file),
 					Toast.LENGTH_LONG).show();
 			Toast.makeText(this,
-					"Starting importing categories from initial file",
+					getString(R.string.importing_categories_from_initial_file),
 					Toast.LENGTH_LONG).show();
 			// Log.v(TAG, "Starting import categories from xml");
 			m_UpdateManager.importCategoriesFromXml();

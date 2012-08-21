@@ -97,7 +97,7 @@ public class ActivityAbout extends Activity implements OnClickListener {
 				"Suggestion for Trivia");
 
 		startActivity(Intent
-				.createChooser(emailIntent, "Send suggestion in..."));
+				.createChooser(emailIntent, getString(R.string.send_suggestion_in_)));
 
 	}
 
