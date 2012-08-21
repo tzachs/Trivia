@@ -35,7 +35,7 @@ import android.widget.Toast;
 public class ActivityTrivia extends Activity implements OnClickListener,
 		CategoriesListener, QuestionsListener {
 
-	// TODO: auto login
+	// TODO: 
 	// TODO: create service to update the database daily
 
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
@@ -160,33 +160,36 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		buttonWizardSetup_Clicked();
 
 	}
-	
+
 	@Override
 	protected void onStart() {
-		// 
+		//
 		super.onStart();
-		
-		try{
-			m_CurrentUserId = Integer.valueOf(m_SharedPreferences.getInt("defaultUserId", -2));	
-		}catch (Exception e){
-			m_CurrentUserId = -2;
-		}
-		
+
+	
 	}
 
-	@Override
-	protected void onResume() {
-		//
-		super.onResume();
-		changeLanguageTo(m_SharedPreferences.getString(
-				"listPreferenceLanguages", "iw"));
-
+	private void setUser() {
 		if (m_CurrentUserId > 0) {
 
 			String username = m_TrivaDbEngine.getUsername(m_CurrentUserId);
 			textViewCurrentUser.setText(getString(R.string.current_user_is_)
 					+ username);
 		}
+		
+
+	}
+
+	@Override
+	protected void onResume() {
+		//
+		
+		super.onResume();
+		
+		changeLanguageTo(m_SharedPreferences.getString(
+				"listPreferenceLanguages", "iw"));
+		
+		setUser();
 
 		if (m_ButtonsLocckedDueToImportFromXML
 				&& !m_FirstTimeStartingDoNotTryToUpdate) {
@@ -206,6 +209,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private void changeLanguageTo(String string) {
 		//
 
+		
 		Locale locale = new Locale(string);
 		Locale.setDefault(locale);
 		Log.i(TAG, "Changed lang to " + string);
@@ -228,7 +232,13 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private void initializeVariables() {
 		//
 
-		m_CurrentUserId = -1;
+		try {
+			m_CurrentUserId = Integer.valueOf(m_SharedPreferences.getString(
+					"defaultUserId", "-2"));
+		} catch (Exception e) {
+			m_CurrentUserId = -2;
+		}
+
 
 		m_ProgressDialog = new ProgressDialog(this);
 		m_TrivaDbEngine = new TriviaDbEngine(this);
@@ -336,6 +346,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 			break;
 		case REQUEST_CODE_BACK_FROM_ACTIVITY_USER_MANAGER:
 			m_CurrentUserId = resultCode;
+			//Log.v(TAG, "m_CurrentUserId --> " + m_CurrentUserId);
 			changeToDefault();
 			break;
 		case REQUEST_CODE_BACK_FROM_PREFERENCES:
