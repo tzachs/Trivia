@@ -72,7 +72,7 @@
     <string name="no_more_questions_in_this_level_going_to_next_level_">No more questions in this level, going to next level :)</string>
     <string name="error_sent_thanks_">Error sent, thanks :)</string>
     <string name="game_over">Game over</string>
-    <string name="thank_you_for_making_this_trivia_better_">Thank you for making this trivia better! :)</string>
+    
     <string name="no_update_available">No update available</string>
     <string name="uploading_correct_wrong_statistics">Uploading correct wrong statistics</string>
     <string name="update_is_available_for_">"Update is available for "</string>

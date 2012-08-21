@@ -35,7 +35,8 @@ import android.widget.Toast;
 public class ActivityTrivia extends Activity implements OnClickListener,
 		CategoriesListener, QuestionsListener {
 
-	// TODO: 
+	// TODO: Suggest a question
+	// TODO: less hard coded strings
 	// TODO: create service to update the database daily
 
 	public static final String TAG = ActivityTrivia.class.getSimpleName();

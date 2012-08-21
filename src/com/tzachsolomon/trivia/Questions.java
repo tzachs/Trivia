@@ -89,7 +89,7 @@ public class Questions {
 		}
 	}
 
-	private void myShuffle(List<?> list, int i_Start, int i_End) {
+	private void myShuffle(List<Question> list, int i_Start, int i_End) {
 		Random rnd = new Random();
 		int size = i_End - i_Start;
 		if (size < SHUFFLE_THRESHOLD || list instanceof RemoteAccess) {
@@ -121,7 +121,7 @@ public class Questions {
 		
 	}
 
-	private void swap(List<?> list, int i, int j) {
+	private void swap(List<Question> list, int i, int j) {
 		//
 
 		final List l = list;
