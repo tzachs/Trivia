@@ -124,7 +124,7 @@ public class Questions {
 	private void swap(List<Question> list, int i, int j) {
 		//
 
-		final List l = list;
+		final List<Question> l = list;
 		l.set(i, l.set(j, l.get(i)));
 
 	}

@@ -69,7 +69,6 @@
     <string name="no_more_questions_in_this_level_going_to_next_level_">"אין שאלות נוספות ברמה זו, הולך לרמה הבאה :)"</string>
     <string name="error_sent_thanks_">"שגיאה נשלחה, תודה :)"</string>
     <string name="game_over">"המשחק נגמר"</string>
-    
     <string name="no_update_available">"אין עדכון"</string>
     <string name="uploading_correct_wrong_statistics">"העלאת נתונים סטטיסטיים"</string>
     <string name="update_is_available_for_">"העדכון זמין עבור "</string>
@@ -163,6 +162,32 @@
     <string name="current_user_is_">"שם משתמש מחובר:  "</string>
     <string name="time_is_up_">Time is up!</string>
     <string name="register_you_user">Register you User</string>
-    <string name="register_a_user_in_order_to_publish_scores_get_updates_publish_questions_tbd_and_more">Register a user in order to publish scores, get updates, publish questions(TBD) and more</string>
-<string name="zero">0</string>
+    <string name="register_a_user_in_order_to_publish_scores_get_updates_publish_questions_tbd_and_more">רשום משתמש על מנת להנות ממשחק נגד אחרים (עדיין לא יושם) , שליחת שאלות וכדומה</string>
+    <string name="send_suggestion_in_">שלח הצעה ב</string>
+    <string name="finished_importing_questions_from_internet">עדכון שאלות מאינטרנט הסתיים</string>
+    <string name="finished_importing_questions_from_initial_file">ייבוא שאלות מקובץ אתחול הסתיים</string>
+    <string name="importing_categories_from_initial_file">החל תהליך ייבוא קטגוריוות מקובץ אתחול</string>
+    <string name="thank_you_for_making_social_trivia_better_">תודה רבה על תרומתך על טריוויה חברתית :)</string>
+    <string name="finished_updating_categories_from_internet">עדכון קטגוריות מאינטרנט הסתיים</string>
+    <string name="finished_importing_categories_from_initial_file">הסתיים יבוא קטגוריות מקובץ אתחול</string>
+    <string name="registering_a_user_gives_you_the_ability_to_publish_scores_play_against_other_players_etc">רישום משתמש יאפשר לך לפרסם תוצאות, משחק נגד אחרים (עדיין לא יושם) , שליחת הצעות לשאלות ועוד</string>
+    <string name="register_user">רשום משתמש</string>
+    <string name="register_a_user_">רשום משתמש</string>
+    <string name="no">לא</string>
+    <string name="defaut_user">משתמש ברירת מחדל</string>
+    <string name="use_user_"> התחבר אוטומטית עם "</string>
+    <string name="_as_default_">" ?"</string>
+    <string name="importing_questions_from_initial_file">מייבא שאלות מקובץ אתחול</string>
+    <string name="zero">0</string>
+    <string name="start_game">התחל משחק</string>
+    <string name="please_fill_in_username_and_password">אנא הכנס שם משתמש וסיסמא</string>
+    <string name="error_connecting_to_server">שגיאה בתחברות לשרת</string>
+    <string name="wrong_password_">סיסמא לא נכונה!</string>
+    <string name="user_does_not_exits">משתמש לא קיים</string>
+    <string name="user_authenticated_succesfully">משתמש אומת בהצלחה</string>
+    <string name="general_error">שגיאה כללית</string>
+    <string name="user_registered_succesfully">משתמש נרשם בהצלחה</string>
+    <string name="user_already_exits">שם משתמש קיים כבר</string>
+    <string name="md5_algorithm_was_not_found_">אלגוריתם MD5 לא נמצא</string>
+
 </resources>

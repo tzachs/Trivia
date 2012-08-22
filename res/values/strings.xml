@@ -156,8 +156,8 @@
     <string name="date">Date</string>
     <string name="register">Register</string>
     <string name="login">Login</string>
-    <string name="fill_in_username">Fill in username</string>
-    <string name="fill_in_password">Fill in password</string>
+    <string name="fill_in_username">Fill in User name</string>
+    <string name="fill_in_password">Fill in Password</string>
     <string name="send">Send</string>
     <string name="fill_in_email">Fill in email</string>
     <string name="high_scores">High Scores</string>
@@ -166,20 +166,30 @@
     <string name="register_you_user">Register you User</string>
     <string name="register_a_user_in_order_to_publish_scores_get_updates_publish_questions_tbd_and_more">Register a user in order to publish scores, get updates, publish questions(TBD) and more</string>
     <string name="zero">0</string>
-    <string name="send_suggestion_in_">Send suggestion in...</string>
-    <string name="finished_importing_questions_from_internet">Finished importing questions from internet</string>
+    <string name="send_suggestion_in_">Send suggestion in</string>
+    <string name="finished_importing_questions_from_internet">Finished importing questions from Internet</string>
     <string name="finished_importing_questions_from_initial_file">Finished importing questions from initial file</string>
     <string name="importing_categories_from_initial_file">Importing categories from initial file</string>
     <string name="thank_you_for_making_social_trivia_better_">Thank you for making Social Trivia better! :)</string>
-    <string name="finished_updating_categories_from_internet">Finished updating categories from internet</string>
+    <string name="finished_updating_categories_from_internet">Finished updating categories from Internet</string>
     <string name="finished_importing_categories_from_initial_file">Finished importing categories from initial file</string>
     <string name="registering_a_user_gives_you_the_ability_to_publish_scores_play_against_other_players_etc">Registering a user gives you the ability to publish scores, play against other players, etc</string>
     <string name="register_user">Register user</string>
     <string name="register_a_user_">Register a user?</string>
     <string name="no">No</string>
-    <string name="defaut_user">Defaut user</string>
+    <string name="defaut_user">Default user</string>
     <string name="use_user_">"Use user "</string>
     <string name="_as_default_">" as default?"</string>
     <string name="importing_questions_from_initial_file">Importing Questions from initial file</string>
+    <string name="start_game">Start Game</string>
+    <string name="please_fill_in_username_and_password">Please fill in username and password</string>
+    <string name="error_connecting_to_server">Error connecting to server</string>
+    <string name="wrong_password_">Wrong password!</string>
+    <string name="user_does_not_exits">User does not exits</string>
+    <string name="user_authenticated_succesfully">User authenticated succesfully</string>
+    <string name="general_error">General error</string>
+    <string name="user_registered_succesfully">User registered succesfully</string>
+    <string name="user_already_exits">User already exits</string>
+    <string name="md5_algorithm_was_not_found_">MD5 algorithm was not found!</string>
 
 </resources>

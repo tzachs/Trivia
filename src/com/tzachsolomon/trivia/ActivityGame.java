@@ -362,7 +362,7 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(
 					ActivityGame.this);
 
-			alertDialog.setTitle("Start Game");
+			alertDialog.setTitle(getString(R.string.start_game));
 			alertDialog.setPositiveButton(getString(R.string.start),
 					new DialogInterface.OnClickListener() {
 

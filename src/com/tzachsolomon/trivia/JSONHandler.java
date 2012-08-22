@@ -63,8 +63,8 @@ public class JSONHandler {
 	private static final String TAG_USER_REGISTER = "tagUserRegister";
 	private static final String TAG_USER_LOGIN = "tagUserLogin";
 
-	private static final String SUCCESS_CODE = "success";
-	private static final String ERROR_CODE = "error";
+	
+	
 	private static final int SUCCUESS_CODE_USER_REGISTERED = 2001;
 	private static final int SUCCUESS_CODE_USER_EXIST = 2002;
 	private static final int ERROR_CODE_USER_DOES_NOT_EXISTS = 1003;
@@ -773,24 +773,25 @@ public class JSONHandler {
 		try {
 			if (result != null) {
 				// checking if user added successfully
-				int successCode = result.getInt(SUCCESS_CODE);
-				int errorCode = result.getInt(ERROR_CODE);
+				int successCode = result.getInt(RESULT_SUCCESS);
+				int errorCode = result.getInt(RESULT_ERROR);
 
 				if (successCode == SUCCUESS_CODE_USER_EXIST) {
-					ret = "User authenticated succesfully";
+					ret = m_Context
+							.getString(R.string.user_authenticated_succesfully);
 					userId = result.getInt("userId");
 				} else if (errorCode == ERROR_CODE_USER_DOES_NOT_EXISTS) {
-					ret = "User does not exits";
+					ret = m_Context.getString(R.string.user_does_not_exits);
 				} else if (errorCode == ERROR_CODE_USER_WRONG_PASSWORD) {
-					ret = "Wrong password!";
+					ret = m_Context.getString(R.string.wrong_password_);
 				}
 			} else {
 				//
-				ret = "Error connecting to server";
+				ret = m_Context.getString(R.string.error_connecting_to_server);
 			}
 		} catch (JSONException e) {
 			//
-			ret = "General error";
+			ret = m_Context.getString(R.string.general_error);
 			e.printStackTrace();
 		}
 
@@ -831,22 +832,22 @@ public class JSONHandler {
 		try {
 			if (result != null) {
 				// checking if user added successfully
-				int successCode = result.getInt(SUCCESS_CODE);
-				int errorCode = result.getInt(ERROR_CODE);
+				int successCode = result.getInt(RESULT_SUCCESS);
+				int errorCode = result.getInt(RESULT_ERROR);
 
 				if (successCode == SUCCUESS_CODE_USER_REGISTERED) {
-					ret = "User registered succesfully";
+					ret = m_Context.getString(R.string.user_registered_succesfully);
 					userId = result.getInt("userId");
 				} else if (errorCode == ERROR_CODE_USER_EXIST) {
-					ret = "User already exits";
+					ret = m_Context.getString(R.string.user_already_exits);
 				}
 			} else {
 				//
-				ret = "Error connecting to server";
+				ret = m_Context.getString(R.string.error_connecting_to_server);
 			}
 		} catch (JSONException e) {
 			//
-			ret = "General error";
+			ret = m_Context.getString(R.string.general_error);
 			e.printStackTrace();
 		}
 
@@ -903,7 +904,7 @@ public class JSONHandler {
 			if (enabled) {
 				m_ProgressDialog = new ProgressDialog(m_Context);
 				m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				m_ProgressDialog.setTitle("Register");
+				m_ProgressDialog.setTitle(m_Context.getString(R.string.register));
 				m_ProgressDialog.setCancelable(true);
 				m_ProgressDialog.show();
 			} else {
@@ -922,7 +923,7 @@ public class JSONHandler {
 				return userRegister(params);
 			} catch (NoSuchAlgorithmException e) {
 				// 
-				return "MD5 algorithm was not found!";
+				return m_Context.getString(R.string.md5_algorithm_was_not_found_);
 			}
 			
 
@@ -952,7 +953,7 @@ public class JSONHandler {
 			if (enabled) {
 				m_ProgressDialog = new ProgressDialog(m_Context);
 				m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				m_ProgressDialog.setTitle("Login");
+				m_ProgressDialog.setTitle(m_Context.getString(R.string.login));
 				m_ProgressDialog.setCancelable(true);
 				m_ProgressDialog.show();
 			} else {
@@ -971,7 +972,7 @@ public class JSONHandler {
 				return userLogin(params);
 			} catch (NoSuchAlgorithmException e) {
 				// 
-				return "MD5 algorithm was not found!";
+				return m_Context.getString(R.string.md5_algorithm_was_not_found_);
 				
 			}
 			

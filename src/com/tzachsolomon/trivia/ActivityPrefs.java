@@ -3,7 +3,7 @@ package com.tzachsolomon.trivia;
 
 
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
+
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 
@@ -11,7 +11,7 @@ import android.preference.PreferenceCategory;
 
 import android.preference.PreferenceActivity;
 
-import android.widget.Toast;
+
 
 public class ActivityPrefs extends PreferenceActivity implements
 		SharedPreferences.OnSharedPreferenceChangeListener {
@@ -82,11 +82,4 @@ public class ActivityPrefs extends PreferenceActivity implements
 		checkBoxPreferenceAllowUpdateMobileNetworkRoaming.setEnabled(i_State);
 	}
 	
-	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
-		// 
-		
-		Toast.makeText(this, "che", Toast.LENGTH_LONG).show();
-	}
-
 }

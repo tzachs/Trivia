@@ -207,7 +207,7 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 		if (password.length() == 0 || username.length() == 0) {
 			Toast.makeText(ActivityWizardSetup.this,
-					"Please fill in username and password", Toast.LENGTH_SHORT)
+					getString(R.string.please_fill_in_username_and_password), Toast.LENGTH_SHORT)
 					.show();
 		} else {
 
