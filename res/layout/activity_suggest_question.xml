@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/editTextQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/question"
+        android:inputType="text" >
+    </EditText>
+
+    <EditText
+        android:id="@+id/editTextAnswerCorrect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/correct_answer"
+        android:inputType="text"
+         />
+
+    <EditText
+        android:id="@+id/editTextAnswerWrong1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/wrong_answer_1"
+        android:inputType="text"
+        />
+
+    <EditText
+        android:id="@+id/editTextAnswerWrong2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="@string/wrong_answer_2"
+         />
+
+    <EditText
+        android:id="@+id/editTextAnswerWrong3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:hint="@string/wrong_answer_3"
+         />
+
+    <Button
+        android:id="@+id/buttonSendSuggestion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/custom_menu_button"
+        android:text="@string/send_suggestion" />
+
+</LinearLayout>

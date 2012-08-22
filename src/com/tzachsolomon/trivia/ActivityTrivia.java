@@ -36,7 +36,6 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		CategoriesListener, QuestionsListener {
 
 	// TODO: Suggest a question
-	// TODO: less hard coded strings
 	// TODO: create service to update the database daily
 
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
@@ -71,11 +70,13 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 	private ProgressDialog m_ProgressDialog;
 
+	private Button buttonSuggestQuestion;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		setContentView(R.layout.activity_trivia);
 
 		m_SharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
@@ -219,7 +220,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		getBaseContext().getResources().updateConfiguration(config,
 				getBaseContext().getResources().getDisplayMetrics());
 
-		setContentView(R.layout.main);
+		setContentView(R.layout.activity_trivia);
 
 		initializeButtons();
 		if (m_ButtonsLocckedDueToImportFromXML) {
@@ -260,6 +261,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		buttonNewGameCategories = (Button) findViewById(R.id.buttonNewGameCategories);
 		buttonManageUsers = (Button) findViewById(R.id.buttonManageUsers);
 		buttonGameScores = (Button) findViewById(R.id.buttonGameScores);
+		buttonSuggestQuestion = (Button)findViewById(R.id.buttonSuggestQuestion);
 
 		buttonNewGameAllQuestions.setOnClickListener(this);
 		buttonManageDatabase.setOnClickListener(this);
@@ -269,6 +271,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		buttonNewGameCategories.setOnClickListener(this);
 		buttonManageUsers.setOnClickListener(this);
 		buttonGameScores.setOnClickListener(this);
+		buttonSuggestQuestion.setOnClickListener(this);
 
 		textViewCurrentUser = (TextView) findViewById(R.id.textViewCurrentUser);
 
@@ -285,6 +288,10 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	public void onClick(View v) {
 		//
 		switch (v.getId()) {
+		case R.id.buttonSuggestQuestion:
+			buttonSuggestQuestion_Clicked();
+			break;
+			
 		case R.id.buttonGameScores:
 			buttonGameScores_Clicked();
 			break;
@@ -318,6 +325,13 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 			break;
 		}
 
+	}
+
+	private void buttonSuggestQuestion_Clicked() {
+		// 
+		Intent intent = new Intent(ActivityTrivia.this, ActivitySuggestQuestion.class);
+		startActivity(intent);
+		
 	}
 
 	private void buttonGameScores_Clicked() {

@@ -2,9 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
     android:background="@drawable/background_shape"
-     >
+    android:orientation="vertical" >
 
     <Button
         android:id="@+id/buttonNewGameSimple"
@@ -35,7 +34,7 @@
         android:layout_margin="4dp"
         android:background="@drawable/custom_menu_button"
         android:text="@string/buttonNewGameCategoriesText" />
-    
+
     <Button
         android:id="@+id/buttonGameScores"
         android:layout_width="fill_parent"
@@ -61,10 +60,8 @@
         android:layout_below="@+id/buttonUpdateDatabase"
         android:layout_margin="4dp"
         android:background="@drawable/custom_menu_button"
-        android:text="@string/buttonManageUsersText"
-        
-        />
-    
+        android:text="@string/buttonManageUsersText" />
+
     <Button
         android:id="@+id/buttonManageDatabase"
         android:layout_width="fill_parent"
@@ -75,24 +72,31 @@
         android:text="@string/buttonManageDatabaseText" />
 
     <Button
-        android:id="@+id/buttonPreferences"
+        android:id="@+id/buttonSuggestQuestion"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/buttonManageDatabase"
         android:layout_margin="4dp"
         android:background="@drawable/custom_menu_button"
-        android:text="@string/buttonPreferencesText" />
-    
-    <TextView 
-        android:id="@+id/textViewCurrentUser"
-        android:layout_height="wrap_content"
+        android:text="@string/suggest_a_question" />
+
+    <Button
+        android:id="@+id/buttonPreferences"
         android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonSuggestQuestion"
         android:layout_margin="4dp"
-        android:textSize="16dp"
+        android:background="@drawable/custom_menu_button"
+        android:text="@string/buttonPreferencesText" />
+
+    <TextView
+        android:id="@+id/textViewCurrentUser"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_margin="4dp"
         android:text="@string/current_user_is_"
         android:textColor="#000000"
-        
-        />
+        android:textSize="16dp" />
 
 </RelativeLayout>

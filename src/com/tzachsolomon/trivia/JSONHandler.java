@@ -24,6 +24,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.tzachsolomon.trivia.JSONHandler.SuggestQuestionListener;
+
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -67,9 +69,12 @@ public class JSONHandler {
 	
 	private static final int SUCCUESS_CODE_USER_REGISTERED = 2001;
 	private static final int SUCCUESS_CODE_USER_EXIST = 2002;
+	private static final int SUCCUESS_QUESTION_ADDED = 2003;
 	private static final int ERROR_CODE_USER_DOES_NOT_EXISTS = 1003;
 	private static final int ERROR_CODE_USER_EXIST = 1001;
 	private static final int ERROR_CODE_USER_WRONG_PASSWORD = 1004;
+	private static final int ERROR_QUESTION_NOT_ADDED = 1005;
+	
 
 	private String m_ServerUrl;
 	private HttpClient m_HttpClient;
@@ -79,6 +84,7 @@ public class JSONHandler {
 	private SharedPreferences m_SharedPreferences;
 	private UserManageListener m_UserManagerListener;
 	private DatabaseUpdateListener m_DatabaseUpdateListener;
+	private SuggestQuestionListener m_SuggestQuestionListener;
 
 	/**
 	 * CTOR
@@ -859,17 +865,23 @@ public class JSONHandler {
 	static public interface UserManageListener {
 
 		public void onUserLogin(String i_Response, int i_UserId);
-
 		public void onUserRegister(String i_Response, int i_UserId);
 	}
 
 	static public interface DatabaseUpdateListener {
 
 		public void onDownloadedQuestions(ContentValues[] i_DownloadedQuestions);
-
 		public void onDownloadedCategories(
 				ContentValues[] i_DownloadedCategories);
 
+	}
+	
+	static public interface SuggestQuestionListener {
+		public void onSuggestionSent ();
+	}
+	
+	public void setSuggestQuestionListener (SuggestQuestionListener i_Listener){
+		this.m_SuggestQuestionListener = i_Listener;
 	}
 
 	public void setUserManageListener(UserManageListener listener) {
@@ -986,6 +998,56 @@ public class JSONHandler {
 			m_ProgressDialog.dismiss();
 			Toast.makeText(m_Context, result, Toast.LENGTH_SHORT).show();
 			
+		}
+
+	}
+
+	public void sendQuestionSuggestionAsync(int m_CurrentUserID,
+			String answerCorrect, String answerQuestion, String answerWrong1,
+			String answerWrong2, String answerWrong3) {
+		// 
+		//
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		JSONObject result;
+		String ret = "";
+		int userId = -1;
+
+		params.add(new BasicNameValuePair("tag", TAG_USER_REGISTER));
+		params.add(new BasicNameValuePair("userId", String.valueOf(m_CurrentUserID)));
+		params.add(new BasicNameValuePair("answerCorrect", answerCorrect));
+		params.add(new BasicNameValuePair("answerQuestion", answerQuestion));
+		params.add(new BasicNameValuePair("answerWrong1", answerWrong1));
+		params.add(new BasicNameValuePair("answerWrong2", answerWrong2));
+		params.add(new BasicNameValuePair("answerWrong3", answerWrong3));
+		
+
+		result = getJSONObjectFromUrl(m_ServerUrl, params);
+
+		try {
+			if (result != null) {
+				// checking if user added successfully
+				int successCode = result.getInt(RESULT_SUCCESS);
+				int errorCode = result.getInt(RESULT_ERROR);
+
+				if (successCode == SUCCUESS_QUESTION_ADDED){
+					
+					// TODO: complete call to interface
+					if ( m_SuggestQuestionListener != null){
+						m_SuggestQuestionListener.onSuggestionSent();
+					}
+					
+					
+				} else if (errorCode == ERROR_QUESTION_NOT_ADDED){
+					
+				}
+			} else {
+				//
+				ret = m_Context.getString(R.string.error_connecting_to_server);
+			}
+		} catch (JSONException e) {
+			//
+			ret = m_Context.getString(R.string.general_error);
+			e.printStackTrace();
 		}
 
 	}
