@@ -24,7 +24,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.tzachsolomon.trivia.JSONHandler.SuggestQuestionListener;
+
 
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -64,17 +64,15 @@ public class JSONHandler {
 	private static final String TAG_GET_CATEGORIES = "getCategories";
 	private static final String TAG_USER_REGISTER = "tagUserRegister";
 	private static final String TAG_USER_LOGIN = "tagUserLogin";
+	private static final String TAG_SUGGEST_QUESTION = "tagSuggestQuestion";
 
-	
-	
 	private static final int SUCCUESS_CODE_USER_REGISTERED = 2001;
 	private static final int SUCCUESS_CODE_USER_EXIST = 2002;
-	private static final int SUCCUESS_QUESTION_ADDED = 2003;
+	public static final int SUCCUESS_QUESTION_ADDED = 2003;
 	private static final int ERROR_CODE_USER_DOES_NOT_EXISTS = 1003;
 	private static final int ERROR_CODE_USER_EXIST = 1001;
 	private static final int ERROR_CODE_USER_WRONG_PASSWORD = 1004;
-	private static final int ERROR_QUESTION_NOT_ADDED = 1005;
-	
+	public static final int ERROR_QUESTION_NOT_ADDED = 1005;
 
 	private String m_ServerUrl;
 	private HttpClient m_HttpClient;
@@ -282,7 +280,8 @@ public class JSONHandler {
 		int status;
 		HttpPost httpPost = new HttpPost(i_URL);
 		try {
-			httpPost.setEntity(new UrlEncodedFormEntity(params));
+			httpPost.setEntity(new UrlEncodedFormEntity(params,"UTF-8"));
+			
 			HttpResponse httpResponse = m_HttpClient.execute(httpPost);
 
 			status = httpResponse.getStatusLine().getStatusCode();
@@ -674,7 +673,8 @@ public class JSONHandler {
 						numberOfRows = jsonObject.getInt("number_of_rows");
 
 						params = new ContentValues[numberOfRows];
-						Log.v(TAG, "Number of rows to parse: " + numberOfRows);
+						// Log.v(TAG, "Number of rows to parse: " +
+						// numberOfRows);
 						m_ProgressDialog.setMax(numberOfRows);
 
 						numberOfRows++;
@@ -755,8 +755,8 @@ public class JSONHandler {
 
 		return ret;
 	}
-	
-	public void userLoginAsync(String[]i_Params){
+
+	public void userLoginAsync(String[] i_Params) {
 		AsyncTaskUserLogin asyncTaskUserLogin = new AsyncTaskUserLogin();
 
 		asyncTaskUserLogin.execute(i_Params);
@@ -804,24 +804,25 @@ public class JSONHandler {
 		m_UserManagerListener.onUserLogin(ret, userId);
 		return ret;
 	}
-	
+
 	private String md5hash(String i_Password) throws NoSuchAlgorithmException {
-		// 
-		
-        MessageDigest md5 = MessageDigest.getInstance("MD5");
-        md5.update(i_Password.getBytes(),0,i_Password.length());
-        String hash = new BigInteger(1,md5.digest()).toString(16);
-        
+		//
+
+		MessageDigest md5 = MessageDigest.getInstance("MD5");
+		md5.update(i_Password.getBytes(), 0, i_Password.length());
+		String hash = new BigInteger(1, md5.digest()).toString(16);
+
 		return hash;
 	}
 
-	public void userRegisterAsync(String[] i_Params){
+	public void userRegisterAsync(String[] i_Params) {
 		AsyncTaskUserRegister asyncTaskUserRegister = new AsyncTaskUserRegister();
 
 		asyncTaskUserRegister.execute(i_Params);
 	}
 
-	public String userRegister(String[] i_Params) throws NoSuchAlgorithmException {
+	public String userRegister(String[] i_Params)
+			throws NoSuchAlgorithmException {
 		//
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		JSONObject result;
@@ -842,7 +843,8 @@ public class JSONHandler {
 				int errorCode = result.getInt(RESULT_ERROR);
 
 				if (successCode == SUCCUESS_CODE_USER_REGISTERED) {
-					ret = m_Context.getString(R.string.user_registered_succesfully);
+					ret = m_Context
+							.getString(R.string.user_registered_succesfully);
 					userId = result.getInt("userId");
 				} else if (errorCode == ERROR_CODE_USER_EXIST) {
 					ret = m_Context.getString(R.string.user_already_exits);
@@ -865,22 +867,24 @@ public class JSONHandler {
 	static public interface UserManageListener {
 
 		public void onUserLogin(String i_Response, int i_UserId);
+
 		public void onUserRegister(String i_Response, int i_UserId);
 	}
 
 	static public interface DatabaseUpdateListener {
 
 		public void onDownloadedQuestions(ContentValues[] i_DownloadedQuestions);
+
 		public void onDownloadedCategories(
 				ContentValues[] i_DownloadedCategories);
 
 	}
-	
+
 	static public interface SuggestQuestionListener {
-		public void onSuggestionSent ();
+		public void onSuggestionSent(int result);
 	}
-	
-	public void setSuggestQuestionListener (SuggestQuestionListener i_Listener){
+
+	public void setSuggestQuestionListener(SuggestQuestionListener i_Listener) {
 		this.m_SuggestQuestionListener = i_Listener;
 	}
 
@@ -901,8 +905,9 @@ public class JSONHandler {
 				"editTextPreferencePrimaryServerIP",
 				"http://23.23.238.181/index.php");
 	}
-	
-	public class AsyncTaskUserRegister extends AsyncTask<String, Integer, String> {
+
+	public class AsyncTaskUserRegister extends
+			AsyncTask<String, Integer, String> {
 
 		private ProgressDialog m_ProgressDialog;
 		private boolean enabled;
@@ -916,12 +921,13 @@ public class JSONHandler {
 			if (enabled) {
 				m_ProgressDialog = new ProgressDialog(m_Context);
 				m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				m_ProgressDialog.setTitle(m_Context.getString(R.string.register));
+				m_ProgressDialog.setTitle(m_Context
+						.getString(R.string.register));
 				m_ProgressDialog.setCancelable(true);
 				m_ProgressDialog.show();
 			} else {
-				Toast.makeText(m_Context,
-						detailedResult.toString(), Toast.LENGTH_LONG).show();
+				Toast.makeText(m_Context, detailedResult.toString(),
+						Toast.LENGTH_LONG).show();
 			}
 
 			detailedResult.setLength(0);
@@ -934,10 +940,10 @@ public class JSONHandler {
 			try {
 				return userRegister(params);
 			} catch (NoSuchAlgorithmException e) {
-				// 
-				return m_Context.getString(R.string.md5_algorithm_was_not_found_);
+				//
+				return m_Context
+						.getString(R.string.md5_algorithm_was_not_found_);
 			}
-			
 
 		}
 
@@ -950,7 +956,7 @@ public class JSONHandler {
 		}
 
 	}
-	
+
 	public class AsyncTaskUserLogin extends AsyncTask<String, Integer, String> {
 
 		private ProgressDialog m_ProgressDialog;
@@ -969,8 +975,8 @@ public class JSONHandler {
 				m_ProgressDialog.setCancelable(true);
 				m_ProgressDialog.show();
 			} else {
-				Toast.makeText(m_Context,
-						detailedResult.toString(), Toast.LENGTH_LONG).show();
+				Toast.makeText(m_Context, detailedResult.toString(),
+						Toast.LENGTH_LONG).show();
 			}
 
 			detailedResult.setLength(0);
@@ -983,11 +989,11 @@ public class JSONHandler {
 			try {
 				return userLogin(params);
 			} catch (NoSuchAlgorithmException e) {
-				// 
-				return m_Context.getString(R.string.md5_algorithm_was_not_found_);
-				
+				//
+				return m_Context
+						.getString(R.string.md5_algorithm_was_not_found_);
+
 			}
-			
 
 		}
 
@@ -997,7 +1003,67 @@ public class JSONHandler {
 
 			m_ProgressDialog.dismiss();
 			Toast.makeText(m_Context, result, Toast.LENGTH_SHORT).show();
+
+		}
+
+	}
+
+	public class AsyncTaskSendSuggestion extends
+			AsyncTask<String, Integer, Integer> {
+		
+		@Override
+		protected void onPostExecute(Integer result) {
+			// 
+			super.onPostExecute(result);
+			// callback
+			if (m_SuggestQuestionListener != null) {
+				m_SuggestQuestionListener
+						.onSuggestionSent(result);
+			}
+
+		}
+
+		@Override
+		protected Integer doInBackground(String... params) {
+			//
+			List<NameValuePair> params1 = new ArrayList<NameValuePair>();
+			JSONObject result;
+			Integer ret = -1;
 			
+
+			params1.add(new BasicNameValuePair("tag", TAG_SUGGEST_QUESTION));
+			params1.add(new BasicNameValuePair("userId", params[0]));
+			params1.add(new BasicNameValuePair("answerCorrect", params[1]));
+			params1.add(new BasicNameValuePair("answerQuestion", params[2]));
+			params1.add(new BasicNameValuePair("answerWrong1", params[3]));
+			params1.add(new BasicNameValuePair("answerWrong2", params[4]));
+			params1.add(new BasicNameValuePair("answerWrong3", params[5]));
+
+			result = getJSONObjectFromUrl(m_ServerUrl, params1);
+
+			try {
+				if (result != null) {
+					// checking if user added successfully
+					int successCode = result.getInt(RESULT_SUCCESS);
+					int errorCode = result.getInt(RESULT_ERROR);
+
+					if (successCode == SUCCUESS_QUESTION_ADDED) {
+						ret = SUCCUESS_QUESTION_ADDED;
+			
+					} else if (errorCode == ERROR_QUESTION_NOT_ADDED) {
+						ret = ERROR_QUESTION_NOT_ADDED;
+					}
+				} else {
+					//
+					
+				}
+			} catch (JSONException e) {
+				//
+				
+				e.printStackTrace();
+			}
+
+			return ret;
 		}
 
 	}
@@ -1005,52 +1071,18 @@ public class JSONHandler {
 	public void sendQuestionSuggestionAsync(int m_CurrentUserID,
 			String answerCorrect, String answerQuestion, String answerWrong1,
 			String answerWrong2, String answerWrong3) {
-		// 
-		//
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		JSONObject result;
-		String ret = "";
-		int userId = -1;
+		String[] params = new String[6];
 
-		params.add(new BasicNameValuePair("tag", TAG_USER_REGISTER));
-		params.add(new BasicNameValuePair("userId", String.valueOf(m_CurrentUserID)));
-		params.add(new BasicNameValuePair("answerCorrect", answerCorrect));
-		params.add(new BasicNameValuePair("answerQuestion", answerQuestion));
-		params.add(new BasicNameValuePair("answerWrong1", answerWrong1));
-		params.add(new BasicNameValuePair("answerWrong2", answerWrong2));
-		params.add(new BasicNameValuePair("answerWrong3", answerWrong3));
-		
+		params[0] = String.valueOf(m_CurrentUserID);
+		params[1] = answerCorrect;
+		params[2] = answerQuestion;
+		params[3] = answerWrong1;
+		params[4] = answerWrong2;
+		params[5] = answerWrong3;
 
-		result = getJSONObjectFromUrl(m_ServerUrl, params);
-
-		try {
-			if (result != null) {
-				// checking if user added successfully
-				int successCode = result.getInt(RESULT_SUCCESS);
-				int errorCode = result.getInt(RESULT_ERROR);
-
-				if (successCode == SUCCUESS_QUESTION_ADDED){
-					
-					// TODO: complete call to interface
-					if ( m_SuggestQuestionListener != null){
-						m_SuggestQuestionListener.onSuggestionSent();
-					}
-					
-					
-				} else if (errorCode == ERROR_QUESTION_NOT_ADDED){
-					
-				}
-			} else {
-				//
-				ret = m_Context.getString(R.string.error_connecting_to_server);
-			}
-		} catch (JSONException e) {
-			//
-			ret = m_Context.getString(R.string.general_error);
-			e.printStackTrace();
-		}
+		AsyncTaskSendSuggestion a = new AsyncTaskSendSuggestion();
+		a.execute(params);
 
 	}
-
 
 }

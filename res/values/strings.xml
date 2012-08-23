@@ -72,7 +72,6 @@
     <string name="no_more_questions_in_this_level_going_to_next_level_">No more questions in this level, going to next level :)</string>
     <string name="error_sent_thanks_">Error sent, thanks :)</string>
     <string name="game_over">Game over</string>
-    
     <string name="no_update_available">No update available</string>
     <string name="uploading_correct_wrong_statistics">Uploading correct wrong statistics</string>
     <string name="update_is_available_for_">"Update is available for "</string>
@@ -182,13 +181,13 @@
     <string name="_as_default_">" as default?"</string>
     <string name="importing_questions_from_initial_file">Importing Questions from initial file</string>
     <string name="start_game">Start Game</string>
-    <string name="please_fill_in_username_and_password">Please fill in username and password</string>
+    <string name="please_fill_in_username_and_password">Please fill in user name and password</string>
     <string name="error_connecting_to_server">Error connecting to server</string>
     <string name="wrong_password_">Wrong password!</string>
     <string name="user_does_not_exits">User does not exits</string>
-    <string name="user_authenticated_succesfully">User authenticated succesfully</string>
+    <string name="user_authenticated_succesfully">User authenticated successfully</string>
     <string name="general_error">General error</string>
-    <string name="user_registered_succesfully">User registered succesfully</string>
+    <string name="user_registered_succesfully">User registered successfully</string>
     <string name="user_already_exits">User already exits</string>
     <string name="md5_algorithm_was_not_found_">MD5 algorithm was not found!</string>
     <string name="suggest_a_question">Suggest a question</string>
@@ -198,7 +197,7 @@
     <string name="wrong_answer_2">Wrong Answer #2</string>
     <string name="wrong_answer_3">Wrong Answer #3</string>
     <string name="send_suggestion">Send Suggestion</string>
-    <string name="thank_for_sending_a_suggestion_in_case_you_are_a_registered_user_with_email_filled_in_recieve_a_notication_when_the_question_is_enabled">Thank for sending a suggestion :) In case you are a registered user with email filled in, recieve a notication when the question is enabled</string>
     <string name="thank_you_for_your_contribution_to_social_trivia_">Thank you for your contribution to Social Trivia :)</string>
+    <string name="questions_wasn_t_added_due_to_error_try_again_later">Questions wasn\'t added due to error, try again later</string>
 
 </resources>

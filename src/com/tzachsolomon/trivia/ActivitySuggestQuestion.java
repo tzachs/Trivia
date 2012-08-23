@@ -78,20 +78,21 @@ public class ActivitySuggestQuestion extends Activity implements
 
 	}
 
-	@Override,
-	public void onSuggestionSent() {
+	@Override
+	public void onSuggestionSent(int result) {
 		//
-		if ( m_CurrentUserID > 0 ){
-		Toast.makeText(
-				ActivitySuggestQuestion.this,
-				getString(R.string.thank_for_sending_a_suggestion_in_case_you_are_a_registered_user_with_email_filled_in_recieve_a_notication_when_the_question_is_enabled),
-				Toast.LENGTH_LONG).show();
-		}else{
+		if (result == JSONHandler.SUCCUESS_QUESTION_ADDED) {
 			Toast.makeText(
 					ActivitySuggestQuestion.this,
 					getString(R.string.thank_you_for_your_contribution_to_social_trivia_),
 					Toast.LENGTH_LONG).show();
-				
+		}else if ( result == JSONHandler.ERROR_QUESTION_NOT_ADDED){
+			// TODO: save the question and upload it later, and then change the text displayed to the user
+			Toast.makeText(
+					ActivitySuggestQuestion.this,
+					getString(R.string.questions_wasn_t_added_due_to_error_try_again_later),
+					Toast.LENGTH_LONG).show();
 		}
+
 	}
 };

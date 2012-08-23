@@ -92,6 +92,11 @@
             android:label="@string/app_name"
             >
         </activity>
+        <activity
+            android:name=".ActivitySuggestQuestion"
+            android:label="@string/app_name"
+            >
+        </activity>
     </application>
 
 </manifest>
