@@ -37,8 +37,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class ActivityTrivia extends Activity implements OnClickListener,
-		CategoriesListener, QuestionsListener, OnDrawerOpenListener {
+		CategoriesListener, QuestionsListener {
 
+	// TODO: Later should be with counter of attempts
 	// TODO: create service to update the database daily
 
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
@@ -75,10 +76,9 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 	private Button buttonSuggestQuestion;
 
-	private SlidingDrawer sd;
+	private SlidingDrawer slidingDrawer;
 
 	private boolean m_UpdateQuestionsLater;
-
 	private boolean m_UpdateCategoriesLater;
 
 	/** Called when the activity is first created. */
@@ -259,9 +259,9 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		m_UpdateManager.setCategoriesListener(this);
 		m_UpdateManager.setQuestionsListener(this);
 		
-		sd = (SlidingDrawer)findViewById(R.id.sd);
+		slidingDrawer = (SlidingDrawer)findViewById(R.id.sd);
 		
-		sd.setOnDrawerOpenListener(this);
+		
 
 		m_RegisterLater = false;
 	}
@@ -660,14 +660,6 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		m_ProgressDialog.setProgress(i_Progress);
 	}
 
-	@Override
-	public void onDrawerOpened() {
-		// 
-		
-		
-		
-		
-	}
 
 	@Override
 	public void onUpdateQuestionsPostponed() {

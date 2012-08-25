@@ -21,7 +21,8 @@
         android:id="@+id/buttonNewGameSimple"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textViewCurrentUser"
+        
+        android:layout_centerInParent="true"
         android:layout_marginBottom="4dp"
         android:layout_marginLeft="4dp"
         android:layout_marginRight="4dp"

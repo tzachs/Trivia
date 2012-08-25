@@ -189,15 +189,15 @@
     <string name="user_registered_succesfully">משתמש נרשם בהצלחה</string>
     <string name="user_already_exits">שם משתמש קיים כבר</string>
     <string name="md5_algorithm_was_not_found_">אלגוריתם MD5 לא נמצא</string>
-    <string name="suggest_a_question">Suggest a question</string>
-    <string name="question">Question</string>
-    <string name="correct_answer">Correct Answer</string>
-    <string name="wrong_answer_1">Wrong answer #1</string>
-    <string name="wrong_answer_2">Wrong Answer #2</string>
-    <string name="wrong_answer_3">Wrong Answer #3</string>
-    <string name="send_suggestion">Send Suggestion</string>
-    <string name="thank_you_for_your_contribution_to_social_trivia_">Thank you for your contribution to Social Trivia :)</string>
-    <string name="questions_wasn_t_added_due_to_error_try_again_later">Questions wasn\'t added due to error, try again later</string>
-    <string name="more">More</string>
+    <string name="suggest_a_question">שלח שאלה</string>
+    <string name="question">שאלה</string>
+    <string name="correct_answer">תשובה נכונה</string>
+    <string name="wrong_answer_1">תשובה שגויה #1</string>
+    <string name="wrong_answer_2">תשובה שגויה #2</string>
+    <string name="wrong_answer_3">תשובה שגויה #3</string>
+    <string name="send_suggestion">שלח הצעה</string>
+    <string name="thank_you_for_your_contribution_to_social_trivia_">תודה רבה על תרומתך לטריויה :)</string>
+    <string name="questions_wasn_t_added_due_to_error_try_again_later">השאלה לא נוספה עקב בעיה בשרת, אנא נסה מאוחר יותר</string>
+    <string name="more">עוד</string>
 
 </resources>
