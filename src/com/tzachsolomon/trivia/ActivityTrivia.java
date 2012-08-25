@@ -18,6 +18,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 
+import android.opengl.Visibility;
 import android.os.Bundle;
 
 import android.preference.PreferenceManager;
@@ -29,13 +30,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.SlidingDrawer;
+import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class ActivityTrivia extends Activity implements OnClickListener,
-		CategoriesListener, QuestionsListener {
+		CategoriesListener, QuestionsListener, OnDrawerOpenListener {
 
-	// TODO: Suggest a question
 	// TODO: create service to update the database daily
 
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
@@ -71,6 +74,12 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private ProgressDialog m_ProgressDialog;
 
 	private Button buttonSuggestQuestion;
+
+	private SlidingDrawer sd;
+
+	private boolean m_UpdateQuestionsLater;
+
+	private boolean m_UpdateCategoriesLater;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -201,7 +210,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 			m_ProgressDialog.setTitle(getString(R.string.importing_questions_from_initial_file));
 			m_ProgressDialog.show();
 
-		} else if (!m_FirstTimeStartingDoNotTryToUpdate) {
+		} else if (!m_FirstTimeStartingDoNotTryToUpdate && !m_UpdateQuestionsLater) {
 			m_UpdateManager.updateQuestions(true);
 			showUserRegister();
 		}
@@ -240,6 +249,8 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		} catch (Exception e) {
 			m_CurrentUserId = -2;
 		}
+		
+		m_UpdateQuestionsLater = false;
 
 
 		m_ProgressDialog = new ProgressDialog(this);
@@ -247,6 +258,10 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		m_UpdateManager = new UpdateManager(this);
 		m_UpdateManager.setCategoriesListener(this);
 		m_UpdateManager.setQuestionsListener(this);
+		
+		sd = (SlidingDrawer)findViewById(R.id.sd);
+		
+		sd.setOnDrawerOpenListener(this);
 
 		m_RegisterLater = false;
 	}
@@ -643,6 +658,29 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		//
 		m_ProgressDialog.setMax(i_Max);
 		m_ProgressDialog.setProgress(i_Progress);
+	}
+
+	@Override
+	public void onDrawerOpened() {
+		// 
+		
+		
+		
+		
+	}
+
+	@Override
+	public void onUpdateQuestionsPostponed() {
+		// 
+		m_UpdateQuestionsLater = true;
+		
+	}
+
+	@Override
+	public void onUpdateCategoriesPostponed() {
+		// 
+		m_UpdateCategoriesLater = true;
+		
 	}
 
 }

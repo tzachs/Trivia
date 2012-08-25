@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/question"
+        android:layout_margin="4dp"
         android:inputType="text" >
     </EditText>
 
@@ -17,6 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/correct_answer"
+        android:layout_margin="4dp"
         android:inputType="text"
          />
 
@@ -25,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/wrong_answer_1"
+        android:layout_margin="4dp"
         android:inputType="text"
         />
 
@@ -34,6 +37,7 @@
         android:layout_height="wrap_content"
         android:inputType="text"
         android:hint="@string/wrong_answer_2"
+        android:layout_margin="4dp"
          />
 
     <EditText
@@ -42,12 +46,14 @@
         android:layout_height="wrap_content"
         android:inputType="text"
         android:hint="@string/wrong_answer_3"
+        android:layout_margin="4dp"
          />
 
     <Button
         android:id="@+id/buttonSendSuggestion"
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="4dp"
         android:background="@drawable/custom_menu_button"
         android:text="@string/send_suggestion" />
 

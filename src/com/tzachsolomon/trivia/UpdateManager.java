@@ -297,6 +297,18 @@ public class UpdateManager implements DatabaseUpdateListener,
 							public void onClick(DialogInterface dialog,
 									int which) {
 								//
+								if (m_UpdateType == JSONHandler.TYPE_UPDATE_CATEGORIES) {
+									
+									if ( m_CategoriesListener != null){
+										m_CategoriesListener.onUpdateCategoriesPostponed();
+									}
+
+								} else if (m_UpdateType == JSONHandler.TYPE_UPDATE_QUESTIONS) {
+
+									if ( m_QuestionsListener != null){
+										m_QuestionsListener.onUpdateQuestionsPostponed();
+									}
+								}
 
 							}
 						});
@@ -378,12 +390,14 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 	static public interface CategoriesListener {
 		public void onCategoriesUpdated(int i_UpdateFrom);
+		public void onUpdateCategoriesPostponed();
 	}
 
 	static public interface QuestionsListener {
 		public void onQuestionsCorrectRatioSent();
 		public void onQuestionsUpdated(int i_UpdateFrom);
 		public void updateQuestionProgress(int i_Progress,int i_Max);
+		public void onUpdateQuestionsPostponed();
 	}
 
 	public void setCategoriesListener(CategoriesListener listener) {

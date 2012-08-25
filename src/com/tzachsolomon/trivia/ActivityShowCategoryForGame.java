@@ -562,4 +562,10 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 		initItemsFromDatabase();
 		
 	}
+
+	@Override
+	public void onUpdateCategoriesPostponed() {
+		// 
+		
+	}
 }
