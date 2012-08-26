@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+import android.preference.PreferenceManager;
 
 
 import android.preference.PreferenceCategory;
@@ -31,8 +32,10 @@ public class ActivityPrefs extends PreferenceActivity implements
 		try{
 			addPreferencesFromResource(R.xml.prefs);
 		}catch (Exception e){
-			// TODO: in case error, restore to defaults and print a message about it
-			
+			// 
+			PreferenceManager.getDefaultSharedPreferences(this).edit().clear();
+			PreferenceManager.getDefaultSharedPreferences(this).edit().commit();
+			addPreferencesFromResource(R.xml.prefs);
 		}
 		
 		
