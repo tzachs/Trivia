@@ -2,10 +2,13 @@ package com.tzachsolomon.trivia;
 
 
 
+
+
 import android.content.SharedPreferences;
 
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
+
 
 import android.preference.PreferenceCategory;
 
@@ -25,8 +28,12 @@ public class ActivityPrefs extends PreferenceActivity implements
 		//
 		super.onCreate(savedInstanceState);
 
-		addPreferencesFromResource(R.xml.prefs);
-		
+		try{
+			addPreferencesFromResource(R.xml.prefs);
+		}catch (Exception e){
+			// TODO: in case error, restore to defaults and print a message about it
+			
+		}
 		
 		
 		checkBoxPreferenceAllowUpdateMobileNetwork = (CheckBoxPreference) findPreference("checkBoxPreferenceAllowUpdateMobileNetwork");

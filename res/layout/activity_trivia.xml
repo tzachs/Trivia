@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/relativeLayoutActivityTrivia"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/background_shape"
-    android:orientation="vertical"
-    android:id="@+id/relativeLayoutActivityTrivia"
-     >
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/textViewCurrentUser"
@@ -21,7 +20,6 @@
         android:id="@+id/buttonNewGameSimple"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        
         android:layout_centerInParent="true"
         android:layout_marginBottom="4dp"
         android:layout_marginLeft="4dp"
@@ -60,25 +58,28 @@
         android:id="@+id/sd"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:content="@+id/sdcontent"
-        android:handle="@+id/sdhandle" 
         android:allowSingleTap="true"
-        
-        >
+        android:content="@+id/sdcontent"
+        android:handle="@+id/sdhandle" >
 
-        <Button
-            android:id="@+id/sdhandle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/custom_menu_button"
-            android:text="@string/more" />
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/sdhandle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/custom_menu_button"
+                android:text="@string/more" />
+        </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/sdcontent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#000"
-             >
+            android:background="#000" >
 
             <Button
                 android:id="@+id/buttonUpdateDatabase"

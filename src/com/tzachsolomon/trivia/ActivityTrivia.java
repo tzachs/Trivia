@@ -41,6 +41,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 	// TODO: Later should be with counter of attempts
 	// TODO: create service to update the database daily
+	// TODO: activity menu for tablet
 
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
 
@@ -68,7 +69,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private TriviaDbEngine m_TrivaDbEngine;
 	private TextView textViewCurrentUser;
 
-	private boolean m_ButtonsLocckedDueToImportFromXML;
+	private boolean m_ButtonsLockedDueToImportFromXML;
 
 	protected boolean m_RegisterLater;
 
@@ -110,11 +111,11 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 				m_FirstTimeStartingDoNotTryToUpdate = true;
 
-				// Log.v(TAG, "Starting import questions from xml");
+				// Log.v(TAG, "Starting import questions from XML");
 				Toast.makeText(this,
 						getString(R.string.importing_questions_from_initial_file),
 						Toast.LENGTH_LONG).show();
-				m_ButtonsLocckedDueToImportFromXML = true;
+				m_ButtonsLockedDueToImportFromXML = true;
 
 				m_UpdateManager.importQuestionsFromXml();
 
@@ -138,7 +139,6 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 	private void lockButtonOnImportFromXMLFile() {
 		//
-
 		setLockReleaseButtons(false);
 
 	}
@@ -202,7 +202,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		
 		setUser();
 
-		if (m_ButtonsLocckedDueToImportFromXML
+		if (m_ButtonsLockedDueToImportFromXML
 				&& !m_FirstTimeStartingDoNotTryToUpdate) {
 
 			m_ProgressDialog.setCancelable(false);
@@ -232,7 +232,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		setContentView(R.layout.activity_trivia);
 
 		initializeButtons();
-		if (m_ButtonsLocckedDueToImportFromXML) {
+		if (m_ButtonsLockedDueToImportFromXML) {
 			lockButtonOnImportFromXMLFile();
 		} else {
 			releaseButtonsOnImportFromXMLFile();
@@ -605,7 +605,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 			Toast.makeText(ActivityTrivia.this,
 					getString(R.string.finished_importing_categories_from_initial_file),
 					Toast.LENGTH_LONG).show();
-			m_ButtonsLocckedDueToImportFromXML = false;
+			m_ButtonsLockedDueToImportFromXML = false;
 			m_ProgressDialog.dismiss();
 			break;
 
@@ -642,7 +642,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 			Toast.makeText(this,
 					getString(R.string.importing_categories_from_initial_file),
 					Toast.LENGTH_LONG).show();
-			// Log.v(TAG, "Starting import categories from xml");
+			// Log.v(TAG, "Starting import categories from XML");
 			m_UpdateManager.importCategoriesFromXml();
 
 			break;
