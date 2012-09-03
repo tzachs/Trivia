@@ -30,9 +30,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.SlidingDrawer;
-import android.widget.SlidingDrawer.OnDrawerOpenListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +40,9 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	// TODO: Later should be with counter of attempts
 	// TODO: create service to update the database daily
 	// TODO: activity menu for tablet
+	// TODO: check if needed to update from XML file using last update
+	// TODO: facebook users add on
+	// TODO: publish scores
 
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
 
@@ -58,6 +59,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private Button buttonNewGameCategories;
 	private Button buttonGameScores;
 	private Button buttonManageUsers;
+	private Button buttonSuggestQuestion;
 
 	private SharedPreferences m_SharedPreferences;
 
@@ -70,17 +72,16 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private TextView textViewCurrentUser;
 
 	private boolean m_ButtonsLockedDueToImportFromXML;
-
-	protected boolean m_RegisterLater;
+	protected boolean m_LaterRegisterUser;
 
 	private ProgressDialog m_ProgressDialog;
-
-	private Button buttonSuggestQuestion;
 
 	private SlidingDrawer slidingDrawer;
 
 	private boolean m_UpdateQuestionsLater;
 	private boolean m_UpdateCategoriesLater;
+
+	private int m_LaterRegisterUserCounter;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -99,7 +100,10 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private void checkIfNeedToShowFirstTimeMessageOrConfiguration() {
 		//
 		PackageInfo packageInfo = null;
-		String i = m_SharedPreferences.getString("showWhatsNew", "1.0");
+		String whatsNewVersion = m_SharedPreferences.getString("showWhatsNew",
+				"1.0");
+		String showConfigVersion = m_SharedPreferences.getString(
+				"showConfigWizard", "1.0");
 
 		m_FirstTimeStartingDoNotTryToUpdate = false;
 
@@ -107,12 +111,13 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 			packageInfo = getPackageManager().getPackageInfo(
 					"com.tzachsolomon.trivia", PackageManager.GET_META_DATA);
 
-			if (!packageInfo.versionName.contentEquals(i)) {
+			if (!packageInfo.versionName.contentEquals(whatsNewVersion)) {
 
 				m_FirstTimeStartingDoNotTryToUpdate = true;
 
 				// Log.v(TAG, "Starting import questions from XML");
-				Toast.makeText(this,
+				Toast.makeText(
+						this,
 						getString(R.string.importing_questions_from_initial_file),
 						Toast.LENGTH_LONG).show();
 				m_ButtonsLockedDueToImportFromXML = true;
@@ -120,7 +125,10 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 				m_UpdateManager.importQuestionsFromXml();
 
 				showWhatsNew();
-				showWizardSetup();
+				if (showConfigVersion.contentEquals("1")) {
+					showWizardSetup();
+					m_SharedPreferences.edit().putString("showConfigWizard","0").commit();
+				}
 
 				m_SharedPreferences.edit()
 						.putString("showWhatsNew", packageInfo.versionName)
@@ -177,7 +185,6 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		//
 		super.onStart();
 
-	
 	}
 
 	private void setUser() {
@@ -187,19 +194,18 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 			textViewCurrentUser.setText(getString(R.string.current_user_is_)
 					+ username);
 		}
-		
 
 	}
 
 	@Override
 	protected void onResume() {
 		//
-		
+
 		super.onResume();
-		
+
 		changeLanguageTo(m_SharedPreferences.getString(
 				"listPreferenceLanguages", "iw"));
-		
+
 		setUser();
 
 		if (m_ButtonsLockedDueToImportFromXML
@@ -207,10 +213,12 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 			m_ProgressDialog.setCancelable(false);
 			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			m_ProgressDialog.setTitle(getString(R.string.importing_questions_from_initial_file));
+			m_ProgressDialog
+					.setTitle(getString(R.string.importing_questions_from_initial_file));
 			m_ProgressDialog.show();
 
-		} else if (!m_FirstTimeStartingDoNotTryToUpdate && !m_UpdateQuestionsLater) {
+		} else if (!m_FirstTimeStartingDoNotTryToUpdate
+				&& !m_UpdateQuestionsLater) {
 			m_UpdateManager.updateQuestions(true);
 			showUserRegister();
 		}
@@ -220,10 +228,9 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private void changeLanguageTo(String string) {
 		//
 
-		
 		Locale locale = new Locale(string);
 		Locale.setDefault(locale);
-		//Log.i(TAG, "Changed lang to " + string);
+		// Log.i(TAG, "Changed lang to " + string);
 		Configuration config = new Configuration();
 		config.locale = locale;
 		getBaseContext().getResources().updateConfiguration(config,
@@ -249,21 +256,19 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		} catch (Exception e) {
 			m_CurrentUserId = -2;
 		}
-		
-		m_UpdateQuestionsLater = false;
 
+		m_UpdateQuestionsLater = false;
 
 		m_ProgressDialog = new ProgressDialog(this);
 		m_TrivaDbEngine = new TriviaDbEngine(this);
 		m_UpdateManager = new UpdateManager(this);
 		m_UpdateManager.setCategoriesListener(this);
 		m_UpdateManager.setQuestionsListener(this);
-		
-		slidingDrawer = (SlidingDrawer)findViewById(R.id.sd);
-		
-		
 
-		m_RegisterLater = false;
+		slidingDrawer = (SlidingDrawer) findViewById(R.id.sd);
+
+		m_LaterRegisterUser = false;
+		m_LaterRegisterUserCounter = 0;
 	}
 
 	private void initializeButtons() {
@@ -276,7 +281,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		buttonNewGameCategories = (Button) findViewById(R.id.buttonNewGameCategories);
 		buttonManageUsers = (Button) findViewById(R.id.buttonManageUsers);
 		buttonGameScores = (Button) findViewById(R.id.buttonGameScores);
-		buttonSuggestQuestion = (Button)findViewById(R.id.buttonSuggestQuestion);
+		buttonSuggestQuestion = (Button) findViewById(R.id.buttonSuggestQuestion);
 
 		buttonNewGameAllQuestions.setOnClickListener(this);
 		buttonManageDatabase.setOnClickListener(this);
@@ -306,7 +311,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		case R.id.buttonSuggestQuestion:
 			buttonSuggestQuestion_Clicked();
 			break;
-			
+
 		case R.id.buttonGameScores:
 			buttonGameScores_Clicked();
 			break;
@@ -343,10 +348,11 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	}
 
 	private void buttonSuggestQuestion_Clicked() {
-		// 
-		Intent intent = new Intent(ActivityTrivia.this, ActivitySuggestQuestion.class);
+		//
+		Intent intent = new Intent(ActivityTrivia.this,
+				ActivitySuggestQuestion.class);
 		startActivity(intent);
-		
+
 	}
 
 	private void buttonGameScores_Clicked() {
@@ -376,7 +382,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 			break;
 		case REQUEST_CODE_BACK_FROM_ACTIVITY_USER_MANAGER:
 			m_CurrentUserId = resultCode;
-			//Log.v(TAG, "m_CurrentUserId --> " + m_CurrentUserId);
+			// Log.v(TAG, "m_CurrentUserId --> " + m_CurrentUserId);
 			changeToDefault();
 			break;
 		case REQUEST_CODE_BACK_FROM_PREFERENCES:
@@ -460,10 +466,19 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 									ActivityTrivia.this,
 									getString(R.string.registering_a_user_gives_you_the_ability_to_publish_scores_play_against_other_players_etc),
 									Toast.LENGTH_LONG).show();
-							m_RegisterLater = true;
+							m_LaterRegisterUser = true;
 						}
 					});
-			if (!m_RegisterLater) {
+			if (m_LaterRegisterUser) {
+				m_LaterRegisterUserCounter++;
+
+				// after 5 times showing the screen displaying again the
+				// register user
+				if (m_LaterRegisterUserCounter == 5) {
+					m_LaterRegisterUserCounter = 0;
+					m_LaterRegisterUser = false;
+				}
+			} else {
 				alert.show();
 			}
 		}
@@ -596,13 +611,15 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		//
 		switch (i_UpdateFrom) {
 		case TriviaDbEngine.TYPE_UPDATE_FROM_INTERNET:
-			Toast.makeText(ActivityTrivia.this,
+			Toast.makeText(
+					ActivityTrivia.this,
 					getString(R.string.finished_updating_categories_from_internet),
 					Toast.LENGTH_LONG).show();
 			break;
 		case TriviaDbEngine.TYPE_UPDATE_FROM_XML_FILE:
 
-			Toast.makeText(ActivityTrivia.this,
+			Toast.makeText(
+					ActivityTrivia.this,
 					getString(R.string.finished_importing_categories_from_initial_file),
 					Toast.LENGTH_LONG).show();
 			m_ButtonsLockedDueToImportFromXML = false;
@@ -629,14 +646,16 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		// //
 		switch (i_UpdateFrom) {
 		case TriviaDbEngine.TYPE_UPDATE_FROM_INTERNET:
-			Toast.makeText(ActivityTrivia.this,
+			Toast.makeText(
+					ActivityTrivia.this,
 					getString(R.string.finished_importing_questions_from_internet),
 					Toast.LENGTH_LONG).show();
 			break;
 		case TriviaDbEngine.TYPE_UPDATE_FROM_XML_FILE:
 			// starting to update the categories
 			releaseButtonsOnImportFromXMLFile();
-			Toast.makeText(ActivityTrivia.this,
+			Toast.makeText(
+					ActivityTrivia.this,
 					getString(R.string.finished_importing_questions_from_initial_file),
 					Toast.LENGTH_LONG).show();
 			Toast.makeText(this,
@@ -660,19 +679,18 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		m_ProgressDialog.setProgress(i_Progress);
 	}
 
-
 	@Override
 	public void onUpdateQuestionsPostponed() {
-		// 
+		//
 		m_UpdateQuestionsLater = true;
-		
+
 	}
 
 	@Override
 	public void onUpdateCategoriesPostponed() {
-		// 
+		//
 		m_UpdateCategoriesLater = true;
-		
+
 	}
 
 }

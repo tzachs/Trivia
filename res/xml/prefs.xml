@@ -159,8 +159,9 @@
     <PreferenceCategory android:key="invisible" >
 -
         <EditTextPreference
-            android:defaultValue="0"
+            android:defaultValue="1"
             android:key="showConfigWizard" />
+        
         <EditTextPreference
             android:defaultValue="0"
             android:key="showWhatsNew" />

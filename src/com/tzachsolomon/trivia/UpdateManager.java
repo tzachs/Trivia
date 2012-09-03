@@ -440,8 +440,9 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 	public void importQuestionsFromXml() {
 		// 
+		AsyncTaskImportQuestionsFromXml a = new AsyncTaskImportQuestionsFromXml(m_TriviaDb.getQuestionsLastUpdate());
+		a.execute();
 		
-		new AsyncTaskImportQuestionsFromXml().execute();
 	}
 	
 	public class AsyncTaskImportCategoriesFromXml extends AsyncTask<Void, Integer, Void>{
@@ -503,6 +504,11 @@ public class UpdateManager implements DatabaseUpdateListener,
 	public class AsyncTaskImportQuestionsFromXml extends AsyncTask<Void, Integer, Void> {
 
 		private XmlDataHandlerQuestions xmlDataHandler;
+		private long m_LastUpdate;
+		
+		public AsyncTaskImportQuestionsFromXml ( long i_LastUpdate){
+			m_LastUpdate = i_LastUpdate;
+		}
 
 		@Override
 		protected void onPostExecute(Void result) {
@@ -540,7 +546,7 @@ public class UpdateManager implements DatabaseUpdateListener,
 				reader = new InputStreamReader(raw,"UTF-8");
 				InputSource inputSource = new InputSource(reader);
 				inputSource.setEncoding("UTF-8");
-				xmlDataHandler = new XmlDataHandlerQuestions();
+				xmlDataHandler = new XmlDataHandlerQuestions(m_LastUpdate);
 				try {
 					saxParser.parse(inputSource, xmlDataHandler);
 				} catch (SAXException e) {

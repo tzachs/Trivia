@@ -35,13 +35,20 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 	private boolean inColQuestionId;
 	private boolean inColQuestion;
 
+	private static final int SKIP_QUESTION_DONT_SKIP = 0;
+	private static final int SKIP_QUESTION_DUE_TO_ERROR = 1;
+	private static final int SKIP_QUESTION_DUE_LAST_UPDATE = 2;
+
 	private StringBuilder currentString;
 
 	private XmlDataHandlerQuestionListener m_Listener;
 
-	private boolean m_SkipQuestionDueToParseError;
+	private int m_SkipQuestion;
 
-	public XmlDataHandlerQuestions() {
+	private long m_LastUpdate;
+
+	public XmlDataHandlerQuestions(long i_LastUpdate) {
+		m_LastUpdate = i_LastUpdate;
 		m_Questions = new ArrayList<ContentValues>();
 	}
 
@@ -83,16 +90,23 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 		} else if (localName.contentEquals("row")) {
 
 			if (inQuestionsDataRow) {
-				
-				// checking if there was error during question parsing
-				if ( m_SkipQuestionDueToParseError){
+
+				switch (m_SkipQuestion) {
+				case SKIP_QUESTION_DONT_SKIP:
+					m_Questions.add(m_Question);
+					break;
+				case SKIP_QUESTION_DUE_LAST_UPDATE:
+					break;
+				case SKIP_QUESTION_DUE_TO_ERROR:
 					// error was detected, checking if we need to send event
-					if ( m_Listener != null ){
+					if (m_Listener != null) {
 						m_Listener.errorQuestionParsingDetected(m_Question);
 					}
-				} else {
-					m_Questions.add(m_Question);
+					break;
+				default:
+					break;
 				}
+
 			}
 
 			setInColFalse();
@@ -141,7 +155,8 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 
 				if (inQuestionsData) {
 					inQuestionsDataRow = true;
-					m_SkipQuestionDueToParseError = false;
+					m_SkipQuestion = SKIP_QUESTION_DONT_SKIP;
+
 					m_Question = new ContentValues();
 				}
 			} else if (localName.contentEquals("field")) {
@@ -225,15 +240,14 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 
 		try {
 			String chars = new String(ch, start, length);
-			//Log.v(TAG, chars);
+			// Log.v(TAG, chars);
 
 			if (inColAnswer1) {
 
 				// only \n means the question parser ended, this section can be
 				// called multiple times if
 				// there are special characters such as &quot; that is why we
-				// need
-				// to check \n
+				// need to check \n
 				if (chars.contentEquals("\n")) {
 
 					inColAnswer1 = false;
@@ -243,8 +257,7 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 
 				} else {
 					// checking if this is the start of t he question, if so,
-					// create
-					// the StringBuilder
+					// create the StringBuilder
 					if (currentString == null) {
 						currentString = new StringBuilder();
 					}
@@ -341,10 +354,17 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 				m_Question.put(TriviaDbEngine.KEY_ENABLED, chars);
 				inColEnabled = false;
 			} else if (inColLanguage) {
-				m_Question.put(TriviaDbEngine.KEY_LANGUAGE, chars);
-				inColLanguage = false;
+			
+					m_Question.put(TriviaDbEngine.KEY_LANGUAGE, chars);
+					inColLanguage = false;
+				
 			} else if (inColLastUpdate) {
-				m_Question.put(TriviaDbEngine.KEY_LAST_UPDATE, chars);
+				if (m_LastUpdate < Long.parseLong(chars)) {
+					m_Question.put(TriviaDbEngine.KEY_LAST_UPDATE, chars);
+				}else{
+					m_SkipQuestion = SKIP_QUESTION_DUE_LAST_UPDATE;
+				}
+				
 				inColLastUpdate = false;
 			} else if (inColQuestion) {
 
@@ -377,17 +397,19 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 			}
 		} catch (NullPointerException e) {
 			// there is an error parsing the question
-			m_SkipQuestionDueToParseError = true;
-			//Log.e(TAG, e.getMessage());
+			m_SkipQuestion = SKIP_QUESTION_DUE_TO_ERROR;
+			// Log.e(TAG, e.getMessage());
 		} catch (Exception e) {
-			m_SkipQuestionDueToParseError = true;
-			//Log.e(TAG, e.getMessage());
+			m_SkipQuestion = SKIP_QUESTION_DUE_TO_ERROR;
+			// Log.e(TAG, e.getMessage());
 		}
 	}
 
 	public static interface XmlDataHandlerQuestionListener {
 		public void onEndDocument();
+
 		public void onStartDocument();
+
 		public void errorQuestionParsingDetected(ContentValues i_Question);
 	}
 

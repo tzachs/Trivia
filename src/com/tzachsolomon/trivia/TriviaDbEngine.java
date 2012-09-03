@@ -865,7 +865,9 @@ public class TriviaDbEngine {
 		long ret;
 		int columnIndex0;
 		long qlastupdate;
-		this.openDbReadable();
+		
+		this.openDbWritable();
+		
 
 		Cursor cursor = ourDatabase.query(TABLE_QUESTIONS, columns, null, null,
 				null, null, null);
