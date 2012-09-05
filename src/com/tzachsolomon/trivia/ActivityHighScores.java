@@ -39,6 +39,7 @@ public class ActivityHighScores extends Activity {
 
 	private void sendLocalScores() {
 		// 
+		// TODO: 1. check if there are local scores that were not uploaded
 		
 		
 	}

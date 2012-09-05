@@ -1042,8 +1042,8 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 		// if m_UserId is of logged in user than enter it to the database
 		// 
 		if ( m_UserId > -1 ){
-			// TODO: try sending score to database, if fail, adding it to local on callback
-			m_JSONHandler.sendScoreToDatabase(m_UserId,m_CurrentGameType, m_GameScore,-1);
+			// TODO: facebook user support
+			m_JSONHandler.sendScoreToDatabase(m_UserId,m_CurrentGameType, m_GameScore);
 			
 			
 		}
@@ -1194,7 +1194,7 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 	}
 
 	@Override
-	public void onScoreAdded(String i_Response, int i_Result) {
+	public void onScoreAdded( int i_Result) {
 		// 
 		if ( i_Result == JSONHandler.SUCCESS_SCORE_ADDED ){
 				

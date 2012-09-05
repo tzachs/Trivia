@@ -26,8 +26,6 @@ import org.json.JSONObject;
 
 import com.tzachsolomon.trivia.JSONHandler.ScoreUpdateListener;
 
-
-
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -72,14 +70,15 @@ public class JSONHandler {
 	private static final int SUCCESS_CODE_USER_EXIST = 2002;
 	public static final int SUCCESS_QUESTION_ADDED = 2003;
 	public static final int SUCCESS_SCORE_ADDED = 2004;
-	
+
 	private static final int ERROR_CODE_USER_DOES_NOT_EXISTS = 1003;
 	private static final int ERROR_CODE_USER_EXIST = 1001;
 	private static final int ERROR_CODE_USER_WRONG_PASSWORD = 1004;
 	public static final int ERROR_QUESTION_NOT_ADDED = 1005;
 	public static final int ERROR_SCORE_WAS_NOT_ADDED = 1006;
-	
-//Success
+	public static final String TAG_SEND_GAME_SCORE = null;
+
+	// Success
 	private String m_ServerUrl;
 	private HttpClient m_HttpClient;
 	private Context m_Context;
@@ -287,8 +286,8 @@ public class JSONHandler {
 		int status;
 		HttpPost httpPost = new HttpPost(i_URL);
 		try {
-			httpPost.setEntity(new UrlEncodedFormEntity(params,"UTF-8"));
-			
+			httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
+
 			HttpResponse httpResponse = m_HttpClient.execute(httpPost);
 
 			status = httpResponse.getStatusLine().getStatusCode();
@@ -874,19 +873,21 @@ public class JSONHandler {
 	static public interface UserManageListener {
 
 		public void onUserLogin(String i_Response, int i_UserId);
+
 		public void onUserRegister(String i_Response, int i_UserId);
 	}
 
 	static public interface DatabaseUpdateListener {
 
 		public void onDownloadedQuestions(ContentValues[] i_DownloadedQuestions);
+
 		public void onDownloadedCategories(
 				ContentValues[] i_DownloadedCategories);
 
 	}
-	
+
 	static public interface ScoreUpdateListener {
-		public void onScoreAdded (String i_Response, int i_Result);
+		public void onScoreAdded( int i_Result);
 	}
 
 	static public interface SuggestQuestionListener {
@@ -906,8 +907,8 @@ public class JSONHandler {
 		//
 
 	}
-	
-	public void setScoreUpdateListener (ScoreUpdateListener listener){
+
+	public void setScoreUpdateListener(ScoreUpdateListener listener) {
 		this.m_ScoreUpdateListener = listener;
 	}
 
@@ -1023,15 +1024,14 @@ public class JSONHandler {
 
 	public class AsyncTaskSendSuggestion extends
 			AsyncTask<String, Integer, Integer> {
-		
+
 		@Override
 		protected void onPostExecute(Integer result) {
-			// 
+			//
 			super.onPostExecute(result);
 			// callback
 			if (m_SuggestQuestionListener != null) {
-				m_SuggestQuestionListener
-						.onSuggestionSent(result);
+				m_SuggestQuestionListener.onSuggestionSent(result);
 			}
 
 		}
@@ -1042,7 +1042,6 @@ public class JSONHandler {
 			List<NameValuePair> params1 = new ArrayList<NameValuePair>();
 			JSONObject result;
 			Integer ret = -1;
-			
 
 			params1.add(new BasicNameValuePair("tag", TAG_SUGGEST_QUESTION));
 			params1.add(new BasicNameValuePair("userId", params[0]));
@@ -1062,17 +1061,17 @@ public class JSONHandler {
 
 					if (successCode == SUCCESS_QUESTION_ADDED) {
 						ret = SUCCESS_QUESTION_ADDED;
-			
+
 					} else if (errorCode == ERROR_QUESTION_NOT_ADDED) {
 						ret = ERROR_QUESTION_NOT_ADDED;
 					}
 				} else {
 					//
-					
+
 				}
 			} catch (JSONException e) {
 				//
-				
+
 				e.printStackTrace();
 			}
 
@@ -1095,15 +1094,76 @@ public class JSONHandler {
 
 		AsyncTaskSendSuggestion a = new AsyncTaskSendSuggestion();
 		a.execute(params);
+
+	}
+
+	public void sendScoreToDatabase(int userId, int currentGameType,
+			int gameScore) {
+		//
+		String[] params = new String[3];
+		
+		params[0] = String.valueOf(userId);
+		params[1] = String.valueOf(currentGameType);
+		params[2] = String.valueOf(gameScore);
+		
+		AsyncTaskSendScore a = new AsyncTaskSendScore();
+		a.execute(params);
 		
 	}
-	
-	
 
-	public void sendScoreToDatabase(int m_UserId, int m_CurrentGameType,
-			int m_GameScore, int i) {
-		// 
-		
+	public class AsyncTaskSendScore extends AsyncTask<String, Integer, Integer> {
+
+		@Override
+		protected void onPostExecute(Integer result) {
+			//
+			super.onPostExecute(result);
+			// callback
+			if (m_ScoreUpdateListener != null){
+				m_ScoreUpdateListener.onScoreAdded(result);
+				
+			}
+
+		}
+
+		@Override
+		protected Integer doInBackground(String... params) {
+			//
+			List<NameValuePair> params1 = new ArrayList<NameValuePair>();
+			JSONObject result;
+			Integer ret = -1;
+
+			params1.add(new BasicNameValuePair("tag", TAG_SEND_GAME_SCORE));
+			params1.add(new BasicNameValuePair("userId", params[0]));
+			params1.add(new BasicNameValuePair("gameType", params[1]));
+			params1.add(new BasicNameValuePair("gameScore", params[2]));
+			
+			result = getJSONObjectFromUrl(m_ServerUrl, params1);
+
+			try {
+				if (result != null) {
+					// checking if user added successfully
+					int successCode = result.getInt(RESULT_SUCCESS);
+					int errorCode = result.getInt(RESULT_ERROR);
+					
+					if (successCode == SUCCESS_SCORE_ADDED){
+						ret = SUCCESS_SCORE_ADDED;
+
+					} else if (errorCode == ERROR_SCORE_WAS_NOT_ADDED){
+						ret = ERROR_SCORE_WAS_NOT_ADDED;
+					}
+				} else {
+					//
+
+				}
+			} catch (JSONException e) {
+				//
+
+				e.printStackTrace();
+			}
+
+			return ret;
+		}
+
 	}
 
 }
