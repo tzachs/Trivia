@@ -24,6 +24,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.tzachsolomon.trivia.JSONHandler.ScoreUpdateListener;
+
 
 
 import android.app.ProgressDialog;
@@ -66,14 +68,18 @@ public class JSONHandler {
 	private static final String TAG_USER_LOGIN = "tagUserLogin";
 	private static final String TAG_SUGGEST_QUESTION = "tagSuggestQuestion";
 
-	private static final int SUCCUESS_CODE_USER_REGISTERED = 2001;
-	private static final int SUCCUESS_CODE_USER_EXIST = 2002;
-	public static final int SUCCUESS_QUESTION_ADDED = 2003;
+	private static final int SUCCESS_CODE_USER_REGISTERED = 2001;
+	private static final int SUCCESS_CODE_USER_EXIST = 2002;
+	public static final int SUCCESS_QUESTION_ADDED = 2003;
+	public static final int SUCCESS_SCORE_ADDED = 2004;
+	
 	private static final int ERROR_CODE_USER_DOES_NOT_EXISTS = 1003;
 	private static final int ERROR_CODE_USER_EXIST = 1001;
 	private static final int ERROR_CODE_USER_WRONG_PASSWORD = 1004;
 	public static final int ERROR_QUESTION_NOT_ADDED = 1005;
-
+	public static final int ERROR_SCORE_WAS_NOT_ADDED = 1006;
+	
+//Success
 	private String m_ServerUrl;
 	private HttpClient m_HttpClient;
 	private Context m_Context;
@@ -83,6 +89,7 @@ public class JSONHandler {
 	private UserManageListener m_UserManagerListener;
 	private DatabaseUpdateListener m_DatabaseUpdateListener;
 	private SuggestQuestionListener m_SuggestQuestionListener;
+	private ScoreUpdateListener m_ScoreUpdateListener;
 
 	/**
 	 * CTOR
@@ -782,7 +789,7 @@ public class JSONHandler {
 				int successCode = result.getInt(RESULT_SUCCESS);
 				int errorCode = result.getInt(RESULT_ERROR);
 
-				if (successCode == SUCCUESS_CODE_USER_EXIST) {
+				if (successCode == SUCCESS_CODE_USER_EXIST) {
 					ret = m_Context
 							.getString(R.string.user_authenticated_succesfully);
 					userId = result.getInt("userId");
@@ -842,7 +849,7 @@ public class JSONHandler {
 				int successCode = result.getInt(RESULT_SUCCESS);
 				int errorCode = result.getInt(RESULT_ERROR);
 
-				if (successCode == SUCCUESS_CODE_USER_REGISTERED) {
+				if (successCode == SUCCESS_CODE_USER_REGISTERED) {
 					ret = m_Context
 							.getString(R.string.user_registered_succesfully);
 					userId = result.getInt("userId");
@@ -867,25 +874,27 @@ public class JSONHandler {
 	static public interface UserManageListener {
 
 		public void onUserLogin(String i_Response, int i_UserId);
-
 		public void onUserRegister(String i_Response, int i_UserId);
 	}
 
 	static public interface DatabaseUpdateListener {
 
 		public void onDownloadedQuestions(ContentValues[] i_DownloadedQuestions);
-
 		public void onDownloadedCategories(
 				ContentValues[] i_DownloadedCategories);
 
+	}
+	
+	static public interface ScoreUpdateListener {
+		public void onScoreAdded (String i_Response, int i_Result);
 	}
 
 	static public interface SuggestQuestionListener {
 		public void onSuggestionSent(int result);
 	}
 
-	public void setSuggestQuestionListener(SuggestQuestionListener i_Listener) {
-		this.m_SuggestQuestionListener = i_Listener;
+	public void setSuggestQuestionListener(SuggestQuestionListener listener) {
+		this.m_SuggestQuestionListener = listener;
 	}
 
 	public void setUserManageListener(UserManageListener listener) {
@@ -896,6 +905,10 @@ public class JSONHandler {
 		this.m_DatabaseUpdateListener = listener;
 		//
 
+	}
+	
+	public void setScoreUpdateListener (ScoreUpdateListener listener){
+		this.m_ScoreUpdateListener = listener;
 	}
 
 	public void updateServerIpFromPreferences() {
@@ -1047,8 +1060,8 @@ public class JSONHandler {
 					int successCode = result.getInt(RESULT_SUCCESS);
 					int errorCode = result.getInt(RESULT_ERROR);
 
-					if (successCode == SUCCUESS_QUESTION_ADDED) {
-						ret = SUCCUESS_QUESTION_ADDED;
+					if (successCode == SUCCESS_QUESTION_ADDED) {
+						ret = SUCCESS_QUESTION_ADDED;
 			
 					} else if (errorCode == ERROR_QUESTION_NOT_ADDED) {
 						ret = ERROR_QUESTION_NOT_ADDED;
@@ -1082,7 +1095,15 @@ public class JSONHandler {
 
 		AsyncTaskSendSuggestion a = new AsyncTaskSendSuggestion();
 		a.execute(params);
+		
+	}
+	
+	
 
+	public void sendScoreToDatabase(int m_UserId, int m_CurrentGameType,
+			int m_GameScore, int i) {
+		// 
+		
 	}
 
 }

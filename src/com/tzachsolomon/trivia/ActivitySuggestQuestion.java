@@ -81,7 +81,7 @@ public class ActivitySuggestQuestion extends Activity implements
 	@Override
 	public void onSuggestionSent(int result) {
 		//
-		if (result == JSONHandler.SUCCUESS_QUESTION_ADDED) {
+		if (result == JSONHandler.SUCCESS_QUESTION_ADDED) {
 			Toast.makeText(
 					ActivitySuggestQuestion.this,
 					getString(R.string.thank_you_for_your_contribution_to_social_trivia_),

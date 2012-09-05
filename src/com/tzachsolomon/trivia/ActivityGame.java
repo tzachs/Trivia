@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import java.util.Random;
 
+import com.tzachsolomon.trivia.JSONHandler.ScoreUpdateListener;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -30,7 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher.ViewFactory;
 
-public class ActivityGame extends Activity implements OnClickListener, ViewFactory {
+public class ActivityGame extends Activity implements OnClickListener, ViewFactory, ScoreUpdateListener {
 
 	public static final String TAG = ActivityGame.class.getSimpleName();
 
@@ -131,6 +133,8 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 	private int m_UserId;
 
 	private TextSwitcher textSwitcherTime;
+
+	private JSONHandler m_JSONHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -573,6 +577,10 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 		//
 		// initialize the sounds
 
+		m_JSONHandler = new JSONHandler(this);
+		
+		m_JSONHandler.setScoreUpdateListener(this);
+		
 		m_UserId = -1;
 		
 		m_SoundEnabled = m_SharedPreferences.getBoolean(
@@ -1034,7 +1042,9 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 		// if m_UserId is of logged in user than enter it to the database
 		// 
 		if ( m_UserId > -1 ){
-			m_TriviaDb.addScoreToDatabase(m_UserId, m_CurrentGameType, m_GameScore);
+			// TODO: try sending score to database, if fail, adding it to local on callback
+			m_JSONHandler.sendScoreToDatabase(m_UserId,m_CurrentGameType, m_GameScore,-1);
+			
 			
 		}
 
@@ -1180,6 +1190,17 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 		t.setTextSize(18);
 		
 		return t;
+		
+	}
+
+	@Override
+	public void onScoreAdded(String i_Response, int i_Result) {
+		// 
+		if ( i_Result == JSONHandler.SUCCESS_SCORE_ADDED ){
+				
+		}else if ( i_Result == JSONHandler.ERROR_SCORE_WAS_NOT_ADDED){
+			m_TriviaDb.addScoreToDatabase(m_UserId, m_CurrentGameType, m_GameScore);
+		}
 		
 	}
 

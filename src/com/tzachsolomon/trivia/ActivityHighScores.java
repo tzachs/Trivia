@@ -1,3 +1,4 @@
+
 package com.tzachsolomon.trivia;
 
 import java.util.Date;
@@ -19,20 +20,35 @@ public class ActivityHighScores extends Activity {
 	private TriviaDbEngine m_TriviaDb;
 	private SparseArray<String> m_Users;
 	private SparseArray<String> m_GameTypes;
+	private JSONHandler m_JSONHandler;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//
+		// TODO: 1. send local scores to database
+		// TODO: 2. fetch public scores from database and display them
+		// TODO: 3. divide by game type / all game types combined
+		
+		
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_high_scores);
 
 		initializeVariables();
+		sendLocalScores();
+	}
+
+	private void sendLocalScores() {
+		// 
+		
+		
 	}
 
 	private void initializeVariables() {
 
 		//
-
+		m_JSONHandler = new JSONHandler(this);
+		
+		
 		m_TriviaDb = new TriviaDbEngine(this);
 
 		m_Users = m_TriviaDb.getUserNames();
@@ -93,13 +109,14 @@ public class ActivityHighScores extends Activity {
 		dateFormat = new Date(row.getAsLong(TriviaDbEngine.KEY_COL_GAME_ID));
 		date.setText(dateFormat.toLocaleString());
 
-		rowCounter.setText("" + i_RowCounter);
+		rowCounter.setText(String.valueOf(i_RowCounter));
 
 		rowView.addView(rowCounter);
 		rowView.addView(user);
 		rowView.addView(score);
 		rowView.addView(type);
 		rowView.addView(date);
+		
 		return rowView;
 	}
 
