@@ -71,10 +71,10 @@ public class TriviaDbEngine {
 
 	private static final String TABLE_GAMES = "tblGames";
 
-	public static final String KEY_COL_GAME_ID = "colGameId";
+	public static final String KEY_COL_GAME_TIME = "colGameTime";
 	public static final String KEY_COL_GAME_TYPE = "colGameType";
 	public static final String KEY_COL_GAME_SCORE = "colGameScore";
-	private static final String KEY_COL_GAME_UPLOADED = "colGameUploaded";
+	
 
 	public static final int TYPE_UPDATE_FROM_XML_FILE = 1001;
 	public static final int TYPE_UPDATE_FROM_INTERNET = 1002;
@@ -110,11 +110,11 @@ public class TriviaDbEngine {
 			sb.append(TABLE_GAMES);
 			sb.append(" ( ");
 			sb.append(KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, ");
-			sb.append(KEY_COL_GAME_ID + " INTEGER NOT NULL, ");
+			sb.append(KEY_COL_GAME_TIME + " INTEGER NOT NULL, ");
 			sb.append(KEY_COL_USER_ID + " INTEGER NOT NULL, ");
 			sb.append(KEY_COL_GAME_TYPE + " INTEGER NOT NULL, ");
-			sb.append(KEY_COL_GAME_SCORE + " INTEGER NOT NULL, ");
-			sb.append(KEY_COL_GAME_UPLOADED + " INTEGER NOT NULL ");
+			sb.append(KEY_COL_GAME_SCORE + " INTEGER NOT NULL");
+			
 			sb.append(" );");
 
 			db.execSQL(sb.toString());
@@ -266,9 +266,9 @@ public class TriviaDbEngine {
 
 		this.openDbReadable();
 
-		String[] columns = new String[] { KEY_ROWID, KEY_COL_GAME_ID,
-				KEY_COL_USER_ID, KEY_COL_GAME_TYPE, KEY_COL_GAME_SCORE,
-				KEY_COL_GAME_UPLOADED };
+		String[] columns = new String[] { KEY_ROWID, KEY_COL_GAME_TIME,
+				KEY_COL_USER_ID, KEY_COL_GAME_TYPE, KEY_COL_GAME_SCORE
+				 };
 
 		Cursor cursor = ourDatabase.query(TABLE_GAMES, columns, null, null,
 				null, null, KEY_COL_GAME_SCORE + " DESC");
@@ -934,12 +934,11 @@ public class TriviaDbEngine {
 
 		ContentValues cv = new ContentValues();
 
-		cv.put(KEY_COL_GAME_ID, System.currentTimeMillis());
+		cv.put(KEY_COL_GAME_TIME, System.currentTimeMillis());
 		cv.put(KEY_COL_GAME_SCORE, i_GameScore);
 		cv.put(KEY_COL_GAME_TYPE, i_GameType);
 		cv.put(KEY_COL_USER_ID, i_UserId);
-		cv.put(KEY_COL_GAME_UPLOADED, 0);
-
+		
 		retCode = ourDatabase.insert(TABLE_GAMES, null, cv);
 
 		if (m_UpdateListener != null) {
@@ -1144,6 +1143,16 @@ public class TriviaDbEngine {
 
 		return ret;
 
+	}
+
+	public int deleteScoreFromDatabase(int rowInDatabase) {
+		// 
+		int ret;
+		this.openDbWritable();
+		ret = ourDatabase.delete(TABLE_GAMES, KEY_ROWID + "=" + rowInDatabase, null);
+		this.closeDb();
+
+		return ret;		
 	}
 
 }

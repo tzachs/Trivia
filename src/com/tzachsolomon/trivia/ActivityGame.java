@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import java.util.Random;
 
-import com.tzachsolomon.trivia.JSONHandler.ScoreUpdateListener;
+import com.tzachsolomon.trivia.JSONHandler.ScoreListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -32,7 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher.ViewFactory;
 
-public class ActivityGame extends Activity implements OnClickListener, ViewFactory, ScoreUpdateListener {
+public class ActivityGame extends Activity implements OnClickListener, ViewFactory, ScoreListener {
 
 	public static final String TAG = ActivityGame.class.getSimpleName();
 
@@ -1043,7 +1043,12 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 		// 
 		if ( m_UserId > -1 ){
 			// TODO: facebook user support
-			m_JSONHandler.sendScoreToDatabase(m_UserId,m_CurrentGameType, m_GameScore);
+			m_JSONHandler.uploadScoreToDatabase(
+					String.valueOf(	m_UserId),
+					String.valueOf(m_CurrentGameType), 
+					String.valueOf(m_GameScore),
+					String.valueOf(System.currentTimeMillis()),
+					-1);
 			
 			
 		}
@@ -1193,6 +1198,8 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 		
 	}
 
+	
+	
 	@Override
 	public void onScoreAdded( int i_Result) {
 		// 
@@ -1203,5 +1210,12 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 		}
 		
 	}
+
+	@Override
+	public void deleteScoreFromDatabase(int rowInDatabase) {
+		// 
+		
+	}
+
 
 }

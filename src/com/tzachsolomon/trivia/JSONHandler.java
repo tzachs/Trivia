@@ -24,8 +24,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.tzachsolomon.trivia.JSONHandler.ScoreUpdateListener;
-
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
@@ -65,18 +63,23 @@ public class JSONHandler {
 	private static final String TAG_USER_REGISTER = "tagUserRegister";
 	private static final String TAG_USER_LOGIN = "tagUserLogin";
 	private static final String TAG_SUGGEST_QUESTION = "tagSuggestQuestion";
+	private static final String TAG_DOWNLOAD_GAME_SCORES = "tagDownloadGameScores";
+	public static final String TAG_UPLOAD_GAME_SCORE = "tagUploadGameScore";
 
+	private static final int ERROR_CODE_USER_EXIST = 1001;
+	//private static final int ERROR_ADDING_USER = 1002;
+	private static final int ERROR_CODE_USER_DOES_NOT_EXISTS = 1003;
+	private static final int ERROR_CODE_USER_WRONG_PASSWORD = 1004;
+	public static final int ERROR_QUESTION_NOT_ADDED = 1005;
+	public static final int ERROR_SCORE_WAS_NOT_ADDED = 1006;
+	
 	private static final int SUCCESS_CODE_USER_REGISTERED = 2001;
 	private static final int SUCCESS_CODE_USER_EXIST = 2002;
 	public static final int SUCCESS_QUESTION_ADDED = 2003;
 	public static final int SUCCESS_SCORE_ADDED = 2004;
 
-	private static final int ERROR_CODE_USER_DOES_NOT_EXISTS = 1003;
-	private static final int ERROR_CODE_USER_EXIST = 1001;
-	private static final int ERROR_CODE_USER_WRONG_PASSWORD = 1004;
-	public static final int ERROR_QUESTION_NOT_ADDED = 1005;
-	public static final int ERROR_SCORE_WAS_NOT_ADDED = 1006;
-	public static final String TAG_SEND_GAME_SCORE = null;
+	
+
 
 	// Success
 	private String m_ServerUrl;
@@ -88,7 +91,8 @@ public class JSONHandler {
 	private UserManageListener m_UserManagerListener;
 	private DatabaseUpdateListener m_DatabaseUpdateListener;
 	private SuggestQuestionListener m_SuggestQuestionListener;
-	private ScoreUpdateListener m_ScoreUpdateListener;
+	private ScoreListener m_ScoreUpdateListener;
+	private JSONArray jsonArray;
 
 	/**
 	 * CTOR
@@ -164,6 +168,29 @@ public class JSONHandler {
 		}
 
 		return ret;
+	}
+	
+	private ContentValues convertJSONObjectToGameScoreContentValue(
+			JSONObject jsonObject) throws JSONException {
+		// 
+		
+		ContentValues ret = new ContentValues();
+
+		String[] keys = { TriviaDbEngine.KEY_COL_USERNAME,
+				TriviaDbEngine.KEY_COL_GAME_SCORE, TriviaDbEngine.KEY_COL_GAME_TYPE,
+				TriviaDbEngine.KEY_COL_GAME_TIME
+
+		};
+		int i = keys.length - 1;
+
+		while (i > -1) {
+			ret.put(keys[i], jsonObject.getString(keys[i]));
+			i--;
+		}
+
+		return ret;
+
+
 	}
 
 	/**
@@ -298,7 +325,9 @@ public class JSONHandler {
 				data = new String(EntityUtils.toString(httpEntity).getBytes(),
 						"UTF-8");
 
-				// Log.v(TAG, "the raw JSON response is " + data);
+				
+				// DEBUG
+				//Log.v(TAG, "the raw JSON response is " + data);
 
 				// try parse the string to a JSON object
 				try {
@@ -779,6 +808,8 @@ public class JSONHandler {
 		params.add(new BasicNameValuePair("username", i_Params[0]));
 		params.add(new BasicNameValuePair("userpass", md5hash(i_Params[1])));
 		params.add(new BasicNameValuePair("usermail", i_Params[2]));
+		
+		// 
 
 		result = getJSONObjectFromUrl(m_ServerUrl, params);
 
@@ -834,6 +865,8 @@ public class JSONHandler {
 		JSONObject result;
 		String ret = "";
 		int userId = -1;
+		
+		// TODO: add user type (trivia or facebook)
 
 		params.add(new BasicNameValuePair("tag", TAG_USER_REGISTER));
 		params.add(new BasicNameValuePair("username", i_Params[0]));
@@ -886,8 +919,11 @@ public class JSONHandler {
 
 	}
 
-	static public interface ScoreUpdateListener {
-		public void onScoreAdded( int i_Result);
+	static public interface ScoreListener {
+		public void onScoreAdded(int i_Result);
+
+		public void deleteScoreFromDatabase(int rowInDatabase);
+
 	}
 
 	static public interface SuggestQuestionListener {
@@ -908,7 +944,7 @@ public class JSONHandler {
 
 	}
 
-	public void setScoreUpdateListener(ScoreUpdateListener listener) {
+	public void setScoreUpdateListener(ScoreListener listener) {
 		this.m_ScoreUpdateListener = listener;
 	}
 
@@ -1097,30 +1133,48 @@ public class JSONHandler {
 
 	}
 
-	public void sendScoreToDatabase(int userId, int currentGameType,
-			int gameScore) {
+	public void uploadScoreToDatabase(String userId, String currentGameType,
+			String gameScore, String currentTime, int rowIdInDatabase) {
 		//
-		String[] params = new String[3];
-		
+		String[] params = new String[4];
+
 		params[0] = String.valueOf(userId);
 		params[1] = String.valueOf(currentGameType);
 		params[2] = String.valueOf(gameScore);
-		
-		AsyncTaskSendScore a = new AsyncTaskSendScore();
+		params[3] = String.valueOf(currentTime);
+
+		AsyncTaskUploadScore a = new AsyncTaskUploadScore();
+		a.m_RowInDatabase = rowIdInDatabase;
 		a.execute(params);
-		
+
 	}
 
-	public class AsyncTaskSendScore extends AsyncTask<String, Integer, Integer> {
+	public class AsyncTaskUploadScore extends AsyncTask<String, Integer, Integer> {
+
+		public int m_RowInDatabase;
+
+		public AsyncTaskUploadScore() {
+			m_RowInDatabase = -1;
+		}
 
 		@Override
 		protected void onPostExecute(Integer result) {
 			//
 			super.onPostExecute(result);
 			// callback
-			if (m_ScoreUpdateListener != null){
+			if (m_ScoreUpdateListener != null) {
 				m_ScoreUpdateListener.onScoreAdded(result);
-				
+
+				// checking if uploaded a score that was in the local db, if so
+				// then delete if from the local db
+				if (m_RowInDatabase != -1) {
+					if (result == SUCCESS_SCORE_ADDED) {
+						m_ScoreUpdateListener
+								.deleteScoreFromDatabase(m_RowInDatabase);
+					}
+
+				}
+
 			}
 
 		}
@@ -1132,11 +1186,12 @@ public class JSONHandler {
 			JSONObject result;
 			Integer ret = -1;
 
-			params1.add(new BasicNameValuePair("tag", TAG_SEND_GAME_SCORE));
+			params1.add(new BasicNameValuePair("tag", TAG_UPLOAD_GAME_SCORE));
 			params1.add(new BasicNameValuePair("userId", params[0]));
 			params1.add(new BasicNameValuePair("gameType", params[1]));
 			params1.add(new BasicNameValuePair("gameScore", params[2]));
-			
+			params1.add(new BasicNameValuePair("gameTime", params[3]));
+
 			result = getJSONObjectFromUrl(m_ServerUrl, params1);
 
 			try {
@@ -1144,16 +1199,16 @@ public class JSONHandler {
 					// checking if user added successfully
 					int successCode = result.getInt(RESULT_SUCCESS);
 					int errorCode = result.getInt(RESULT_ERROR);
-					
-					if (successCode == SUCCESS_SCORE_ADDED){
+
+					if (successCode == SUCCESS_SCORE_ADDED) {
 						ret = SUCCESS_SCORE_ADDED;
 
-					} else if (errorCode == ERROR_SCORE_WAS_NOT_ADDED){
+					} else if (errorCode == ERROR_SCORE_WAS_NOT_ADDED) {
 						ret = ERROR_SCORE_WAS_NOT_ADDED;
 					}
 				} else {
-					//
-
+					// there was an error at the JSON request, save the score locally 
+					ret = ERROR_SCORE_WAS_NOT_ADDED;
 				}
 			} catch (JSONException e) {
 				//
@@ -1166,4 +1221,47 @@ public class JSONHandler {
 
 	}
 
+	public ContentValues[] getGameScores(int gameType) {
+		// 
+
+		ContentValues[] ret = null;
+		int i, numberOfRows;
+
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("tag", TAG_DOWNLOAD_GAME_SCORES));
+		params.add(new BasicNameValuePair("gameType", Integer.toString(gameType)));
+		params.add(new BasicNameValuePair("firstRowIndex", Long.toString(0)));
+		params.add(new BasicNameValuePair("lastRowIndex", Long.toString(10)));
+		
+
+		try {
+			
+			jsonArray = getJSONArrayFromUrl(m_ServerUrl, params);
+
+			if (jsonArray != null) {
+
+				JSONObject jsonObject = jsonArray.getJSONObject(0);
+				numberOfRows = jsonObject.getInt("number_of_rows");
+
+				ret = new ContentValues[numberOfRows];
+
+				numberOfRows++;
+
+				for (i = 1; i < numberOfRows; i++) {
+
+					jsonObject = jsonArray.getJSONObject(i);
+					
+					ret[i - 1] = convertJSONObjectToGameScoreContentValue(jsonObject);
+					
+
+				}
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		return ret;
+	}
+
+	
 }

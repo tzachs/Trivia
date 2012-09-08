@@ -199,5 +199,9 @@
     <string name="thank_you_for_your_contribution_to_social_trivia_">תודה רבה על תרומתך לטריויה :)</string>
     <string name="questions_wasn_t_added_due_to_error_try_again_later">השאלה לא נוספה עקב בעיה בשרת, אנא נסה מאוחר יותר</string>
     <string name="more">עוד</string>
+	<string name="levels">שלבים</string>
+    <string name="category">קטגוריות</string>
+    <string name="soviet">סובייטי</string>
+    <string name="all">הכול</string>
 
 </resources>

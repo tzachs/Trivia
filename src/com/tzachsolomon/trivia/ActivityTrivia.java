@@ -18,7 +18,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 
-import android.opengl.Visibility;
 import android.os.Bundle;
 
 import android.preference.PreferenceManager;
@@ -42,7 +41,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	// TODO: activity menu for tablet
 	// TODO: check if needed to update from XML file using last update
 	// TODO: facebook users add on
-	// TODO: publish scores
+
 
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
 
@@ -103,7 +102,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		String whatsNewVersion = m_SharedPreferences.getString("showWhatsNew",
 				"1.0");
 		String showConfigVersion = m_SharedPreferences.getString(
-				"showConfigWizard", "1.0");
+				"showConfigWizard", "1");
 
 		m_FirstTimeStartingDoNotTryToUpdate = false;
 

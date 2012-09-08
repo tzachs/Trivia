@@ -200,5 +200,9 @@
     <string name="thank_you_for_your_contribution_to_social_trivia_">Thank you for your contribution to Social Trivia :)</string>
     <string name="questions_wasn_t_added_due_to_error_try_again_later">Questions wasn\'t added due to error, try again later</string>
     <string name="more">More</string>
+    <string name="levels">Levels</string>
+    <string name="category">Category</string>
+    <string name="soviet">Soviet</string>
+    <string name="all">All</string>
 
 </resources>

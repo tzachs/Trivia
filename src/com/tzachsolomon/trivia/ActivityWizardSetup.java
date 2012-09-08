@@ -237,6 +237,9 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 	private void saveChoices() {
 		//
+		//  for debug only
+		//m_SharedPreferencesEditor.putString("editTextPreferencePrimaryServerIP","http://192.168.200.100/index.php");
+		
 		m_SharedPreferencesEditor.putBoolean("showFirstTimeConfiguration",
 				checkBoxShowConfigurationWizard.isChecked());
 		m_SharedPreferencesEditor.putBoolean(
