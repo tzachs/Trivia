@@ -62,10 +62,10 @@ public class TriviaDbEngine {
 	// TABLE USERS
 
 	private static final String TABLE_USERS = "tblUsers";
-
-	public static final String KEY_COL_USERNAME = "colUsername";
-	public static final String KEY_COL_PASSWORD = "colPassword";
+	
 	public static final String KEY_COL_USER_ID = "colUserId";
+	private static final String KEY_COL_USER_TYPE = "colUserType";
+	public static final String KEY_COL_USERNAME = "colUsername";
 
 	// TABLE GAMES
 
@@ -74,10 +74,13 @@ public class TriviaDbEngine {
 	public static final String KEY_COL_GAME_TIME = "colGameTime";
 	public static final String KEY_COL_GAME_TYPE = "colGameType";
 	public static final String KEY_COL_GAME_SCORE = "colGameScore";
-	
 
 	public static final int TYPE_UPDATE_FROM_XML_FILE = 1001;
 	public static final int TYPE_UPDATE_FROM_INTERNET = 1002;
+
+	
+
+	
 
 	private DbHelper ourHelper;
 	private Context ourContext;
@@ -114,7 +117,7 @@ public class TriviaDbEngine {
 			sb.append(KEY_COL_USER_ID + " INTEGER NOT NULL, ");
 			sb.append(KEY_COL_GAME_TYPE + " INTEGER NOT NULL, ");
 			sb.append(KEY_COL_GAME_SCORE + " INTEGER NOT NULL");
-			
+
 			sb.append(" );");
 
 			db.execSQL(sb.toString());
@@ -132,8 +135,9 @@ public class TriviaDbEngine {
 			sb.append(" ( ");
 			sb.append(KEY_ROWID + " INTEGER PRIMARY KEY AUTOINCREMENT, ");
 			sb.append(KEY_COL_USER_ID + " INTEGER NOT NULL, ");
-			sb.append(KEY_COL_USERNAME + " TEXT NOT NULL, ");
-			sb.append(KEY_COL_PASSWORD + " TEXT NOT NULL ");
+			sb.append(KEY_COL_USER_TYPE + " INTEGER NOT NULL, ");
+			sb.append(KEY_COL_USERNAME + " TEXT NOT NULL ");
+			
 			sb.append(" );");
 
 			db.execSQL(sb.toString());
@@ -267,8 +271,7 @@ public class TriviaDbEngine {
 		this.openDbReadable();
 
 		String[] columns = new String[] { KEY_ROWID, KEY_COL_GAME_TIME,
-				KEY_COL_USER_ID, KEY_COL_GAME_TYPE, KEY_COL_GAME_SCORE
-				 };
+				KEY_COL_USER_ID, KEY_COL_GAME_TYPE, KEY_COL_GAME_SCORE };
 
 		Cursor cursor = ourDatabase.query(TABLE_GAMES, columns, null, null,
 				null, null, KEY_COL_GAME_SCORE + " DESC");
@@ -682,17 +685,46 @@ public class TriviaDbEngine {
 
 	public boolean isCategoryExist(String categoryId) {
 		//
+		boolean closeAtEnd = false;
 		boolean ret = false;
 		String query = String.format("SELECT 1 FROM %1$s WHERE %2$s =%3$s",
 				TABLE_CATEGORIES, KEY_ROWID, categoryId);
+		
+		if ( !ourDatabase.isOpen()){
+			this.openDbReadable();
+			closeAtEnd = true;
+			
+		}
 
 		Cursor cursor = ourDatabase.rawQuery(query, null);
 
 		ret = (cursor.getCount() > 0);
 		cursor.close();
+		
+		if ( closeAtEnd ){
+			this.closeDb();
+		}
 
 		return ret;
 
+	}
+
+	public boolean isUsersExists(String id) {
+		//
+		boolean ret = false;
+
+		String query = String.format("SELECT 1 FROM %1$s WHERE %2$s =%3$s",
+				TABLE_USERS, KEY_COL_USER_ID, id);
+
+		this.openDbReadable();
+		Cursor cursor = ourDatabase.rawQuery(query, null);
+
+		ret = (cursor.getCount() > 0);
+		cursor.close();
+		
+		this.closeDb();
+
+		return ret;
 	}
 
 	public ContentValues[] getWrongCorrectStat() {
@@ -783,7 +815,7 @@ public class TriviaDbEngine {
 				int i = 0;
 
 				m_MaxValue = params.length;
-				
+
 				m_ProgressDialog.setMax(m_MaxValue);
 
 				for (ContentValues cv : params) {
@@ -837,9 +869,10 @@ public class TriviaDbEngine {
 		protected void onProgressUpdate(Integer... values) {
 			//
 			m_ProgressDialog.setProgress(values[0]);
-			
-			if ( m_UpdateListener!= null){
-				m_UpdateListener.updateProgressQuestionsInsertToDatabase(values[0],m_MaxValue);
+
+			if (m_UpdateListener != null) {
+				m_UpdateListener.updateProgressQuestionsInsertToDatabase(
+						values[0], m_MaxValue);
 			}
 		}
 
@@ -865,9 +898,8 @@ public class TriviaDbEngine {
 		long ret;
 		int columnIndex0;
 		long qlastupdate;
-		
+
 		this.openDbWritable();
-		
 
 		Cursor cursor = ourDatabase.query(TABLE_QUESTIONS, columns, null, null,
 				null, null, null);
@@ -938,7 +970,7 @@ public class TriviaDbEngine {
 		cv.put(KEY_COL_GAME_SCORE, i_GameScore);
 		cv.put(KEY_COL_GAME_TYPE, i_GameType);
 		cv.put(KEY_COL_USER_ID, i_UserId);
-		
+
 		retCode = ourDatabase.insert(TABLE_GAMES, null, cv);
 
 		if (m_UpdateListener != null) {
@@ -1062,7 +1094,10 @@ public class TriviaDbEngine {
 
 	static public interface TriviaDbEngineUpdateListener {
 		public void onUpdateCategoriesFinished(int i_UpdateFrom);
-		public void updateProgressQuestionsInsertToDatabase (int i_Progress,int i_Max);
+
+		public void updateProgressQuestionsInsertToDatabase(int i_Progress,
+				int i_Max);
+
 		public void onUpdateQuestionsFinished(int i_UpdateFrom);
 
 		public void onAddedScoreToDatabase(long returnCode);
@@ -1073,15 +1108,15 @@ public class TriviaDbEngine {
 		this.m_UpdateListener = listener;
 	}
 
-	public void insertUser(int i_UserId, String i_Username, String i_Password) {
+	public void insertUser(int i_UserId, int userType, String userName){
 		//
 		this.openDbWritable();
 
 		ContentValues cv = new ContentValues();
-
-		cv.put(KEY_COL_USERNAME, i_Username);
-		cv.put(KEY_COL_PASSWORD, i_Password);
+		
 		cv.put(KEY_COL_USER_ID, i_UserId);
+		cv.put(KEY_COL_USER_TYPE, userType);
+		cv.put(KEY_COL_USERNAME, userName);
 
 		ourDatabase.insertWithOnConflict(TABLE_USERS, null, cv,
 				SQLiteDatabase.CONFLICT_IGNORE);
@@ -1090,12 +1125,13 @@ public class TriviaDbEngine {
 
 	}
 
+	/*
 	public SparseArray<String> getUserNames() {
 		//
 
 		SparseArray<String> ret;
 
-		String[] columns = new String[] { KEY_COL_USER_ID, KEY_COL_USERNAME };
+		String[] columns = new String[] { KEY_COL_USER_ID, KEY_COL_USER_TYPE };
 
 		this.openDbWritable();
 
@@ -1111,11 +1147,11 @@ public class TriviaDbEngine {
 		this.closeDb();
 
 		return ret;
-	}
+	}*/
 
 	public String getUsername(int i_UserId) {
 		//
-		String[] columns = new String[] { KEY_COL_USER_ID, KEY_COL_USERNAME };
+		String[] columns = new String[] { KEY_COL_USER_ID, KEY_COL_USERNAME, KEY_COL_USER_TYPE };
 
 		String ret = "";
 
@@ -1146,13 +1182,14 @@ public class TriviaDbEngine {
 	}
 
 	public int deleteScoreFromDatabase(int rowInDatabase) {
-		// 
+		//
 		int ret;
 		this.openDbWritable();
-		ret = ourDatabase.delete(TABLE_GAMES, KEY_ROWID + "=" + rowInDatabase, null);
+		ret = ourDatabase.delete(TABLE_GAMES, KEY_ROWID + "=" + rowInDatabase,
+				null);
 		this.closeDb();
 
-		return ret;		
+		return ret;
 	}
 
 }

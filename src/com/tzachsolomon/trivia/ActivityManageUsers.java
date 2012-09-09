@@ -161,29 +161,24 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 	
 
 	@Override
-	public void onUserLogin(String i_Response, int i_UserId) {
+	public void onUserLogin(String i_Response, int userId,int userType, String username) {
 		//
-
-		setResult(i_UserId);
-		if (i_UserId != -1) {
+		setResult(userId);
+		
+		// checking if login in with a user that exists but isn't in the local database
+		if ( !m_TriviaDb.isUsersExists(Integer.toString(userId))){
 			// adding the user locally
-			m_TriviaDb.insertUser(i_UserId, editTextUsername.getText()
-					.toString(), editTextPassword.getText().toString());
+			m_TriviaDb.insertUser(userId, userType,username);
 			
 		}
-		
-		
-
 	}
 
 	@Override
-	public void onUserRegister(String i_Respone, int i_UserId) {
+	public void onUserRegister(String i_Respone, int userId, int userType, String username) {
 		//
-		if (i_UserId != -1) {
+		if (userId != -1) {
 			// adding the user locally
-			m_TriviaDb.insertUser(i_UserId, editTextUsername.getText()
-					.toString(), editTextPassword.getText().toString());
-			
+			m_TriviaDb.insertUser(userId, userType, username);
 			
 		} 
 

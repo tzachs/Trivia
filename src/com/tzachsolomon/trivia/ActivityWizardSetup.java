@@ -1,10 +1,21 @@
 package com.tzachsolomon.trivia;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Locale;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.facebook.android.DialogError;
+import com.facebook.android.Facebook;
+import com.facebook.android.FacebookError;
+import com.facebook.android.Util;
 
 import com.tzachsolomon.trivia.JSONHandler.UserManageListener;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 
@@ -31,6 +42,9 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		OnCheckedChangeListener, OnItemClickListener, UserManageListener {
 
 	public static final String TAG = ActivityWizardSetup.class.getSimpleName();
+
+	private static final Integer USER_TYPE_TRIVIA = 0;
+	private static final Integer USER_TYPE_FACEBOOK = 1;
 
 	private JSONHandler m_JSONHandler;
 	private TriviaDbEngine m_TriviaDb;
@@ -61,12 +75,12 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 	private boolean m_ChoseLanguage;
 
 	private EditText editTextUsername;
-
 	private EditText editTextPassword;
-
 	private EditText editTextEmail;
 
 	private ImageView imageViewFacebookButton;
+
+	private Facebook mFacebook;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +97,96 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 	}
 
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		//
+		super.onActivityResult(requestCode, resultCode, data);
+		try {
+			mFacebook.authorizeCallback(requestCode, resultCode, data);
+		} catch (FacebookError e) {
+			Toast.makeText(ActivityWizardSetup.this,
+					"Error connecting to facebook", Toast.LENGTH_LONG).show();
+		} catch (Exception e) {
+			Toast.makeText(ActivityWizardSetup.this,
+					"Error connecting to facebook", Toast.LENGTH_LONG).show();
+		}
+	}
+
+	private void updateFacebookLoginLogout() {
+		if (mFacebook.isSessionValid()) {
+			imageViewFacebookButton.setImageResource(R.drawable.logout_button);
+		} else {
+			imageViewFacebookButton.setImageResource(R.drawable.login_button);
+		}
+	}
+
+	private void facebookLogin() {
+
+		mFacebook.authorize(ActivityWizardSetup.this, new String[] { "email" },
+				new Facebook.DialogListener() {
+
+					@Override
+					public void onFacebookError(FacebookError e) {
+						// TODO Auto-generated method stub
+						Toast.makeText(getApplicationContext(), "onFacebookError", Toast.LENGTH_LONG).show();
+					}
+
+					@Override
+					public void onError(DialogError e) {
+						// TODO Auto-generated method stub
+						Toast.makeText(getApplicationContext(), "onError", Toast.LENGTH_LONG).show();
+
+					}
+
+					@Override
+					public void onComplete(Bundle values) {
+						// TODO Auto-generated method stub
+						try {
+
+							String jsonUser = mFacebook.request("me");
+							JSONObject jsonObject = Util.parseJson(jsonUser);
+
+							String id = jsonObject.getString("id");
+							String username = jsonObject.getString("username");
+							String email = jsonObject.getString("email");
+
+							if (!m_TriviaDb.isUsersExists(id)) {
+								// Register the user
+								registerUser(email, id, username,
+										USER_TYPE_FACEBOOK);
+							} else {
+								Toast.makeText(
+										getApplicationContext(),
+										getString(R.string.user_authenticated_succesfully),
+										Toast.LENGTH_LONG).show();
+							}
+
+							updateFacebookLoginLogout();
+
+						} catch (MalformedURLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (JSONException e) {
+
+						}
+
+					}
+
+					@Override
+					public void onCancel() {
+						// TODO Auto-generated method stub
+						Toast.makeText(getApplicationContext(), "onCancel", Toast.LENGTH_LONG).show();
+					}
+				});
+
+	}
+
 	private void initializeVariables() {
 		//
+
 		m_TriviaDb = new TriviaDbEngine(ActivityWizardSetup.this);
 		m_JSONHandler = new JSONHandler(ActivityWizardSetup.this);
 
@@ -99,8 +201,8 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		buttonBack = (Button) findViewById(R.id.buttonBack);
 		buttonFinish = (Button) findViewById(R.id.buttonSetupFinish);
 		buttonUserRegister = (Button) findViewById(R.id.buttonUserRegister);
-		
-		imageViewFacebookButton = (ImageView)findViewById(R.id.imageViewFacebookButton);
+
+		imageViewFacebookButton = (ImageView) findViewById(R.id.imageViewFacebookButton);
 
 		buttonNext.setOnClickListener(this);
 		buttonBack.setOnClickListener(this);
@@ -115,6 +217,8 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		editTextUsername = (EditText) findViewById(R.id.editTextUsername);
 		editTextPassword = (EditText) findViewById(R.id.editTextPassword);
 		editTextEmail = (EditText) findViewById(R.id.editTextEmail);
+
+		mFacebook = new Facebook("203003926497543");
 
 		initializeCheckBoxes();
 
@@ -174,7 +278,7 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		case R.id.imageViewFacebookButton:
 			imageViewFacebookButton_Clicked();
 			break;
-		
+
 		case R.id.buttonUserRegister:
 			buttonUserRegister_Clicked();
 			break;
@@ -206,29 +310,50 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 	}
 
 	private void imageViewFacebookButton_Clicked() {
-		// 
-		// TODO: facebook class
-		
+		//
+		if (mFacebook.isSessionValid()) {
+			try {
+				mFacebook.logout(getApplicationContext());
+				updateFacebookLoginLogout();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		} else {
+			facebookLogin();
+		}
+
 	}
 
 	private void buttonUserRegister_Clicked() {
 		//
+
 		String email = editTextEmail.getText().toString();
 		String password = editTextPassword.getText().toString();
 		String username = editTextUsername.getText().toString();
 
+		registerUser(email, password, username, USER_TYPE_TRIVIA);
+
+	}
+
+	private void registerUser(String email, String password, String username,
+			int userType) {
+		//
 		if (email.length() == 0) {
 			email = "nomail";
 		}
 
 		if (password.length() == 0 || username.length() == 0) {
 			Toast.makeText(ActivityWizardSetup.this,
-					getString(R.string.please_fill_in_username_and_password), Toast.LENGTH_SHORT)
-					.show();
+					getString(R.string.please_fill_in_username_and_password),
+					Toast.LENGTH_SHORT).show();
 		} else {
 
 			m_JSONHandler.userRegisterAsync(new String[] { username, password,
-					email });
+					email, Integer.toString(userType) });
 
 		}
 
@@ -253,9 +378,9 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 	private void saveChoices() {
 		//
-		//  for debug only
-		//m_SharedPreferencesEditor.putString("editTextPreferencePrimaryServerIP","http://192.168.200.100/index.php");
-		
+		// for debug only
+		// m_SharedPreferencesEditor.putString("editTextPreferencePrimaryServerIP","http://192.168.200.100/index.php");
+
 		m_SharedPreferencesEditor.putBoolean("showFirstTimeConfiguration",
 				checkBoxShowConfigurationWizard.isChecked());
 		m_SharedPreferencesEditor.putBoolean(
@@ -272,11 +397,11 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		m_SharedPreferencesEditor.putBoolean(
 				"checkBoxPreferenceCheckUpdateOnStartup",
 				checkBoxCheckUpdateOnStartup.isChecked());
-		
+
 		m_SharedPreferencesEditor.putBoolean(
 				"checkBoxPreferenceQuestionLanguageHebrew",
 				checkBoxQuestionLanguageHebrew.isChecked());
-		
+
 		m_SharedPreferencesEditor.putBoolean(
 				"checkBoxPreferenceQuestionLanguageEnglish",
 				checkBoxQuestionLanguageEnglish.isChecked());
@@ -359,7 +484,6 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 	private void checkBoxQuestionLanguageHebrew_Clicked() {
 		//
-		
 
 		checkBoxQuestionLanguageChangeNextVisibilty();
 	}
@@ -377,8 +501,6 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 	private void checkBoxQuestionLanguageEnglish_Clicked() {
 		//
-
-		
 
 		checkBoxQuestionLanguageChangeNextVisibilty();
 
@@ -424,24 +546,24 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 	}
 
 	@Override
-	public void onUserLogin(String i_Response, int i_UserId) {
+	public void onUserLogin(String i_Response, int userId, int userType, String username) {
 		//
-
+		m_SharedPreferencesEditor.putInt("defaultUserId", userId);
+		setResult(userId);
 	}
 
 	@Override
-	public void onUserRegister(String i_Response, int i_UserId) {
+	public void onUserRegister(String i_Response, int userId, int userType,String username) {
 
-		if (i_UserId != -1) {
+		if (userId != -1) {
 			// adding the user locally
-			m_TriviaDb.insertUser(i_UserId, editTextUsername.getText()
-					.toString(), editTextPassword.getText().toString());
+			m_TriviaDb.insertUser(userId, userType,username);
 
-		} 
- 
+		}
 
-		m_SharedPreferencesEditor.putInt("defaultUserId", i_UserId);
-		setResult(i_UserId);
+		m_SharedPreferencesEditor.putInt("defaultUserId", userId);
+		setResult(userId);
+
 	}
 
 }

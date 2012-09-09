@@ -803,11 +803,14 @@ public class JSONHandler {
 		JSONObject result;
 		String ret = "";
 		int userId = -1;
+		int userType = -1;
 
 		params.add(new BasicNameValuePair("tag", TAG_USER_LOGIN));
 		params.add(new BasicNameValuePair("username", i_Params[0]));
 		params.add(new BasicNameValuePair("userpass", md5hash(i_Params[1])));
 		params.add(new BasicNameValuePair("usermail", i_Params[2]));
+		params.add(new BasicNameValuePair("userType", "0"));
+		
 		
 		// 
 
@@ -823,6 +826,7 @@ public class JSONHandler {
 					ret = m_Context
 							.getString(R.string.user_authenticated_succesfully);
 					userId = result.getInt("userId");
+					userType = result.getInt("userType");
 				} else if (errorCode == ERROR_CODE_USER_DOES_NOT_EXISTS) {
 					ret = m_Context.getString(R.string.user_does_not_exits);
 				} else if (errorCode == ERROR_CODE_USER_WRONG_PASSWORD) {
@@ -838,7 +842,7 @@ public class JSONHandler {
 			e.printStackTrace();
 		}
 
-		m_UserManagerListener.onUserLogin(ret, userId);
+		m_UserManagerListener.onUserLogin(ret, userId,0,i_Params[0]);
 		return ret;
 	}
 
@@ -865,21 +869,30 @@ public class JSONHandler {
 		JSONObject result;
 		String ret = "";
 		int userId = -1;
-		
-		// TODO: add user type (trivia or facebook)
+		int successCode = -1;
+		int errorCode = -1;
+		String userType = i_Params[3];
 
 		params.add(new BasicNameValuePair("tag", TAG_USER_REGISTER));
 		params.add(new BasicNameValuePair("username", i_Params[0]));
-		params.add(new BasicNameValuePair("userpass", md5hash(i_Params[1])));
+		if ( userType.contentEquals("0")){
+			// trivia user, thus scrambling password
+			params.add(new BasicNameValuePair("userpass", md5hash(i_Params[1])));
+		}else{
+			// facebook user, no user password is needed
+			params.add(new BasicNameValuePair("userId", i_Params[1]));
+		}
+		
 		params.add(new BasicNameValuePair("usermail", i_Params[2]));
+		params.add(new BasicNameValuePair("userType", userType));
 
 		result = getJSONObjectFromUrl(m_ServerUrl, params);
 
 		try {
 			if (result != null) {
 				// checking if user added successfully
-				int successCode = result.getInt(RESULT_SUCCESS);
-				int errorCode = result.getInt(RESULT_ERROR);
+				successCode = result.getInt(RESULT_SUCCESS);
+				errorCode = result.getInt(RESULT_ERROR);
 
 				if (successCode == SUCCESS_CODE_USER_REGISTERED) {
 					ret = m_Context
@@ -887,6 +900,11 @@ public class JSONHandler {
 					userId = result.getInt("userId");
 				} else if (errorCode == ERROR_CODE_USER_EXIST) {
 					ret = m_Context.getString(R.string.user_already_exits);
+				} else if ( successCode == SUCCESS_CODE_USER_EXIST){
+					// this is a facebook user
+					ret = m_Context
+							.getString(R.string.user_authenticated_succesfully);
+					userId = result.getInt("userId");
 				}
 			} else {
 				//
@@ -898,16 +916,17 @@ public class JSONHandler {
 			e.printStackTrace();
 		}
 
-		m_UserManagerListener.onUserRegister(ret, userId);
+		m_UserManagerListener.onUserRegister(ret, userId, Integer.valueOf(userType),i_Params[0]);
+		
 		return ret;
 
 	}
 
 	static public interface UserManageListener {
 
-		public void onUserLogin(String i_Response, int i_UserId);
+		public void onUserLogin(String i_Response, int userId, int userType, String username);
 
-		public void onUserRegister(String i_Response, int i_UserId);
+		public void onUserRegister(String i_Response, int i_UserId, int userType,String username);
 	}
 
 	static public interface DatabaseUpdateListener {
