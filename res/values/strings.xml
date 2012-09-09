@@ -162,7 +162,7 @@
     <string name="high_scores">High Scores</string>
     <string name="current_user_is_">"Current user is: "</string>
     <string name="time_is_up_">Time is up!</string>
-    <string name="register_you_user">Register you User</string>
+    <string name="register_you_user">Register your User</string>
     <string name="register_a_user_in_order_to_publish_scores_get_updates_publish_questions_tbd_and_more">Register a user in order to publish scores, get updates, publish questions(TBD) and more</string>
     <string name="zero">0</string>
     <string name="send_suggestion_in_">Send suggestion in</string>
@@ -204,5 +204,7 @@
     <string name="category">Category</string>
     <string name="soviet">Soviet</string>
     <string name="all">All</string>
+    <string name="login_to_facebook">Login to Facebook</string>
+    <string name="or_use_your_facebook_account_and_press_the_login_button_">Or, use your Facebook account and press the login button</string>
 
 </resources>

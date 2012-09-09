@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import android.widget.Toast;
 
@@ -65,6 +66,8 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 	private EditText editTextEmail;
 
+	private ImageView imageViewFacebookButton;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//
@@ -96,11 +99,14 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		buttonBack = (Button) findViewById(R.id.buttonBack);
 		buttonFinish = (Button) findViewById(R.id.buttonSetupFinish);
 		buttonUserRegister = (Button) findViewById(R.id.buttonUserRegister);
+		
+		imageViewFacebookButton = (ImageView)findViewById(R.id.imageViewFacebookButton);
 
 		buttonNext.setOnClickListener(this);
 		buttonBack.setOnClickListener(this);
 		buttonFinish.setOnClickListener(this);
 		buttonUserRegister.setOnClickListener(this);
+		imageViewFacebookButton.setOnClickListener(this);
 
 		listViewLanguages = (ListView) findViewById(R.id.listViewLanguages);
 
@@ -165,6 +171,10 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 	public void onClick(View v) {
 		//
 		switch (v.getId()) {
+		case R.id.imageViewFacebookButton:
+			imageViewFacebookButton_Clicked();
+			break;
+		
 		case R.id.buttonUserRegister:
 			buttonUserRegister_Clicked();
 			break;
@@ -193,6 +203,12 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 			break;
 		}
 
+	}
+
+	private void imageViewFacebookButton_Clicked() {
+		// 
+		// TODO: facebook class
+		
 	}
 
 	private void buttonUserRegister_Clicked() {
