@@ -43,8 +43,7 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 	public static final String TAG = ActivityWizardSetup.class.getSimpleName();
 
-	private static final Integer USER_TYPE_TRIVIA = 0;
-	private static final Integer USER_TYPE_FACEBOOK = 1;
+	
 
 	private JSONHandler m_JSONHandler;
 	private TriviaDbEngine m_TriviaDb;
@@ -153,7 +152,7 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 							if (!m_TriviaDb.isUsersExists(id)) {
 								// Register the user
 								registerUser(email, id, username,
-										USER_TYPE_FACEBOOK);
+										 ActivityManageUsers.USER_TYPE_FACEBOOK);
 							} else {
 								Toast.makeText(
 										getApplicationContext(),
@@ -217,10 +216,8 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		editTextUsername = (EditText) findViewById(R.id.editTextUsername);
 		editTextPassword = (EditText) findViewById(R.id.editTextPassword);
 		editTextEmail = (EditText) findViewById(R.id.editTextEmail);
-
 		
-		
-		mFacebook = new Facebook("203003926497543");
+		mFacebook = new Facebook(getString(R.string.facebook_app_id));
 
 		initializeCheckBoxes();
 
@@ -337,7 +334,7 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		String password = editTextPassword.getText().toString();
 		String username = editTextUsername.getText().toString();
 
-		registerUser(email, password, username, USER_TYPE_TRIVIA);
+		registerUser(email, password, username, ActivityManageUsers.USER_TYPE_TRIVIA);
 
 	}
 
