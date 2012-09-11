@@ -37,11 +37,11 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 	private EditText editTextEmail;
 	private EditText editTextPassword;
 
-	private JSONHandler m_JSONHandler;
+	private JSONHandler mJSONHandler;
 	private LinearLayout linearLayoutUserRequestDetails;
 	private Button buttonUserRequestClose;
 	private Button buttonUserRequestSend;
-	private TriviaDbEngine m_TriviaDb;
+	private TriviaDbEngine mTriviaDb;
 	private ImageView imageViewFacebookButton;
 	
 	private Facebook mFacebook;
@@ -60,11 +60,11 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 		// -2 means no user login was done
 		setResult(ANNONYMOUS_USER);
 		//
-		m_JSONHandler = new JSONHandler(this);
+		mJSONHandler = new JSONHandler(this);
 
-		m_JSONHandler.setUserManageListener(this);
+		mJSONHandler.setUserManageListener(this);
 
-		m_TriviaDb = new TriviaDbEngine(this);
+		mTriviaDb = new TriviaDbEngine(this);
 
 		linearLayoutUserRequestDetails = (LinearLayout) findViewById(R.id.linearLayoutUserRequestDetails);
 
@@ -170,7 +170,7 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 						String username = jsonObject.getString("username");
 						String email = jsonObject.getString("email");
 
-						if (!m_TriviaDb.isUsersExists(id)) {
+						if (!mTriviaDb.isUsersExists(id)) {
 							// Register the user
 							registerUser(email, id, username,
 									USER_TYPE_FACEBOOK);
@@ -206,6 +206,15 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 
 	}
 	
+	/**
+	 * Function checks if parameters are valid and calls register user in JSON object
+	 * return value is in callback function onUserRegister
+	 * 
+	 * @param email
+	 * @param password
+	 * @param username
+	 * @param userType
+	 */
 	private void registerUser(String email, String password, String username,
 			int userType) {
 		//
@@ -219,7 +228,7 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 					Toast.LENGTH_SHORT).show();
 		} else {
 
-			m_JSONHandler.userRegisterAsync(new String[] { username, password,
+			mJSONHandler.userRegisterAsync(new String[] { username, password,
 					email, Integer.toString(userType) });
 
 		}
@@ -254,10 +263,10 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 
 			
 			if (buttonUserLogin.getVisibility() == View.VISIBLE) {
-				m_JSONHandler.userLoginAsync(new String[] { username, password,
+				mJSONHandler.userLoginAsync(new String[] { username, password,
 						email });
 			} else {
-				m_JSONHandler.userRegisterAsync(new String[] { username,
+				mJSONHandler.userRegisterAsync(new String[] { username,
 						password, email });
 
 			}
@@ -287,9 +296,9 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 
 		// checking if login in with a user that exists but isn't in the local
 		// database
-		if (!m_TriviaDb.isUsersExists(Integer.toString(userId))) {
+		if (!mTriviaDb.isUsersExists(Integer.toString(userId))) {
 			// adding the user locally
-			m_TriviaDb.insertUser(userId, userType, username);
+			mTriviaDb.insertUser(userId, userType, username);
 
 		}
 	}
@@ -300,7 +309,7 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 		//
 		if (userId != -1) {
 			// adding the user locally
-			m_TriviaDb.insertUser(userId, userType, username);
+			mTriviaDb.insertUser(userId, userType, username);
 
 		}
 
