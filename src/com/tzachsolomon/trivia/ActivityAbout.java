@@ -21,8 +21,8 @@ public class ActivityAbout extends Activity implements OnClickListener {
 	private Button buttonSendSuggestion;
 	private TextView textViewAboutVersion;
 
-	private StringParser m_StringParser;
-	private SharedPreferences m_SharedPreferences;
+	private StringParser mStringParser;
+	private SharedPreferences mSharedPreferences;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +31,10 @@ public class ActivityAbout extends Activity implements OnClickListener {
 		setContentView(R.layout.about);
 
 		
-		m_SharedPreferences = PreferenceManager
+		mSharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
 		
-		m_StringParser = new StringParser(m_SharedPreferences);
+		mStringParser = new StringParser(mSharedPreferences);
 
 		textViewAboutVersion = (TextView) findViewById(R.id.textViewAboutVersion);
 
@@ -53,11 +53,11 @@ public class ActivityAbout extends Activity implements OnClickListener {
 			packageInfo = getPackageManager().getPackageInfo(
 					"com.tzachsolomon.trivia", PackageManager.GET_META_DATA);
 
-			if (m_SharedPreferences.getBoolean(
+			if (mSharedPreferences.getBoolean(
 					"checkBoxPreferenceRevereseInHebrew", false)) {
 
 				textViewAboutVersion
-						.setText(m_StringParser
+						.setText(mStringParser
 								.reverseNumbersInStringHebrew(getString(R.string.textViewAboutVersionText)
 										+ packageInfo.versionName));
 			} else {
