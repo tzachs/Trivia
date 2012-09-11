@@ -127,20 +127,20 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 					@Override
 					public void onFacebookError(FacebookError e) {
-						// TODO Auto-generated method stub
+						// 
 						Toast.makeText(getApplicationContext(), "onFacebookError", Toast.LENGTH_LONG).show();
 					}
 
 					@Override
 					public void onError(DialogError e) {
-						// TODO Auto-generated method stub
+						// 
 						Toast.makeText(getApplicationContext(), "onError", Toast.LENGTH_LONG).show();
 
 					}
 
 					@Override
 					public void onComplete(Bundle values) {
-						// TODO Auto-generated method stub
+						// 
 						try {
 
 							String jsonUser = mFacebook.request("me");
@@ -164,10 +164,10 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 							updateFacebookLoginLogout();
 
 						} catch (MalformedURLException e) {
-							// TODO Auto-generated catch block
+							// 
 							e.printStackTrace();
 						} catch (IOException e) {
-							// TODO Auto-generated catch block
+							// 
 							e.printStackTrace();
 						} catch (JSONException e) {
 
@@ -177,7 +177,7 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 
 					@Override
 					public void onCancel() {
-						// TODO Auto-generated method stub
+						// 
 						Toast.makeText(getApplicationContext(), "onCancel", Toast.LENGTH_LONG).show();
 					}
 				});
@@ -218,6 +218,8 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		editTextPassword = (EditText) findViewById(R.id.editTextPassword);
 		editTextEmail = (EditText) findViewById(R.id.editTextEmail);
 
+		
+		
 		mFacebook = new Facebook("203003926497543");
 
 		initializeCheckBoxes();
@@ -316,10 +318,10 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 				mFacebook.logout(getApplicationContext());
 				updateFacebookLoginLogout();
 			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
+				// 
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
+				// 
 				e.printStackTrace();
 			}
 		} else {

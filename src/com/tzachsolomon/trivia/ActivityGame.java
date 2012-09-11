@@ -1042,7 +1042,7 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 		// if m_UserId is of logged in user than enter it to the database
 		// 
 		if ( m_UserId > -1 ){
-			// TODO: facebook user support
+			// 
 			m_JSONHandler.uploadScoreToDatabase(
 					String.valueOf(	m_UserId),
 					String.valueOf(m_CurrentGameType), 
