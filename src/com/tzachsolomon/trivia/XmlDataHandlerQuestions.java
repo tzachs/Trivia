@@ -18,8 +18,8 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 
 	private boolean inQuestionsDataRow;
 
-	ArrayList<ContentValues> m_Questions;
-	ContentValues m_Question;
+	ArrayList<ContentValues> mQuestions;
+	ContentValues mQuestion;
 	private boolean inColAnswer1;
 	private boolean inColAnswer2;
 	private boolean inColAnswer3;
@@ -41,22 +41,22 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 
 	private StringBuilder currentString;
 
-	private XmlDataHandlerQuestionListener m_Listener;
+	private XmlDataHandlerQuestionListener mListener;
 
-	private int m_SkipQuestion;
+	private int mSkipQuestion;
 
-	private long m_LastUpdate;
+	private long mLastUpdate;
 
 	public XmlDataHandlerQuestions(long i_LastUpdate) {
-		m_LastUpdate = i_LastUpdate;
-		m_Questions = new ArrayList<ContentValues>();
+		mLastUpdate = i_LastUpdate;
+		mQuestions = new ArrayList<ContentValues>();
 	}
 
 	public ContentValues[] getQuestions() {
 		//
-		ContentValues[] ret = new ContentValues[m_Questions.size()];
+		ContentValues[] ret = new ContentValues[mQuestions.size()];
 
-		m_Questions.toArray(ret);
+		mQuestions.toArray(ret);
 
 		return ret;
 	}
@@ -65,8 +65,8 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 	public void startDocument() throws SAXException {
 		//
 		super.startDocument();
-		if (m_Listener != null) {
-			m_Listener.onStartDocument();
+		if (mListener != null) {
+			mListener.onStartDocument();
 		}
 	}
 
@@ -74,8 +74,8 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 	public void endDocument() throws SAXException {
 		//
 		super.endDocument();
-		if (m_Listener != null) {
-			m_Listener.onEndDocument();
+		if (mListener != null) {
+			mListener.onEndDocument();
 		}
 	}
 
@@ -91,16 +91,16 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 
 			if (inQuestionsDataRow) {
 
-				switch (m_SkipQuestion) {
+				switch (mSkipQuestion) {
 				case SKIP_QUESTION_DONT_SKIP:
-					m_Questions.add(m_Question);
+					mQuestions.add(mQuestion);
 					break;
 				case SKIP_QUESTION_DUE_LAST_UPDATE:
 					break;
 				case SKIP_QUESTION_DUE_TO_ERROR:
 					// error was detected, checking if we need to send event
-					if (m_Listener != null) {
-						m_Listener.errorQuestionParsingDetected(m_Question);
+					if (mListener != null) {
+						mListener.errorQuestionParsingDetected(mQuestion);
 					}
 					break;
 				default:
@@ -155,9 +155,9 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 
 				if (inQuestionsData) {
 					inQuestionsDataRow = true;
-					m_SkipQuestion = SKIP_QUESTION_DONT_SKIP;
+					mSkipQuestion = SKIP_QUESTION_DONT_SKIP;
 
-					m_Question = new ContentValues();
+					mQuestion = new ContentValues();
 				}
 			} else if (localName.contentEquals("field")) {
 				if (inQuestionsDataRow) {
@@ -251,7 +251,7 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 				if (chars.contentEquals("\n")) {
 
 					inColAnswer1 = false;
-					m_Question.put(TriviaDbEngine.KEY_ANSWER1,
+					mQuestion.put(TriviaDbEngine.KEY_ANSWER1,
 							currentString.toString());
 					currentString = null;
 
@@ -274,7 +274,7 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 				if (chars.contentEquals("\n")) {
 
 					inColAnswer2 = false;
-					m_Question.put(TriviaDbEngine.KEY_ANSWER2,
+					mQuestion.put(TriviaDbEngine.KEY_ANSWER2,
 							currentString.toString());
 					currentString = null;
 
@@ -298,7 +298,7 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 				if (chars.contentEquals("\n")) {
 
 					inColAnswer3 = false;
-					m_Question.put(TriviaDbEngine.KEY_ANSWER3,
+					mQuestion.put(TriviaDbEngine.KEY_ANSWER3,
 							currentString.toString());
 					currentString = null;
 
@@ -323,7 +323,7 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 				if (chars.contentEquals("\n")) {
 
 					inColAnswer4 = false;
-					m_Question.put(TriviaDbEngine.KEY_ANSWER4,
+					mQuestion.put(TriviaDbEngine.KEY_ANSWER4,
 							currentString.toString());
 					currentString = null;
 
@@ -339,30 +339,30 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 				}
 
 			} else if (inColAnswerIndex) {
-				m_Question.put(TriviaDbEngine.KEY_ANSWER_INDEX, chars);
+				mQuestion.put(TriviaDbEngine.KEY_ANSWER_INDEX, chars);
 				inColAnswerIndex = false;
 			} else if (inColCategory) {
-				m_Question.put(TriviaDbEngine.KEY_CATEGORY, chars);
+				mQuestion.put(TriviaDbEngine.KEY_CATEGORY, chars);
 				inColCategory = false;
 			} else if (inColCorrect) {
 
 				inColCorrect = false;
 			} else if (inColCorrectWrongRatio) {
-				m_Question.put(TriviaDbEngine.KEY_CORRECT_WRONG_RATIO, chars);
+				mQuestion.put(TriviaDbEngine.KEY_CORRECT_WRONG_RATIO, chars);
 				inColCorrectWrongRatio = false;
 			} else if (inColEnabled) {
-				m_Question.put(TriviaDbEngine.KEY_ENABLED, chars);
+				mQuestion.put(TriviaDbEngine.KEY_ENABLED, chars);
 				inColEnabled = false;
 			} else if (inColLanguage) {
 			
-					m_Question.put(TriviaDbEngine.KEY_LANGUAGE, chars);
+					mQuestion.put(TriviaDbEngine.KEY_LANGUAGE, chars);
 					inColLanguage = false;
 				
 			} else if (inColLastUpdate) {
-				if (m_LastUpdate < Long.parseLong(chars)) {
-					m_Question.put(TriviaDbEngine.KEY_LAST_UPDATE, chars);
+				if (mLastUpdate < Long.parseLong(chars)) {
+					mQuestion.put(TriviaDbEngine.KEY_LAST_UPDATE, chars);
 				}else{
-					m_SkipQuestion = SKIP_QUESTION_DUE_LAST_UPDATE;
+					mSkipQuestion = SKIP_QUESTION_DUE_LAST_UPDATE;
 				}
 				
 				inColLastUpdate = false;
@@ -374,7 +374,7 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 				// need
 				// to check \n
 				if (chars.contentEquals("\n")) {
-					m_Question.put(TriviaDbEngine.KEY_QUESTION,
+					mQuestion.put(TriviaDbEngine.KEY_QUESTION,
 							currentString.toString());
 					currentString = null;
 					inColQuestion = false;
@@ -390,17 +390,17 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 				}
 
 			} else if (inColQuestionId) {
-				m_Question.put(TriviaDbEngine.KEY_QUESTIONID, chars);
+				mQuestion.put(TriviaDbEngine.KEY_QUESTIONID, chars);
 				inColQuestionId = false;
 			} else if (inColWrong) {
 				inColWrong = false;
 			}
 		} catch (NullPointerException e) {
 			// there is an error parsing the question
-			m_SkipQuestion = SKIP_QUESTION_DUE_TO_ERROR;
+			mSkipQuestion = SKIP_QUESTION_DUE_TO_ERROR;
 			// Log.e(TAG, e.getMessage());
 		} catch (Exception e) {
-			m_SkipQuestion = SKIP_QUESTION_DUE_TO_ERROR;
+			mSkipQuestion = SKIP_QUESTION_DUE_TO_ERROR;
 			// Log.e(TAG, e.getMessage());
 		}
 	}
@@ -415,7 +415,7 @@ public class XmlDataHandlerQuestions extends DefaultHandler {
 
 	public void setXmlDataHandlerListener(
 			XmlDataHandlerQuestionListener i_Listener) {
-		m_Listener = i_Listener;
+		mListener = i_Listener;
 	}
 
 }

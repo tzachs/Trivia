@@ -25,10 +25,10 @@ public class ActivityReportErrorInQuestion extends Activity implements OnChecked
 	private Button buttonSendError;
 	private RadioButton radioButtonPreviousQuestion;
 	private RadioButton radioButtonCurrentQuestion;
-	private JSONHandler m_JSONHandler;
-	private String m_CurrentQuestionId;
-	private String m_PreviousQuestionId;
-	private String m_SentQuestionId;
+	private JSONHandler mJSONHandler;
+	private String mCurrentQuestionId;
+	private String mPreviousQuestionId;
+	private String mSentQuestionId;
 
 	private EditText editTextErrorDetails;
 
@@ -43,9 +43,9 @@ public class ActivityReportErrorInQuestion extends Activity implements OnChecked
 
 	private void initializeVariables() {
 		// 
-		m_SentQuestionId = "-1";
+		mSentQuestionId = "-1";
 		
-		m_JSONHandler  = new JSONHandler(ActivityReportErrorInQuestion.this);
+		mJSONHandler  = new JSONHandler(ActivityReportErrorInQuestion.this);
 		initializeButtons();
 		initializeRadioButtons();
 		initializeEditText();
@@ -69,16 +69,16 @@ public class ActivityReportErrorInQuestion extends Activity implements OnChecked
 		
 		radioButtonCurrentQuestion.setText(extras.getString(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_STRING));
 		radioButtonPreviousQuestion.setText(extras.getString(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING));
-		m_CurrentQuestionId = extras.getString(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_ID);
-		m_PreviousQuestionId = extras.getString(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID);
+		mCurrentQuestionId = extras.getString(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_ID);
+		mPreviousQuestionId = extras.getString(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID);
 		
 		radioButtonCurrentQuestion.setChecked(true);
 		radioButtonPreviousQuestion.setChecked(false);
 		
-		m_SentQuestionId = m_CurrentQuestionId;
+		mSentQuestionId = mCurrentQuestionId;
 		
 		// checking if sending error report without previous question
-		if ( m_PreviousQuestionId.contentEquals("-1")){
+		if ( mPreviousQuestionId.contentEquals("-1")){
 			radioButtonPreviousQuestion.setVisibility(View.GONE);
 			
 		}
@@ -97,11 +97,11 @@ public class ActivityReportErrorInQuestion extends Activity implements OnChecked
 		// 
 		switch (buttonView.getId()) {
 		case R.id.radioButtonPreviousQuestion:
-			m_SentQuestionId = m_PreviousQuestionId;
+			mSentQuestionId = mPreviousQuestionId;
 			
 			break;
 		case R.id.radioButtonCurrentQuestion:
-			m_SentQuestionId = m_CurrentQuestionId;
+			mSentQuestionId = mCurrentQuestionId;
 			
 			break;
 
@@ -118,8 +118,8 @@ public class ActivityReportErrorInQuestion extends Activity implements OnChecked
 		
 		try {
 
-			m_JSONHandler.reportMistakeInQuestionAsync(
-					m_SentQuestionId, description);
+			mJSONHandler.reportMistakeInQuestionAsync(
+					mSentQuestionId, description);
 			Toast.makeText(ActivityReportErrorInQuestion.this, getString(R.string.error_sent_thanks_), Toast.LENGTH_SHORT)
 					.show();
 		} catch (ClientProtocolException e) {

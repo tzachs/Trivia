@@ -62,27 +62,27 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private Button buttonManageUsers;
 	private Button buttonSuggestQuestion;
 
-	private SharedPreferences m_SharedPreferences;
+	private SharedPreferences mSharedPreferences;
 
-	private UpdateManager m_UpdateManager;
+	private UpdateManager mUpdateManager;
 
-	private int m_CurrentUserId;
+	private int mCurrentUserId;
 
-	private boolean m_FirstTimeStartingDoNotTryToUpdate;
-	private TriviaDbEngine m_TrivaDbEngine;
+	private boolean mFirstTimeStartingDoNotTryToUpdate;
+	private TriviaDbEngine mTrivaDbEngine;
 	private TextView textViewCurrentUser;
 
-	private boolean m_ButtonsLockedDueToImportFromXML;
-	protected boolean m_LaterRegisterUser;
+	private boolean mButtonsLockedDueToImportFromXML;
+	protected boolean mLaterRegisterUser;
 
-	private ProgressDialog m_ProgressDialog;
+	private ProgressDialog mProgressDialog;
 
 	private SlidingDrawer slidingDrawer;
 
-	private boolean m_UpdateQuestionsLater;
-	private boolean m_UpdateCategoriesLater;
+	private boolean mUpdateQuestionsLater;
+	private boolean mUpdateCategoriesLater;
 
-	private int m_LaterRegisterUserCounter;
+	private int mLaterRegisterUserCounter;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -90,7 +90,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_trivia);
 
-		m_SharedPreferences = PreferenceManager
+		mSharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
 
 		initializeVariables();
@@ -101,12 +101,12 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private void checkIfNeedToShowFirstTimeMessageOrConfiguration() {
 		//
 		PackageInfo packageInfo = null;
-		String whatsNewVersion = m_SharedPreferences.getString("showWhatsNew",
+		String whatsNewVersion = mSharedPreferences.getString("showWhatsNew",
 				"1.0");
-		String showConfigVersion = m_SharedPreferences.getString(
+		String showConfigVersion = mSharedPreferences.getString(
 				"showConfigWizard", "1");
 
-		m_FirstTimeStartingDoNotTryToUpdate = false;
+		mFirstTimeStartingDoNotTryToUpdate = false;
 
 		try {
 			packageInfo = getPackageManager().getPackageInfo(
@@ -114,28 +114,28 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 			if (!packageInfo.versionName.contentEquals(whatsNewVersion)) {
 
-				m_FirstTimeStartingDoNotTryToUpdate = true;
+				mFirstTimeStartingDoNotTryToUpdate = true;
 
 				// Log.v(TAG, "Starting import questions from XML");
 				Toast.makeText(
 						this,
 						getString(R.string.importing_questions_from_initial_file),
 						Toast.LENGTH_LONG).show();
-				m_ButtonsLockedDueToImportFromXML = true;
+				mButtonsLockedDueToImportFromXML = true;
 
-				m_UpdateManager.importQuestionsFromXml();
+				mUpdateManager.importQuestionsFromXml();
 
 				showWhatsNew();
 				if (showConfigVersion.contentEquals("1")) {
 					showWizardSetup();
-					m_SharedPreferences.edit().putString("showConfigWizard","0").commit();
+					mSharedPreferences.edit().putString("showConfigWizard","0").commit();
 				}
 
-				m_SharedPreferences.edit()
+				mSharedPreferences.edit()
 						.putString("showWhatsNew", packageInfo.versionName)
 						.commit();
 
-			} else if (m_SharedPreferences.getBoolean(
+			} else if (mSharedPreferences.getBoolean(
 					"showFirstTimeConfiguration", true)) {
 				showWizardSetup();
 			}
@@ -177,6 +177,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 	private void showWizardSetup() {
 		//
+		mTrivaDbEngine.openForFirstTime();
 		buttonWizardSetup_Clicked();
 
 	}
@@ -189,9 +190,9 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	}
 
 	private void setUser() {
-		if (m_CurrentUserId > 0) {
+		if (mCurrentUserId > 0) {
 
-			String username = m_TrivaDbEngine.getUsername(m_CurrentUserId);
+			String username = mTrivaDbEngine.getUsername(mCurrentUserId);
 			textViewCurrentUser.setText(getString(R.string.current_user_is_)
 					+ username);
 		}
@@ -204,23 +205,23 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 		super.onResume();
 
-		changeLanguageTo(m_SharedPreferences.getString(
+		changeLanguageTo(mSharedPreferences.getString(
 				"listPreferenceLanguages", "iw"));
 
 		setUser();
 
-		if (m_ButtonsLockedDueToImportFromXML
-				&& !m_FirstTimeStartingDoNotTryToUpdate) {
+		if (mButtonsLockedDueToImportFromXML
+				&& !mFirstTimeStartingDoNotTryToUpdate) {
 
-			m_ProgressDialog.setCancelable(false);
-			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			m_ProgressDialog
+			mProgressDialog.setCancelable(false);
+			mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+			mProgressDialog
 					.setTitle(getString(R.string.importing_questions_from_initial_file));
-			m_ProgressDialog.show();
+			mProgressDialog.show();
 
-		} else if (!m_FirstTimeStartingDoNotTryToUpdate
-				&& !m_UpdateQuestionsLater) {
-			m_UpdateManager.updateQuestions(true);
+		} else if (!mFirstTimeStartingDoNotTryToUpdate
+				&& !mUpdateQuestionsLater) {
+			mUpdateManager.updateQuestions(true);
 			showUserRegister();
 		}
 
@@ -231,7 +232,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 		Locale locale = new Locale(string);
 		Locale.setDefault(locale);
-		// Log.i(TAG, "Changed lang to " + string);
+		Log.d(TAG, "Changed language to " + string);
 		Configuration config = new Configuration();
 		config.locale = locale;
 		getBaseContext().getResources().updateConfiguration(config,
@@ -240,7 +241,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		setContentView(R.layout.activity_trivia);
 
 		initializeButtons();
-		if (m_ButtonsLockedDueToImportFromXML) {
+		if (mButtonsLockedDueToImportFromXML) {
 			lockButtonOnImportFromXMLFile();
 		} else {
 			releaseButtonsOnImportFromXMLFile();
@@ -252,24 +253,24 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		//
 
 		try {
-			m_CurrentUserId = Integer.valueOf(m_SharedPreferences.getString(
+			mCurrentUserId = Integer.valueOf(mSharedPreferences.getString(
 					"defaultUserId", "-2"));
 		} catch (Exception e) {
-			m_CurrentUserId = -2;
+			mCurrentUserId = -2;
 		}
 
-		m_UpdateQuestionsLater = false;
+		mUpdateQuestionsLater = false;
 
-		m_ProgressDialog = new ProgressDialog(this);
-		m_TrivaDbEngine = new TriviaDbEngine(this);
-		m_UpdateManager = new UpdateManager(this);
-		m_UpdateManager.setCategoriesListener(this);
-		m_UpdateManager.setQuestionsListener(this);
+		mProgressDialog = new ProgressDialog(this);
+		mTrivaDbEngine = new TriviaDbEngine(this);
+		mUpdateManager = new UpdateManager(this);
+		mUpdateManager.setCategoriesListener(this);
+		mUpdateManager.setQuestionsListener(this);
 
 		slidingDrawer = (SlidingDrawer) findViewById(R.id.sd);
 
-		m_LaterRegisterUser = false;
-		m_LaterRegisterUserCounter = 0;
+		mLaterRegisterUser = false;
+		mLaterRegisterUserCounter = 0;
 	}
 
 	private void initializeButtons() {
@@ -377,17 +378,17 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		//
 		switch (requestCode) {
 		case REQUEST_CODE_BACK_FROM_ACTIVITY_WIZARD_SETUP:
-			m_FirstTimeStartingDoNotTryToUpdate = false;
-			m_CurrentUserId = resultCode;
+			mFirstTimeStartingDoNotTryToUpdate = false;
+			mCurrentUserId = resultCode;
 			changeToDefault();
 			break;
 		case REQUEST_CODE_BACK_FROM_ACTIVITY_USER_MANAGER:
-			m_CurrentUserId = resultCode;
+			mCurrentUserId = resultCode;
 			// Log.v(TAG, "m_CurrentUserId --> " + m_CurrentUserId);
 			changeToDefault();
 			break;
 		case REQUEST_CODE_BACK_FROM_PREFERENCES:
-			m_UpdateManager.updateServerIpFromPreferences();
+			mUpdateManager.updateServerIpFromPreferences();
 			break;
 		case REQUEST_CODE_START_GAME_CATEGORIES:
 			if (data != null) {
@@ -407,11 +408,11 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private void changeToDefault() {
 
 		//
-		if (m_CurrentUserId > 0) {
+		if (mCurrentUserId > 0) {
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
 			alert.setTitle(getString(R.string.defaut_user));
 			alert.setMessage(getString(R.string.use_user_)
-					+ m_TrivaDbEngine.getUsername(m_CurrentUserId)
+					+ mTrivaDbEngine.getUsername(mCurrentUserId)
 					+ getString(R.string._as_default_));
 			alert.setPositiveButton(getString(R.string.yes),
 					new DialogInterface.OnClickListener() {
@@ -419,10 +420,10 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							//
-							m_SharedPreferences
+							mSharedPreferences
 									.edit()
 									.putString("defaultUserId",
-											String.valueOf(m_CurrentUserId))
+											String.valueOf(mCurrentUserId))
 									.commit();
 						}
 					});
@@ -442,7 +443,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private void showUserRegister() {
 		//
 
-		if (m_TrivaDbEngine.isUsersEmpty()) {
+		if (mTrivaDbEngine.isUsersEmpty()) {
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
 			alert.setTitle(getString(R.string.register_user));
 			alert.setMessage(getString(R.string.register_a_user_));
@@ -467,17 +468,17 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 									ActivityTrivia.this,
 									getString(R.string.registering_a_user_gives_you_the_ability_to_publish_scores_play_against_other_players_etc),
 									Toast.LENGTH_LONG).show();
-							m_LaterRegisterUser = true;
+							mLaterRegisterUser = true;
 						}
 					});
-			if (m_LaterRegisterUser) {
-				m_LaterRegisterUserCounter++;
+			if (mLaterRegisterUser) {
+				mLaterRegisterUserCounter++;
 
 				// after 5 times showing the screen displaying again the
 				// register user
-				if (m_LaterRegisterUserCounter == 5) {
-					m_LaterRegisterUserCounter = 0;
-					m_LaterRegisterUser = false;
+				if (mLaterRegisterUserCounter == 5) {
+					mLaterRegisterUserCounter = 0;
+					mLaterRegisterUser = false;
 				}
 			} else {
 				alert.show();
@@ -489,7 +490,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private void startNewGame(Bundle extras) {
 		//
 		Intent intent = new Intent(this, ActivityGame.class);
-		intent.putExtra(ActivityGame.EXTRA_GAME_USER_ID, m_CurrentUserId);
+		intent.putExtra(ActivityGame.EXTRA_GAME_USER_ID, mCurrentUserId);
 		intent.putExtras(extras);
 		startActivity(intent);
 	}
@@ -504,7 +505,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private void buttonUpdateDatabase_Clicked() {
 		//
 
-		m_UpdateManager.updateQuestions(false);
+		mUpdateManager.updateQuestions(false);
 
 	}
 
@@ -623,8 +624,8 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 					ActivityTrivia.this,
 					getString(R.string.finished_importing_categories_from_initial_file),
 					Toast.LENGTH_LONG).show();
-			m_ButtonsLockedDueToImportFromXML = false;
-			m_ProgressDialog.dismiss();
+			mButtonsLockedDueToImportFromXML = false;
+			mProgressDialog.dismiss();
 			break;
 
 		default:
@@ -663,7 +664,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 					getString(R.string.importing_categories_from_initial_file),
 					Toast.LENGTH_LONG).show();
 			// Log.v(TAG, "Starting import categories from XML");
-			m_UpdateManager.importCategoriesFromXml();
+			mUpdateManager.importCategoriesFromXml();
 
 			break;
 
@@ -676,21 +677,21 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	@Override
 	public void updateQuestionProgress(int i_Progress, int i_Max) {
 		//
-		m_ProgressDialog.setMax(i_Max);
-		m_ProgressDialog.setProgress(i_Progress);
+		mProgressDialog.setMax(i_Max);
+		mProgressDialog.setProgress(i_Progress);
 	}
 
 	@Override
 	public void onUpdateQuestionsPostponed() {
 		//
-		m_UpdateQuestionsLater = true;
+		mUpdateQuestionsLater = true;
 
 	}
 
 	@Override
 	public void onUpdateCategoriesPostponed() {
 		//
-		m_UpdateCategoriesLater = true;
+		mUpdateCategoriesLater = true;
 
 	}
 

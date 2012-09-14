@@ -13,8 +13,8 @@ public class XmlDataHandlerCategories extends DefaultHandler {
 
 	public static final String TAG = XmlDataHandlerCategories.class
 			.getSimpleName();
-	private ArrayList<ContentValues> m_Categories;
-	private ContentValues m_Category;
+	private ArrayList<ContentValues> mCategories;
+	private ContentValues mCategory;
 	private boolean inCategoriesData;
 	private boolean inCategoriesDataRow;
 	private boolean inColId;
@@ -22,18 +22,18 @@ public class XmlDataHandlerCategories extends DefaultHandler {
 	private boolean inColEnName;
 	private boolean inColHeName;
 	private boolean inColLastUpdate;
-	private XmlDataHandlerCategoriesListener m_XmlDataHandlerCategoriesListener;
+	private XmlDataHandlerCategoriesListener mXmlDataHandlerCategoriesListener;
 
 	public XmlDataHandlerCategories() {
-		m_Categories = new ArrayList<ContentValues>();
+		mCategories = new ArrayList<ContentValues>();
 	}
 
 	@Override
 	public void startDocument() throws SAXException {
 		//
 		super.startDocument();
-		if (m_XmlDataHandlerCategoriesListener != null) {
-			m_XmlDataHandlerCategoriesListener.onStartDocument();
+		if (mXmlDataHandlerCategoriesListener != null) {
+			mXmlDataHandlerCategoriesListener.onStartDocument();
 		}
 
 	}
@@ -42,8 +42,8 @@ public class XmlDataHandlerCategories extends DefaultHandler {
 	public void endDocument() throws SAXException {
 		//
 		super.endDocument();
-		if (m_XmlDataHandlerCategoriesListener != null) {
-			m_XmlDataHandlerCategoriesListener.onEndDocument();
+		if (mXmlDataHandlerCategoriesListener != null) {
+			mXmlDataHandlerCategoriesListener.onEndDocument();
 		}
 	}
 
@@ -67,7 +67,7 @@ public class XmlDataHandlerCategories extends DefaultHandler {
 
 				if (inCategoriesData) {
 					inCategoriesDataRow = true;
-					m_Category = new ContentValues();
+					mCategory = new ContentValues();
 				}
 
 			} else if (localName.contentEquals("field")) {
@@ -128,7 +128,7 @@ public class XmlDataHandlerCategories extends DefaultHandler {
 		} else if (localName.contentEquals("row")) {
 
 			if (inCategoriesDataRow){
-				m_Categories.add(m_Category);
+				mCategories.add(mCategory);
 
 			}
 			
@@ -147,19 +147,19 @@ public class XmlDataHandlerCategories extends DefaultHandler {
 
 		String chars = new String(ch, start, length);
 		if (inColEnName) {
-			m_Category.put(TriviaDbEngine.KEY_COL_EN_NAME, chars);
+			mCategory.put(TriviaDbEngine.KEY_COL_EN_NAME, chars);
 			inColEnName = false;
 		} else if (inColHeName) {
-			m_Category.put(TriviaDbEngine.KEY_COL_HE_NAME, chars);
+			mCategory.put(TriviaDbEngine.KEY_COL_HE_NAME, chars);
 			inColHeName = false;
 		} else if (inColId) {
-			m_Category.put(TriviaDbEngine.KEY_ROWID, chars);
+			mCategory.put(TriviaDbEngine.KEY_ROWID, chars);
 			inColId = false;
 		} else if (inColLastUpdate) {
-			m_Category.put(TriviaDbEngine.KEY_LAST_UPDATE, chars);
+			mCategory.put(TriviaDbEngine.KEY_LAST_UPDATE, chars);
 			inColLastUpdate = false;
 		} else if (inColParentId) {
-			m_Category.put(TriviaDbEngine.KEY_COL_PARENT_ID, chars);
+			mCategory.put(TriviaDbEngine.KEY_COL_PARENT_ID, chars);
 			inColParentId = false;
 		}
 
@@ -173,14 +173,14 @@ public class XmlDataHandlerCategories extends DefaultHandler {
 
 	public void setXmlDataHandlerCategoriesListener(
 			XmlDataHandlerCategoriesListener i_Listener) {
-		this.m_XmlDataHandlerCategoriesListener = i_Listener;
+		this.mXmlDataHandlerCategoriesListener = i_Listener;
 	}
 
 	public ContentValues[] getCategories() {
 		//
-		ContentValues[] ret = new ContentValues[m_Categories.size()];
+		ContentValues[] ret = new ContentValues[mCategories.size()];
 
-		m_Categories.toArray(ret);
+		mCategories.toArray(ret);
 
 		return ret;
 

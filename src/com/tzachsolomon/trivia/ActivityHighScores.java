@@ -23,10 +23,10 @@ import android.widget.Toast;
 public class ActivityHighScores extends Activity implements ScoreListener, OnClickListener {
 
 	private TableLayout table;
-	private TriviaDbEngine m_TriviaDb;
+	private TriviaDbEngine mTriviaDb;
 	
-	private SparseArray<String> m_GameTypes;
-	private JSONHandler m_JSONHandler;
+	private SparseArray<String> mGameTypes;
+	private JSONHandler mJSONHandler;
 	private Button buttonGameTypeAll;
 	private Button buttonGameTypeCategory;
 	private Button buttonGameTypeLevel;
@@ -73,7 +73,7 @@ public class ActivityHighScores extends Activity implements ScoreListener, OnCli
 		@Override
 		protected ContentValues[] doInBackground(Integer... params) {
 			//
-			return m_JSONHandler.getGameScores(params[0]);
+			return mJSONHandler.getGameScores(params[0]);
 
 		}
 
@@ -132,7 +132,7 @@ public class ActivityHighScores extends Activity implements ScoreListener, OnCli
 			// function
 			for (ContentValues row : params) {
 
-				m_JSONHandler.uploadScoreToDatabase(
+				mJSONHandler.uploadScoreToDatabase(
 						row.getAsString(TriviaDbEngine.KEY_COL_USER_ID),
 						row.getAsString(TriviaDbEngine.KEY_COL_GAME_TYPE),
 						row.getAsString(TriviaDbEngine.KEY_COL_GAME_SCORE),
@@ -161,29 +161,29 @@ public class ActivityHighScores extends Activity implements ScoreListener, OnCli
 		//
 		AsyncTaskUploadLocalScores a = new AsyncTaskUploadLocalScores();
 
-		a.execute(m_TriviaDb.getGameScores());
+		a.execute(mTriviaDb.getGameScores());
 
 	}
 
 	private void initializeVariables() {
 
 		//
-		m_JSONHandler = new JSONHandler(this);
+		mJSONHandler = new JSONHandler(this);
 
-		m_JSONHandler.setScoreUpdateListener(this);
+		mJSONHandler.setScoreUpdateListener(this);
 
-		m_TriviaDb = new TriviaDbEngine(this);
+		mTriviaDb = new TriviaDbEngine(this);
 
 		
 
-		m_GameTypes = new SparseArray<String>();
+		mGameTypes = new SparseArray<String>();
 
 		//
-		m_GameTypes.put(ActivityGame.GAMETYPE_ALL_QUESTIONS,
+		mGameTypes.put(ActivityGame.GAMETYPE_ALL_QUESTIONS,
 				getString(R.string.soviet));
-		m_GameTypes.put(ActivityGame.GAMETYPE_CATEGORIES,
+		mGameTypes.put(ActivityGame.GAMETYPE_CATEGORIES,
 				getString(R.string.category));
-		m_GameTypes.put(ActivityGame.GAMETYPE_LEVELS,
+		mGameTypes.put(ActivityGame.GAMETYPE_LEVELS,
 				getString(R.string.levels));
 
 		table = (TableLayout) findViewById(R.id.tableLayoutHighScores);
@@ -248,7 +248,7 @@ public class ActivityHighScores extends Activity implements ScoreListener, OnCli
 
 	private CharSequence getGameTypeStringByGameTypeId(int gameType) {
 		//
-		String ret =m_GameTypes.get(gameType); 
+		String ret =mGameTypes.get(gameType); 
 
 		if (ret != null) {
 			return ret;
@@ -268,7 +268,7 @@ public class ActivityHighScores extends Activity implements ScoreListener, OnCli
 	public void deleteScoreFromDatabase(int rowInDatabase) {
 		//
 		// for debug
-		m_TriviaDb.deleteScoreFromDatabase(rowInDatabase);
+		mTriviaDb.deleteScoreFromDatabase(rowInDatabase);
 
 	}
 

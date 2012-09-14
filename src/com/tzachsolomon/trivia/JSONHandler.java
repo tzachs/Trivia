@@ -32,6 +32,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
+import android.os.Bundle;
 
 import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
@@ -82,16 +83,16 @@ public class JSONHandler {
 
 
 	// Success
-	private String m_ServerUrl;
-	private HttpClient m_HttpClient;
-	private Context m_Context;
-	private ConnectivityManager m_ConnectivityManager;
-	private TelephonyManager m_TelephonyManager;
-	private SharedPreferences m_SharedPreferences;
-	private UserManageListener m_UserManagerListener;
-	private DatabaseUpdateListener m_DatabaseUpdateListener;
-	private SuggestQuestionListener m_SuggestQuestionListener;
-	private ScoreListener m_ScoreUpdateListener;
+	private String mServerUrl;
+	private HttpClient mHttpClient;
+	private Context mContext;
+	private ConnectivityManager mConnectivityManager;
+	private TelephonyManager mTelephonyManager;
+	private SharedPreferences mSharedPreferences;
+	private UserManageListener mUserManagerListener;
+	private DatabaseUpdateListener mDatabaseUpdateListener;
+	private SuggestQuestionListener mSuggestQuestionListener;
+	private ScoreListener mScoreUpdateListener;
 	private JSONArray jsonArray;
 
 	/**
@@ -101,16 +102,16 @@ public class JSONHandler {
 	 *            - Receive context in order to display progress
 	 */
 	public JSONHandler(Context i_Context) {
-		m_HttpClient = new DefaultHttpClient();
-		m_Context = i_Context;
-		m_ConnectivityManager = (ConnectivityManager) m_Context
+		mHttpClient = new DefaultHttpClient();
+		mContext = i_Context;
+		mConnectivityManager = (ConnectivityManager) mContext
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
 
-		m_TelephonyManager = (TelephonyManager) m_Context
+		mTelephonyManager = (TelephonyManager) mContext
 				.getSystemService(Context.TELEPHONY_SERVICE);
 
-		m_SharedPreferences = PreferenceManager
-				.getDefaultSharedPreferences(m_Context);
+		mSharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(mContext);
 
 		updateServerIpFromPreferences();
 	}
@@ -236,7 +237,7 @@ public class JSONHandler {
 				params.add(new BasicNameValuePair("lastUserUpdate", Long
 						.toString(i_LastUpdate)));
 
-				jsonArray = getJSONArrayFromUrl(m_ServerUrl, params);
+				jsonArray = getJSONArrayFromUrl(mServerUrl, params);
 				if (jsonArray != null) {
 					if (!jsonArray.getJSONObject(0).has(RESULT_SUCCESS)) {
 						jsonArray = null;
@@ -244,7 +245,7 @@ public class JSONHandler {
 				}
 
 			} else {
-				Toast.makeText(m_Context, detailedResult.toString(),
+				Toast.makeText(mContext, detailedResult.toString(),
 						Toast.LENGTH_SHORT).show();
 			}
 		} catch (Exception e1) {
@@ -271,7 +272,7 @@ public class JSONHandler {
 				params.add(new BasicNameValuePair("lastUserUpdate", Long
 						.toString(i_LastUpdate)));
 
-				jsonArray = getJSONArrayFromUrl(m_ServerUrl, params);
+				jsonArray = getJSONArrayFromUrl(mServerUrl, params);
 				if (jsonArray != null) {
 					if (!jsonArray.getJSONObject(0).has(RESULT_SUCCESS)) {
 						jsonArray = null;
@@ -279,7 +280,7 @@ public class JSONHandler {
 				}
 
 			} else {
-				Toast.makeText(m_Context, detailedResult.toString(),
+				Toast.makeText(mContext, detailedResult.toString(),
 						Toast.LENGTH_SHORT).show();
 			}
 		} catch (Exception e1) {
@@ -315,7 +316,7 @@ public class JSONHandler {
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(params, "UTF-8"));
 
-			HttpResponse httpResponse = m_HttpClient.execute(httpPost);
+			HttpResponse httpResponse = mHttpClient.execute(httpPost);
 
 			status = httpResponse.getStatusLine().getStatusCode();
 
@@ -374,7 +375,7 @@ public class JSONHandler {
 		HttpPost httpPost = new HttpPost(i_URL);
 		try {
 			httpPost.setEntity(new UrlEncodedFormEntity(params));
-			HttpResponse httpResponse = m_HttpClient.execute(httpPost);
+			HttpResponse httpResponse = mHttpClient.execute(httpPost);
 
 			status = httpResponse.getStatusLine().getStatusCode();
 
@@ -425,7 +426,7 @@ public class JSONHandler {
 		params.add(new BasicNameValuePair("colQuestionId", i_QuestionId));
 		params.add(new BasicNameValuePair("colDescription", i_Description));
 
-		result = getJSONObjectFromUrl(m_ServerUrl, params);
+		result = getJSONObjectFromUrl(mServerUrl, params);
 
 		try {
 			if (result.has("error")) {
@@ -471,20 +472,20 @@ public class JSONHandler {
 		boolean allowOnlyUpdate3G;
 		boolean allowUpdateRoaming;
 
-		info = m_ConnectivityManager.getActiveNetworkInfo();
+		info = mConnectivityManager.getActiveNetworkInfo();
 
 		if (info != null) {
 
 			netType = info.getType();
 			netSubType = info.getSubtype();
 
-			allowUpdateWifi = m_SharedPreferences.getBoolean(
+			allowUpdateWifi = mSharedPreferences.getBoolean(
 					"checkBoxPreferenceAllowUpdateWifi", true);
-			allowUpdateMobile = m_SharedPreferences.getBoolean(
+			allowUpdateMobile = mSharedPreferences.getBoolean(
 					"checkBoxPreferenceAllowUpdateMobileNetwork", true);
-			allowOnlyUpdate3G = m_SharedPreferences.getBoolean(
+			allowOnlyUpdate3G = mSharedPreferences.getBoolean(
 					"checkBoxPreferenceAllowUpdateMobileNetwork3G", true);
-			allowUpdateRoaming = m_SharedPreferences.getBoolean(
+			allowUpdateRoaming = mSharedPreferences.getBoolean(
 					"checkBoxPreferenceAllowUpdateMobileNetworkRoaming", false);
 
 			// checking if the user allow WiFi updates and
@@ -493,7 +494,7 @@ public class JSONHandler {
 					ret = info.isConnected();
 					if (!ret) {
 						i_DetailedResult
-								.append(m_Context
+								.append(mContext
 										.getString(R.string.wifi_is_enabled_but_isn_t_connected_please_check_wifi_connection));
 					}
 				} else {
@@ -509,18 +510,18 @@ public class JSONHandler {
 							ret = info.isConnected();
 							if (!ret) {
 								i_DetailedResult
-										.append(m_Context
+										.append(mContext
 												.getString(R.string.mobile_network_found_but_only_3g_mobile_network_connection_is_allowed_));
 								i_DetailedResult
-										.append(m_Context
+										.append(mContext
 												.getString(R.string.check_preferencs_to_allow_slow_networks));
 							}
 						} else {
 							i_DetailedResult
-									.append(m_Context
+									.append(mContext
 											.getString(R.string.mobile_network_found_but_only_3g_mobile_network_connection_is_allowed_));
 							i_DetailedResult
-									.append(m_Context
+									.append(mContext
 											.getString(R.string.check_preferencs_to_allow_slow_networks));
 						}
 					} else {
@@ -528,14 +529,14 @@ public class JSONHandler {
 					}
 
 					// checking if connection is roaming
-					if (m_TelephonyManager.isNetworkRoaming()) {
+					if (mTelephonyManager.isNetworkRoaming()) {
 						// the connection is roaming, checking if the user allow
 						// update on roaming
 						if (allowUpdateRoaming) {
 							ret = true;
 						} else {
 							i_DetailedResult
-									.append(m_Context
+									.append(mContext
 											.getString(R.string.mobile_connection_was_found_but_it_is_in_roaming));
 						}
 
@@ -543,14 +544,14 @@ public class JSONHandler {
 
 				} else {
 					i_DetailedResult
-							.append(m_Context
+							.append(mContext
 									.getString(R.string.mobile_device_is_online_but_option_is_disabled_please_check_preferences));
 				}
 			}
 
 		} else {
 			i_DetailedResult
-					.append(m_Context
+					.append(mContext
 							.getString(R.string.no_network_devices_are_available_check_your_wifi_or_mobile_network_connection));
 
 		}
@@ -570,16 +571,16 @@ public class JSONHandler {
 
 			detailedResult = new StringBuilder();
 
-			m_ProgressDialog = new ProgressDialog(m_Context);
+			m_ProgressDialog = new ProgressDialog(mContext);
 			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			m_ProgressDialog.setTitle(m_Context
+			m_ProgressDialog.setTitle(mContext
 					.getString(R.string.downloading_categories));
 			m_ProgressDialog.show();
 
 			isInternetAvailable = isInternetAvailable(detailedResult);
 
 			if (isInternetAvailable == false) {
-				Toast.makeText(m_Context, detailedResult.toString(),
+				Toast.makeText(mContext, detailedResult.toString(),
 						Toast.LENGTH_SHORT).show();
 			}
 
@@ -592,8 +593,8 @@ public class JSONHandler {
 			//
 			m_ProgressDialog.dismiss();
 
-			if (m_DatabaseUpdateListener != null) {
-				m_DatabaseUpdateListener.onDownloadedCategories(result);
+			if (mDatabaseUpdateListener != null) {
+				mDatabaseUpdateListener.onDownloadedCategories(result);
 			}
 
 		}
@@ -661,16 +662,16 @@ public class JSONHandler {
 
 			detailedResult = new StringBuilder();
 
-			m_ProgressDialog = new ProgressDialog(m_Context);
+			m_ProgressDialog = new ProgressDialog(mContext);
 			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-			m_ProgressDialog.setTitle(m_Context
+			m_ProgressDialog.setTitle(mContext
 					.getString(R.string.downloading_questions));
 			m_ProgressDialog.show();
 
 			isInternetAvailable = isInternetAvailable(detailedResult);
 
 			if (isInternetAvailable == false) {
-				Toast.makeText(m_Context, detailedResult.toString(),
+				Toast.makeText(mContext, detailedResult.toString(),
 						Toast.LENGTH_SHORT).show();
 			}
 
@@ -683,7 +684,7 @@ public class JSONHandler {
 			//
 			m_ProgressDialog.dismiss();
 
-			m_DatabaseUpdateListener.onDownloadedQuestions(result);
+			mDatabaseUpdateListener.onDownloadedQuestions(result);
 
 		}
 
@@ -750,7 +751,7 @@ public class JSONHandler {
 				.getAsString(TriviaDbEngine.KEY_WRONG_USER)));
 		params.add(new BasicNameValuePair("colCorrectCounter", cv
 				.getAsString(TriviaDbEngine.KEY_CORRECT_USER)));
-		JSONObject response = getJSONObjectFromUrl(m_ServerUrl, params);
+		JSONObject response = getJSONObjectFromUrl(mServerUrl, params);
 
 		if (response != null) {
 			if (response.has(RESULT_SUCCESS)) {
@@ -778,7 +779,7 @@ public class JSONHandler {
 		params.add(new BasicNameValuePair("lastUserUpdate", Long
 				.toString(lastUpdate)));
 
-		JSONObject obj = getJSONObjectFromUrl(m_ServerUrl, params);
+		JSONObject obj = getJSONObjectFromUrl(mServerUrl, params);
 
 		if (obj != null) {
 
@@ -791,19 +792,28 @@ public class JSONHandler {
 		return ret;
 	}
 
+	/**
+	 * Functions starts an asyncTask to login user
+	 * Results are sent in callback
+	 * 
+	 * @param i_Params
+	 * username
+	 * userpass
+	 * usermail
+	 * 
+	 */
 	public void userLoginAsync(String[] i_Params) {
 		AsyncTaskUserLogin asyncTaskUserLogin = new AsyncTaskUserLogin();
 
 		asyncTaskUserLogin.execute(i_Params);
 	}
 
-	public String userLogin(String[] i_Params) throws NoSuchAlgorithmException {
+	private Bundle userLogin(String[] i_Params) throws NoSuchAlgorithmException {
 		//
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		JSONObject result;
-		String ret = "";
-		int userId = -1;
-		int userType = -1;
+		Bundle ret;
+		
 
 		params.add(new BasicNameValuePair("tag", TAG_USER_LOGIN));
 		params.add(new BasicNameValuePair("username", i_Params[0]));
@@ -814,35 +824,46 @@ public class JSONHandler {
 		
 		// 
 
-		result = getJSONObjectFromUrl(m_ServerUrl, params);
-
+		result = getJSONObjectFromUrl(mServerUrl, params);
+		ret = new Bundle();
 		try {
+			
 			if (result != null) {
 				// checking if user added successfully
 				int successCode = result.getInt(RESULT_SUCCESS);
 				int errorCode = result.getInt(RESULT_ERROR);
 
 				if (successCode == SUCCESS_CODE_USER_EXIST) {
-					ret = m_Context
-							.getString(R.string.user_authenticated_succesfully);
-					userId = result.getInt("userId");
-					userType = result.getInt("userType");
+					ret.putInt("retCode",SUCCESS_CODE_USER_EXIST);
+					ret.putString("response",mContext.getString(R.string.user_authenticated_succesfully));
+					ret.putInt("userId",result.getInt("userId"));
+					ret.putInt("userType",0);
+					
 				} else if (errorCode == ERROR_CODE_USER_DOES_NOT_EXISTS) {
-					ret = m_Context.getString(R.string.user_does_not_exits);
+					ret.putInt("retCode", ERROR_CODE_USER_DOES_NOT_EXISTS);
+					ret.putString("response", mContext.getString(R.string.user_does_not_exits));
+					ret.putInt("userId",-1);
+					ret.putInt("userType",0);
 				} else if (errorCode == ERROR_CODE_USER_WRONG_PASSWORD) {
-					ret = m_Context.getString(R.string.wrong_password_);
+					ret.putInt("retCode", ERROR_CODE_USER_WRONG_PASSWORD);
+					ret.putString("response", mContext.getString(R.string.wrong_password_));
+					ret.putInt("userId",-1);
+					ret.putInt("userType",0);
+					
 				}
 			} else {
 				//
-				ret = m_Context.getString(R.string.error_connecting_to_server);
+				ret.putInt("retCode", -1);
+				ret.putString("response", mContext.getString(R.string.error_connecting_to_server));
 			}
 		} catch (JSONException e) {
 			//
-			ret = m_Context.getString(R.string.general_error);
-			e.printStackTrace();
+			ret.putInt("retCode",-1);
+			ret.putString("response", mContext.getString(R.string.general_error));
+			
 		}
 
-		m_UserManagerListener.onUserLogin(ret, userId,0,i_Params[0]);
+		
 		return ret;
 	}
 
@@ -862,13 +883,14 @@ public class JSONHandler {
 		asyncTaskUserRegister.execute(i_Params);
 	}
 
-	public String userRegister(String[] i_Params)
+	private Bundle userRegister(String[] i_Params)
 			throws NoSuchAlgorithmException {
 		//
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		JSONObject result;
-		String ret = "";
-		int userId = -1;
+		Bundle ret = null;
+		
+		
 		int successCode = -1;
 		int errorCode = -1;
 		String userType = i_Params[3];
@@ -886,37 +908,57 @@ public class JSONHandler {
 		params.add(new BasicNameValuePair("usermail", i_Params[2]));
 		params.add(new BasicNameValuePair("userType", userType));
 
-		result = getJSONObjectFromUrl(m_ServerUrl, params);
+		result = getJSONObjectFromUrl(mServerUrl, params);
+		
+		
 
 		try {
+			ret = new Bundle();
 			if (result != null) {
 				// checking if user added successfully
+				
+				ret.putInt("userType", Integer.valueOf(userType));
 				successCode = result.getInt(RESULT_SUCCESS);
 				errorCode = result.getInt(RESULT_ERROR);
 
 				if (successCode == SUCCESS_CODE_USER_REGISTERED) {
-					ret = m_Context
-							.getString(R.string.user_registered_succesfully);
-					userId = result.getInt("userId");
+					ret.putInt("retCode", SUCCESS_CODE_USER_REGISTERED);
+					ret.putString("response",mContext.getString(R.string.user_registered_succesfully));
+					ret.putInt("userId", result.getInt("userId"));
+					ret.putString("username",i_Params[0]);
+					
+					
 				} else if (errorCode == ERROR_CODE_USER_EXIST) {
-					ret = m_Context.getString(R.string.user_already_exits);
+					ret.putInt("retCode", ERROR_CODE_USER_EXIST);
+					ret.putString("response",mContext.getString(R.string.user_already_exits));
+					ret.putInt("userId", -1);
+					ret.putString("username",i_Params[0]);
+					
+					 
 				} else if ( successCode == SUCCESS_CODE_USER_EXIST){
 					// this is a facebook user
-					ret = m_Context
-							.getString(R.string.user_authenticated_succesfully);
-					userId = result.getInt("userId");
+					ret.putInt("retCode", SUCCESS_CODE_USER_EXIST);
+					ret.putString("response",mContext.getString(R.string.user_authenticated_succesfully));
+					ret.putInt("userId", result.getInt("userId"));
+					ret.putString("username",i_Params[0]);
+					
 				}
 			} else {
 				//
-				ret = m_Context.getString(R.string.error_connecting_to_server);
+				
+				ret.putInt("retCode", -1);
+				ret.putString("response",mContext.getString(R.string.error_connecting_to_server));
+				
+				
 			}
 		} catch (JSONException e) {
 			//
-			ret = m_Context.getString(R.string.general_error);
-			e.printStackTrace();
+			ret.putInt("retCode", -1);
+			ret.putString("response",mContext.getString(R.string.general_error));
+			
 		}
 
-		m_UserManagerListener.onUserRegister(ret, userId, Integer.valueOf(userType),i_Params[0]);
+		
 		
 		return ret;
 
@@ -950,33 +992,33 @@ public class JSONHandler {
 	}
 
 	public void setSuggestQuestionListener(SuggestQuestionListener listener) {
-		this.m_SuggestQuestionListener = listener;
+		this.mSuggestQuestionListener = listener;
 	}
 
 	public void setUserManageListener(UserManageListener listener) {
-		this.m_UserManagerListener = listener;
+		this.mUserManagerListener = listener;
 	}
 
 	public void setUpdateManager(DatabaseUpdateListener listener) {
-		this.m_DatabaseUpdateListener = listener;
+		this.mDatabaseUpdateListener = listener;
 		//
 
 	}
 
 	public void setScoreUpdateListener(ScoreListener listener) {
-		this.m_ScoreUpdateListener = listener;
+		this.mScoreUpdateListener = listener;
 	}
 
 	public void updateServerIpFromPreferences() {
 		//
 
-		m_ServerUrl = m_SharedPreferences.getString(
+		mServerUrl = mSharedPreferences.getString(
 				"editTextPreferencePrimaryServerIP",
 				"http://23.23.238.181/index.php");
 	}
 
 	public class AsyncTaskUserRegister extends
-			AsyncTask<String, Integer, String> {
+			AsyncTask<String, Integer, Bundle> {
 
 		private ProgressDialog m_ProgressDialog;
 		private boolean enabled;
@@ -988,14 +1030,14 @@ public class JSONHandler {
 
 			enabled = isInternetAvailable(detailedResult);
 			if (enabled) {
-				m_ProgressDialog = new ProgressDialog(m_Context);
+				m_ProgressDialog = new ProgressDialog(mContext);
 				m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				m_ProgressDialog.setTitle(m_Context
+				m_ProgressDialog.setTitle(mContext
 						.getString(R.string.register));
 				m_ProgressDialog.setCancelable(true);
 				m_ProgressDialog.show();
 			} else {
-				Toast.makeText(m_Context, detailedResult.toString(),
+				Toast.makeText(mContext, detailedResult.toString(),
 						Toast.LENGTH_LONG).show();
 			}
 
@@ -1004,29 +1046,72 @@ public class JSONHandler {
 		}
 
 		@Override
-		protected String doInBackground(String... params) {
+		protected Bundle doInBackground(String... params) {
 			//
 			try {
 				return userRegister(params);
 			} catch (NoSuchAlgorithmException e) {
+				
 				//
-				return m_Context
-						.getString(R.string.md5_algorithm_was_not_found_);
+				Bundle ret = new Bundle();
+				//  
+				Log.d(TAG, mContext
+						.getString(R.string.md5_algorithm_was_not_found_));
+				ret.putInt("retCode", -1);
+				ret.putString("response", mContext
+						.getString(R.string.md5_algorithm_was_not_found_));
+				return ret;
+				
 			}
 
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(Bundle result) {
 			//
-
 			m_ProgressDialog.dismiss();
-			Toast.makeText(m_Context, result, Toast.LENGTH_LONG).show();
+			if ( result != null){
+				int retCode = result.getInt("retCode");
+				switch (retCode){
+				case SUCCESS_CODE_USER_REGISTERED:
+					
+					mUserManagerListener.onUserRegister(
+							result.getString("response"),
+							result.getInt("userId"),
+							result.getInt("userType"),
+							result.getString("username"));
+							
+					break;
+				case SUCCESS_CODE_USER_EXIST:
+					// User already exists in server Database
+					mUserManagerListener.onUserLogin(
+							result.getString("response"),
+							result.getInt("userId"),
+							result.getInt("userType"),
+							result.getString("username"));
+							
+					
+					break;
+				case ERROR_CODE_USER_EXIST:
+					mUserManagerListener.onUserRegister(
+							result.getString("response"),
+							-1,
+							result.getInt("userType"),
+							result.getString("username"));
+							
+							
+					
+					break;
+				}
+						
+				//			
+			}
+			
 		}
 
 	}
 
-	public class AsyncTaskUserLogin extends AsyncTask<String, Integer, String> {
+	public class AsyncTaskUserLogin extends AsyncTask<String, Integer, Bundle> {
 
 		private ProgressDialog m_ProgressDialog;
 		private boolean enabled;
@@ -1038,13 +1123,13 @@ public class JSONHandler {
 
 			enabled = isInternetAvailable(detailedResult);
 			if (enabled) {
-				m_ProgressDialog = new ProgressDialog(m_Context);
+				m_ProgressDialog = new ProgressDialog(mContext);
 				m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				m_ProgressDialog.setTitle(m_Context.getString(R.string.login));
+				m_ProgressDialog.setTitle(mContext.getString(R.string.login));
 				m_ProgressDialog.setCancelable(true);
 				m_ProgressDialog.show();
 			} else {
-				Toast.makeText(m_Context, detailedResult.toString(),
+				Toast.makeText(mContext, detailedResult.toString(),
 						Toast.LENGTH_LONG).show();
 			}
 
@@ -1053,25 +1138,64 @@ public class JSONHandler {
 		}
 
 		@Override
-		protected String doInBackground(String... params) {
+		protected Bundle doInBackground(String... params) {
 			//
 			try {
 				return userLogin(params);
 			} catch (NoSuchAlgorithmException e) {
 				//
-				return m_Context
-						.getString(R.string.md5_algorithm_was_not_found_);
+				Bundle ret = new Bundle();
+				ret.putInt("retCode", -1);
+				ret.putString("response", mContext
+						.getString(R.string.md5_algorithm_was_not_found_));
+				
+				return ret;
 
 			}
 
 		}
 
 		@Override
-		protected void onPostExecute(String result) {
+		protected void onPostExecute(Bundle result) {
 			//
 
 			m_ProgressDialog.dismiss();
-			Toast.makeText(m_Context, result, Toast.LENGTH_SHORT).show();
+			int key = result.getInt("retCode");
+			switch (key) {	
+			case -1:
+				Toast.makeText(mContext, result.getString("response"), Toast.LENGTH_LONG).show();
+				break;
+			case SUCCESS_CODE_USER_EXIST:
+				
+				mUserManagerListener.onUserLogin(
+						result.getString("response"),
+						result.getInt("userId"),
+						result.getInt("userType"),
+						result.getString("username"));
+						
+				break;
+			case ERROR_CODE_USER_DOES_NOT_EXISTS:
+				mUserManagerListener.onUserLogin(
+						result.getString("response"),
+						result.getInt("userId"),
+						result.getInt("userType"),
+						result.getString("username"));
+				
+				
+				break;
+			case ERROR_CODE_USER_WRONG_PASSWORD:
+				mUserManagerListener.onUserLogin(
+						result.getString("response"),
+						result.getInt("userId"),
+						result.getInt("userType"),
+						result.getString("username"));
+				break;
+
+			default:
+				break;
+			}
+			
+			//
 
 		}
 
@@ -1085,8 +1209,8 @@ public class JSONHandler {
 			//
 			super.onPostExecute(result);
 			// callback
-			if (m_SuggestQuestionListener != null) {
-				m_SuggestQuestionListener.onSuggestionSent(result);
+			if (mSuggestQuestionListener != null) {
+				mSuggestQuestionListener.onSuggestionSent(result);
 			}
 
 		}
@@ -1106,7 +1230,7 @@ public class JSONHandler {
 			params1.add(new BasicNameValuePair("answerWrong2", params[4]));
 			params1.add(new BasicNameValuePair("answerWrong3", params[5]));
 
-			result = getJSONObjectFromUrl(m_ServerUrl, params1);
+			result = getJSONObjectFromUrl(mServerUrl, params1);
 
 			try {
 				if (result != null) {
@@ -1181,14 +1305,14 @@ public class JSONHandler {
 			//
 			super.onPostExecute(result);
 			// callback
-			if (m_ScoreUpdateListener != null) {
-				m_ScoreUpdateListener.onScoreAdded(result);
+			if (mScoreUpdateListener != null) {
+				mScoreUpdateListener.onScoreAdded(result);
 
 				// checking if uploaded a score that was in the local db, if so
 				// then delete if from the local db
 				if (m_RowInDatabase != -1) {
 					if (result == SUCCESS_SCORE_ADDED) {
-						m_ScoreUpdateListener
+						mScoreUpdateListener
 								.deleteScoreFromDatabase(m_RowInDatabase);
 					}
 
@@ -1211,7 +1335,7 @@ public class JSONHandler {
 			params1.add(new BasicNameValuePair("gameScore", params[2]));
 			params1.add(new BasicNameValuePair("gameTime", params[3]));
 
-			result = getJSONObjectFromUrl(m_ServerUrl, params1);
+			result = getJSONObjectFromUrl(mServerUrl, params1);
 
 			try {
 				if (result != null) {
@@ -1255,7 +1379,7 @@ public class JSONHandler {
 
 		try {
 			
-			jsonArray = getJSONArrayFromUrl(m_ServerUrl, params);
+			jsonArray = getJSONArrayFromUrl(mServerUrl, params);
 
 			if (jsonArray != null) {
 

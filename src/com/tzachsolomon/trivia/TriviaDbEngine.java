@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import android.os.AsyncTask;
 import android.util.Log;
-import android.util.SparseArray;
+
 
 public class TriviaDbEngine {
 
@@ -86,7 +86,7 @@ public class TriviaDbEngine {
 	private Context ourContext;
 	private SQLiteDatabase ourDatabase;
 
-	private TriviaDbEngineUpdateListener m_UpdateListener;
+	private TriviaDbEngineUpdateListener mUpdateListener;
 
 	private static class DbHelper extends SQLiteOpenHelper {
 
@@ -763,8 +763,8 @@ public class TriviaDbEngine {
 			boolean i_SilentMode) {
 		//
 		AsyncTaskUpdateQuestions a = new AsyncTaskUpdateQuestions();
-		a.m_UpdateFrom = i_UpdateFrom;
-		a.m_SilentMode = i_SilentMode;
+		a.mUpdateFrom = i_UpdateFrom;
+		a.mSilentMode = i_SilentMode;
 		a.execute(values);
 
 	}
@@ -772,8 +772,8 @@ public class TriviaDbEngine {
 	public class AsyncTaskUpdateQuestions extends
 			AsyncTask<ContentValues, Integer, Void> {
 
-		public boolean m_SilentMode;
-		public int m_UpdateFrom;
+		public boolean mSilentMode;
+		public int mUpdateFrom;
 		private ProgressDialog m_ProgressDialog;
 		private int m_MaxValue;
 
@@ -785,7 +785,7 @@ public class TriviaDbEngine {
 			m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 			m_ProgressDialog.setTitle(ourContext
 					.getString(R.string.inserting_questions_to_database));
-			if (!m_SilentMode) {
+			if (!mSilentMode) {
 				m_ProgressDialog.show();
 			}
 
@@ -794,11 +794,11 @@ public class TriviaDbEngine {
 		@Override
 		protected void onPostExecute(Void result) {
 			//
-			if (!m_SilentMode) {
+			if (!mSilentMode) {
 				m_ProgressDialog.dismiss();
 			}
-			if (m_UpdateListener != null) {
-				m_UpdateListener.onUpdateQuestionsFinished(m_UpdateFrom);
+			if (mUpdateListener != null) {
+				mUpdateListener.onUpdateQuestionsFinished(mUpdateFrom);
 			}
 			// Toast.makeText(ourContext, "Ended inserting to database",
 			// Toast.LENGTH_LONG).show();
@@ -870,8 +870,8 @@ public class TriviaDbEngine {
 			//
 			m_ProgressDialog.setProgress(values[0]);
 
-			if (m_UpdateListener != null) {
-				m_UpdateListener.updateProgressQuestionsInsertToDatabase(
+			if (mUpdateListener != null) {
+				mUpdateListener.updateProgressQuestionsInsertToDatabase(
 						values[0], m_MaxValue);
 			}
 		}
@@ -973,8 +973,8 @@ public class TriviaDbEngine {
 
 		retCode = ourDatabase.insert(TABLE_GAMES, null, cv);
 
-		if (m_UpdateListener != null) {
-			m_UpdateListener.onAddedScoreToDatabase(retCode);
+		if (mUpdateListener != null) {
+			mUpdateListener.onAddedScoreToDatabase(retCode);
 		}
 
 		this.closeDb();
@@ -1019,8 +1019,8 @@ public class TriviaDbEngine {
 			if (!m_SilentMode) {
 				m_ProgressDialog.dismiss();
 			}
-			if (m_UpdateListener != null) {
-				m_UpdateListener.onUpdateCategoriesFinished(m_UpdateFrom);
+			if (mUpdateListener != null) {
+				mUpdateListener.onUpdateCategoriesFinished(m_UpdateFrom);
 			}
 
 		}
@@ -1105,7 +1105,7 @@ public class TriviaDbEngine {
 	}
 
 	public void setUpdateListener(TriviaDbEngineUpdateListener listener) {
-		this.m_UpdateListener = listener;
+		this.mUpdateListener = listener;
 	}
 
 	public void insertUser(int i_UserId, int userType, String userName){
@@ -1190,6 +1190,14 @@ public class TriviaDbEngine {
 		this.closeDb();
 
 		return ret;
+	}
+
+	public void openForFirstTime() {
+		// 
+		this.openDbWritable();
+		
+		this.closeDb();
+		
 	}
 
 }

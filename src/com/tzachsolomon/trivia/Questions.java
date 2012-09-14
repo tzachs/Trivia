@@ -10,25 +10,25 @@ public class Questions {
 
 	private static final int SHUFFLE_THRESHOLD = 5;
 	// holds the questions
-	public ArrayList<Question> m_Questions;
+	public ArrayList<Question> mQuestions;
 	// holds the regions for how many times played
-	public ArrayList<Integer> m_RegionsHowManyTimesPlayed;
-	public int m_QuestionIndex;
+	public ArrayList<Integer> mRegionsHowManyTimesPlayed;
+	public int mQuestionIndex;
 
 	public Questions() {
-		m_Questions = new ArrayList<Question>();
-		m_RegionsHowManyTimesPlayed = new ArrayList<Integer>();
-		m_QuestionIndex = 0;
+		mQuestions = new ArrayList<Question>();
+		mRegionsHowManyTimesPlayed = new ArrayList<Integer>();
+		mQuestionIndex = 0;
 	}
 
 	public void addNewQuestion(Question question) {
 		//
-		m_Questions.add(question);
+		mQuestions.add(question);
 
 	}
 
 	private void calculateRegionsTimesPlayed() {
-		int length = m_Questions.size() - 1;
+		int length = mQuestions.size() - 1;
 		int i = 1;
 		int timesPlayed;
 
@@ -36,14 +36,14 @@ public class Questions {
 		if (length > 2) {
 
 			// getting how many times the first questions was played
-			timesPlayed = m_Questions.get(0).getQuestionTimesPlayed();
+			timesPlayed = mQuestions.get(0).getQuestionTimesPlayed();
 
 			while (i <= length) {
 				// checking if the current question and the next question have been played the same times
-				if (timesPlayed != m_Questions.get(i).getQuestionTimesPlayed()) {
+				if (timesPlayed != mQuestions.get(i).getQuestionTimesPlayed()) {
 					// if not then we we found a new region
-					m_RegionsHowManyTimesPlayed.add(i);
-					timesPlayed = m_Questions.get(i).getQuestionTimesPlayed();
+					mRegionsHowManyTimesPlayed.add(i);
+					timesPlayed = mQuestions.get(i).getQuestionTimesPlayed();
 				}
 
 				i++;
@@ -51,15 +51,15 @@ public class Questions {
 			
 		}
 		
-		if ( m_RegionsHowManyTimesPlayed.size() == 0 ){
-			m_RegionsHowManyTimesPlayed.add(length);
+		if ( mRegionsHowManyTimesPlayed.size() == 0 ){
+			mRegionsHowManyTimesPlayed.add(length);
 		}
 
 	}
 
 	public int getNumberOfQustions() {
 		//
-		return m_Questions.size();
+		return mQuestions.size();
 	}
 
 	public void shuffle(boolean m_SortByNewQuestionFirst) {
@@ -77,15 +77,15 @@ public class Questions {
 			start = 0;
 			
 			
-			for ( i = 0; i < m_RegionsHowManyTimesPlayed.size(); i++ ){
-				end = m_RegionsHowManyTimesPlayed.get(i);
-				myShuffle(m_Questions,start,end);
+			for ( i = 0; i < mRegionsHowManyTimesPlayed.size(); i++ ){
+				end = mRegionsHowManyTimesPlayed.get(i);
+				myShuffle(mQuestions,start,end);
 				start = end;
 				
 			}
 			
 		} else {
-			Collections.shuffle(m_Questions);
+			Collections.shuffle(mQuestions);
 		}
 	}
 
@@ -131,7 +131,7 @@ public class Questions {
 
 	public Question getQuestionAtIndex(int m_QuestionIndex) {
 		//
-		return m_Questions.get(m_QuestionIndex);
+		return mQuestions.get(m_QuestionIndex);
 	}
 	
 	public interface RemoteAccess { 

@@ -13,9 +13,9 @@ import android.widget.Toast;
 public class ActivitySuggestQuestion extends Activity implements
 		OnClickListener, SuggestQuestionListener {
 
-	private int m_CurrentUserID;
+	private int mCurrentUserID;
 	private Button buttonSendSuggestion;
-	private JSONHandler m_JSONHandler;
+	private JSONHandler mJSONHandler;
 	private EditText editTextAnswerCorrect;
 	private EditText editTextAnswerWrong1;
 	private EditText editTextAnswerWrong2;
@@ -33,10 +33,10 @@ public class ActivitySuggestQuestion extends Activity implements
 
 	private void initializeVariables() {
 		//
-		m_CurrentUserID = -2;
-		m_JSONHandler = new JSONHandler(ActivitySuggestQuestion.this);
+		mCurrentUserID = -2;
+		mJSONHandler = new JSONHandler(ActivitySuggestQuestion.this);
 
-		m_JSONHandler.setSuggestQuestionListener(this);
+		mJSONHandler.setSuggestQuestionListener(this);
 
 		buttonSendSuggestion = (Button) findViewById(R.id.buttonSendSuggestion);
 
@@ -72,7 +72,7 @@ public class ActivitySuggestQuestion extends Activity implements
 		String answerWrong3 = editTextAnswerWrong3.getText().toString();
 		String answerQuestion = editTextQuestion.getText().toString();
 
-		m_JSONHandler.sendQuestionSuggestionAsync(m_CurrentUserID,
+		mJSONHandler.sendQuestionSuggestionAsync(mCurrentUserID,
 				answerCorrect, answerQuestion, answerWrong1, answerWrong2,
 				answerWrong3);
 

@@ -1,18 +1,11 @@
 package com.tzachsolomon.trivia;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.facebook.android.DialogError;
-import com.facebook.android.Facebook;
-import com.facebook.android.FacebookError;
-import com.facebook.android.Util;
 import com.tzachsolomon.trivia.JSONHandler.UserManageListener;
+import com.tzachsolomon.trivia.MyFacebook.MyFacebookListener;
 
 import android.app.Activity;
+import android.content.Intent;
 
 import android.os.Bundle;
 import android.view.View;
@@ -33,7 +26,7 @@ import android.widget.Toast;
  * 
  */
 public class ActivityManageUsers extends Activity implements OnClickListener,
-		UserManageListener {
+		UserManageListener, MyFacebookListener {
 
 	public static final int ANNONYMOUS_USER = -2;
 	public static final int USER_TYPE_TRIVIA = 0;
@@ -52,7 +45,7 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 	private TriviaDbEngine mTriviaDb;
 	private ImageView imageViewFacebookButton;
 
-	private Facebook mFacebook;
+	private MyFacebook mFacebook;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +72,9 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 		initButtons();
 		initEditText();
 
-		mFacebook = new Facebook(getString(R.string.facebook_app_id));
+		mFacebook = new MyFacebook(ActivityManageUsers.this,ActivityManageUsers.this);
+		
+		mFacebook.setMyFacebookListener(this);
 
 		// TODO: check if this actually works, login a user, back, retry to
 		// login user.
@@ -151,78 +146,15 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 
 	private void imageViewFacebookButton_Clicked() {
 		//
-		if (mFacebook.isSessionValid()) {
-			// logout the user
-			setResult(ANNONYMOUS_USER);
-		} else {
-			mFacebook.authorize(ActivityManageUsers.this,
-					new Facebook.DialogListener() {
-
-						@Override
-						public void onFacebookError(FacebookError e) {
-							//
-							Toast.makeText(ActivityManageUsers.this,
-									"onFacebookError", Toast.LENGTH_LONG)
-									.show();
-
-						}
-
-						@Override
-						public void onError(DialogError e) {
-							//
-							Toast.makeText(ActivityManageUsers.this, "onError",
-									Toast.LENGTH_LONG).show();
-						}
-
-						@Override
-						public void onComplete(Bundle values) {
-							//
-							//
-							try {
-								// Logged in okay to the facebook account
-								String jsonUser = mFacebook.request("me");
-								JSONObject jsonObject = Util
-										.parseJson(jsonUser);
-
-								String id = jsonObject.getString("id");
-								String username = jsonObject
-										.getString("username");
-								String email = jsonObject.getString("email");
-
-								if (!mTriviaDb.isUsersExists(id)) {
-									// Register the user
-									registerUser(email, id, username,
-											USER_TYPE_FACEBOOK);
-								} else {
-									Toast.makeText(
-											getApplicationContext(),
-											getString(R.string.user_authenticated_succesfully),
-											Toast.LENGTH_LONG).show();
-								}
-
-								updateFacebookLoginLogoutImage();
-
-							} catch (MalformedURLException e) {
-								//
-								e.printStackTrace();
-							} catch (IOException e) {
-								//
-								e.printStackTrace();
-							} catch (JSONException e) {
-
-							}
-
-						}
-
-						@Override
-						public void onCancel() {
-							//
-							Toast.makeText(ActivityManageUsers.this,
-									"onCancel", Toast.LENGTH_LONG).show();
-						}
-					});
-		}
-
+		mFacebook.loginLogout();
+		
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		// 
+		super.onActivityResult(requestCode, resultCode, data);
+		mFacebook.authorizeCallback(requestCode, resultCode, data);
 	}
 
 	/**
@@ -264,12 +196,18 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 	private void buttonUserRequestSend_Clicked() {
 
 		//
-
 		String email = editTextEmail.getText().toString();
 		String password = editTextPassword.getText().toString();
 		String username = editTextUsername.getText().toString();
+		
+		if ( buttonUserLogin.getVisibility() == View.VISIBLE){
+			mJSONHandler.userLoginAsync(new String[] { username,password,email});
+		}else{
+			registerUser(email, password, username, USER_TYPE_TRIVIA);	
+		}
+		
 
-		registerUser(email, password, username, USER_TYPE_TRIVIA);
+		
 
 	}
 
@@ -298,21 +236,29 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 	 * Function is the callback answer when calling JSONHandler.loginUser
 	 */
 	@Override
-	public void onUserLogin(String i_Response, int userId, int userType,
+	public void onUserLogin(String response, int userId, int userType,
 			String username) {
 		//
 		// setting result id for calling activity, usually the Main activity
 		setResult(userId);
+		if ( userId != -1){
+			// checking if login in with a user that exists but isn't in the local
+			// database. This might be in case the user registered once the user and
+			// uninstalled the application
+			// or cleared it's data
+			if (!mTriviaDb.isUsersExists(Integer.toString(userId))) {
+				// adding the user locally
+				mTriviaDb.insertUser(userId, userType, username);
 
-		// checking if login in with a user that exists but isn't in the local
-		// database. This might be in case the user registered once the user and
-		// uninstalled the application
-		// or cleared it's data
-		if (!mTriviaDb.isUsersExists(Integer.toString(userId))) {
-			// adding the user locally
-			mTriviaDb.insertUser(userId, userType, username);
-
+			}
+			
+			Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
+			
+		}else{
+			Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
 		}
+
+
 	}
 
 	/*
@@ -325,16 +271,45 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 	 * Function is a callback answer when calling JSONHandler.registerUSer
 	 */
 	@Override
-	public void onUserRegister(String i_Respone, int userId, int userType,
+	public void onUserRegister(String response, int userId, int userType,
 			String username) {
-		//
 		// checking if userId is valid
 		if (userId != -1) {
 			// adding the user locally
 			mTriviaDb.insertUser(userId, userType, username);
+			Toast.makeText(getApplicationContext(), response,Toast.LENGTH_LONG).show();
 
+		}else{
+			Toast.makeText(getApplicationContext(), response, Toast.LENGTH_LONG).show();
 		}
 
+	}
+
+	@Override
+	public void onFacebookUserLogin(int userId) {
+		// 
+		
+		Toast.makeText(ActivityManageUsers.this, getString(R.string.user_authenticated_succesfully), Toast.LENGTH_LONG).show();
+		setResult(userId);
+		updateFacebookLoginLogoutImage();
+	}
+
+	@Override
+	public void onFacebookUserLogout() {
+		// 
+		Toast.makeText(ActivityManageUsers.this, getString(R.string.user_authenticated_succesfully), Toast.LENGTH_LONG).show();
+		setResult(ANNONYMOUS_USER);
+		updateFacebookLoginLogoutImage();
+		
+	}
+
+	@Override
+	public void onFacebookUserRegister(int userId) {
+		// TODO Auto-generated method stub
+		Toast.makeText(ActivityManageUsers.this, getString(R.string.user_registered_succesfully), Toast.LENGTH_LONG).show();
+		setResult(userId);
+		updateFacebookLoginLogoutImage();
+		
 	}
 
 }

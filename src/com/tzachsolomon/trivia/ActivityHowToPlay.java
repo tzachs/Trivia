@@ -21,7 +21,7 @@ public class ActivityHowToPlay extends Activity implements OnClickListener {
 	private TextView textViewHowToPlayTitle;
 	private CheckBox checkBoxShowGameInstructionsEveryTime;
 
-	private int m_GameType;
+	private int mGameType;
 	private SharedPreferences m_SharedPreferences;
 	private Button buttonCloseHowToPlay;
 
@@ -51,7 +51,7 @@ public class ActivityHowToPlay extends Activity implements OnClickListener {
 				.getString(KEY_HOW_TO_PLAY_INSTRUCTIONS_TITLE));
 		textViewHowToPlayTitle.setText(extras.getString(KEY_HOW_TO_PLAY_TITLE));
 
-		m_GameType = extras.getInt(ActivityGame.INTENT_EXTRA_GAME_TYPE);
+		mGameType = extras.getInt(ActivityGame.INTENT_EXTRA_GAME_TYPE);
 		
 		
 
@@ -106,7 +106,7 @@ public class ActivityHowToPlay extends Activity implements OnClickListener {
 
 	private void checkBoxShowGameInstructionsEveryTime_Clicked() {
 		//
-		switch (m_GameType) {
+		switch (mGameType) {
 		case ActivityGame.GAMETYPE_ALL_QUESTIONS:
 			m_SharedPreferences.edit().putBoolean(
 					"checkBoxPreferenceShowHelpAllQuestions",

@@ -5,17 +5,17 @@ import android.content.SharedPreferences;
 
 public class StringParser {
 
-	private  SharedPreferences m_SharedPreferences;
+	private  SharedPreferences mSharedPreferences;
 			
 	public StringParser (SharedPreferences i_SharedPreferences){
-		m_SharedPreferences = i_SharedPreferences;
+		mSharedPreferences = i_SharedPreferences;
 	}
 	
 	public  String reverseNumbersInStringHebrew(String i_String) {
 		
-		boolean reverse = m_SharedPreferences.getBoolean(
+		boolean reverse = mSharedPreferences.getBoolean(
 				"checkBoxPreferenceRevereseInHebrew", false);
-		String lang = m_SharedPreferences.getString("listPreferenceLanguages", "iw");
+		String lang = mSharedPreferences.getString("listPreferenceLanguages", "iw");
 		if ( reverse && lang.contentEquals("iw")){
 			return reverseNumbersInString(i_String);
 		}else{

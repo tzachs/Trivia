@@ -16,9 +16,9 @@ public class ActivityManageDatabase extends Activity implements OnClickListener 
 	private Button buttonDeleteDatabase;
 	private Button buttonUpdateDatabaseQuestions;
 
-	private TriviaDbEngine m_TriviaDb;
+	private TriviaDbEngine mTriviaDb;
 
-	private UpdateManager m_UpdateManager;
+	private UpdateManager mUpdateManager;
 
 	private Button buttonUpdateDatabaseCategories;
 
@@ -35,8 +35,8 @@ public class ActivityManageDatabase extends Activity implements OnClickListener 
 	private void initializeVariables() {
 		//
 
-		m_UpdateManager = new UpdateManager(this);
-		m_TriviaDb = new TriviaDbEngine(ActivityManageDatabase.this);
+		mUpdateManager = new UpdateManager(this);
+		mTriviaDb = new TriviaDbEngine(ActivityManageDatabase.this);
 
 		initializeButtons();
 
@@ -81,13 +81,13 @@ public class ActivityManageDatabase extends Activity implements OnClickListener 
 
 	private void buttonUpdateDatabaseCategories_Clicked() {
 		// 
-		m_UpdateManager.updateCategories(false);
+		mUpdateManager.updateCategories(false);
 		
 	}
 
 	private void buttonUpdateDatabase_Clicked() {
 		// checking if to upload user correct wrong statistics before
-		m_UpdateManager.updateQuestions(false);
+		mUpdateManager.updateQuestions(false);
 
 	}
 
@@ -103,7 +103,7 @@ public class ActivityManageDatabase extends Activity implements OnClickListener 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
 				//
-				m_TriviaDb.deleteDatabase();
+				mTriviaDb.deleteDatabase();
 				
 				
 				Toast.makeText(ActivityManageDatabase.this,getString(R.string.database_deleted), Toast.LENGTH_LONG).show();

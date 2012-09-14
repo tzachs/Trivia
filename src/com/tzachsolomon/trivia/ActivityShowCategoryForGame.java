@@ -33,13 +33,13 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 
 	
 	private MyBaseExpandableListAdapter m_Adapter;
-	private Items m_Items;
+	private Items mItems;
 
 	private ExpandableListView m_ExpandableList;
 	private Button buttonStartCategoryGame;
 	private Button buttonUpdateCategories;
-	private TriviaDbEngine m_DbEngine;
-	private UpdateManager m_UpdateManager;
+	private TriviaDbEngine mDbEngine;
+	private UpdateManager mUpdateManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -59,11 +59,11 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 	private void initialiazeVariables() {
 		//
 		
-		m_DbEngine = new TriviaDbEngine(this);
+		mDbEngine = new TriviaDbEngine(this);
 		
 		
-		m_UpdateManager = new UpdateManager(this);
-		m_UpdateManager.setCategoriesListener(this);
+		mUpdateManager = new UpdateManager(this);
+		mUpdateManager.setCategoriesListener(this);
 		
 		buttonStartCategoryGame = (Button) findViewById(R.id.buttonStartCategoryGame);
 		buttonUpdateCategories = (Button)findViewById(R.id.buttonUpdateCategories);
@@ -81,11 +81,11 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 		// 
 		super.onResume();
 		
-		m_UpdateManager.updateCategories(true);
+		mUpdateManager.updateCategories(true);
 	}
 
 	private void setButtonsVisibilaty() {
-		if ( m_DbEngine.isCategoriesEmpty() ){
+		if ( mDbEngine.isCategoriesEmpty() ){
 			buttonUpdateCategories.setVisibility(View.VISIBLE);
 			buttonStartCategoryGame.setVisibility(View.GONE);
 		}else{
@@ -101,26 +101,26 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 		ContentValues[] subCategories;
 		int i, length, j, jlength, categoryId, currentGroupId;
 
-		categories = m_DbEngine.getPrimaryCategories();
+		categories = mDbEngine.getPrimaryCategories();
 
-		m_Items = new Items();
+		mItems = new Items();
 
 		for (i = 0, length = categories.length; i < length; i++) {
 			String categoryText = categories[i]
 					.getAsString(TriviaDbEngine.KEY_COL_HE_NAME);
 			categoryId = categories[i].getAsInteger(TriviaDbEngine.KEY_ROWID);
-			subCategories = m_DbEngine.getSubCategories(categoryId);
+			subCategories = mDbEngine.getSubCategories(categoryId);
 
 			// checking how many sub categories this category has
 			jlength = subCategories.length;
 
 			// add primary categories
-			currentGroupId = m_Items.addEmptyGroup(categoryText, false,
+			currentGroupId = mItems.addEmptyGroup(categoryText, false,
 					categoryId);
 
 			// adding sub categories
 			for (j = 0; j < jlength; j++) {
-				m_Items.addChildToGroup(
+				mItems.addChildToGroup(
 						currentGroupId,
 						categoryText
 								+ " - "
@@ -133,7 +133,7 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 
 		}
 
-		m_Adapter = new MyBaseExpandableListAdapter(this, m_Items);
+		m_Adapter = new MyBaseExpandableListAdapter(this, mItems);
 
 		m_ExpandableList = getExpandableListView();
 
@@ -526,13 +526,13 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 	private void buttonUpdateCategories_Clicked() {
 		// 
 		
-		m_UpdateManager.updateCategories(false);
+		mUpdateManager.updateCategories(false);
 		
 	}
 
 	private void buttonStartCategoryGame_Clicked() {
 		//
-		ArrayList<Integer> chosenIds = m_Items.getChosenIds();
+		ArrayList<Integer> chosenIds = mItems.getChosenIds();
 		
 
 		if (chosenIds.size() > 0) {
