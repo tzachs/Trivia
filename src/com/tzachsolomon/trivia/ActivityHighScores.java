@@ -55,8 +55,8 @@ public class ActivityHighScores extends Activity implements ScoreListener,
 		protected void onPreExecute() {
 			//
 			mProgressDialog = new ProgressDialog(ActivityHighScores.this);
-			mProgressDialog.setTitle("Downloding Game Scores");
-			mProgressDialog.setMessage("Downloading Game Scores from server");
+			mProgressDialog.setTitle(getString(R.string.downloding_game_scores));
+			mProgressDialog.setMessage(getString(R.string.downloading_game_scores_from_server));
 			mProgressDialog.setCancelable(false);
 			mProgressDialog.show();
 		}

@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">Trivia</string>
-    <string name="facebook_app_id" translatable="false">203003926497543</string>
+    
     <string name="buttonNewGameAllQuestionsText">All Questions</string>
     <string name="textViewQuestionText"></string>
     <string name="buttonAnswer1"></string>
@@ -207,5 +207,7 @@
     <string name="all">All</string>
     <string name="login_to_facebook">Login to Facebook</string>
     <string name="or_use_your_facebook_account_and_press_the_login_button_">Or, use your Facebook account and press the login button</string>
+    <string name="downloding_game_scores">Downloading Game Scores</string>
+    <string name="downloading_game_scores_from_server">Downloading Game Scores from server</string>
 
 </resources>

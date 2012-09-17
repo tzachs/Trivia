@@ -205,4 +205,6 @@
     <string name="all">הכול</string>
 <string name="login_to_facebook">התחבר לFacebook</string>
     <string name="or_use_your_facebook_account_and_press_the_login_button_">או התחבר בעזרת חשבון הFacebook</string>
+    <string name="downloding_game_scores">מוריד תוצאות משחקים</string>
+    <string name="downloading_game_scores_from_server">מוריד תוצאות משחקים מהשרת</string>
 </resources>
