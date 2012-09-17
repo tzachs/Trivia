@@ -385,7 +385,7 @@ public class JSONHandler {
 				data = new String(EntityUtils.toString(httpEntity).getBytes(),
 						"UTF-8");
 
-				Log.v(TAG, "the raw JSON response is " + data);
+				//Log.d(TAG, "the raw JSON response is " + data);
 
 				// try parse the string to a JSON array
 				try {

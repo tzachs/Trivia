@@ -34,8 +34,8 @@
     <string name="checkBoxPreferenceUploadCorrectWrongUserStatTitle">Upload statistics</string>
     <string name="buttonNewGameSimpleText">Levels Game</string>
     <string name="preferenceCategoryGameRelatedTitle">Game Configuration</string>
-    <string name="checkBoxPreferenceCheckUpdateOnStartupSummary">Check update on the startup of the app</string>
-    <string name="checkBoxPreferenceCheckUpdateOnStartupTitle">Check update on startup</string>
+    <string name="checkBoxPreferenceCheckUpdateOnStartupSummary">Check for updates</string>
+    <string name="checkBoxPreferenceCheckUpdateOnStartupTitle">Update</string>
     <string name="textViewWelcomeMessageText">Welcome to first time configuration wizard of Trivia. Press next to toggle between options and click finish when you are done</string>
     <string name="textViewSetupFinishText">Thank you for configuring Trivia for the first time. Next thing to do is hit finish and than update database from the main menu</string>
     <string name="textViewSetupFinishText1">Please send suggestion by clicking Menu and then About</string>
@@ -175,7 +175,7 @@
     <string name="finished_importing_categories_from_initial_file">Finished importing categories from initial file</string>
     <string name="registering_a_user_gives_you_the_ability_to_publish_scores_play_against_other_players_etc">Registering a user gives you the ability to publish scores, play against other players, etc</string>
     <string name="register_user">Register user</string>
-    <string name="register_a_user_">Register a user?</string>
+    <string name="register_a_user_">Registering allows to upload game scores, get credit for suggest questions and more</string>
     <string name="no">No</string>
     <string name="defaut_user">Default user</string>
     <string name="use_user_">"Use user "</string>

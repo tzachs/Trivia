@@ -216,6 +216,8 @@ public class TriviaDbEngine {
 	}
 
 	private TriviaDbEngine openDbReadable() {
+		
+		
 		ourHelper = new DbHelper(ourContext);
 		ourDatabase = ourHelper.getReadableDatabase();
 
@@ -671,14 +673,26 @@ public class TriviaDbEngine {
 
 	private boolean isQuestionExist(String i_QuestionId) {
 		//
+		boolean closeAtEnd = false;
 		boolean ret = false;
-		String query = String.format("SELECT 1 FROM %1$s WHERE %2$s =%3$s",
-				TABLE_QUESTIONS, KEY_QUESTIONID, i_QuestionId);
-
-		Cursor cursor = ourDatabase.rawQuery(query, null);
+		//String query = String.format("SELECT 1 FROM %1$s WHERE %2$s =%3$s",	TABLE_QUESTIONS, KEY_QUESTIONID, i_QuestionId);
+		Cursor cursor;
+		//Cursor cursor = ourDatabase.rawQuery(query, null);
+		
+		if ( !ourDatabase.isOpen()){
+			this.openDbReadable();
+			closeAtEnd = true;
+		}
+		
+		cursor = ourDatabase.query(TABLE_QUESTIONS, new String[] { KEY_QUESTIONID}, KEY_QUESTIONID + "= ? ", 
+				new String[] { i_QuestionId } , null,null,null);
 
 		ret = (cursor.getCount() > 0);
 		cursor.close();
+		
+		if ( closeAtEnd){
+			this.closeDb();
+		}
 
 		return ret;
 	}
@@ -1110,6 +1124,7 @@ public class TriviaDbEngine {
 
 	public void insertUser(int i_UserId, int userType, String userName){
 		//
+		
 		this.openDbWritable();
 
 		ContentValues cv = new ContentValues();

@@ -132,15 +132,15 @@ public class ActivityWizardSetup extends Activity implements OnClickListener,
 		buttonNext = (Button) findViewById(R.id.buttonNext);
 		buttonBack = (Button) findViewById(R.id.buttonBack);
 		buttonFinish = (Button) findViewById(R.id.buttonSetupFinish);
-		buttonUserRegister = (Button) findViewById(R.id.buttonUserRegister);
+		//buttonUserRegister = (Button) findViewById(R.id.buttonUserRegister);
 
-		imageViewFacebookButton = (ImageView) findViewById(R.id.imageViewFacebookButton);
+		//imageViewFacebookButton = (ImageView) findViewById(R.id.imageViewFacebookButton);
 
 		buttonNext.setOnClickListener(this);
 		buttonBack.setOnClickListener(this);
 		buttonFinish.setOnClickListener(this);
-		buttonUserRegister.setOnClickListener(this);
-		imageViewFacebookButton.setOnClickListener(this);
+		//buttonUserRegister.setOnClickListener(this);
+		//imageViewFacebookButton.setOnClickListener(this);
 
 		listViewLanguages = (ListView) findViewById(R.id.listViewLanguages);
 

@@ -17,27 +17,10 @@
 		<field Field="colCorrectWrongRatio" Type="double" Null="NO" Key="" Extra="" Comment="" />
 		<field Field="colLastUpdate" Type="int(11)" Null="NO" Key="" Extra="" Comment="" />
 		<field Field="colEnabled" Type="int(11)" Null="NO" Key="" Extra="" Comment="" />
-		<key Table="questions" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="_id" Collation="A" Cardinality="511" Null="" Index_type="BTREE" Comment="" Index_comment="" />
-		<options Name="questions" Engine="InnoDB" Version="10" Row_format="Compact" Rows="511" Avg_row_length="288" Data_length="147456" Max_data_length="0" Index_length="0" Data_free="4194304" Auto_increment="590" Create_time="2012-06-02 12:54:48" Collation="latin1_swedish_ci" Create_options="" Comment="" />
+		<key Table="questions" Non_unique="0" Key_name="PRIMARY" Seq_in_index="1" Column_name="_id" Collation="A" Cardinality="565" Null="" Index_type="BTREE" Comment="" Index_comment="" />
+		<options Name="questions" Engine="InnoDB" Version="10" Row_format="Compact" Rows="565" Avg_row_length="260" Data_length="147456" Max_data_length="0" Index_length="0" Data_free="4194304" Auto_increment="617" Create_time="2012-06-02 12:54:48" Collation="latin1_swedish_ci" Create_options="" Comment="" />
 	</table_structure>
 	<table_data name="questions">
-	<row>
-		<field name="_id">33</field>
-		<field name="colQuestionId">1335877424</field>
-		<field name="colQuestion">כינוי הרמב&quot;ם</field>
-		<field name="colAnswer1">הנשר הגדול</field>
-		<field name="colAnswer2">הראשון לציון</field>
-		<field name="colAnswer3">הנס מספרד</field>
-		<field name="colAnswer4">חכם ישראל</field>
-		<field name="colAnswerIndex">1</field>
-		<field name="colCategory">10</field>
-		<field name="colLanguage">2</field>
-		<field name="colCorrect">18</field>
-		<field name="colWrong">2</field>
-		<field name="colCorrectWrongRatio">0.1</field>
-		<field name="colLastUpdate">1341723873</field>
-		<field name="colEnabled">1</field>
-	</row>
 	<row>
 		<field name="_id">12</field>
 		<field name="colQuestionId">1335808253</field>
@@ -7524,7 +7507,7 @@
 		<field name="colQuestion">באיזה סרט נאמר &quot;אנדי דופרין – האיש שזחל בתוך נהר של חרא ויצא נקי בצד השני.&quot;</field>
 		<field name="colAnswer1">חומות של תקווה</field>
 		<field name="colAnswer2">איש הגשם</field>
-		<field name="colAnswer3">אנדי דופרין</field>
+		<field name="colAnswer3">צעצוע של סיפור</field>
 		<field name="colAnswer4">לב אמיץ</field>
 		<field name="colAnswerIndex">1</field>
 		<field name="colCategory">21</field>
@@ -7532,13 +7515,13 @@
 		<field name="colCorrect">5</field>
 		<field name="colWrong">0</field>
 		<field name="colCorrectWrongRatio">0.1</field>
-		<field name="colLastUpdate">1341723886</field>
+		<field name="colLastUpdate">1344979301</field>
 		<field name="colEnabled">1</field>
 	</row>
 	<row>
 		<field name="_id">472</field>
 		<field name="colQuestionId">1340697213</field>
-		<field name="colQuestion">באיזה סרט נאמר &quot;הישועה באה מבפנים.&quot;</field>
+		<field name="colQuestion">באיזה סרט נאמר הישועה באה מבפנים</field>
 		<field name="colAnswer1">חומות של תקווה</field>
 		<field name="colAnswer2">הפסיון של ישו</field>
 		<field name="colAnswer3">אקספרס של חצות</field>
@@ -9522,6 +9505,465 @@
 		<field name="colWrong">0</field>
 		<field name="colCorrectWrongRatio">0</field>
 		<field name="colLastUpdate">1344719243</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">590</field>
+		<field name="colQuestionId">1344945295</field>
+		<field name="colQuestion">מי שר את השיר EVEN FLOW</field>
+		<field name="colAnswer1">Pearl Jam</field>
+		<field name="colAnswer2">Oasis</field>
+		<field name="colAnswer3">Blur</field>
+		<field name="colAnswer4">Soundgarden</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">14</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1344945295</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">591</field>
+		<field name="colQuestionId">1344945388</field>
+		<field name="colQuestion">באיזה אלבום קיים השיר Daughter של Pearl Jam</field>
+		<field name="colAnswer1">Vs.</field>
+		<field name="colAnswer2">Ten</field>
+		<field name="colAnswer3">Yield </field>
+		<field name="colAnswer4">Vitalogy </field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">14</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1344945388</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">592</field>
+		<field name="colQuestionId">1344948238</field>
+		<field name="colQuestion">המתאגרף המבוגר ביותר שזכה אי-פעם בתואר אלוף העולם במשקל כבד</field>
+		<field name="colAnswer1">ג'ורג' פורמן</field>
+		<field name="colAnswer2">מוחמד עלי</field>
+		<field name="colAnswer3">מייק טייסון</field>
+		<field name="colAnswer4">ג'ו פרייזר</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">7</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1344948238</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">593</field>
+		<field name="colQuestionId">1344948414</field>
+		<field name="colQuestion">כמה שחקנים בקבוצת בתחילת משחק כדורגל</field>
+		<field name="colAnswer1">11</field>
+		<field name="colAnswer2">10</field>
+		<field name="colAnswer3">5</field>
+		<field name="colAnswer4">13</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">7</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1344948414</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">594</field>
+		<field name="colQuestionId">1344948461</field>
+		<field name="colQuestion">כמה שחקנים בקבוצה במשחק פוטבול</field>
+		<field name="colAnswer1">11</field>
+		<field name="colAnswer2">13</field>
+		<field name="colAnswer3">9</field>
+		<field name="colAnswer4">10</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">7</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1344948461</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">595</field>
+		<field name="colQuestionId">1344948537</field>
+		<field name="colQuestion">כמה שחקנים בקבוצה במשחק כדוריד</field>
+		<field name="colAnswer1">7</field>
+		<field name="colAnswer2">5</field>
+		<field name="colAnswer3">9</field>
+		<field name="colAnswer4">10</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">7</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1344948537</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">596</field>
+		<field name="colQuestionId">1344948554</field>
+		<field name="colQuestion">כמה שחקנים בקבוצה במשחק כדורסל</field>
+		<field name="colAnswer1">5</field>
+		<field name="colAnswer2">6</field>
+		<field name="colAnswer3">3</field>
+		<field name="colAnswer4">9</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">7</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1344948554</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">597</field>
+		<field name="colQuestionId">1344948617</field>
+		<field name="colQuestion">כמה שחקנים בקבוצה במשחק הוקי</field>
+		<field name="colAnswer1">6</field>
+		<field name="colAnswer2">4</field>
+		<field name="colAnswer3">7</field>
+		<field name="colAnswer4">8</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">7</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1344948617</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">598</field>
+		<field name="colQuestionId">1344948680</field>
+		<field name="colQuestion">כמה שחקנים בקבוצה במשחק בייסבול (כדור בסיס)</field>
+		<field name="colAnswer1">9</field>
+		<field name="colAnswer2">7</field>
+		<field name="colAnswer3">11</field>
+		<field name="colAnswer4">8</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">7</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1344948680</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">599</field>
+		<field name="colQuestionId">1344948975</field>
+		<field name="colQuestion">מהו משקל תקני לכפפות אגרוף</field>
+		<field name="colAnswer1">בין 6 ל 8 אונקיות</field>
+		<field name="colAnswer2">בין 3 ל 5 אונקיות</field>
+		<field name="colAnswer3">בין 6 ל 10 אונקיות</field>
+		<field name="colAnswer4">בין 5 ל 9 אונקיות</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">7</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1344948975</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">600</field>
+		<field name="colQuestionId">1344949041</field>
+		<field name="colQuestion">כמה גרם יש באונקיה</field>
+		<field name="colAnswer1">30.6</field>
+		<field name="colAnswer2">19.6</field>
+		<field name="colAnswer3">24.9</field>
+		<field name="colAnswer4">42.3</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">10</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1344949041</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">601</field>
+		<field name="colQuestionId">1345359639</field>
+		<field name="colQuestion">היכן גדל הליצ'י במקור?</field>
+		<field name="colAnswer1">סין</field>
+		<field name="colAnswer2">בוליביה</field>
+		<field name="colAnswer3">יפן</field>
+		<field name="colAnswer4">תאילנד</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">28</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1345359639</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">602</field>
+		<field name="colQuestionId">1346241094</field>
+		<field name="colQuestion">ג'ון לוק נחשב אבי</field>
+		<field name="colAnswer1">הליברליזם</field>
+		<field name="colAnswer2">סוציאליזם</field>
+		<field name="colAnswer3">פמינזם</field>
+		<field name="colAnswer4">פשיזם</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">10</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1346241094</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">603</field>
+		<field name="colQuestionId">1346313994</field>
+		<field name="colQuestion">נחשב לאבי הפיזיקה הגרעינית</field>
+		<field name="colAnswer1">ארנסט רתרפורד</field>
+		<field name="colAnswer2">אלברט איינשטיין</field>
+		<field name="colAnswer3">ארתור אדינגטון</field>
+		<field name="colAnswer4">רוברט בויל</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">16</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1346313994</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">604</field>
+		<field name="colQuestionId">1346314025</field>
+		<field name="colQuestion">זאב רווח הוא יליד</field>
+		<field name="colAnswer1">מרוקו</field>
+		<field name="colAnswer2">תוניסיה</field>
+		<field name="colAnswer3">לוב</field>
+		<field name="colAnswer4">עיראק</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">10</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1346314025</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">605</field>
+		<field name="colQuestionId">1346314201</field>
+		<field name="colQuestion">סרטו הראשון של זאב רווח נקרא</field>
+		<field name="colAnswer1">סבינה והגברים</field>
+		<field name="colAnswer2">חסמבה ונערי ההפקר</field>
+		<field name="colAnswer3">צ'ארלי וחצי</field>
+		<field name="colAnswer4">חגיגה בסנוקר</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">11</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1346314201</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">606</field>
+		<field name="colQuestionId">1346314302</field>
+		<field name="colQuestion">מה שם המשפחה של ששון מצ'ארלי וחצי</field>
+		<field name="colAnswer1">אין לו שם משפחה</field>
+		<field name="colAnswer2">ביטון</field>
+		<field name="colAnswer3">אמזלג</field>
+		<field name="colAnswer4">יוספטל</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">11</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1346314302</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">607</field>
+		<field name="colQuestionId">1346573964</field>
+		<field name="colQuestion">איזה חברת רכב התחילה כחברה לייצור טרקטורים </field>
+		<field name="colAnswer1">למבורגיני</field>
+		<field name="colAnswer2">פורשה</field>
+		<field name="colAnswer3">טסלה</field>
+		<field name="colAnswer4">סאאב </field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">10</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1346573964</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">608</field>
+		<field name="colQuestionId">1346574027</field>
+		<field name="colQuestion">שמו האמצעי של זאב ז'בוטינסקי </field>
+		<field name="colAnswer1">ולדימיר</field>
+		<field name="colAnswer2">ייבגני</field>
+		<field name="colAnswer3">יוסף</field>
+		<field name="colAnswer4">ואדים</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">10</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1346574027</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">609</field>
+		<field name="colQuestionId">1346673456</field>
+		<field name="colQuestion">מהו יום ה H</field>
+		<field name="colAnswer1">היום בו החליפה שבדיה נהיגה מצד שמאל לצד ימין</field>
+		<field name="colAnswer2">היום בו פלשו בעלות הברית לצרפת</field>
+		<field name="colAnswer3">היום בו אנגליה פלשה להונדורס</field>
+		<field name="colAnswer4">היום בו מציינים את יום האיידס</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">10</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1346673456</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">610</field>
+		<field name="colQuestionId">1347545002</field>
+		<field name="colQuestion">מתי היה משבר הבנקים בישראל?</field>
+		<field name="colAnswer1">1983</field>
+		<field name="colAnswer2">1979</field>
+		<field name="colAnswer3">1989</field>
+		<field name="colAnswer4">2001</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">30</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1347545002</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">611</field>
+		<field name="colQuestionId">1347545159</field>
+		<field name="colQuestion">מי קיבל את העונש החמור ביותר במשבר מניות הבנקים בישראל?</field>
+		<field name="colAnswer1">ארנסט יפת</field>
+		<field name="colAnswer2">יעקב לוינסון</field>
+		<field name="colAnswer3">אהרן מאיר</field>
+		<field name="colAnswer4">רפאל רקנאטי</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">30</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1347545159</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">612</field>
+		<field name="colQuestionId">1347545443</field>
+		<field name="colQuestion">הבנק היחיד אשר לא הצטרף לוויסות מניות הבנקים בבבורסה לניירות ערך</field>
+		<field name="colAnswer1">הבינלאומי הראשון</field>
+		<field name="colAnswer2">דיסקונט</field>
+		<field name="colAnswer3">הפועלים</field>
+		<field name="colAnswer4">אגוד</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">30</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1347545443</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">613</field>
+		<field name="colQuestionId">1347545520</field>
+		<field name="colQuestion">מי היה ארנסט יפת</field>
+		<field name="colAnswer1">מנכ&quot;ל בנק לאומי במשבר מניות הבנקים</field>
+		<field name="colAnswer2">מנכל קק&quot;ל בשנים 1977-1981</field>
+		<field name="colAnswer3">מנכל הרכבת הראשון</field>
+		<field name="colAnswer4">שר האוצר בממשלת בגין</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">30</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1347545520</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">614</field>
+		<field name="colQuestionId">1347545554</field>
+		<field name="colQuestion">באיזה שנה הוקם בנק לאומי לישראל</field>
+		<field name="colAnswer1">1902</field>
+		<field name="colAnswer2">1920</field>
+		<field name="colAnswer3">1948</field>
+		<field name="colAnswer4">1956</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">30</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1347545554</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">615</field>
+		<field name="colQuestionId">1347545685</field>
+		<field name="colQuestion">מהי פרשת גני חמת</field>
+		<field name="colAnswer1">החרם אותו הכריזו בד&quot;ץ העדה החרדית על בנק לאומי לישראל</field>
+		<field name="colAnswer2">מעילת הכספים בחמת גדר בקק&quot;ל</field>
+		<field name="colAnswer3">הקמת היישוב גני חמת על יישוב ערבי</field>
+		<field name="colAnswer4">פרשת השוחד של איש הציבור גני חמת</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">30</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1347545685</field>
+		<field name="colEnabled">1</field>
+	</row>
+	<row>
+		<field name="_id">616</field>
+		<field name="colQuestionId">1347545800</field>
+		<field name="colQuestion">באיזה שנה נוסד בנק הפועלים</field>
+		<field name="colAnswer1">1921</field>
+		<field name="colAnswer2">1902</field>
+		<field name="colAnswer3">1951</field>
+		<field name="colAnswer4">1971</field>
+		<field name="colAnswerIndex">1</field>
+		<field name="colCategory">30</field>
+		<field name="colLanguage">2</field>
+		<field name="colCorrect">0</field>
+		<field name="colWrong">0</field>
+		<field name="colCorrectWrongRatio">0</field>
+		<field name="colLastUpdate">1347545800</field>
 		<field name="colEnabled">1</field>
 	</row>
 	</table_data>

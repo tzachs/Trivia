@@ -32,8 +32,8 @@
     <string name="checkBoxPreferenceUploadCorrectWrongUserStatTitle">"העלה הסטטיסטיקה"</string>
     <string name="buttonNewGameSimpleText">"משחק חדש"</string>
     <string name="preferenceCategoryGameRelatedTitle">"הגדרות משחק"</string>
-    <string name="checkBoxPreferenceCheckUpdateOnStartupSummary">"בדוק עדכונים בזמן העלאת התוכנה"</string>
-    <string name="checkBoxPreferenceCheckUpdateOnStartupTitle">"בדוק עדכונים באתחול"</string>
+    <string name="checkBoxPreferenceCheckUpdateOnStartupSummary">"בדוק עדכונים "</string>
+    <string name="checkBoxPreferenceCheckUpdateOnStartupTitle">"בדוק עדכונים "</string>
     <string name="textViewWelcomeMessageText">"ברוך הבא לאשף ההגדרות. לחץ הבא על מנת להמשיך ובסוף על סיום על מנת לשמור."</string>
     <string name="textViewSetupFinishText">&quot;תודה על שהגדרת את טריוויה. הדבר הבא לעשות הוא ללחוץ סיום ואז לללחוץ על עדכן את מאגר השאלות מהמסך הראשי&quot;</string>
     <string name="textViewSetupFinishTitleText">"טריוויה - סיום"</string>
@@ -172,7 +172,7 @@
     <string name="finished_importing_categories_from_initial_file">הסתיים יבוא קטגוריות מקובץ אתחול</string>
     <string name="registering_a_user_gives_you_the_ability_to_publish_scores_play_against_other_players_etc">רישום משתמש יאפשר לך לפרסם תוצאות, משחק נגד אחרים (עדיין לא יושם) , שליחת הצעות לשאלות ועוד</string>
     <string name="register_user">רשום משתמש</string>
-    <string name="register_a_user_">רשום משתמש</string>
+    <string name="register_a_user_">רישום משתמש מאפשר לך להעלות תוצאות משחקים, לקבל קרדיט על שאלות שפרסמת ועוד</string>
     <string name="no">לא</string>
     <string name="defaut_user">משתמש ברירת מחדל</string>
     <string name="use_user_"> התחבר אוטומטית עם "</string>

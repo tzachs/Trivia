@@ -62,13 +62,19 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 	public void updateQuestions(boolean i_SilentMode) {
 
-		if (mSharedPreferences.getBoolean(
-				"checkBoxPreferenceUploadCorrectWrongUserStat", true)) {
-			AsyncTaskUpdateCorrectWrongAsync a = new AsyncTaskUpdateCorrectWrongAsync();
-			a.mSilentMode = i_SilentMode;
-			a.execute();
-		} else {
-			checkIsUpdateAvailable(i_SilentMode);
+		boolean isUpdateEnabled = mSharedPreferences.getBoolean(
+				"checkBoxPreferenceCheckUpdateOnStartup", true);
+
+		if (isUpdateEnabled) {
+
+			if (mSharedPreferences.getBoolean(
+					"checkBoxPreferenceUploadCorrectWrongUserStat", true)) {
+				AsyncTaskUpdateCorrectWrongAsync a = new AsyncTaskUpdateCorrectWrongAsync();
+				a.mSilentMode = i_SilentMode;
+				a.execute();
+			} else {
+				checkIsUpdateAvailable(i_SilentMode);
+			}
 		}
 	}
 
@@ -134,23 +140,19 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 					Toast.makeText(mContext, result, Toast.LENGTH_LONG).show();
 				} else {
-					
-				
+
 				}
 
 				mProgressDialog.dismiss();
 				checkIsUpdateAvailable(true);
 			}
-			
-			
+
 			// checking if we sent any questions
-			if ( mNumberOfQuestionsToSend > 0 && !mSilentMode){
+			if (mNumberOfQuestionsToSend > 0 && !mSilentMode) {
 				if (mQuestionsListener != null) {
 					mQuestionsListener.onQuestionsCorrectRatioSent();
 				}
 			}
-			
-			
 
 		}
 
@@ -161,7 +163,7 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 			if (isInternetAvailable) {
 				int i = 0;
-				
+
 				wrongCorrectStat = mTriviaDb.getWrongCorrectStat();
 
 				mNumberOfQuestionsToSend = wrongCorrectStat.length;
@@ -184,8 +186,6 @@ public class UpdateManager implements DatabaseUpdateListener,
 						publishProgress(++i);
 
 					}
-
-					
 
 				}
 
@@ -298,15 +298,17 @@ public class UpdateManager implements DatabaseUpdateListener,
 									int which) {
 								//
 								if (mUpdateType == JSONHandler.TYPE_UPDATE_CATEGORIES) {
-									
-									if ( mCategoriesListener != null){
-										mCategoriesListener.onUpdateCategoriesPostponed();
+
+									if (mCategoriesListener != null) {
+										mCategoriesListener
+												.onUpdateCategoriesPostponed();
 									}
 
 								} else if (mUpdateType == JSONHandler.TYPE_UPDATE_QUESTIONS) {
 
-									if ( mQuestionsListener != null){
-										mQuestionsListener.onUpdateQuestionsPostponed();
+									if (mQuestionsListener != null) {
+										mQuestionsListener
+												.onUpdateQuestionsPostponed();
 									}
 								}
 
@@ -358,13 +360,13 @@ public class UpdateManager implements DatabaseUpdateListener,
 		//
 
 		if (i_DownloadedQuestions != null) {
-			mTriviaDb.updateQuestionAsync(i_DownloadedQuestions,TriviaDbEngine.TYPE_UPDATE_FROM_INTERNET,false);
+			mTriviaDb.updateQuestionAsync(i_DownloadedQuestions,
+					TriviaDbEngine.TYPE_UPDATE_FROM_INTERNET, false);
 
 		} else {
 			Toast.makeText(
 					mContext,
-					mContext
-							.getString(R.string.error_while_trying_to_update_from_server),
+					mContext.getString(R.string.error_while_trying_to_update_from_server),
 					Toast.LENGTH_SHORT).show();
 		}
 
@@ -376,13 +378,13 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 		if (i_DownloadedCategories != null) {
 
-			mTriviaDb.updateCategoriesAysnc(i_DownloadedCategories,TriviaDbEngine.TYPE_UPDATE_FROM_INTERNET,false);
+			mTriviaDb.updateCategoriesAysnc(i_DownloadedCategories,
+					TriviaDbEngine.TYPE_UPDATE_FROM_INTERNET, false);
 
 		} else {
 			Toast.makeText(
 					mContext,
-					mContext
-							.getString(R.string.error_while_trying_to_update_from_server),
+					mContext.getString(R.string.error_while_trying_to_update_from_server),
 					Toast.LENGTH_SHORT).show();
 		}
 
@@ -390,13 +392,17 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 	static public interface CategoriesListener {
 		public void onCategoriesUpdated(int i_UpdateFrom);
+
 		public void onUpdateCategoriesPostponed();
 	}
 
 	static public interface QuestionsListener {
 		public void onQuestionsCorrectRatioSent();
+
 		public void onQuestionsUpdated(int i_UpdateFrom);
-		public void updateQuestionProgress(int i_Progress,int i_Max);
+
+		public void updateQuestionProgress(int i_Progress, int i_Max);
+
 		public void onUpdateQuestionsPostponed();
 	}
 
@@ -413,7 +419,7 @@ public class UpdateManager implements DatabaseUpdateListener,
 		//
 		// sending event that the categories have been updated
 		if (mCategoriesListener != null) {
-			mCategoriesListener.onCategoriesUpdated( i_UpdateFrom);
+			mCategoriesListener.onCategoriesUpdated(i_UpdateFrom);
 		}
 
 	}
@@ -421,7 +427,7 @@ public class UpdateManager implements DatabaseUpdateListener,
 	@Override
 	public void onUpdateQuestionsFinished(int i_UpdateFrom) {
 		//
-		if (mQuestionsListener != null){
+		if (mQuestionsListener != null) {
 			mQuestionsListener.onQuestionsUpdated(i_UpdateFrom);
 		}
 	}
@@ -439,18 +445,21 @@ public class UpdateManager implements DatabaseUpdateListener,
 	}
 
 	public void importQuestionsFromXml() {
-		// 
-		AsyncTaskImportQuestionsFromXml a = new AsyncTaskImportQuestionsFromXml(mTriviaDb.getQuestionsLastUpdate());
+		//
+		AsyncTaskImportQuestionsFromXml a = new AsyncTaskImportQuestionsFromXml(
+				mTriviaDb.getQuestionsLastUpdate());
 		a.execute();
-		
+
 	}
-	
-	public class AsyncTaskImportCategoriesFromXml extends AsyncTask<Void, Integer, Void>{
-		
+
+	public class AsyncTaskImportCategoriesFromXml extends
+			AsyncTask<Void, Integer, Void> {
+
 		@Override
 		protected void onPostExecute(Void result) {
-			// 
-			mTriviaDb.updateCategoriesAysnc(xmlDataHandler.getCategories(), TriviaDbEngine.TYPE_UPDATE_FROM_XML_FILE,true);
+			//
+			mTriviaDb.updateCategoriesAysnc(xmlDataHandler.getCategories(),
+					TriviaDbEngine.TYPE_UPDATE_FROM_XML_FILE, true);
 		}
 
 		private XmlDataHandlerCategories xmlDataHandler;
@@ -466,10 +475,10 @@ public class UpdateManager implements DatabaseUpdateListener,
 			try {
 				saxParser = saxParserFactory.newSAXParser();
 			} catch (ParserConfigurationException e1) {
-				// 
+				//
 				e1.printStackTrace();
 			} catch (SAXException e1) {
-				// 
+				//
 				e1.printStackTrace();
 			}
 
@@ -477,13 +486,13 @@ public class UpdateManager implements DatabaseUpdateListener,
 			InputSource inputSource = new InputSource(reader);
 			inputSource.setEncoding("UTF-8");
 			xmlDataHandler = new XmlDataHandlerCategories();
-			
+
 			try {
 				try {
 					saxParser.parse(inputSource, xmlDataHandler);
 				} catch (SAXException e) {
-					// 
-					
+					//
+
 					e.printStackTrace();
 				}
 			} catch (IOException e) {
@@ -493,27 +502,28 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 			return null;
 		}
-		
+
 	}
-	
-	public void importCategoriesFromXml (){
+
+	public void importCategoriesFromXml() {
 		new AsyncTaskImportCategoriesFromXml().execute();
 	}
-	
-	
-	public class AsyncTaskImportQuestionsFromXml extends AsyncTask<Void, Integer, Void> {
+
+	public class AsyncTaskImportQuestionsFromXml extends
+			AsyncTask<Void, Integer, Void> {
 
 		private XmlDataHandlerQuestions xmlDataHandler;
 		private long m_LastUpdate;
-		
-		public AsyncTaskImportQuestionsFromXml ( long i_LastUpdate){
+
+		public AsyncTaskImportQuestionsFromXml(long i_LastUpdate) {
 			m_LastUpdate = i_LastUpdate;
 		}
 
 		@Override
 		protected void onPostExecute(Void result) {
 			//
-			mTriviaDb.updateQuestionAsync(xmlDataHandler.getQuestions(), TriviaDbEngine.TYPE_UPDATE_FROM_XML_FILE,true);
+			mTriviaDb.updateQuestionAsync(xmlDataHandler.getQuestions(),
+					TriviaDbEngine.TYPE_UPDATE_FROM_XML_FILE, true);
 
 		}
 
@@ -534,32 +544,32 @@ public class UpdateManager implements DatabaseUpdateListener,
 			try {
 				saxParser = saxParserFactory.newSAXParser();
 			} catch (ParserConfigurationException e1) {
-				// 
+				//
 				e1.printStackTrace();
 			} catch (SAXException e1) {
-				// 
+				//
 				e1.printStackTrace();
 			}
 
 			Reader reader;
 			try {
-				reader = new InputStreamReader(raw,"UTF-8");
+				reader = new InputStreamReader(raw, "UTF-8");
 				InputSource inputSource = new InputSource(reader);
 				inputSource.setEncoding("UTF-8");
 				xmlDataHandler = new XmlDataHandlerQuestions(m_LastUpdate);
 				try {
 					saxParser.parse(inputSource, xmlDataHandler);
 				} catch (SAXException e) {
-					// 
-					Log.e(TAG, "Error at AsyncTaskImportQuestionsFromXml->doInBackground");
-					
+					//
+					Log.e(TAG,
+							"Error at AsyncTaskImportQuestionsFromXml->doInBackground");
+
 				} catch (IOException e) {
-					
-					
+
 				}
 			} catch (UnsupportedEncodingException e1) {
-				// 
-				Log.e(TAG,"unsupported encoding of questions");
+				//
+				Log.e(TAG, "unsupported encoding of questions");
 				e1.printStackTrace();
 			}
 			return null;
@@ -568,14 +578,13 @@ public class UpdateManager implements DatabaseUpdateListener,
 	}
 
 	@Override
-	public void updateProgressQuestionsInsertToDatabase(int i_Progress, int i_Max) {
-		// 
-		if ( mQuestionsListener != null){
-			mQuestionsListener.updateQuestionProgress(i_Progress,i_Max);
+	public void updateProgressQuestionsInsertToDatabase(int i_Progress,
+			int i_Max) {
+		//
+		if (mQuestionsListener != null) {
+			mQuestionsListener.updateQuestionProgress(i_Progress, i_Max);
 		}
-		
+
 	}
-
-
 
 }

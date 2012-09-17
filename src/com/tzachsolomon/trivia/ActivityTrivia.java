@@ -43,7 +43,6 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	// TODO: check user authentication key expired
 	// TODO: think of releasing the program???
 
-
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
 
 	private static final int REQUEST_CODE_START_GAME_CATEGORIES = 1;
@@ -127,7 +126,8 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 				showWhatsNew();
 				if (showConfigVersion.contentEquals("1")) {
 					showWizardSetup();
-					mSharedPreferences.edit().putString("showConfigWizard","0").commit();
+					mSharedPreferences.edit()
+							.putString("showConfigWizard", "0").commit();
 				}
 
 				mSharedPreferences.edit()
@@ -625,6 +625,9 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 					Toast.LENGTH_LONG).show();
 			mButtonsLockedDueToImportFromXML = false;
 			mProgressDialog.dismiss();
+			
+			showUserRegister();
+
 			break;
 
 		default:

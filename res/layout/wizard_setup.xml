@@ -14,10 +14,6 @@
         <include
             android:id="@+id/wizard_setup_language"
             layout="@layout/wizard_setup_language" />
-        
-        <include
-            android:id="@+id/wizard_setup_user"
-            layout="@layout/wizard_setup_user" />
 
         <include
             android:id="@+id/wizard_setup_question_language"
