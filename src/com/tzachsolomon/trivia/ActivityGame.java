@@ -158,7 +158,8 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 	}
 
 	private void restartGame() {
-		initializeVariables();
+		
+		initializeGameSettings();
 
 		mExtras = getIntent().getExtras();
 		mCurrentGameType = mExtras.getInt(ActivityGame.EXTRA_GAME_TYPE);
@@ -576,6 +577,7 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 		//
 		// initialize the sounds
 
+		m_TriviaDb = new TriviaDbEngine(ActivityGame.this);
 		mJSONHandler = new JSONHandler(this);
 		
 		mJSONHandler.setScoreUpdateListener(this);
@@ -590,9 +592,23 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 				"checkBoxPreferenceRevereseInHebrew", false);
 		mShowCorrectAnswer = m_SharedPreferences.getBoolean(
 				"checkBoxPreferenceShowCorrectAnswer", true);
+		
+		initializeQuestionsLanguages();
+
+		initializeTextViews();
+
+		initializeButtons();
+		
+		initializeGameSettings();
+		
+		
+
+	}
+	
+	private void initializeGameSettings (){
 		mResumeClock = false;
 		mGameOver = false;
-		m_TriviaDb = new TriviaDbEngine(ActivityGame.this);
+		
 		// m_Random = new Random(1);
 		m_Random = new Random(System.currentTimeMillis());
 		mTimeToAnswerQuestion = 10;
@@ -617,14 +633,6 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 				1000);
 
 		mCurrentGameType = -1;
-
-		initializeQuestionsLanguages();
-
-		initializeTextViews();
-
-		initializeButtons();
-		
-		
 
 	}
 

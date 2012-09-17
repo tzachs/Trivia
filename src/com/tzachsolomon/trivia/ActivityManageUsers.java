@@ -305,7 +305,7 @@ public class ActivityManageUsers extends Activity implements OnClickListener,
 
 	@Override
 	public void onFacebookUserRegister(int userId) {
-		// TODO Auto-generated method stub
+		// 
 		Toast.makeText(ActivityManageUsers.this, getString(R.string.user_registered_succesfully), Toast.LENGTH_LONG).show();
 		setResult(userId);
 		updateFacebookLoginLogoutImage();

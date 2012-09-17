@@ -40,7 +40,6 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	// TODO: create service to update the database daily
 	// TODO: activity menu for tablet
 	// TODO: check if needed to update from XML file using last update
-	// TODO: Facebook user in the management
 	// TODO: check user authentication key expired
 	// TODO: think of releasing the program???
 
