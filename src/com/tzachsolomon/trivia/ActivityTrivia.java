@@ -42,6 +42,8 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	// TODO: check if needed to update from XML file using last update
 	// TODO: check user authentication key expired
 	// TODO: think of releasing the program???
+	// TODO: content provider for DB
+	// TODO: separate sounds
 
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
 

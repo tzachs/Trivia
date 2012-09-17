@@ -9,9 +9,9 @@ import org.json.JSONObject;
 import android.app.Activity;
 import android.content.Context;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-
 
 import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
@@ -20,8 +20,8 @@ import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.Util;
 import com.tzachsolomon.trivia.JSONHandler.UserManageListener;
 
-
-public class MyFacebook extends Facebook implements DialogListener, UserManageListener {
+public class MyFacebook extends Facebook implements DialogListener,
+		UserManageListener {
 
 	private static final String TAG = MyFacebook.class.getSimpleName();
 
@@ -41,17 +41,13 @@ public class MyFacebook extends Facebook implements DialogListener, UserManageLi
 
 		mContext = context;
 		mActivity = activity;
-		
+
 		mTriviaDb = new TriviaDbEngine(mContext);
 		mJSONHandler = new JSONHandler(mContext);
-		
+
 		mJSONHandler.setUserManageListener(this);
-		
-		
 
 	}
-
-	
 
 	public void loginLogout() {
 		if (this.isSessionValid()) {
@@ -60,12 +56,12 @@ public class MyFacebook extends Facebook implements DialogListener, UserManageLi
 				this.logout(mContext);
 				mForceUserRegister = false;
 			} catch (MalformedURLException e) {
-				// 
+				//
 				e.printStackTrace();
 			} catch (IOException e) {
-				// 
+				//
 				e.printStackTrace();
-			}catch (Exception e){
+			} catch (Exception e) {
 				Log.d(TAG, e.getMessage());
 			}
 		} else {
@@ -76,44 +72,76 @@ public class MyFacebook extends Facebook implements DialogListener, UserManageLi
 
 	@Override
 	public void onComplete(Bundle values) {
-		// 
-		try {
+		//
+		AsyncTaskFacebookOnComplete a = new AsyncTaskFacebookOnComplete();
+		a.execute();
 
-			String jsonUser = MyFacebook.this.request("me");
-			JSONObject jsonObject = Util.parseJson(jsonUser);
+	}
 
-			String id = jsonObject.getString("id");
-			String username = jsonObject.getString("username");
-			String email = jsonObject.getString("email");
+	private class AsyncTaskFacebookOnComplete extends
+			AsyncTask<Void, Integer, Bundle> {
 
-			if (!mTriviaDb.isUsersExists(id)) {
-				// Register the user
-				mForceUserRegister = true;
-				mJSONHandler.userRegisterAsync(new String[] { username, id,
-						email, Integer.toString(ActivityManageUsers.USER_TYPE_FACEBOOK) });
-				
-				
-			} else {
-				// User login
-				if ( mMyFacebookListener != null ){
-					mMyFacebookListener.onFacebookUserLogin(Integer.valueOf(id));
+		@Override
+		protected void onPostExecute(Bundle result) {
+			//
+
+			if (result != null) {
+				String id = result.getString("id");
+				String username = result.getString("username");
+				String email = result.getString("email");
+
+				if (!mTriviaDb.isUsersExists(id)) {
+					// Register the user
+					mForceUserRegister = true;
+					mJSONHandler
+							.userRegisterAsync(new String[] {
+									username,
+									id,
+									email,
+									Integer.toString(ActivityManageUsers.USER_TYPE_FACEBOOK) });
+
+				} else {
+					// User login
+					if (mMyFacebookListener != null) {
+						mMyFacebookListener.onFacebookUserLogin(Integer
+								.valueOf(id));
+					}
 				}
 			}
+		}
 
-		} catch (MalformedURLException e) {
+		@Override
+		protected Bundle doInBackground(Void... params) {
 			//
-			e.printStackTrace();
-		} catch (IOException e) {
-			//
-			e.printStackTrace();
-		} catch (JSONException e) {
+			Bundle ret = null;
+			try {
 
+				String jsonUser = MyFacebook.this.request("me");
+				JSONObject jsonObject = Util.parseJson(jsonUser);
+
+				String id = jsonObject.getString("id");
+				String username = jsonObject.getString("username");
+				String email = jsonObject.getString("email");
+
+				ret = new Bundle();
+
+				ret.putString("id", id);
+				ret.putString("username", username);
+				ret.putString("email", email);
+
+			} catch (MalformedURLException e) {
+				//
+				e.printStackTrace();
+			} catch (IOException e) {
+				//
+				e.printStackTrace();
+			} catch (JSONException e) {
+
+			}
+			return ret;
 		}
 
 	}
-	
-	
-	
 
 	@Override
 	public void onFacebookError(FacebookError e) {
@@ -132,30 +160,34 @@ public class MyFacebook extends Facebook implements DialogListener, UserManageLi
 		// TODO Auto-generated method stub
 
 	}
-	
+
 	static public interface MyFacebookListener {
-		public void onFacebookUserLogin (int userId);
-		public void onFacebookUserLogout ();
-		public void onFacebookUserRegister (int userId);
+		public void onFacebookUserLogin(int userId);
+
+		public void onFacebookUserLogout();
+
+		public void onFacebookUserRegister(int userId);
 	}
-	
-	public void setMyFacebookListener ( MyFacebookListener listener ){
+
+	public void setMyFacebookListener(MyFacebookListener listener) {
 		this.mMyFacebookListener = listener;
 	}
 
 	@Override
 	public void onUserLogin(String i_Response, int userId, int userType,
 			String username) {
-		
-		if ( userType == ActivityManageUsers.USER_TYPE_FACEBOOK){
-			if ( mForceUserRegister){
-				// reaching this point means the user is registered at the database but isn't registered 
+
+		if (userType == ActivityManageUsers.USER_TYPE_FACEBOOK) {
+			if (mForceUserRegister) {
+				// reaching this point means the user is registered at the
+				// database but isn't registered
 				// on the local DB
-				// This should happen for example, in case the user installed the app, registered, uninstalled the app
+				// This should happen for example, in case the user installed
+				// the app, registered, uninstalled the app
 				// and then reinstalled and registered again
 				mTriviaDb.insertUser(userId, userType, username);
 			}
-			if (mMyFacebookListener != null ){
+			if (mMyFacebookListener != null) {
 				mMyFacebookListener.onFacebookUserLogin(userId);
 			}
 		}
@@ -164,14 +196,14 @@ public class MyFacebook extends Facebook implements DialogListener, UserManageLi
 	@Override
 	public void onUserRegister(String i_Response, int userId, int userType,
 			String username) {
-		// 
-		if ( userType == ActivityManageUsers.USER_TYPE_FACEBOOK){
+		//
+		if (userType == ActivityManageUsers.USER_TYPE_FACEBOOK) {
 			mTriviaDb.insertUser(userId, userType, username);
-			if (mMyFacebookListener != null ){
+			if (mMyFacebookListener != null) {
 				mMyFacebookListener.onFacebookUserRegister(userId);
 			}
 		}
-		
+
 	}
 
 }
