@@ -1069,7 +1069,9 @@ public class JSONHandler {
 		@Override
 		protected void onPostExecute(Bundle result) {
 			//
-			m_ProgressDialog.dismiss();
+			if ( m_ProgressDialog != null ){
+				m_ProgressDialog.dismiss();
+			}
 			if ( result != null){
 				int retCode = result.getInt("retCode");
 				switch (retCode){

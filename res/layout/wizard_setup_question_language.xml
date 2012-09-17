@@ -26,6 +26,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/viewLineQuestionLanguage"
+        android:layout_margin="4dp"
         android:text="@string/textViewQuestionLanguageDetailsText" />
 
     <CheckBox
