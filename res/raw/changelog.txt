@@ -45,6 +45,31 @@ body {
 <body>
 
 	<div class="title">
+		0.04 - What's new? <br />
+	</div> 
+	
+	<div class="subtitle">
+		1. Fixed bug, app might crash due to exception in facebook login <br />  
+	</div>
+	
+
+	<div class="title">
+		0.03 - What's new? <br />
+	</div> 
+	
+	<div class="subtitle">
+		1. Fixed Hebrew Support bug in Samsung Galaxy S2
+	</div>
+
+	<div class="title">
+		0.02 - What's new? <br />
+	</div>
+	
+	<div class="subtitle">
+		1. Fixed a bug, application is crashing when using Facebook account to register on ICS OS
+	</div>
+
+	<div class="title">
 		0.01 -  First release :)<br />
 	</div>
 	

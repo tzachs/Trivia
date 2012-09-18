@@ -62,7 +62,14 @@ public class MyFacebook extends Facebook implements DialogListener,
 				//
 				e.printStackTrace();
 			} catch (Exception e) {
-				Log.d(TAG, e.getMessage());
+				String message = e.getMessage();
+				if ( message == null ){
+					e.printStackTrace();
+				}else{
+					Log.d(TAG, e.getMessage());
+				}
+					
+						
 			}
 		} else {
 			// login the user
