@@ -343,9 +343,10 @@ public class UpdateManager implements DatabaseUpdateListener,
 						mUpdateType);
 
 			} catch (Exception e) {
-				String msg = e.getMessage().toString();
+				// 
+				String msg = e.getMessage();
 				if (msg != null) {
-					Log.v(TAG, msg);
+					Log.e(TAG, msg);
 				}
 
 			}
