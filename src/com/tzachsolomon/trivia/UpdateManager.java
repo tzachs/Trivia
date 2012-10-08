@@ -244,7 +244,10 @@ public class UpdateManager implements DatabaseUpdateListener,
 		@Override
 		protected void onPostExecute(Integer result) {
 			//
-			mProgressDialog.dismiss();
+			if ( mProgressDialog != null ){
+				mProgressDialog.dismiss();	
+			}
+			
 			if (result > 0) {
 
 				StringBuilder message = new StringBuilder();
