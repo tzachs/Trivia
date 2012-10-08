@@ -68,19 +68,16 @@ public class JSONHandler {
 	public static final String TAG_UPLOAD_GAME_SCORE = "tagUploadGameScore";
 
 	private static final int ERROR_CODE_USER_EXIST = 1001;
-	//private static final int ERROR_ADDING_USER = 1002;
+	// private static final int ERROR_ADDING_USER = 1002;
 	private static final int ERROR_CODE_USER_DOES_NOT_EXISTS = 1003;
 	private static final int ERROR_CODE_USER_WRONG_PASSWORD = 1004;
 	public static final int ERROR_QUESTION_NOT_ADDED = 1005;
 	public static final int ERROR_SCORE_WAS_NOT_ADDED = 1006;
-	
+
 	private static final int SUCCESS_CODE_USER_REGISTERED = 2001;
 	private static final int SUCCESS_CODE_USER_EXIST = 2002;
 	public static final int SUCCESS_QUESTION_ADDED = 2003;
 	public static final int SUCCESS_SCORE_ADDED = 2004;
-
-	
-
 
 	// Success
 	private String mServerUrl;
@@ -170,15 +167,16 @@ public class JSONHandler {
 
 		return ret;
 	}
-	
+
 	private ContentValues convertJSONObjectToGameScoreContentValue(
 			JSONObject jsonObject) throws JSONException {
-		// 
-		
+		//
+
 		ContentValues ret = new ContentValues();
 
 		String[] keys = { TriviaDbEngine.KEY_COL_USERNAME,
-				TriviaDbEngine.KEY_COL_GAME_SCORE, TriviaDbEngine.KEY_COL_GAME_TYPE,
+				TriviaDbEngine.KEY_COL_GAME_SCORE,
+				TriviaDbEngine.KEY_COL_GAME_TYPE,
 				TriviaDbEngine.KEY_COL_GAME_TIME
 
 		};
@@ -190,7 +188,6 @@ public class JSONHandler {
 		}
 
 		return ret;
-
 
 	}
 
@@ -326,9 +323,8 @@ public class JSONHandler {
 				data = new String(EntityUtils.toString(httpEntity).getBytes(),
 						"UTF-8");
 
-				
 				// DEBUG
-				//Log.v(TAG, "the raw JSON response is " + data);
+				// Log.v(TAG, "the raw JSON response is " + data);
 
 				// try parse the string to a JSON object
 				try {
@@ -385,7 +381,7 @@ public class JSONHandler {
 				data = new String(EntityUtils.toString(httpEntity).getBytes(),
 						"UTF-8");
 
-				//Log.d(TAG, "the raw JSON response is " + data);
+				// Log.d(TAG, "the raw JSON response is " + data);
 
 				// try parse the string to a JSON array
 				try {
@@ -429,13 +425,19 @@ public class JSONHandler {
 		result = getJSONObjectFromUrl(mServerUrl, params);
 
 		try {
-			if (result.has("error")) {
-				Log.e(TAG, result.getString("error"));
+			if (result != null) {
+				if (result.has("error")) {
+					Log.e(TAG, result.getString("error"));
+				}
+			} else {
+				Log.e(TAG, "result is null");
 			}
 
 		} catch (JSONException e) {
 			//
-			e.printStackTrace();
+			if (e != null) {
+				Log.e(TAG, e.getMessage());
+			}
 		}
 
 	}
@@ -793,13 +795,10 @@ public class JSONHandler {
 	}
 
 	/**
-	 * Functions starts an asyncTask to login user
-	 * Results are sent in callback
+	 * Functions starts an asyncTask to login user Results are sent in callback
 	 * 
 	 * @param i_Params
-	 * username
-	 * userpass
-	 * usermail
+	 *            username userpass usermail
 	 * 
 	 */
 	public void userLoginAsync(String[] i_Params) {
@@ -813,57 +812,59 @@ public class JSONHandler {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		JSONObject result;
 		Bundle ret;
-		
 
 		params.add(new BasicNameValuePair("tag", TAG_USER_LOGIN));
 		params.add(new BasicNameValuePair("username", i_Params[0]));
 		params.add(new BasicNameValuePair("userpass", md5hash(i_Params[1])));
 		params.add(new BasicNameValuePair("usermail", i_Params[2]));
 		params.add(new BasicNameValuePair("userType", "0"));
-		
-		
-		// 
+
+		//
 
 		result = getJSONObjectFromUrl(mServerUrl, params);
 		ret = new Bundle();
 		try {
-			
+
 			if (result != null) {
 				// checking if user added successfully
 				int successCode = result.getInt(RESULT_SUCCESS);
 				int errorCode = result.getInt(RESULT_ERROR);
 
 				if (successCode == SUCCESS_CODE_USER_EXIST) {
-					ret.putInt("retCode",SUCCESS_CODE_USER_EXIST);
-					ret.putString("response",mContext.getString(R.string.user_authenticated_succesfully));
-					ret.putInt("userId",result.getInt("userId"));
-					ret.putInt("userType",0);
-					
+					ret.putInt("retCode", SUCCESS_CODE_USER_EXIST);
+					ret.putString("response", mContext
+							.getString(R.string.user_authenticated_succesfully));
+					ret.putInt("userId", result.getInt("userId"));
+					ret.putInt("userType", 0);
+
 				} else if (errorCode == ERROR_CODE_USER_DOES_NOT_EXISTS) {
 					ret.putInt("retCode", ERROR_CODE_USER_DOES_NOT_EXISTS);
-					ret.putString("response", mContext.getString(R.string.user_does_not_exits));
-					ret.putInt("userId",-1);
-					ret.putInt("userType",0);
+					ret.putString("response",
+							mContext.getString(R.string.user_does_not_exits));
+					ret.putInt("userId", -1);
+					ret.putInt("userType", 0);
 				} else if (errorCode == ERROR_CODE_USER_WRONG_PASSWORD) {
 					ret.putInt("retCode", ERROR_CODE_USER_WRONG_PASSWORD);
-					ret.putString("response", mContext.getString(R.string.wrong_password_));
-					ret.putInt("userId",-1);
-					ret.putInt("userType",0);
-					
+					ret.putString("response",
+							mContext.getString(R.string.wrong_password_));
+					ret.putInt("userId", -1);
+					ret.putInt("userType", 0);
+
 				}
 			} else {
 				//
 				ret.putInt("retCode", -1);
-				ret.putString("response", mContext.getString(R.string.error_connecting_to_server));
+				ret.putString("response",
+						mContext.getString(R.string.error_connecting_to_server));
 			}
 		} catch (JSONException e) {
 			//
-			ret.putInt("retCode",-1);
-			ret.putString("response", mContext.getString(R.string.general_error));
-			
+			ret.putInt("retCode", -1);
+			ret.putString("response",
+					mContext.getString(R.string.general_error));
+
 		}
 
-		
 		return ret;
 	}
 
@@ -889,86 +890,85 @@ public class JSONHandler {
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		JSONObject result;
 		Bundle ret = null;
-		
-		
+
 		int successCode = -1;
 		int errorCode = -1;
 		String userType = i_Params[3];
 
 		params.add(new BasicNameValuePair("tag", TAG_USER_REGISTER));
 		params.add(new BasicNameValuePair("username", i_Params[0]));
-		if ( userType.contentEquals("0")){
+		if (userType.contentEquals("0")) {
 			// trivia user, thus scrambling password
 			params.add(new BasicNameValuePair("userpass", md5hash(i_Params[1])));
-		}else{
+		} else {
 			// facebook user, no user password is needed
 			params.add(new BasicNameValuePair("userId", i_Params[1]));
 		}
-		
+
 		params.add(new BasicNameValuePair("usermail", i_Params[2]));
 		params.add(new BasicNameValuePair("userType", userType));
 
 		result = getJSONObjectFromUrl(mServerUrl, params);
-		
-		
 
 		try {
 			ret = new Bundle();
 			if (result != null) {
 				// checking if user added successfully
-				
+
 				ret.putInt("userType", Integer.valueOf(userType));
 				successCode = result.getInt(RESULT_SUCCESS);
 				errorCode = result.getInt(RESULT_ERROR);
 
 				if (successCode == SUCCESS_CODE_USER_REGISTERED) {
 					ret.putInt("retCode", SUCCESS_CODE_USER_REGISTERED);
-					ret.putString("response",mContext.getString(R.string.user_registered_succesfully));
+					ret.putString("response", mContext
+							.getString(R.string.user_registered_succesfully));
 					ret.putInt("userId", result.getInt("userId"));
-					ret.putString("username",i_Params[0]);
-					
-					
+					ret.putString("username", i_Params[0]);
+
 				} else if (errorCode == ERROR_CODE_USER_EXIST) {
 					ret.putInt("retCode", ERROR_CODE_USER_EXIST);
-					ret.putString("response",mContext.getString(R.string.user_already_exits));
+					ret.putString("response",
+							mContext.getString(R.string.user_already_exits));
 					ret.putInt("userId", -1);
-					ret.putString("username",i_Params[0]);
-					
-					 
-				} else if ( successCode == SUCCESS_CODE_USER_EXIST){
+					ret.putString("username", i_Params[0]);
+
+				} else if (successCode == SUCCESS_CODE_USER_EXIST) {
 					// this is a facebook user
 					ret.putInt("retCode", SUCCESS_CODE_USER_EXIST);
-					ret.putString("response",mContext.getString(R.string.user_authenticated_succesfully));
+					ret.putString("response", mContext
+							.getString(R.string.user_authenticated_succesfully));
 					ret.putInt("userId", result.getInt("userId"));
-					ret.putString("username",i_Params[0]);
-					
+					ret.putString("username", i_Params[0]);
+
 				}
 			} else {
 				//
-				
+
 				ret.putInt("retCode", -1);
-				ret.putString("response",mContext.getString(R.string.error_connecting_to_server));
-				
-				
+				ret.putString("response",
+						mContext.getString(R.string.error_connecting_to_server));
+
 			}
 		} catch (JSONException e) {
 			//
 			ret.putInt("retCode", -1);
-			ret.putString("response",mContext.getString(R.string.general_error));
-			
+			ret.putString("response",
+					mContext.getString(R.string.general_error));
+
 		}
 
-		
-		
 		return ret;
 
 	}
 
 	static public interface UserManageListener {
 
-		public void onUserLogin(String i_Response, int userId, int userType, String username);
+		public void onUserLogin(String i_Response, int userId, int userType,
+				String username);
 
-		public void onUserRegister(String i_Response, int i_UserId, int userType,String username);
+		public void onUserRegister(String i_Response, int i_UserId,
+				int userType, String username);
 	}
 
 	static public interface DatabaseUpdateListener {
@@ -1032,8 +1032,8 @@ public class JSONHandler {
 			if (enabled) {
 				m_ProgressDialog = new ProgressDialog(mContext);
 				m_ProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				m_ProgressDialog.setTitle(mContext
-						.getString(R.string.register));
+				m_ProgressDialog
+						.setTitle(mContext.getString(R.string.register));
 				m_ProgressDialog.setCancelable(true);
 				m_ProgressDialog.show();
 			} else {
@@ -1051,17 +1051,17 @@ public class JSONHandler {
 			try {
 				return userRegister(params);
 			} catch (NoSuchAlgorithmException e) {
-				
+
 				//
 				Bundle ret = new Bundle();
-				//  
+				//
 				Log.d(TAG, mContext
 						.getString(R.string.md5_algorithm_was_not_found_));
 				ret.putInt("retCode", -1);
 				ret.putString("response", mContext
 						.getString(R.string.md5_algorithm_was_not_found_));
 				return ret;
-				
+
 			}
 
 		}
@@ -1069,46 +1069,40 @@ public class JSONHandler {
 		@Override
 		protected void onPostExecute(Bundle result) {
 			//
-			if ( m_ProgressDialog != null ){
+			if (m_ProgressDialog != null) {
 				m_ProgressDialog.dismiss();
 			}
-			if ( result != null){
+			if (result != null) {
 				int retCode = result.getInt("retCode");
-				switch (retCode){
+				switch (retCode) {
 				case SUCCESS_CODE_USER_REGISTERED:
-					
+
 					mUserManagerListener.onUserRegister(
 							result.getString("response"),
-							result.getInt("userId"),
-							result.getInt("userType"),
+							result.getInt("userId"), result.getInt("userType"),
 							result.getString("username"));
-							
+
 					break;
 				case SUCCESS_CODE_USER_EXIST:
 					// User already exists in server Database
 					mUserManagerListener.onUserLogin(
 							result.getString("response"),
-							result.getInt("userId"),
-							result.getInt("userType"),
+							result.getInt("userId"), result.getInt("userType"),
 							result.getString("username"));
-							
-					
+
 					break;
 				case ERROR_CODE_USER_EXIST:
 					mUserManagerListener.onUserRegister(
-							result.getString("response"),
-							-1,
+							result.getString("response"), -1,
 							result.getInt("userType"),
 							result.getString("username"));
-							
-							
-					
+
 					break;
 				}
-						
-				//			
+
+				//
 			}
-			
+
 		}
 
 	}
@@ -1150,7 +1144,7 @@ public class JSONHandler {
 				ret.putInt("retCode", -1);
 				ret.putString("response", mContext
 						.getString(R.string.md5_algorithm_was_not_found_));
-				
+
 				return ret;
 
 			}
@@ -1163,40 +1157,34 @@ public class JSONHandler {
 
 			m_ProgressDialog.dismiss();
 			int key = result.getInt("retCode");
-			switch (key) {	
+			switch (key) {
 			case -1:
-				Toast.makeText(mContext, result.getString("response"), Toast.LENGTH_LONG).show();
+				Toast.makeText(mContext, result.getString("response"),
+						Toast.LENGTH_LONG).show();
 				break;
 			case SUCCESS_CODE_USER_EXIST:
-				
-				mUserManagerListener.onUserLogin(
-						result.getString("response"),
-						result.getInt("userId"),
-						result.getInt("userType"),
+
+				mUserManagerListener.onUserLogin(result.getString("response"),
+						result.getInt("userId"), result.getInt("userType"),
 						result.getString("username"));
-						
+
 				break;
 			case ERROR_CODE_USER_DOES_NOT_EXISTS:
-				mUserManagerListener.onUserLogin(
-						result.getString("response"),
-						result.getInt("userId"),
-						result.getInt("userType"),
+				mUserManagerListener.onUserLogin(result.getString("response"),
+						result.getInt("userId"), result.getInt("userType"),
 						result.getString("username"));
-				
-				
+
 				break;
 			case ERROR_CODE_USER_WRONG_PASSWORD:
-				mUserManagerListener.onUserLogin(
-						result.getString("response"),
-						result.getInt("userId"),
-						result.getInt("userType"),
+				mUserManagerListener.onUserLogin(result.getString("response"),
+						result.getInt("userId"), result.getInt("userType"),
 						result.getString("username"));
 				break;
 
 			default:
 				break;
 			}
-			
+
 			//
 
 		}
@@ -1294,7 +1282,8 @@ public class JSONHandler {
 
 	}
 
-	public class AsyncTaskUploadScore extends AsyncTask<String, Integer, Integer> {
+	public class AsyncTaskUploadScore extends
+			AsyncTask<String, Integer, Integer> {
 
 		public int m_RowInDatabase;
 
@@ -1352,7 +1341,8 @@ public class JSONHandler {
 						ret = ERROR_SCORE_WAS_NOT_ADDED;
 					}
 				} else {
-					// there was an error at the JSON request, save the score locally 
+					// there was an error at the JSON request, save the score
+					// locally
 					ret = ERROR_SCORE_WAS_NOT_ADDED;
 				}
 			} catch (JSONException e) {
@@ -1367,20 +1357,20 @@ public class JSONHandler {
 	}
 
 	public ContentValues[] getGameScores(int gameType) {
-		// 
+		//
 
 		ContentValues[] ret = null;
 		int i, numberOfRows;
 
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 		params.add(new BasicNameValuePair("tag", TAG_DOWNLOAD_GAME_SCORES));
-		params.add(new BasicNameValuePair("gameType", Integer.toString(gameType)));
+		params.add(new BasicNameValuePair("gameType", Integer
+				.toString(gameType)));
 		params.add(new BasicNameValuePair("firstRowIndex", Long.toString(0)));
 		params.add(new BasicNameValuePair("lastRowIndex", Long.toString(10)));
-		
 
 		try {
-			
+
 			jsonArray = getJSONArrayFromUrl(mServerUrl, params);
 
 			if (jsonArray != null) {
@@ -1395,9 +1385,8 @@ public class JSONHandler {
 				for (i = 1; i < numberOfRows; i++) {
 
 					jsonObject = jsonArray.getJSONObject(i);
-					
+
 					ret[i - 1] = convertJSONObjectToGameScoreContentValue(jsonObject);
-					
 
 				}
 			}
@@ -1408,5 +1397,4 @@ public class JSONHandler {
 		return ret;
 	}
 
-	
 }
