@@ -7,6 +7,7 @@ import com.tzachsolomon.trivia.UpdateManager.QuestionsListener;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 
 import android.content.DialogInterface;
@@ -41,7 +42,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	// TODO: activity menu for tablet
 	// TODO: check if needed to update from XML file using last update
 	// TODO: check user authentication key expired
-	// 
+	//
 	// TODO: content provider for DB
 	// TODO: separate sounds
 
@@ -83,7 +84,8 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private boolean mUpdateCategoriesLater;
 
 	private int mLaterRegisterUserCounter;
-	private static boolean mRegisterDialogDisplayed;
+	private AlertDialog.Builder mAlertDialogBuilderRegisterUser;
+	private Dialog mDialogRegisterUser;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -96,7 +98,46 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 		initializeVariables();
 		initializeButtons();
+		initializeDialogs();
 		checkIfNeedToShowFirstTimeMessageOrConfiguration();
+	}
+
+	private void initializeDialogs() {
+		//
+		mAlertDialogBuilderRegisterUser = new AlertDialog.Builder(
+				ActivityTrivia.this);
+
+		mAlertDialogBuilderRegisterUser
+				.setTitle(getString(R.string.register_user));
+		mAlertDialogBuilderRegisterUser
+				.setMessage(getString(R.string.register_a_user_));
+		mAlertDialogBuilderRegisterUser.setPositiveButton(
+				getString(R.string.yes), new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						//
+						buttonManagerUsers_Clicked();
+
+					}
+
+				});
+		mAlertDialogBuilderRegisterUser.setNegativeButton(
+				getString(R.string.later),
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						//
+						Toast.makeText(
+								ActivityTrivia.this,
+								getString(R.string.registering_a_user_gives_you_the_ability_to_publish_scores_play_against_other_players_etc),
+								Toast.LENGTH_LONG).show();
+						mLaterRegisterUser = true;
+
+					}
+				});
+
 	}
 
 	private void checkIfNeedToShowFirstTimeMessageOrConfiguration() {
@@ -261,8 +302,8 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 			mCurrentUserId = -2;
 		}
 
-		mRegisterDialogDisplayed = false;
 		
+
 		mUpdateQuestionsLater = false;
 
 		mProgressDialog = new ProgressDialog(this);
@@ -446,37 +487,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 	private void showUserRegister() {
 		//
-
-		
-		if (mTrivaDbEngine.isUsersEmpty() ) {
-			AlertDialog.Builder alert = new AlertDialog.Builder(this);
-			alert.setTitle(getString(R.string.register_user));
-			alert.setMessage(getString(R.string.register_a_user_));
-			alert.setPositiveButton(getString(R.string.yes),
-					new DialogInterface.OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							//
-							buttonManagerUsers_Clicked();
-							mRegisterDialogDisplayed = false;
-						}
-
-					});
-			alert.setNegativeButton(getString(R.string.later),
-					new DialogInterface.OnClickListener() {
-
-						@Override
-						public void onClick(DialogInterface dialog, int which) {
-							//
-							Toast.makeText(
-									ActivityTrivia.this,
-									getString(R.string.registering_a_user_gives_you_the_ability_to_publish_scores_play_against_other_players_etc),
-									Toast.LENGTH_LONG).show();
-							mLaterRegisterUser = true;
-							mRegisterDialogDisplayed = false;
-						}
-					});
+		if (mTrivaDbEngine.isUsersEmpty()) {
 			if (mLaterRegisterUser) {
 				mLaterRegisterUserCounter++;
 
@@ -486,10 +497,12 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 					mLaterRegisterUserCounter = 0;
 					mLaterRegisterUser = false;
 				}
-			} else if (!mRegisterDialogDisplayed) {
-				
-				mRegisterDialogDisplayed = true;
-				alert.show();
+			} else {
+				if ( mDialogRegisterUser == null ){
+					mDialogRegisterUser = mAlertDialogBuilderRegisterUser.show();
+				}else if ( !mDialogRegisterUser.isShowing()){
+					mDialogRegisterUser.show();
+				}
 			}
 		}
 
@@ -634,7 +647,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 					Toast.LENGTH_LONG).show();
 			mButtonsLockedDueToImportFromXML = false;
 			mProgressDialog.dismiss();
-			
+
 			showUserRegister();
 
 			break;
