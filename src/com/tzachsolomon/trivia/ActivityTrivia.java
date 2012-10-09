@@ -41,7 +41,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	// TODO: activity menu for tablet
 	// TODO: check if needed to update from XML file using last update
 	// TODO: check user authentication key expired
-	// TODO: think of releasing the program???
+	// 
 	// TODO: content provider for DB
 	// TODO: separate sounds
 
@@ -83,6 +83,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private boolean mUpdateCategoriesLater;
 
 	private int mLaterRegisterUserCounter;
+	private static boolean mRegisterDialogDisplayed;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -260,6 +261,8 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 			mCurrentUserId = -2;
 		}
 
+		mRegisterDialogDisplayed = false;
+		
 		mUpdateQuestionsLater = false;
 
 		mProgressDialog = new ProgressDialog(this);
@@ -444,7 +447,8 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private void showUserRegister() {
 		//
 
-		if (mTrivaDbEngine.isUsersEmpty()) {
+		
+		if (mTrivaDbEngine.isUsersEmpty() ) {
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
 			alert.setTitle(getString(R.string.register_user));
 			alert.setMessage(getString(R.string.register_a_user_));
@@ -455,7 +459,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 						public void onClick(DialogInterface dialog, int which) {
 							//
 							buttonManagerUsers_Clicked();
-
+							mRegisterDialogDisplayed = false;
 						}
 
 					});
@@ -470,6 +474,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 									getString(R.string.registering_a_user_gives_you_the_ability_to_publish_scores_play_against_other_players_etc),
 									Toast.LENGTH_LONG).show();
 							mLaterRegisterUser = true;
+							mRegisterDialogDisplayed = false;
 						}
 					});
 			if (mLaterRegisterUser) {
@@ -481,7 +486,9 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 					mLaterRegisterUserCounter = 0;
 					mLaterRegisterUser = false;
 				}
-			} else {
+			} else if (!mRegisterDialogDisplayed) {
+				
+				mRegisterDialogDisplayed = true;
 				alert.show();
 			}
 		}
