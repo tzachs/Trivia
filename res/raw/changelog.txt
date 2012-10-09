@@ -45,7 +45,15 @@ body {
 <body>
 
 	<div class="title">
-		0.04 - What's new? <br />
+		0.05 - What's New <br />
+	<div>
+	
+	<div class="subtitle">
+		1. Fixed several crash bugs in case Internet connection isn't available or result from server is incorrect <br />
+	</div> 
+
+	<div class="title">
+		0.04 - What's New? <br />
 	</div> 
 	
 	<div class="subtitle">
