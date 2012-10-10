@@ -42,7 +42,6 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	// TODO: activity menu for tablet
 	// TODO: check if needed to update from XML file using last update
 	// TODO: check user authentication key expired
-	//
 	// TODO: content provider for DB
 	// TODO: separate sounds
 
@@ -62,6 +61,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private Button buttonGameScores;
 	private Button buttonManageUsers;
 	private Button buttonSuggestQuestion;
+	private Button buttonSendSuggesion;
 
 	private SharedPreferences mSharedPreferences;
 
@@ -189,6 +189,19 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 	}
 
+	private void sendSuggestion() {
+		Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+		emailIntent.setType("plain/text");
+		emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
+				new String[] { "tzach.solomon@gmail.com" });
+		emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+				"Suggestion for Trivia");
+
+		startActivity(Intent.createChooser(emailIntent,
+				getString(R.string.send_suggestion_in_)));
+
+	}
+
 	private void lockButtonOnImportFromXMLFile() {
 		//
 		setLockReleaseButtons(false);
@@ -302,8 +315,6 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 			mCurrentUserId = -2;
 		}
 
-		
-
 		mUpdateQuestionsLater = false;
 
 		mProgressDialog = new ProgressDialog(this);
@@ -329,6 +340,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		buttonManageUsers = (Button) findViewById(R.id.buttonManageUsers);
 		buttonGameScores = (Button) findViewById(R.id.buttonGameScores);
 		buttonSuggestQuestion = (Button) findViewById(R.id.buttonSuggestQuestion);
+		buttonSendSuggesion = (Button) findViewById(R.id.buttonSendSuggestion);
 
 		buttonNewGameAllQuestions.setOnClickListener(this);
 		buttonManageDatabase.setOnClickListener(this);
@@ -339,6 +351,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		buttonManageUsers.setOnClickListener(this);
 		buttonGameScores.setOnClickListener(this);
 		buttonSuggestQuestion.setOnClickListener(this);
+		buttonSendSuggesion.setOnClickListener(this);
 
 		textViewCurrentUser = (TextView) findViewById(R.id.textViewCurrentUser);
 
@@ -355,6 +368,10 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	public void onClick(View v) {
 		//
 		switch (v.getId()) {
+		case R.id.buttonSendSuggestion:
+			sendSuggestion();
+			break;
+
 		case R.id.buttonSuggestQuestion:
 			buttonSuggestQuestion_Clicked();
 			break;
@@ -498,9 +515,10 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 					mLaterRegisterUser = false;
 				}
 			} else {
-				if ( mDialogRegisterUser == null ){
-					mDialogRegisterUser = mAlertDialogBuilderRegisterUser.show();
-				}else if ( !mDialogRegisterUser.isShowing()){
+				if (mDialogRegisterUser == null) {
+					mDialogRegisterUser = mAlertDialogBuilderRegisterUser
+							.show();
+				} else if (!mDialogRegisterUser.isShowing()) {
 					mDialogRegisterUser.show();
 				}
 			}

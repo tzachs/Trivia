@@ -17,6 +17,16 @@
         android:textSize="16dp" />
 
     <Button
+        android:id="@+id/buttonSendSuggestion"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textViewCurrentUser"
+        android:layout_margin="4dp"
+        android:background="@drawable/custom_menu_button"
+        android:text="@string/send_suggestion" />
+"
+
+    <Button
         android:id="@+id/buttonNewGameSimple"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

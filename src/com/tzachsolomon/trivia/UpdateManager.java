@@ -42,6 +42,7 @@ public class UpdateManager implements DatabaseUpdateListener,
 	private CategoriesListener mCategoriesListener;
 
 	private QuestionsListener mQuestionsListener;
+	
 
 	public UpdateManager(Context i_Context) {
 
@@ -57,6 +58,8 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 		mJSONHandler = new JSONHandler(mContext);
 		mJSONHandler.setUpdateManager(this);
+		
+		
 
 	}
 

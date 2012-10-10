@@ -45,8 +45,25 @@ body {
 <body>
 
 	<div class="title">
+		0.07 - What's New <br />
+	</div>
+	
+	<div class="subtitle">
+		1. Added Send Suggestion from About Dialog to Main Dialog <br />
+	</div>
+
+
+	<div class="title">
+		0.06 - What's New <br />
+	</div>
+	
+	<div class="subtitle">
+		1. Fixed bug showing register user multiple times when returning to app
+	</div>
+		
+	<div class="title">
 		0.05 - What's New <br />
-	<div>
+	</div>
 	
 	<div class="subtitle">
 		1. Fixed several crash bugs in case Internet connection isn't available or result from server is incorrect <br />
