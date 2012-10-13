@@ -78,6 +78,8 @@ public class UpdateManager implements DatabaseUpdateListener,
 			} else {
 				checkIsUpdateAvailable(i_SilentMode);
 			}
+		}else if ( i_SilentMode == false ){
+			Toast.makeText(mContext, "Update is disabled, check preferences", Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -251,6 +253,8 @@ public class UpdateManager implements DatabaseUpdateListener,
 				mProgressDialog.dismiss();	
 			}
 			
+			
+			
 			if (result > 0) {
 
 				StringBuilder message = new StringBuilder();
@@ -407,10 +411,9 @@ public class UpdateManager implements DatabaseUpdateListener,
 		public void onQuestionsCorrectRatioSent();
 
 		public void onQuestionsUpdated(int i_UpdateFrom);
-
 		public void updateQuestionProgress(int i_Progress, int i_Max);
-
 		public void onUpdateQuestionsPostponed();
+		
 	}
 
 	public void setCategoriesListener(CategoriesListener listener) {
