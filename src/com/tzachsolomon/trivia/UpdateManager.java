@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -37,12 +38,17 @@ public class UpdateManager implements DatabaseUpdateListener,
 	private TriviaDbEngine mTriviaDb;
 
 	private SharedPreferences mSharedPreferences;
-	private StringParser mStringParser;
 
 	private CategoriesListener mCategoriesListener;
 
 	private QuestionsListener mQuestionsListener;
-	
+
+	private boolean mSilentMode;
+
+	private int mUpdateType;
+
+	private long mLastUserQuestionsUpdate;
+	private long mLastUserCategoriesUpdate;
 
 	public UpdateManager(Context i_Context) {
 
@@ -51,61 +57,60 @@ public class UpdateManager implements DatabaseUpdateListener,
 		mSharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(mContext);
 
-		mStringParser = new StringParser(mSharedPreferences);
-
 		mTriviaDb = new TriviaDbEngine(mContext);
 		mTriviaDb.setUpdateListener(this);
 
 		mJSONHandler = new JSONHandler(mContext);
 		mJSONHandler.setUpdateManager(this);
-		
-		
 
 	}
 
-	public void updateQuestions(boolean i_SilentMode) {
+	public void updateQuestions(boolean silentMode) {
 
 		boolean isUpdateEnabled = mSharedPreferences.getBoolean(
 				"checkBoxPreferenceCheckUpdateOnStartup", true);
+
+		mSilentMode = silentMode;
 
 		if (isUpdateEnabled) {
 
 			if (mSharedPreferences.getBoolean(
 					"checkBoxPreferenceUploadCorrectWrongUserStat", true)) {
 				AsyncTaskUpdateCorrectWrongAsync a = new AsyncTaskUpdateCorrectWrongAsync();
-				a.mSilentMode = i_SilentMode;
+
 				a.execute();
 			} else {
-				checkIsUpdateAvailable(i_SilentMode);
+				checkIsUpdateAvailable(mSilentMode);
 			}
-		}else if ( i_SilentMode == false ){
-			Toast.makeText(mContext, "Update is disabled, check preferences", Toast.LENGTH_LONG).show();
+		} else if (mSilentMode == false) {
+			Toast.makeText(mContext, "Update is disabled, check preferences",
+					Toast.LENGTH_LONG).show();
 		}
 	}
 
-	public void updateCategories(boolean i_SilentMode) {
+	public void updateCategories(boolean silentMode) {
 		//
 
 		AsyncTaskCheckUpdateIsAvailable a = new AsyncTaskCheckUpdateIsAvailable();
-		a.mSilentMode = i_SilentMode;
-		a.setUpdateType(JSONHandler.TYPE_UPDATE_CATEGORIES);
-		a.execute(true);
+		
+		mSilentMode = silentMode;
+
+		mUpdateType = JSONHandler.TYPE_UPDATE_CATEGORIES;
+		a.execute();
 	}
 
-	private void checkIsUpdateAvailable(boolean i_SilentMode) {
+	private void checkIsUpdateAvailable(boolean silentMode) {
 		AsyncTaskCheckUpdateIsAvailable a = new AsyncTaskCheckUpdateIsAvailable();
 
-		a.mSilentMode = i_SilentMode;
-
-		a.setUpdateType(JSONHandler.TYPE_UPDATE_QUESTIONS);
-		a.execute(i_SilentMode);
+		mSilentMode = silentMode;
+		mUpdateType = JSONHandler.TYPE_UPDATE_QUESTIONS;
+		a.execute();
 
 	}
 
 	public class AsyncTaskUpdateCorrectWrongAsync extends
 			AsyncTask<Void, Integer, String> {
 
-		public boolean mSilentMode;
 		boolean isInternetAvailable;
 		ContentValues[] wrongCorrectStat;
 		private ProgressDialog mProgressDialog;
@@ -149,7 +154,7 @@ public class UpdateManager implements DatabaseUpdateListener,
 				}
 
 				mProgressDialog.dismiss();
-				checkIsUpdateAvailable(true);
+				checkIsUpdateAvailable(mSilentMode);
 			}
 
 			// checking if we sent any questions
@@ -212,11 +217,6 @@ public class UpdateManager implements DatabaseUpdateListener,
 		private ProgressDialog mProgressDialog;
 		private boolean enabled;
 
-		private int mUpdateType = -1;
-		private long mLastUserUpdate;
-
-		public boolean mSilentMode;
-
 		public void setUpdateType(int i_UpdateType) {
 			mUpdateType = i_UpdateType;
 		}
@@ -249,92 +249,28 @@ public class UpdateManager implements DatabaseUpdateListener,
 		@Override
 		protected void onPostExecute(Integer result) {
 			//
-			if ( mProgressDialog != null ){
-				mProgressDialog.dismiss();	
+			if (mProgressDialog != null) {
+				mProgressDialog.dismiss();
 			}
 			
-			
-			
-			if (result > 0) {
-
-				StringBuilder message = new StringBuilder();
-
-				message.append(mContext
-						.getString(R.string.update_is_available_for_));
-				message.append(result);
-				message.append(' ');
-
-				if (mUpdateType == JSONHandler.TYPE_UPDATE_CATEGORIES) {
-
-					message.append(mContext.getString(R.string.categories));
-
-				} else if (mUpdateType == JSONHandler.TYPE_UPDATE_QUESTIONS) {
-
-					message.append(mContext
-							.getString(R.string._questions_update_database_));
+			switch (mUpdateType){
+			case JSONHandler.TYPE_UPDATE_CATEGORIES:
+				if (mCategoriesListener != null){
+									
+					mCategoriesListener.onCheckIfCategoriesUpdateAvailablePost(result);
+					
 				}
-
-				AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-				dialog.setCancelable(false);
-
-				dialog.setMessage(mStringParser
-						.reverseNumbersInStringHebrew(message.toString()));
-
-				dialog.setPositiveButton(mContext.getString(R.string.update),
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-
-								//
-								if (mUpdateType == JSONHandler.TYPE_UPDATE_CATEGORIES) {
-
-									mJSONHandler
-											.updateCategoriesFromInternet(mLastUserUpdate);
-
-								} else if (mUpdateType == JSONHandler.TYPE_UPDATE_QUESTIONS) {
-									mJSONHandler
-											.updateQuestionFromInternet(mLastUserUpdate);
-								}
-
-							}
-						});
-				dialog.setNegativeButton(mContext.getString(R.string.later),
-						new DialogInterface.OnClickListener() {
-
-							@Override
-							public void onClick(DialogInterface dialog,
-									int which) {
-								//
-								if (mUpdateType == JSONHandler.TYPE_UPDATE_CATEGORIES) {
-
-									if (mCategoriesListener != null) {
-										mCategoriesListener
-												.onUpdateCategoriesPostponed();
-									}
-
-								} else if (mUpdateType == JSONHandler.TYPE_UPDATE_QUESTIONS) {
-
-									if (mQuestionsListener != null) {
-										mQuestionsListener
-												.onUpdateQuestionsPostponed();
-									}
-								}
-
-							}
-						});
-
-				dialog.show();
-
-			} else {
-				if (mSilentMode == false) {
-					Toast.makeText(mContext,
-							mContext.getString(R.string.no_update_available),
-							Toast.LENGTH_SHORT).show();
+				break;
+			case JSONHandler.TYPE_UPDATE_QUESTIONS:
+				if (mQuestionsListener != null) {
+					
+					mQuestionsListener.onCheckIfQuestionUpdateAvailablePost(result);
 				}
-
+				break;
 			}
+
+			
+
 		}
 
 		@Override
@@ -342,18 +278,23 @@ public class UpdateManager implements DatabaseUpdateListener,
 			//
 			int ret = -1;
 			try {
-				mLastUserUpdate = 0;
+				
 				if (mUpdateType == JSONHandler.TYPE_UPDATE_CATEGORIES) {
 
-					mLastUserUpdate = mTriviaDb.getCategoriesLastUpdate();
+					mLastUserCategoriesUpdate = 0;
+					mLastUserCategoriesUpdate = mTriviaDb.getCategoriesLastUpdate();
+					ret = mJSONHandler.isUpdateAvailable(mLastUserCategoriesUpdate,
+							mUpdateType);
 				} else if (mUpdateType == JSONHandler.TYPE_UPDATE_QUESTIONS) {
-					mLastUserUpdate = mTriviaDb.getQuestionsLastUpdate();
+					mLastUserQuestionsUpdate = 0;
+					mLastUserQuestionsUpdate = mTriviaDb.getQuestionsLastUpdate();
+					ret = mJSONHandler.isUpdateAvailable(mLastUserQuestionsUpdate,
+							mUpdateType);
 				}
-				ret = mJSONHandler.isUpdateAvailable(mLastUserUpdate,
-						mUpdateType);
+				
 
 			} catch (Exception e) {
-				// 
+				//
 				String msg = e.getMessage();
 				if (msg != null) {
 					Log.e(TAG, msg);
@@ -404,16 +345,21 @@ public class UpdateManager implements DatabaseUpdateListener,
 	static public interface CategoriesListener {
 		public void onCategoriesUpdated(int i_UpdateFrom);
 
+		public void onCheckIfCategoriesUpdateAvailablePost(Integer result);
 		public void onUpdateCategoriesPostponed();
 	}
 
 	static public interface QuestionsListener {
 		public void onQuestionsCorrectRatioSent();
 
+		public void onCheckIfQuestionUpdateAvailablePost(Integer result);
+
 		public void onQuestionsUpdated(int i_UpdateFrom);
+
 		public void updateQuestionProgress(int i_Progress, int i_Max);
+
 		public void onUpdateQuestionsPostponed();
-		
+
 	}
 
 	public void setCategoriesListener(CategoriesListener listener) {
@@ -595,6 +541,29 @@ public class UpdateManager implements DatabaseUpdateListener,
 			mQuestionsListener.updateQuestionProgress(i_Progress, i_Max);
 		}
 
+	}
+
+	public boolean getSilentMode() {
+		//
+		return mSilentMode;
+
+	}
+
+	public int getUpdateType() {
+		//
+		return mUpdateType;
+
+	}
+
+	public void updateQuestionsNow() {
+		//
+		mJSONHandler.updateQuestionFromInternet(mLastUserQuestionsUpdate);
+	}
+
+	public void updateCategoriesNow() {
+		//
+		mJSONHandler.updateCategoriesFromInternet(mLastUserCategoriesUpdate);
+		
 	}
 
 }

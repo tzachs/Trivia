@@ -52,6 +52,8 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private static final int REQUEST_CODE_BACK_FROM_ACTIVITY_USER_MANAGER = 3;
 	private static final int REQUEST_CODE_BACK_FROM_ACTIVITY_WIZARD_SETUP = 4;
 
+	private StringParser mStringParser;
+
 	private Button buttonNewGameAllQuestions;
 	private Button buttonManageDatabase;
 	private Button buttonPreferences;
@@ -85,7 +87,9 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 	private int mLaterRegisterUserCounter;
 	private AlertDialog.Builder mAlertDialogBuilderRegisterUser;
+	private AlertDialog.Builder mAlertDialogBuilderUpdateQuestions;
 	private Dialog mDialogRegisterUser;
+	private Dialog mDialogUpdateQuestions;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -135,6 +139,46 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 								Toast.LENGTH_LONG).show();
 						mLaterRegisterUser = true;
 
+					}
+				});
+
+		mAlertDialogBuilderUpdateQuestions = new AlertDialog.Builder(
+				ActivityTrivia.this);
+		mAlertDialogBuilderUpdateQuestions.setCancelable(false);
+
+		mAlertDialogBuilderUpdateQuestions.setPositiveButton(
+				getString(R.string.update),
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						switch (mUpdateManager.getUpdateType()) {
+						case JSONHandler.TYPE_UPDATE_CATEGORIES:
+							mUpdateManager.updateCategoriesNow();
+							break;
+						case JSONHandler.TYPE_UPDATE_QUESTIONS:
+							mUpdateManager.updateQuestionsNow();
+							break;
+						}
+
+					}
+				});
+		mAlertDialogBuilderUpdateQuestions.setNegativeButton(
+				getString(R.string.later),
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						//
+						switch (mUpdateManager.getUpdateType()) {
+						case JSONHandler.TYPE_UPDATE_CATEGORIES:
+							mUpdateCategoriesLater = true;
+							break;
+						case JSONHandler.TYPE_UPDATE_QUESTIONS:
+							mUpdateQuestionsLater = true;
+							break;
+						}
 					}
 				});
 
@@ -314,6 +358,8 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		} catch (Exception e) {
 			mCurrentUserId = -2;
 		}
+
+		mStringParser = new StringParser(mSharedPreferences);
 
 		mUpdateQuestionsLater = false;
 
@@ -735,6 +781,74 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		//
 		mUpdateCategoriesLater = true;
 
+	}
+
+	@Override
+	public void onCheckIfQuestionUpdateAvailablePost(Integer numberOfItemsToUpdate){
+		// 
+		
+		boolean silentMode = mUpdateManager.getSilentMode();
+
+		if (numberOfItemsToUpdate > 0) {
+			StringBuilder message = new StringBuilder();
+
+			message.append(getString(R.string.update_is_available_for_));
+			message.append(numberOfItemsToUpdate);
+			message.append(' ');
+
+
+				message.append(getString(R.string._questions_update_database_));
+
+			mAlertDialogBuilderUpdateQuestions.setMessage(mStringParser
+					.reverseNumbersInStringHebrew(message.toString()));
+
+			if (mDialogUpdateQuestions == null) {
+				mDialogUpdateQuestions = mAlertDialogBuilderUpdateQuestions
+						.show();
+			} else if (mDialogUpdateQuestions.isShowing() == false) {
+				mDialogUpdateQuestions.show();
+			}
+
+		} else if (silentMode != false) {
+			Toast.makeText(ActivityTrivia.this,
+					getString(R.string.no_update_available), Toast.LENGTH_SHORT)
+					.show();
+		}
+
+	}
+
+	@Override
+	public void onCheckIfCategoriesUpdateAvailablePost(Integer numberOfItemsToUpdate) {
+
+		boolean silentMode = mUpdateManager.getSilentMode();
+
+		if (numberOfItemsToUpdate > 0) {
+			StringBuilder message = new StringBuilder();
+
+			message.append(getString(R.string.update_is_available_for_));
+			message.append(numberOfItemsToUpdate);
+			message.append(' ');
+
+			
+				message.append(getString(R.string.categories));
+
+			mAlertDialogBuilderUpdateQuestions.setMessage(mStringParser
+					.reverseNumbersInStringHebrew(message.toString()));
+
+			if (mDialogUpdateQuestions == null) {
+				mDialogUpdateQuestions = mAlertDialogBuilderUpdateQuestions
+						.show();
+			} else if (mDialogUpdateQuestions.isShowing() == false) {
+				mDialogUpdateQuestions.show();
+			}
+
+		} else if (silentMode != false) {
+			Toast.makeText(ActivityTrivia.this,
+					getString(R.string.no_update_available), Toast.LENGTH_SHORT)
+					.show();
+		}
+// 
+		
 	}
 
 }

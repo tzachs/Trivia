@@ -2,17 +2,21 @@ package com.tzachsolomon.trivia;
 
 import java.util.ArrayList;
 
-
 import com.tzachsolomon.trivia.UpdateManager.CategoriesListener;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ExpandableListActivity;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import android.util.DisplayMetrics;
 
@@ -29,9 +33,8 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ExpandableListView;
 
 public class ActivityShowCategoryForGame extends ExpandableListActivity
-		implements OnClickListener,  CategoriesListener {
+		implements OnClickListener, CategoriesListener {
 
-	
 	private MyBaseExpandableListAdapter m_Adapter;
 	private Items mItems;
 
@@ -41,6 +44,11 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 	private TriviaDbEngine mDbEngine;
 	private UpdateManager mUpdateManager;
 
+	private AlertDialog.Builder mAlertDialogBuilderUpdateQuestions;
+	private Dialog mDialogUpdateQuestions;
+	private SharedPreferences mSharedPreferences;
+	private StringParser mStringParser;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//
@@ -48,47 +56,95 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 
 		setContentView(R.layout.activity_show_category_for_game);
 
+		mSharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(getBaseContext());
+
 		initialiazeVariables();
 
 		setIndicatorToRight();
 
 		initItemsFromDatabase();
+		initializeDialogs();
+
+	}
+
+	private void initializeDialogs() {
+		//
+		mAlertDialogBuilderUpdateQuestions = new AlertDialog.Builder(this);
+		mAlertDialogBuilderUpdateQuestions.setCancelable(false);
+
+		mAlertDialogBuilderUpdateQuestions.setPositiveButton(
+				getString(R.string.update),
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+
+						switch (mUpdateManager.getUpdateType()) {
+						case JSONHandler.TYPE_UPDATE_CATEGORIES:
+							mUpdateManager.updateCategoriesNow();
+
+							break;
+						case JSONHandler.TYPE_UPDATE_QUESTIONS:
+							mUpdateManager.updateQuestionsNow();
+							break;
+						}
+
+					}
+				});
+		mAlertDialogBuilderUpdateQuestions.setNegativeButton(
+				getString(R.string.later),
+				new DialogInterface.OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						//
+						switch (mUpdateManager.getUpdateType()) {
+						case JSONHandler.TYPE_UPDATE_CATEGORIES:
+
+							break;
+						case JSONHandler.TYPE_UPDATE_QUESTIONS:
+
+							break;
+						}
+					}
+				});
 
 	}
 
 	private void initialiazeVariables() {
 		//
-		
+
+		mStringParser = new StringParser(mSharedPreferences);
+
 		mDbEngine = new TriviaDbEngine(this);
-		
-		
+
 		mUpdateManager = new UpdateManager(this);
 		mUpdateManager.setCategoriesListener(this);
-		
+
 		buttonStartCategoryGame = (Button) findViewById(R.id.buttonStartCategoryGame);
-		buttonUpdateCategories = (Button)findViewById(R.id.buttonUpdateCategories);
+		buttonUpdateCategories = (Button) findViewById(R.id.buttonUpdateCategories);
 
 		buttonStartCategoryGame.setOnClickListener(this);
 		buttonUpdateCategories.setOnClickListener(this);
-		
+
 		setButtonsVisibilaty();
-		
 
 	}
-	
+
 	@Override
 	protected void onResume() {
-		// 
+		//
 		super.onResume();
-		
+
 		mUpdateManager.updateCategories(true);
 	}
 
 	private void setButtonsVisibilaty() {
-		if ( mDbEngine.isCategoriesEmpty() ){
+		if (mDbEngine.isCategoriesEmpty()) {
 			buttonUpdateCategories.setVisibility(View.VISIBLE);
 			buttonStartCategoryGame.setVisibility(View.GONE);
-		}else{
+		} else {
 			buttonUpdateCategories.setVisibility(View.GONE);
 			buttonStartCategoryGame.setVisibility(View.VISIBLE);
 		}
@@ -96,7 +152,7 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 
 	private void initItemsFromDatabase() {
 		//
-		
+
 		ContentValues[] categories;
 		ContentValues[] subCategories;
 		int i, length, j, jlength, categoryId, currentGroupId;
@@ -138,7 +194,7 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 		m_ExpandableList = getExpandableListView();
 
 		m_ExpandableList.setAdapter(m_Adapter);
-		
+
 		setButtonsVisibilaty();
 
 	}
@@ -221,7 +277,7 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 
 		@Override
 		public Object getGroup(int groupPosition) {
-			// 
+			//
 			return null;
 		}
 
@@ -233,7 +289,7 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 
 		@Override
 		public long getGroupId(int groupPosition) {
-			// 
+			//
 			return 0;
 		}
 
@@ -524,33 +580,32 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 	}
 
 	private void buttonUpdateCategories_Clicked() {
-		// 
-		
+		//
+
 		mUpdateManager.updateCategories(false);
-		
+
 	}
 
 	private void buttonStartCategoryGame_Clicked() {
 		//
 		ArrayList<Integer> chosenIds = mItems.getChosenIds();
-		
 
 		if (chosenIds.size() > 0) {
-			int i,length;
-			
+			int i, length;
+
 			int[] ids;
 			length = chosenIds.size();
 			ids = new int[length];
-			for ( i = 0; i < length; i++){
+			for (i = 0; i < length; i++) {
 				ids[i] = chosenIds.get(i);
 			}
 			Intent resultData = new Intent();
-			resultData.putExtra(ActivityGame.EXTRA_GAME_CATEGORIES,ids
-					);
+			resultData.putExtra(ActivityGame.EXTRA_GAME_CATEGORIES, ids);
 			setResult(1, resultData);
 			finish();
 		} else {
-			Toast.makeText(this, getString(R.string.you_must_choose_at_least_1_category),
+			Toast.makeText(this,
+					getString(R.string.you_must_choose_at_least_1_category),
 					Toast.LENGTH_SHORT).show();
 		}
 
@@ -558,14 +613,52 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 
 	@Override
 	public void onCategoriesUpdated(int i_UpdateFrom) {
-		// 
+		//
 		initItemsFromDatabase();
-		
+
 	}
 
 	@Override
 	public void onUpdateCategoriesPostponed() {
-		// 
-		
+		//
+
+	}
+
+	@Override
+	public void onCheckIfCategoriesUpdateAvailablePost(
+			Integer numberOfItemsToUpdate) {
+		//
+
+		boolean silentMode = mUpdateManager.getSilentMode();
+
+		if (numberOfItemsToUpdate > 0) {
+			if (silentMode) {
+
+				mUpdateManager.updateCategoriesNow();
+			} else {
+				StringBuilder message = new StringBuilder();
+
+				message.append(getString(R.string.update_is_available_for_));
+				message.append(numberOfItemsToUpdate);
+				message.append(' ');
+
+				message.append(getString(R.string.categories));
+
+				mAlertDialogBuilderUpdateQuestions.setMessage(mStringParser
+						.reverseNumbersInStringHebrew(message.toString()));
+
+				if (mDialogUpdateQuestions == null) {
+					mDialogUpdateQuestions = mAlertDialogBuilderUpdateQuestions
+							.show();
+				} else if (mDialogUpdateQuestions.isShowing() == false) {
+					mDialogUpdateQuestions.show();
+				}
+			}
+
+		} else if (silentMode != false) {
+			Toast.makeText(this, getString(R.string.no_update_available),
+					Toast.LENGTH_SHORT).show();
+		}
+
 	}
 }
