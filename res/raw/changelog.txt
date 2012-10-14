@@ -44,6 +44,17 @@ body {
 </head>
 <body>
 
+
+	<div class="title">
+		0.08 - What's New <br />
+	</div>
+	
+	<div class="subtitle">
+		1. Fixed bug - Update questions might get stuck during update process <br />
+		2. Moved Suggest questions to main window <br />
+	</div>
+
+
 	<div class="title">
 		0.07 - What's New <br />
 	</div>

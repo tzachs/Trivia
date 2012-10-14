@@ -45,6 +45,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	// TODO: content provider for DB
 	// TODO: separate sounds
 
+	
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
 
 	private static final int REQUEST_CODE_START_GAME_CATEGORIES = 1;
@@ -86,10 +87,11 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private boolean mUpdateCategoriesLater;
 
 	private int mLaterRegisterUserCounter;
+	private int mLaterUpdateQuestionsCounter;
 	private AlertDialog.Builder mAlertDialogBuilderRegisterUser;
-	private AlertDialog.Builder mAlertDialogBuilderUpdateQuestions;
+	private AlertDialog.Builder mAlertDialogBuilderUpdate;
 	private Dialog mDialogRegisterUser;
-	private Dialog mDialogUpdateQuestions;
+	private Dialog mDialogUpdate;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -142,11 +144,11 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 					}
 				});
 
-		mAlertDialogBuilderUpdateQuestions = new AlertDialog.Builder(
+		mAlertDialogBuilderUpdate = new AlertDialog.Builder(
 				ActivityTrivia.this);
-		mAlertDialogBuilderUpdateQuestions.setCancelable(false);
+		mAlertDialogBuilderUpdate.setCancelable(false);
 
-		mAlertDialogBuilderUpdateQuestions.setPositiveButton(
+		mAlertDialogBuilderUpdate.setPositiveButton(
 				getString(R.string.update),
 				new DialogInterface.OnClickListener() {
 
@@ -164,7 +166,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 					}
 				});
-		mAlertDialogBuilderUpdateQuestions.setNegativeButton(
+		mAlertDialogBuilderUpdate.setNegativeButton(
 				getString(R.string.later),
 				new DialogInterface.OnClickListener() {
 
@@ -319,9 +321,18 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 					.setTitle(getString(R.string.importing_questions_from_initial_file));
 			mProgressDialog.show();
 
-		} else if (!mFirstTimeStartingDoNotTryToUpdate
-				&& !mUpdateQuestionsLater) {
-			mUpdateManager.updateQuestions(true);
+		} else if (!mFirstTimeStartingDoNotTryToUpdate) {
+			if (mUpdateQuestionsLater) {
+				// checking if user asked to update questions later
+				if (mLaterUpdateQuestionsCounter > 0){
+					mLaterUpdateQuestionsCounter--;
+				}else{
+					mUpdateManager.updateQuestions(true);
+				}
+			} else {
+				mUpdateManager.updateQuestions(true);
+			}
+
 			showUserRegister();
 		}
 
@@ -361,7 +372,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 		mStringParser = new StringParser(mSharedPreferences);
 
-		mUpdateQuestionsLater = false;
+		
 
 		mProgressDialog = new ProgressDialog(this);
 		mTrivaDbEngine = new TriviaDbEngine(this);
@@ -373,6 +384,8 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 		mLaterRegisterUser = false;
 		mLaterRegisterUserCounter = 0;
+		mUpdateQuestionsLater = false;
+		mLaterUpdateQuestionsCounter = 5;
 	}
 
 	private void initializeButtons() {
@@ -773,6 +786,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	public void onUpdateQuestionsPostponed() {
 		//
 		mUpdateQuestionsLater = true;
+		mLaterUpdateQuestionsCounter = 5;
 
 	}
 
@@ -784,9 +798,10 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	}
 
 	@Override
-	public void onCheckIfQuestionUpdateAvailablePost(Integer numberOfItemsToUpdate){
-		// 
-		
+	public void onCheckIfQuestionUpdateAvailablePost(
+			Integer numberOfItemsToUpdate) {
+		//
+
 		boolean silentMode = mUpdateManager.getSilentMode();
 
 		if (numberOfItemsToUpdate > 0) {
@@ -796,20 +811,19 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 			message.append(numberOfItemsToUpdate);
 			message.append(' ');
 
+			message.append(getString(R.string._questions_update_database_));
 
-				message.append(getString(R.string._questions_update_database_));
-
-			mAlertDialogBuilderUpdateQuestions.setMessage(mStringParser
+			mAlertDialogBuilderUpdate.setMessage(mStringParser
 					.reverseNumbersInStringHebrew(message.toString()));
 
-			if (mDialogUpdateQuestions == null) {
-				mDialogUpdateQuestions = mAlertDialogBuilderUpdateQuestions
+			if (mDialogUpdate == null) {
+				mDialogUpdate = mAlertDialogBuilderUpdate
 						.show();
-			} else if (mDialogUpdateQuestions.isShowing() == false) {
-				mDialogUpdateQuestions.show();
+			} else if (mDialogUpdate.isShowing() == false) {
+				mDialogUpdate.show();
 			}
 
-		} else if (silentMode != false) {
+		} else if (silentMode == false) {
 			Toast.makeText(ActivityTrivia.this,
 					getString(R.string.no_update_available), Toast.LENGTH_SHORT)
 					.show();
@@ -818,7 +832,8 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	}
 
 	@Override
-	public void onCheckIfCategoriesUpdateAvailablePost(Integer numberOfItemsToUpdate) {
+	public void onCheckIfCategoriesUpdateAvailablePost(
+			Integer numberOfItemsToUpdate) {
 
 		boolean silentMode = mUpdateManager.getSilentMode();
 
@@ -829,26 +844,25 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 			message.append(numberOfItemsToUpdate);
 			message.append(' ');
 
-			
-				message.append(getString(R.string.categories));
+			message.append(getString(R.string.categories));
 
-			mAlertDialogBuilderUpdateQuestions.setMessage(mStringParser
+			mAlertDialogBuilderUpdate.setMessage(mStringParser
 					.reverseNumbersInStringHebrew(message.toString()));
 
-			if (mDialogUpdateQuestions == null) {
-				mDialogUpdateQuestions = mAlertDialogBuilderUpdateQuestions
+			if (mDialogUpdate == null) {
+				mDialogUpdate = mAlertDialogBuilderUpdate
 						.show();
-			} else if (mDialogUpdateQuestions.isShowing() == false) {
-				mDialogUpdateQuestions.show();
+			} else if (mDialogUpdate.isShowing() == false) {
+				mDialogUpdate.show();
 			}
 
-		} else if (silentMode != false) {
+		} else if (silentMode == false) {
 			Toast.makeText(ActivityTrivia.this,
 					getString(R.string.no_update_available), Toast.LENGTH_SHORT)
 					.show();
 		}
-// 
-		
+		//
+
 	}
 
 }

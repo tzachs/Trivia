@@ -24,7 +24,15 @@
         android:layout_margin="4dp"
         android:background="@drawable/custom_menu_button"
         android:text="@string/send_suggestion" />
-"
+
+    <Button
+        android:id="@+id/buttonSuggestQuestion"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/buttonSendSuggestion"
+        android:layout_margin="4dp"
+        android:background="@drawable/custom_menu_button"
+        android:text="@string/suggest_a_question" />
 
     <Button
         android:id="@+id/buttonNewGameSimple"
@@ -119,19 +127,10 @@
                 android:text="@string/buttonManageDatabaseText" />
 
             <Button
-                android:id="@+id/buttonSuggestQuestion"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/buttonManageDatabase"
-                android:layout_margin="4dp"
-                android:background="@drawable/custom_menu_button"
-                android:text="@string/suggest_a_question" />
-
-            <Button
                 android:id="@+id/buttonPreferences"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/buttonSuggestQuestion"
+                android:layout_below="@+id/buttonManageDatabase"
                 android:layout_margin="4dp"
                 android:background="@drawable/custom_menu_button"
                 android:text="@string/buttonPreferencesText" />

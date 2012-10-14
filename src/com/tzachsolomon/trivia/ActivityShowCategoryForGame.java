@@ -655,7 +655,7 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 				}
 			}
 
-		} else if (silentMode != false) {
+		} else if (silentMode == false) {
 			Toast.makeText(this, getString(R.string.no_update_available),
 					Toast.LENGTH_SHORT).show();
 		}
