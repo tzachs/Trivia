@@ -3,7 +3,6 @@ package com.tzachsolomon.trivia;
 import java.io.IOException;
 import java.util.ArrayList;
 
-
 import java.util.Random;
 
 import com.tzachsolomon.trivia.JSONHandler.ScoreListener;
@@ -32,7 +31,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ViewSwitcher.ViewFactory;
 
-public class ActivityGame extends Activity implements OnClickListener, ViewFactory, ScoreListener {
+public class ActivityGame extends Activity implements OnClickListener,
+		ViewFactory, ScoreListener {
 
 	public static final String TAG = ActivityGame.class.getSimpleName();
 
@@ -49,11 +49,8 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 	public static final String INTENT_EXTRA_PREVIOUS_QUESTION_STRING = "previousQuestionString";
 	public static final String INTENT_EXTRA_CURRENT_QUESTION_ID = "currentQuestionId";
 	public static final String INTENT_EXTRA_CURRENT_QUESTION_STRING = "currentQuestionString";
-	
 
 	public static final String INTENT_EXTRA_GAME_TYPE = "keyGameType";
-
-	
 
 	private MyCountDownCounter mCountDownCounter;
 
@@ -63,7 +60,6 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 	private Button buttonAnswer4;
 	private Button buttonReportMistakeInQuestion;
 	private Button buttonPassQuestion;
-
 
 	private TextView textViewQuestion;
 	private TextView textViewNumberOfQuestionsLeft;
@@ -153,12 +149,12 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 		mExtras = getIntent().getExtras();
 		mCurrentGameType = mExtras.getInt(ActivityGame.EXTRA_GAME_TYPE);
 		mUserId = mExtras.getInt(ActivityGame.EXTRA_GAME_USER_ID);
-		
+
 		showInstructions();
 	}
 
 	private void restartGame() {
-		
+
 		initializeGameSettings();
 
 		mExtras = getIntent().getExtras();
@@ -175,7 +171,6 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 
 		switch (mCurrentGameType) {
 		case GAMETYPE_ALL_QUESTIONS:
-
 			startGameAllQuestions();
 			break;
 		case GAMETYPE_CATEGORIES:
@@ -275,8 +270,8 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 			mSortByNewQuestionFirst = m_SharedPreferences.getBoolean(
 					"checkBoxPreferencePreferNewQuestions", true);
 
-			textViewLivesLeftValue
-					.setText(""	+ (mMaxWrongAnswersAllowed - mCurrentWrongAnswersCounter));
+			textViewLivesLeftValue.setText(""
+					+ (mMaxWrongAnswersAllowed - mCurrentWrongAnswersCounter));
 
 			startNewRoundGameLevels();
 
@@ -351,6 +346,10 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 
 		mResumeClock = false;
 		mAllQuestionsLives = 0;
+		
+		textViewLivesLeftValue.setText(String.valueOf(mAllQuestionsLives));
+		
+		
 		mQuestions = m_TriviaDb.getQuestionsEnabled(mSortByNewQuestionFirst,
 				mQuestionLanguages);
 
@@ -503,8 +502,7 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 			textViewTimesPlayedTitle
 					.setText(mStringParser
 							.reverseNumbersInStringHebrew(getString(R.string.textViewTimesPlayedTitleText)
-									+ mCurrentQuestion
-											.getQuestionTimesPlayed()));
+									+ mCurrentQuestion.getQuestionTimesPlayed()));
 		} else {
 			textViewQuestion.setText(mCurrentQuestion.getQuestion());
 			textViewTimesPlayedTitle
@@ -579,11 +577,11 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 
 		m_TriviaDb = new TriviaDbEngine(ActivityGame.this);
 		mJSONHandler = new JSONHandler(this);
-		
+
 		mJSONHandler.setScoreUpdateListener(this);
-		
+
 		mUserId = -1;
-		
+
 		mSoundEnabled = m_SharedPreferences.getBoolean(
 				"checkBoxPreferencePlayGameSounds", true);
 
@@ -592,23 +590,21 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 				"checkBoxPreferenceRevereseInHebrew", false);
 		mShowCorrectAnswer = m_SharedPreferences.getBoolean(
 				"checkBoxPreferenceShowCorrectAnswer", true);
-		
+
 		initializeQuestionsLanguages();
 
 		initializeTextViews();
 
 		initializeButtons();
-		
+
 		initializeGameSettings();
-		
-		
 
 	}
-	
-	private void initializeGameSettings (){
+
+	private void initializeGameSettings() {
 		mResumeClock = false;
 		mGameOver = false;
-		
+
 		// m_Random = new Random(1);
 		m_Random = new Random(System.currentTimeMillis());
 		mTimeToAnswerQuestion = 10;
@@ -629,8 +625,7 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 
 		mTimeToAnswerQuestion *= 1000;
 
-		mCountDownCounter = new MyCountDownCounter(mTimeToAnswerQuestion,
-				1000);
+		mCountDownCounter = new MyCountDownCounter(mTimeToAnswerQuestion, 1000);
 
 		mCurrentGameType = -1;
 
@@ -685,20 +680,22 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 
 	private void initializeTextViews() {
 		textViewQuestion = (TextView) findViewById(R.id.textViewQuestion);
-		
+
 		textViewNumberOfQuestionsLeft = (TextView) findViewById(R.id.textViewNumberOfQuestionsLeft);
 		textViewQuestionLevel = (TextView) findViewById(R.id.textViewQuestionLevel);
 		textViewLivesLeftValue = (TextView) findViewById(R.id.textViewLivesLeftValue);
 		textViewTimesPlayedTitle = (TextView) findViewById(R.id.textViewTimesPlayedTitle);
 		textViewGameScoreText = (TextView) findViewById(R.id.textViewGameScoreText);
-		
+
 		textSwitcherTime = (TextSwitcher) findViewById(R.id.textViewTime);
-		
+
 		textSwitcherTime.setFactory(this);
-		
-		Animation inAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
-		Animation outAnimation = AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
-		
+
+		Animation inAnimation = AnimationUtils.loadAnimation(this,
+				android.R.anim.fade_in);
+		Animation outAnimation = AnimationUtils.loadAnimation(this,
+				android.R.anim.fade_out);
+
 		textSwitcherTime.setInAnimation(inAnimation);
 		textSwitcherTime.setOutAnimation(outAnimation);
 	}
@@ -715,14 +712,13 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 			//
 			mMillisUntilFinished = millisUntilFinished;
 			updateTime(Long.toString(millisUntilFinished / 1000));
-			
 
 		}
 
 		private void updateTime(String string) {
-			// 
+			//
 			textSwitcherTime.setText(string);
-			
+
 		}
 
 		@Override
@@ -819,9 +815,8 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 
 		if (mReverseNumbersInQuestions) {
 			intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_STRING,
-					mStringParser
-							.reverseNumbersInStringHebrew(mCurrentQuestion
-									.getQuestion()));
+					mStringParser.reverseNumbersInStringHebrew(mCurrentQuestion
+							.getQuestion()));
 		} else {
 			intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_STRING,
 					mCurrentQuestion.getQuestion());
@@ -856,7 +851,7 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 		// checking if time is up
 		if (i == -1) {
 			ret = -1;
-			// 
+			//
 			sb.append(getString(R.string.time_is_up_));
 			incCurrentWrongAnswersCounter();
 			startSoundFromSoundPool(mSoundAnswerWrong, 0);
@@ -886,8 +881,8 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 				startSoundFromSoundPool(mSoundAnswerWrong, 0);
 
 				setButtonRed(o_Button);
-				m_TriviaDb.incUserWrongCounter(mCurrentQuestion
-						.getQuestionId());
+				m_TriviaDb
+						.incUserWrongCounter(mCurrentQuestion.getQuestionId());
 				incCurrentWrongAnswersCounter();
 
 				// checking if the user answer wrong and we need to show the
@@ -934,14 +929,16 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 		mGameScore += addScore;
 
 		// TODO: find better solution, have custom toast
-		
-		Toast t = Toast.makeText(this, "" + "(+" + addScore + ")",Toast.LENGTH_SHORT);
-		
-		t.setGravity(Gravity.TOP, textViewGameScoreText.getLeft(), textViewGameScoreText.getTop());
+
+		Toast t = Toast.makeText(this, "" + "(+" + addScore + ")",
+				Toast.LENGTH_SHORT);
+
+		t.setGravity(Gravity.TOP, textViewGameScoreText.getLeft(),
+				textViewGameScoreText.getTop());
 		t.setMargin(0, 0);
-		
+
 		t.show();
-		
+
 		setGameScoreText("" + mGameScore);
 
 	}
@@ -1045,19 +1042,16 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 	private void showGameOver() {
 		mGameOver = true;
 		stopOrPauseCountdownTimer(true);
-		
+
 		// if m_UserId is of logged in user than enter it to the database
-		// 
-		if ( mUserId > -1 ){
-			// 
-			mJSONHandler.uploadScoreToDatabase(
-					String.valueOf(	mUserId),
-					String.valueOf(mCurrentGameType), 
+		//
+		if (mUserId > -1) {
+			//
+			mJSONHandler.uploadScoreToDatabase(String.valueOf(mUserId),
+					String.valueOf(mCurrentGameType),
 					String.valueOf(mGameScore),
-					String.valueOf(System.currentTimeMillis()),
-					-1);
-			
-			
+					String.valueOf(System.currentTimeMillis()), -1);
+
 		}
 
 		AlertDialog.Builder gameOverDialog = new AlertDialog.Builder(
@@ -1090,13 +1084,15 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 
 		case GAMETYPE_ALL_QUESTIONS:
 			textViewLivesLeftValue.setText(String.valueOf(mAllQuestionsLives));
-			
+
 			break;
 
 		case GAMETYPE_CATEGORIES:
 		case GAMETYPE_LEVELS:
 
-			textViewLivesLeftValue.setText(String.valueOf(mMaxWrongAnswersAllowed - mCurrentWrongAnswersCounter));
+			textViewLivesLeftValue.setText(String
+					.valueOf(mMaxWrongAnswersAllowed
+							- mCurrentWrongAnswersCounter));
 
 			break;
 
@@ -1196,33 +1192,31 @@ public class ActivityGame extends Activity implements OnClickListener, ViewFacto
 
 	@Override
 	public View makeView() {
-		// 
+		//
 		TextView t = new TextView(this);
 		t.setGravity(Gravity.CENTER);
 		t.setTextSize(18);
-		
+
 		return t;
-		
+
 	}
 
-	
-	
 	@Override
-	public void onScoreAdded( int i_Result) {
-		// 
-		if ( i_Result == JSONHandler.SUCCESS_SCORE_ADDED ){
-				
-		}else if ( i_Result == JSONHandler.ERROR_SCORE_WAS_NOT_ADDED){
-			m_TriviaDb.addScoreToDatabase(mUserId, mCurrentGameType, mGameScore);
+	public void onScoreAdded(int i_Result) {
+		//
+		if (i_Result == JSONHandler.SUCCESS_SCORE_ADDED) {
+
+		} else if (i_Result == JSONHandler.ERROR_SCORE_WAS_NOT_ADDED) {
+			m_TriviaDb
+					.addScoreToDatabase(mUserId, mCurrentGameType, mGameScore);
 		}
-		
+
 	}
 
 	@Override
 	public void deleteScoreFromDatabase(int rowInDatabase) {
-		// 
-		
-	}
+		//
 
+	}
 
 }
