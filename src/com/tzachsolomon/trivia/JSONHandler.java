@@ -376,7 +376,7 @@ public class JSONHandler {
 			status = httpResponse.getStatusLine().getStatusCode();
 
 			if (status == 200) {
-				httpEntity = httpResponse.getEntity();
+				
 				httpEntity = httpResponse.getEntity();
 				data = new String(EntityUtils.toString(httpEntity).getBytes(),
 						"UTF-8");
