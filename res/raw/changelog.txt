@@ -46,6 +46,27 @@ body {
 
 
 	<div class="title">
+		0.10 - What's New <br />
+	</div>
+	
+	<div class="subtitle">
+		1. Fixed bug - multiple calling to parse object from server <br />
+		2. Updated questions initial file <br />
+	</div>
+
+
+
+	<div class="title">
+		0.09 - What's New <br />
+	</div>
+	
+	<div class="subtitle">
+		1. Don't remember what I fixed here <br />
+	</div>
+
+
+
+	<div class="title">
 		0.08 - What's New <br />
 	</div>
 	
