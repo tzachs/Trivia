@@ -45,7 +45,6 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	// TODO: content provider for DB
 	// TODO: separate sounds
 
-	
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
 
 	private static final int REQUEST_CODE_START_GAME_CATEGORIES = 1;
@@ -144,12 +143,10 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 					}
 				});
 
-		mAlertDialogBuilderUpdate = new AlertDialog.Builder(
-				ActivityTrivia.this);
+		mAlertDialogBuilderUpdate = new AlertDialog.Builder(ActivityTrivia.this);
 		mAlertDialogBuilderUpdate.setCancelable(false);
 
-		mAlertDialogBuilderUpdate.setPositiveButton(
-				getString(R.string.update),
+		mAlertDialogBuilderUpdate.setPositiveButton(getString(R.string.update),
 				new DialogInterface.OnClickListener() {
 
 					@Override
@@ -166,8 +163,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 					}
 				});
-		mAlertDialogBuilderUpdate.setNegativeButton(
-				getString(R.string.later),
+		mAlertDialogBuilderUpdate.setNegativeButton(getString(R.string.later),
 				new DialogInterface.OnClickListener() {
 
 					@Override
@@ -324,9 +320,9 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		} else if (!mFirstTimeStartingDoNotTryToUpdate) {
 			if (mUpdateQuestionsLater) {
 				// checking if user asked to update questions later
-				if (mLaterUpdateQuestionsCounter > 0){
+				if (mLaterUpdateQuestionsCounter > 0) {
 					mLaterUpdateQuestionsCounter--;
-				}else{
+				} else {
 					mUpdateManager.updateQuestions(true);
 				}
 			} else {
@@ -371,8 +367,6 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		}
 
 		mStringParser = new StringParser(mSharedPreferences);
-
-		
 
 		mProgressDialog = new ProgressDialog(this);
 		mTrivaDbEngine = new TriviaDbEngine(this);
@@ -798,27 +792,31 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	}
 
 	@Override
-	public void onCheckIfQuestionUpdateAvailablePost(
-			Integer numberOfItemsToUpdate) {
+	public void onCheckIfQuestionUpdateAvailablePost(Bundle result) {
 		//
-
 		boolean silentMode = mUpdateManager.getSilentMode();
+		int numberOfNewQuestions = 0;
+		int numberOfUpdatedQuestions = 0;
 
-		if (numberOfItemsToUpdate > 0) {
+		if (result != null) {
+			numberOfNewQuestions = result.getInt("newQuestions");
+			numberOfUpdatedQuestions = result.getInt("updatedQuestions");
+		}
+
+		if ((numberOfNewQuestions + numberOfUpdatedQuestions) > 0) {
 			StringBuilder message = new StringBuilder();
 
-			message.append(getString(R.string.update_is_available_for_));
-			message.append(numberOfItemsToUpdate);
-			message.append(' ');
-
-			message.append(getString(R.string._questions_update_database_));
+			message.append(getString(R.string.there_are_));
+			message.append(numberOfNewQuestions);
+			message.append(getString(R.string._new_questions_and_));
+			message.append(numberOfUpdatedQuestions - numberOfNewQuestions);
+			message.append(getString(R.string._updated_questions));
 
 			mAlertDialogBuilderUpdate.setMessage(mStringParser
 					.reverseNumbersInStringHebrew(message.toString()));
 
 			if (mDialogUpdate == null) {
-				mDialogUpdate = mAlertDialogBuilderUpdate
-						.show();
+				mDialogUpdate = mAlertDialogBuilderUpdate.show();
 			} else if (mDialogUpdate.isShowing() == false) {
 				mDialogUpdate.show();
 			}
@@ -832,26 +830,31 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	}
 
 	@Override
-	public void onCheckIfCategoriesUpdateAvailablePost(
-			Integer numberOfItemsToUpdate) {
+	public void onCheckIfCategoriesUpdateAvailablePost(Bundle result) {
 
 		boolean silentMode = mUpdateManager.getSilentMode();
+		int numberOfNewCategories = 0;
+		int numberOfUpdatedCategories = 0;
 
-		if (numberOfItemsToUpdate > 0) {
+		if (result != null) {
+			numberOfNewCategories = result.getInt("newCategories");
+			numberOfUpdatedCategories = result.getInt("updatedCategories");
+		}
+
+		if ((numberOfNewCategories + numberOfUpdatedCategories) > 0) {
 			StringBuilder message = new StringBuilder();
 
-			message.append(getString(R.string.update_is_available_for_));
-			message.append(numberOfItemsToUpdate);
-			message.append(' ');
-
-			message.append(getString(R.string.categories));
+			message.append(R.string.there_are_);
+			message.append(numberOfNewCategories);
+			message.append(" new categories and ");
+			message.append(numberOfNewCategories);
+			message.append(" updaed categories");
 
 			mAlertDialogBuilderUpdate.setMessage(mStringParser
 					.reverseNumbersInStringHebrew(message.toString()));
 
 			if (mDialogUpdate == null) {
-				mDialogUpdate = mAlertDialogBuilderUpdate
-						.show();
+				mDialogUpdate = mAlertDialogBuilderUpdate.show();
 			} else if (mDialogUpdate.isShowing() == false) {
 				mDialogUpdate.show();
 			}

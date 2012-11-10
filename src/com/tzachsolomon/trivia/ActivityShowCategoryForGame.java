@@ -626,24 +626,30 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 
 	@Override
 	public void onCheckIfCategoriesUpdateAvailablePost(
-			Integer numberOfItemsToUpdate) {
+			Bundle result) {
 		//
 
 		boolean silentMode = mUpdateManager.getSilentMode();
-
-		if (numberOfItemsToUpdate > 0) {
+		int numberOfUpdatedCategories = 0;
+		int numberOfNewCategories = 0;
+		if ( result != null){
+			numberOfNewCategories = result.getInt("newCategories");
+			numberOfUpdatedCategories = result.getInt("updatedCategories");
+		}
+		
+		if ((numberOfUpdatedCategories +  numberOfNewCategories) > 0) {
 			if (silentMode) {
 
 				mUpdateManager.updateCategoriesNow();
 			} else {
 				StringBuilder message = new StringBuilder();
 
-				message.append(getString(R.string.update_is_available_for_));
-				message.append(numberOfItemsToUpdate);
-				message.append(' ');
-
-				message.append(getString(R.string.categories));
-
+				message.append(getString(R.string.there_are_));
+				message.append(numberOfNewCategories);
+				message.append(getString(R.string._new_categories_and_));
+				message.append(numberOfUpdatedCategories);
+				message.append(getString(R.string._updated_categories));
+				
 				mAlertDialogBuilderUpdateQuestions.setMessage(mStringParser
 						.reverseNumbersInStringHebrew(message.toString()));
 

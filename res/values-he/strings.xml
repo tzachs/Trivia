@@ -207,4 +207,5 @@
     <string name="or_use_your_facebook_account_and_press_the_login_button_">או התחבר בעזרת חשבון הFacebook</string>
     <string name="downloding_game_scores">מוריד תוצאות משחקים</string>
     <string name="downloading_game_scores_from_server">מוריד תוצאות משחקים מהשרת</string>
+    <string name="game_score_wasn_t_sent_sicne_the_user_isn_t_registered_or_login">תוצאה לא נשלחה מכיוון שהמשתמש אינו רשום או מחובר</string>
 </resources>

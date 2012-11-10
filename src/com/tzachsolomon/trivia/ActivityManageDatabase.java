@@ -81,6 +81,7 @@ public class ActivityManageDatabase extends Activity implements OnClickListener 
 
 	private void buttonUpdateDatabaseCategories_Clicked() {
 		// 
+		// TODO: fix set listener
 		mUpdateManager.updateCategories(false);
 		
 	}

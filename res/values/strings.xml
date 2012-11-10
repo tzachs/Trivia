@@ -209,5 +209,11 @@
     <string name="or_use_your_facebook_account_and_press_the_login_button_">Or, use your Facebook account and press the login button</string>
     <string name="downloding_game_scores">Downloading Game Scores</string>
     <string name="downloading_game_scores_from_server">Downloading Game Scores from server</string>
+    <string name="game_score_wasn_t_sent_sicne_the_user_isn_t_registered_or_login">Game score wasn\'t sent since the user isn\'t registered or login</string>
+    <string name="there_are_">"There are "</string>
+    <string name="_new_categories_and_">" new categories and "</string>
+    <string name="_updated_categories">" updated categories"</string>
+    <string name="_new_questions_and_">" new questions and "</string>
+    <string name="_updated_questions">" updated questions"</string>
 
 </resources>

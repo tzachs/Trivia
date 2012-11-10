@@ -212,7 +212,7 @@ public class UpdateManager implements DatabaseUpdateListener,
 	}
 
 	public class AsyncTaskCheckUpdateIsAvailable extends
-			AsyncTask<Boolean, Integer, Integer> {
+			AsyncTask<Boolean, Integer, Bundle> {
 
 		private ProgressDialog mProgressDialog;
 		private boolean enabled;
@@ -247,7 +247,7 @@ public class UpdateManager implements DatabaseUpdateListener,
 		}
 
 		@Override
-		protected void onPostExecute(Integer result) {
+		protected void onPostExecute(Bundle result) {
 			//
 			if (mProgressDialog != null) {
 				mProgressDialog.dismiss();
@@ -274,9 +274,9 @@ public class UpdateManager implements DatabaseUpdateListener,
 		}
 
 		@Override
-		protected Integer doInBackground(Boolean... params) {
+		protected Bundle doInBackground(Boolean... params) {
 			//
-			int ret = -1;
+			Bundle ret = null;
 			try {
 				
 				if (mUpdateType == JSONHandler.TYPE_UPDATE_CATEGORIES) {
@@ -345,14 +345,14 @@ public class UpdateManager implements DatabaseUpdateListener,
 	static public interface CategoriesListener {
 		public void onCategoriesUpdated(int i_UpdateFrom);
 
-		public void onCheckIfCategoriesUpdateAvailablePost(Integer result);
+		public void onCheckIfCategoriesUpdateAvailablePost(Bundle result);
 		public void onUpdateCategoriesPostponed();
 	}
 
 	static public interface QuestionsListener {
 		public void onQuestionsCorrectRatioSent();
 
-		public void onCheckIfQuestionUpdateAvailablePost(Integer result);
+		public void onCheckIfQuestionUpdateAvailablePost(Bundle result);
 
 		public void onQuestionsUpdated(int i_UpdateFrom);
 

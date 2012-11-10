@@ -376,7 +376,7 @@ public class JSONHandler {
 			status = httpResponse.getStatusLine().getStatusCode();
 
 			if (status == 200) {
-				
+
 				httpEntity = httpResponse.getEntity();
 				data = new String(EntityUtils.toString(httpEntity).getBytes(),
 						"UTF-8");
@@ -765,9 +765,9 @@ public class JSONHandler {
 
 	}
 
-	public int isUpdateAvailable(long lastUpdate, int i_UpdateType) {
+	public Bundle isUpdateAvailable(long lastUpdate, int i_UpdateType) {
 		//
-		int ret = -1;
+		Bundle ret = null;
 		List<NameValuePair> params = new ArrayList<NameValuePair>();
 
 		if (i_UpdateType == 1) {
@@ -786,8 +786,20 @@ public class JSONHandler {
 		if (obj != null) {
 
 			if (obj.has(RESULT_SUCCESS)) {
-				ret = obj.optInt("number");
-
+				ret = new Bundle();
+				ret.putInt("retCode", 1);
+				switch (i_UpdateType){
+				case 1:
+					ret.putInt("updatedQuestions", obj.optInt("number"));
+					ret.putInt("newQuestions", obj.optInt("newQuestions"));
+					break;
+				case 2:
+					ret.putInt("updatedCategories", obj.optInt("number"));
+					
+					break;
+				}
+				
+				
 			}
 		}
 

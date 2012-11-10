@@ -346,10 +346,9 @@ public class ActivityGame extends Activity implements OnClickListener,
 
 		mResumeClock = false;
 		mAllQuestionsLives = 0;
-		
+
 		textViewLivesLeftValue.setText(String.valueOf(mAllQuestionsLives));
-		
-		
+
 		mQuestions = m_TriviaDb.getQuestionsEnabled(mSortByNewQuestionFirst,
 				mQuestionLanguages);
 
@@ -1045,13 +1044,18 @@ public class ActivityGame extends Activity implements OnClickListener,
 
 		// if m_UserId is of logged in user than enter it to the database
 		//
-		if (mUserId > -1) {
+		if (mUserId > 0) {
 			//
 			mJSONHandler.uploadScoreToDatabase(String.valueOf(mUserId),
 					String.valueOf(mCurrentGameType),
 					String.valueOf(mGameScore),
 					String.valueOf(System.currentTimeMillis()), -1);
 
+		} else {
+			Toast.makeText(
+					ActivityGame.this,
+					getString(R.string.game_score_wasn_t_sent_sicne_the_user_isn_t_registered_or_login),
+					Toast.LENGTH_LONG).show();
 		}
 
 		AlertDialog.Builder gameOverDialog = new AlertDialog.Builder(
