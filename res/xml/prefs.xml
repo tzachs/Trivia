@@ -3,11 +3,11 @@
 
     <PreferenceScreen
         android:key="preferenceScreenUI"
-        android:summary="Advanced UI Language settings"
-        android:title="UI" >
+        android:summary="@string/advanced_ui_language_settings"
+        android:title="@string/ui" >
         <PreferenceCategory
             android:key="preferenceCategoryGenerlUI"
-            android:title="General UI" >
+            android:title="@string/general_ui" >
             <ListPreference
                 android:defaultValue="iw"
                 android:entries="@array/strinArrayLanguagesText"
@@ -25,8 +25,8 @@
     </PreferenceScreen>
     <PreferenceScreen
         android:key="prefernceScreenGameRelated"
-        android:summary="Game settings such as: Questions languages, Question Time, Show Report Error, etc "
-        android:title="Game Related" >
+        android:summary="@string/game_settings_such_as_questions_languages_question_time_show_report_error_etc_"
+        android:title="@string/game_related" >
         <PreferenceCategory
             android:key="preferenceScreenGameRelated"
             android:title="@string/preferenceCategoryGameRelatedTitle" >
@@ -72,7 +72,7 @@
         </PreferenceCategory>
         <PreferenceCategory
             android:key="preferenceCategoryShowInstructions"
-            android:title="Game Instructions" >
+            android:title="@string/game_instructions" >
             <CheckBoxPreference
                 android:defaultValue="true"
                 android:key="checkBoxPreferenceShowHelpNewGame"
@@ -92,7 +92,7 @@
     </PreferenceScreen>
     <PreferenceScreen
         android:key="preferenceScreenDatabase"
-        android:title="Database" >
+        android:title="@string/database" >
         <PreferenceCategory
             android:key="preferenceCategoryDatabaseServer"
             android:title="@string/preferenceCategoryDatabaseServerTitle" >
@@ -110,8 +110,8 @@
     </PreferenceScreen>
     <PreferenceScreen
         android:key="prefernceScreenNetwork"
-        android:summary="Advanced Network settings such as: Server IP, Network prefered allowed methods, etc"
-        android:title="Network" >
+        android:summary="@string/advanced_network_settings_such_as_server_ip_network_prefered_allowed_methods_etc"
+        android:title="@string/network" >
         <PreferenceCategory
             android:key="preferenceCategoryDatabaseServerAdvanced"
             android:title="@string/preferenceCategoryDatabaseServerAdvancedTitle" >

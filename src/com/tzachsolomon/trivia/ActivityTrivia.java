@@ -37,7 +37,6 @@ import android.widget.Toast;
 public class ActivityTrivia extends Activity implements OnClickListener,
 		CategoriesListener, QuestionsListener {
 
-	// TODO: Later should be with counter of attempts
 	// TODO: create service to update the database daily
 	// TODO: activity menu for tablet
 	// TODO: check if needed to update from XML file using last update

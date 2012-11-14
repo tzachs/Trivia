@@ -215,5 +215,14 @@
     <string name="_updated_categories">" updated categories"</string>
     <string name="_new_questions_and_">" new questions and "</string>
     <string name="_updated_questions">" updated questions"</string>
+    <string name="game_settings_such_as_questions_languages_question_time_show_report_error_etc_">"Game settings such as: Questions languages, Question Time, Show Report Error, etc "</string>
+    <string name="game_related">Game Related</string>
+    <string name="advanced_ui_language_settings">Advanced UI Language settings</string>
+    <string name="ui">UI</string>
+    <string name="general_ui">General UI</string>
+    <string name="game_instructions">Game Instructions</string>
+    <string name="network">Network</string>
+    <string name="advanced_network_settings_such_as_server_ip_network_prefered_allowed_methods_etc">Advanced Network settings such as: Server IP, Network prefered allowed methods, etc</string>
+    <string name="database">Database</string>
 
 </resources>

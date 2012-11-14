@@ -44,6 +44,25 @@ body {
 </head>
 <body>
 
+	<div class="title">
+		0.12 - What's New <br />
+	</div>
+	
+	<div class="subtitle">
+		1. App is now available for Jelly Bean (SDK 16) <br /> 
+	</div>
+
+	<div class="title">
+		0.11 - What's New <br />
+	</div>
+	
+	<div class="subtitle">
+		1. Added more detailed questions update <br />
+		2. Added info message in case game over and score is sent to databases  <br />
+		3. Fixed bug score is sent although user isn't registered <br />
+		4. Added more translation <br />
+	</div>
+
 
 	<div class="title">
 		0.10 - What's New <br />

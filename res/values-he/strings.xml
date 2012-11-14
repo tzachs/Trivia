@@ -208,4 +208,19 @@
     <string name="downloding_game_scores">מוריד תוצאות משחקים</string>
     <string name="downloading_game_scores_from_server">מוריד תוצאות משחקים מהשרת</string>
     <string name="game_score_wasn_t_sent_sicne_the_user_isn_t_registered_or_login">תוצאה לא נשלחה מכיוון שהמשתמש אינו רשום או מחובר</string>
+    <string name="there_are_">"ישנם "</string>
+    <string name="_new_categories_and_">" נושאים חדשים ו "</string>
+    <string name="_updated_categories">" עדכונים לנושאים קיימים "</string>
+    <string name="_new_questions_and_">" שאלות חדשות ו "</string>
+    <string name="_updated_questions">" עדכונים לשאלות קיימות "</string>
+    <string name="game_settings_such_as_questions_languages_question_time_show_report_error_etc_">"הגדרות משחק כגון, זמן לשאלה, הראה דווח שגיאה ועוד"</string>
+    <string name="game_related">הגדרות משחק</string>
+    <string name="advanced_ui_language_settings"> שפה - הגדרות ממשק</string>
+    <string name="ui">ממשק</string>
+    <string name="general_ui">הגדרות ממשק</string>
+    <string name="game_instructions">הוראות משחק</string>
+    <string name="network">רשת</string>
+    <string name="advanced_network_settings_such_as_server_ip_network_prefered_allowed_methods_etc">הגדרות רשת מתקדמות כגון כתובת שרת</string>
+    <string name="database">מאגר נתונים</string>
+    
 </resources>
