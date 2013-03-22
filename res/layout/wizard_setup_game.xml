@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginBottom="4dp"
         android:text="@string/textViewWizardSetupGameText"
-        android:textSize="20dp" />
+        android:textSize="20sp" />
      
       <View 
         android:id="@+id/viewLineGame"
@@ -20,8 +20,7 @@
         android:layout_height="4dip"
         android:layout_below="@+id/textViewWizardSetupGame"
         android:background="@drawable/custom_line_red"
-        />
-     
+        />
      <TextView
          android:id="@+id/textViewWizardSetupGameHint"
          android:layout_width="fill_parent"

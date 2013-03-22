@@ -76,7 +76,6 @@
             <CheckBoxPreference
                 android:defaultValue="true"
                 android:key="checkBoxPreferenceShowHelpNewGame"
-                android:summary="@string/show_help_new_game"
                 android:title="@string/show_help_new_game" />
             <CheckBoxPreference
                 android:defaultValue="true"
@@ -154,7 +153,9 @@
     <CheckBoxPreference
         android:defaultValue="false"
         android:key="showFirstTimeConfiguration"
-        android:title="@string/show_first_time_configuration" />
+        android:title="@string/show_first_time_configuration"
+        android:summary="show_first_time_configuration_summary"  
+        />
 
     <PreferenceCategory android:key="invisible" >
 -

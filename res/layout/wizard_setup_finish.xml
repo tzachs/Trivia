@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:text="@string/textViewSetupFinishTitleText"
-        android:textSize="20dp" />
+        android:textSize="20sp" />
 
     <View
         android:id="@+id/viewLineFinish"

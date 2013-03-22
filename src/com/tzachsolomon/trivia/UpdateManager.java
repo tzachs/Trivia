@@ -16,11 +16,11 @@ import org.xml.sax.SAXException;
 import com.tzachsolomon.trivia.JSONHandler.DatabaseUpdateListener;
 import com.tzachsolomon.trivia.TriviaDbEngine.TriviaDbEngineUpdateListener;
 
-import android.app.AlertDialog;
+
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
+
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;

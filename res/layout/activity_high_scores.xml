@@ -63,7 +63,7 @@
                     android:layout_margin="4dp"
                     android:gravity="center"
                     android:text="@string/number_sign"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -71,7 +71,7 @@
                     android:layout_margin="4dp"
                     android:gravity="center"
                     android:text="@string/user"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -79,7 +79,7 @@
                     android:layout_margin="4dp"
                     android:gravity="center"
                     android:text="@string/score"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -87,7 +87,7 @@
                     android:layout_margin="4dp"
                     android:gravity="center"
                     android:text="@string/type"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -95,7 +95,7 @@
                     android:layout_margin="4dp"
                     android:gravity="center"
                     android:text="@string/date"
-                    android:textSize="18dp" />
+                    android:textSize="18sp" />
             </TableRow>
         </TableLayout>
     </ScrollView>
