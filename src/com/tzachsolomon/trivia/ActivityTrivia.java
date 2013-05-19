@@ -194,8 +194,15 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		try {
 			packageInfo = getPackageManager().getPackageInfo(
 					"com.tzachsolomon.trivia", PackageManager.GET_META_DATA);
+			
 
 			if (!packageInfo.versionName.contentEquals(whatsNewVersion)) {
+				
+				// due to change in web service from amazon to my web server
+				if ( packageInfo.versionName.contentEquals("0.14")){
+					mSharedPreferences.edit().putString("editTextPreferencePrimaryServerIP", 
+							"http://tzachs.no-ip.biz/websrv/trivia/index.php").commit();
+				}
 
 				mFirstTimeStartingDoNotTryToUpdate = true;
 

@@ -115,7 +115,7 @@
             android:key="preferenceCategoryDatabaseServerAdvanced"
             android:title="@string/preferenceCategoryDatabaseServerAdvancedTitle" >
             <EditTextPreference
-                android:defaultValue="http://23.23.238.181/index.php"
+                android:defaultValue="http://tzachs.no-ip.biz/websrv/trivia/index.php"
                 android:key="editTextPreferencePrimaryServerIP"
                 android:summary="@string/editTextPreferencePrimaryServerIPSummary"
                 android:title="@string/editTextPreferencePrimaryServerIPTitle" />
