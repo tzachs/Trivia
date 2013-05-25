@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$USER_HOME$/android-libs/ActionBarSherlock/library/SherlockActionBar.iml" filepath="$USER_HOME$/android-libs/ActionBarSherlock/library/SherlockActionBar.iml" />
       <module fileurl="file://$PROJECT_DIR$/Trivia.iml" filepath="$PROJECT_DIR$/Trivia.iml" />
     </modules>
   </component>

@@ -1,5 +1,7 @@
 package com.tzachsolomon.trivia;
 
+import static com.tzachsolomon.trivia.ClassCommonUtils.*;
+
 import java.io.IOException;
 
 import org.apache.http.client.ClientProtocolException;
@@ -67,10 +69,10 @@ public class ActivityReportErrorInQuestion extends Activity implements OnChecked
 		
 		Bundle extras = getIntent().getExtras();
 		
-		radioButtonCurrentQuestion.setText(extras.getString(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_STRING));
-		radioButtonPreviousQuestion.setText(extras.getString(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING));
-		mCurrentQuestionId = extras.getString(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_ID);
-		mPreviousQuestionId = extras.getString(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID);
+		radioButtonCurrentQuestion.setText(extras.getString(INTENT_EXTRA_CURRENT_QUESTION_STRING));
+		radioButtonPreviousQuestion.setText(extras.getString(INTENT_EXTRA_PREVIOUS_QUESTION_STRING));
+		mCurrentQuestionId = extras.getString(INTENT_EXTRA_CURRENT_QUESTION_ID);
+		mPreviousQuestionId = extras.getString(INTENT_EXTRA_PREVIOUS_QUESTION_ID);
 		
 		radioButtonCurrentQuestion.setChecked(true);
 		radioButtonPreviousQuestion.setChecked(false);

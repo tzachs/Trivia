@@ -1,5 +1,7 @@
 package com.tzachsolomon.trivia;
 
+
+import static com.tzachsolomon.trivia.ClassCommonUtils.*;
 import java.util.Date;
 
 import com.tzachsolomon.trivia.JSONHandler.ScoreListener;
@@ -191,12 +193,12 @@ public class ActivityHighScores extends Activity implements ScoreListener,
 		mGameTypes = new SparseArray<String>();
 
 		//
-		mGameTypes.put(ActivityGame.GAMETYPE_ALL_QUESTIONS,
+		mGameTypes.put(GAMETYPE_ALL_QUESTIONS,
 				getString(R.string.soviet));
-		mGameTypes.put(ActivityGame.GAMETYPE_CATEGORIES,
+		mGameTypes.put(GAMETYPE_CATEGORIES,
 				getString(R.string.category));
 		mGameTypes
-				.put(ActivityGame.GAMETYPE_LEVELS, getString(R.string.levels));
+				.put(GAMETYPE_LEVELS, getString(R.string.levels));
 
 		table = (TableLayout) findViewById(R.id.tableLayoutHighScores);
 
@@ -314,19 +316,19 @@ public class ActivityHighScores extends Activity implements ScoreListener,
 
 	private void buttonGameTypeCategory_Clicked() {
 		//
-		downloadScoresAndDisplay(ActivityGame.GAMETYPE_CATEGORIES);
+		downloadScoresAndDisplay(GAMETYPE_CATEGORIES);
 
 	}
 
 	private void buttonGameTypeLevel_Clicked() {
 		//
-		downloadScoresAndDisplay(ActivityGame.GAMETYPE_LEVELS);
+		downloadScoresAndDisplay(GAMETYPE_LEVELS);
 
 	}
 
 	private void buttonGameTypeSoviet_Clicked() {
 		//
-		downloadScoresAndDisplay(ActivityGame.GAMETYPE_ALL_QUESTIONS);
+		downloadScoresAndDisplay(GAMETYPE_ALL_QUESTIONS);
 
 	}
 

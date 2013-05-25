@@ -222,5 +222,7 @@
     <string name="network">רשת</string>
     <string name="advanced_network_settings_such_as_server_ip_network_prefered_allowed_methods_etc">הגדרות רשת מתקדמות כגון כתובת שרת</string>
     <string name="database">מאגר נתונים</string>
-    
+    <string name="single_games">משחק ליחיד</string>
+    <string name="admin">הגדרות</string>
+
 </resources>

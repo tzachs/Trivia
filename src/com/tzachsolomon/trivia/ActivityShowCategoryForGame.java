@@ -1,5 +1,7 @@
 package com.tzachsolomon.trivia;
 
+import static com.tzachsolomon.trivia.ClassCommonUtils.*;
+
 import java.util.ArrayList;
 
 import com.tzachsolomon.trivia.UpdateManager.CategoriesListener;
@@ -600,7 +602,7 @@ public class ActivityShowCategoryForGame extends ExpandableListActivity
 				ids[i] = chosenIds.get(i);
 			}
 			Intent resultData = new Intent();
-			resultData.putExtra(ActivityGame.EXTRA_GAME_CATEGORIES, ids);
+			resultData.putExtra(EXTRA_GAME_CATEGORIES, ids);
 			setResult(1, resultData);
 			finish();
 		} else {

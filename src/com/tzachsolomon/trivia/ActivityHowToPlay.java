@@ -1,5 +1,7 @@
 package com.tzachsolomon.trivia;
 
+import static com.tzachsolomon.trivia.ClassCommonUtils.*;
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -51,7 +53,7 @@ public class ActivityHowToPlay extends Activity implements OnClickListener {
 				.getString(KEY_HOW_TO_PLAY_INSTRUCTIONS_TITLE));
 		textViewHowToPlayTitle.setText(extras.getString(KEY_HOW_TO_PLAY_TITLE));
 
-		mGameType = extras.getInt(ActivityGame.INTENT_EXTRA_GAME_TYPE);
+		mGameType = extras.getInt(INTENT_EXTRA_GAME_TYPE);
 		
 		
 
@@ -107,16 +109,16 @@ public class ActivityHowToPlay extends Activity implements OnClickListener {
 	private void checkBoxShowGameInstructionsEveryTime_Clicked() {
 		//
 		switch (mGameType) {
-		case ActivityGame.GAMETYPE_ALL_QUESTIONS:
+		case GAMETYPE_ALL_QUESTIONS:
 			m_SharedPreferences.edit().putBoolean(
 					"checkBoxPreferenceShowHelpAllQuestions",
 					checkBoxShowGameInstructionsEveryTime.isChecked()).commit();
 
 			break;
-		case ActivityGame.GAMETYPE_CATEGORIES:
+		case GAMETYPE_CATEGORIES:
 
 			break;
-		case ActivityGame.GAMETYPE_LEVELS:
+		case GAMETYPE_LEVELS:
 			m_SharedPreferences.edit().putBoolean(
 					"checkBoxPreferenceShowHelpNewGame",
 					checkBoxShowGameInstructionsEveryTime.isChecked()).commit();

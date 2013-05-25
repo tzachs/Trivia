@@ -1,5 +1,6 @@
 package com.tzachsolomon.trivia;
 
+import static com.tzachsolomon.trivia.ClassCommonUtils.*;
 import java.util.Locale;
 
 import com.tzachsolomon.trivia.UpdateManager.CategoriesListener;
@@ -46,10 +47,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 	public static final String TAG = ActivityTrivia.class.getSimpleName();
 
-	private static final int REQUEST_CODE_START_GAME_CATEGORIES = 1;
-	private static final int REQUEST_CODE_BACK_FROM_PREFERENCES = 2;
-	private static final int REQUEST_CODE_BACK_FROM_ACTIVITY_USER_MANAGER = 3;
-	private static final int REQUEST_CODE_BACK_FROM_ACTIVITY_WIZARD_SETUP = 4;
+
 
 	private StringParser mStringParser;
 
@@ -516,8 +514,8 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 				Bundle extras = data.getExtras();
 
-				extras.putInt(ActivityGame.EXTRA_GAME_TYPE,
-						ActivityGame.GAMETYPE_CATEGORIES);
+				extras.putInt(EXTRA_GAME_TYPE,
+						GAMETYPE_CATEGORIES);
 				startNewGame(extras);
 			}
 
@@ -588,9 +586,10 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private void startNewGame(Bundle extras) {
 		//
 		Intent intent = new Intent(this, ActivityGame.class);
-		intent.putExtra(ActivityGame.EXTRA_GAME_USER_ID, mCurrentUserId);
+		intent.putExtra(EXTRA_GAME_USER_ID, mCurrentUserId);
 		intent.putExtras(extras);
 		startActivity(intent);
+
 	}
 
 	private void buttonNewGameCategories_Clicked() {
@@ -620,9 +619,9 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private void buttonNewGameSimple_Clicked() {
 		//
 		Bundle extras = new Bundle();
-		extras.putInt(ActivityGame.EXTRA_GAME_TYPE,
-				ActivityGame.GAMETYPE_LEVELS);
-		extras.putInt(ActivityGame.EXTRA_GAME_START_LEVEL, 1);
+		extras.putInt(EXTRA_GAME_TYPE,
+				GAMETYPE_LEVELS);
+		extras.putInt(EXTRA_GAME_START_LEVEL, 1);
 
 		startNewGame(extras);
 
@@ -647,8 +646,8 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		//
 		Bundle extras = new Bundle();
 
-		extras.putInt(ActivityGame.EXTRA_GAME_TYPE,
-				ActivityGame.GAMETYPE_ALL_QUESTIONS);
+		extras.putInt(EXTRA_GAME_TYPE,
+				GAMETYPE_ALL_QUESTIONS);
 		startNewGame(extras);
 
 	}

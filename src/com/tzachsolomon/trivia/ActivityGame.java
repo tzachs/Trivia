@@ -1,5 +1,6 @@
 package com.tzachsolomon.trivia;
 
+import static com.tzachsolomon.trivia.ClassCommonUtils.*;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -36,21 +37,6 @@ public class ActivityGame extends Activity implements OnClickListener,
 
 	public static final String TAG = ActivityGame.class.getSimpleName();
 
-	public static final String EXTRA_GAME_TYPE = "GameType";
-	public static final String EXTRA_GAME_CATEGORIES = "GameCategories";
-	public static final String EXTRA_GAME_START_LEVEL = "GameStartLevel";
-	public static final String EXTRA_GAME_USER_ID = "GameUserId";
-
-	public static final int GAMETYPE_ALL_QUESTIONS = 1;
-	public static final int GAMETYPE_LEVELS = 2;
-	public static final int GAMETYPE_CATEGORIES = 3;
-
-	public static final String INTENT_EXTRA_PREVIOUS_QUESTION_ID = "previousQuestionId";
-	public static final String INTENT_EXTRA_PREVIOUS_QUESTION_STRING = "previousQuestionString";
-	public static final String INTENT_EXTRA_CURRENT_QUESTION_ID = "currentQuestionId";
-	public static final String INTENT_EXTRA_CURRENT_QUESTION_STRING = "currentQuestionString";
-
-	public static final String INTENT_EXTRA_GAME_TYPE = "keyGameType";
 
 	private MyCountDownCounter mCountDownCounter;
 
@@ -147,8 +133,8 @@ public class ActivityGame extends Activity implements OnClickListener,
 		mClockSound.setLooping(true);
 
 		mExtras = getIntent().getExtras();
-		mCurrentGameType = mExtras.getInt(ActivityGame.EXTRA_GAME_TYPE);
-		mUserId = mExtras.getInt(ActivityGame.EXTRA_GAME_USER_ID);
+		mCurrentGameType = mExtras.getInt(EXTRA_GAME_TYPE);
+		mUserId = mExtras.getInt(EXTRA_GAME_USER_ID);
 
 		showInstructions();
 	}
@@ -158,7 +144,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 		initializeGameSettings();
 
 		mExtras = getIntent().getExtras();
-		mCurrentGameType = mExtras.getInt(ActivityGame.EXTRA_GAME_TYPE);
+		mCurrentGameType = mExtras.getInt(EXTRA_GAME_TYPE);
 
 		parseGameSetupAndStart();
 	}
@@ -193,7 +179,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 		Intent intent = new Intent(ActivityGame.this, ActivityHowToPlay.class);
 		switch (mCurrentGameType) {
 
-		case ActivityGame.GAMETYPE_ALL_QUESTIONS:
+		case GAMETYPE_ALL_QUESTIONS:
 			showInstruction = m_SharedPreferences.getBoolean(
 					"checkBoxPreferenceShowHelpAllQuestions", true);
 			if (showInstruction) {
@@ -214,8 +200,8 @@ public class ActivityGame extends Activity implements OnClickListener,
 			}
 
 			break;
-		case ActivityGame.GAMETYPE_CATEGORIES:
-		case ActivityGame.GAMETYPE_LEVELS:
+		case GAMETYPE_CATEGORIES:
+		case GAMETYPE_LEVELS:
 			showInstruction = m_SharedPreferences.getBoolean(
 					"checkBoxPreferenceShowHelpNewGame", true);
 			if (showInstruction) {
@@ -234,7 +220,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 		}
 
 		if (showInstruction) {
-			intent.putExtra(ActivityGame.INTENT_EXTRA_GAME_TYPE,
+			intent.putExtra(INTENT_EXTRA_GAME_TYPE,
 					mCurrentGameType);
 			mResumeFromHelp = true;
 			startActivityForResult(intent, 1);
@@ -258,7 +244,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 
 			if (mCurrentGameType == GAMETYPE_CATEGORIES) {
 				mCategories = mExtras
-						.getIntArray(ActivityGame.EXTRA_GAME_CATEGORIES);
+						.getIntArray(EXTRA_GAME_CATEGORIES);
 			}
 
 			mCurrentLevel = 0;
@@ -292,10 +278,10 @@ public class ActivityGame extends Activity implements OnClickListener,
 
 		if (mCurrentLevel <= mNumberOfLevels && !mGameOver) {
 
-			if (mCurrentGameType == ActivityGame.GAMETYPE_LEVELS) {
+			if (mCurrentGameType == GAMETYPE_LEVELS) {
 				mQuestions = m_TriviaDb.getQuestionsByLevel(mCurrentLevel,
 						mSortByNewQuestionFirst, mQuestionLanguages);
-			} else if (mCurrentGameType == ActivityGame.GAMETYPE_CATEGORIES) {
+			} else if (mCurrentGameType == GAMETYPE_CATEGORIES) {
 				mQuestions = m_TriviaDb.getQuestionsByLevelAndCategories(
 						mCurrentLevel, mSortByNewQuestionFirst, mCategories,
 						mQuestionLanguages);
@@ -313,7 +299,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 			mQuestions.shuffle(mSortByNewQuestionFirst);
 
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(
-					ActivityGame.this);
+					this);
 
 			alertDialog.setTitle(getString(R.string.starting_level_)
 					+ mCurrentLevel);
@@ -362,7 +348,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 			mQuestionIndex = -1;
 
 			AlertDialog.Builder alertDialog = new AlertDialog.Builder(
-					ActivityGame.this);
+					this);
 
 			alertDialog.setTitle(getString(R.string.start_game));
 			alertDialog.setPositiveButton(getString(R.string.start),
@@ -465,7 +451,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 				// going to next level
 
 				Toast.makeText(
-						ActivityGame.this,
+						this,
 						getString(R.string.no_more_questions_in_this_level_going_to_next_level_),
 						Toast.LENGTH_LONG).show();
 				startNewRoundGameLevels();
@@ -574,7 +560,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 		//
 		// initialize the sounds
 
-		m_TriviaDb = new TriviaDbEngine(ActivityGame.this);
+		m_TriviaDb = new TriviaDbEngine(this);
 		mJSONHandler = new JSONHandler(this);
 
 		mJSONHandler.setScoreUpdateListener(this);
@@ -783,18 +769,18 @@ public class ActivityGame extends Activity implements OnClickListener,
 
 		if (previousQuestionIndex > -1) {
 			// we are not in the first question
-			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID,
+			intent.putExtra(INTENT_EXTRA_PREVIOUS_QUESTION_ID,
 					mQuestions.getQuestionAtIndex(previousQuestionIndex)
 							.getQuestionId());
 			if (mReverseNumbersInQuestions) {
 				intent.putExtra(
-						ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
+						INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
 						mStringParser.reverseNumbersInStringHebrew(mQuestions
 								.getQuestionAtIndex(previousQuestionIndex)
 								.getQuestion()));
 			} else {
 				intent.putExtra(
-						ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
+						INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
 						mQuestions.getQuestionAtIndex(previousQuestionIndex)
 								.getQuestion());
 			}
@@ -802,22 +788,22 @@ public class ActivityGame extends Activity implements OnClickListener,
 		} else {
 			// we are in the first question ,filling the previous question with
 			// dud value
-			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_ID,
+			intent.putExtra(INTENT_EXTRA_PREVIOUS_QUESTION_ID,
 					"-1");
-			intent.putExtra(ActivityGame.INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
+			intent.putExtra(INTENT_EXTRA_PREVIOUS_QUESTION_STRING,
 					"bla bla");
 
 		}
 
-		intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_ID,
+		intent.putExtra(INTENT_EXTRA_CURRENT_QUESTION_ID,
 				mCurrentQuestion.getQuestionId());
 
 		if (mReverseNumbersInQuestions) {
-			intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_STRING,
+			intent.putExtra(INTENT_EXTRA_CURRENT_QUESTION_STRING,
 					mStringParser.reverseNumbersInStringHebrew(mCurrentQuestion
 							.getQuestion()));
 		} else {
-			intent.putExtra(ActivityGame.INTENT_EXTRA_CURRENT_QUESTION_STRING,
+			intent.putExtra(INTENT_EXTRA_CURRENT_QUESTION_STRING,
 					mCurrentQuestion.getQuestion());
 		}
 
@@ -1008,7 +994,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 		//
 		switch (mCurrentGameType) {
 		case GAMETYPE_ALL_QUESTIONS:
-			Toast.makeText(ActivityGame.this, getString(R.string.game_over),
+			Toast.makeText(this, getString(R.string.game_over),
 					Toast.LENGTH_LONG).show();
 			break;
 
@@ -1053,13 +1039,13 @@ public class ActivityGame extends Activity implements OnClickListener,
 
 		} else {
 			Toast.makeText(
-					ActivityGame.this,
+					this,
 					getString(R.string.game_score_wasn_t_sent_sicne_the_user_isn_t_registered_or_login),
 					Toast.LENGTH_LONG).show();
 		}
 
 		AlertDialog.Builder gameOverDialog = new AlertDialog.Builder(
-				ActivityGame.this);
+				this);
 		gameOverDialog.setTitle(getString(R.string.game_over));
 		gameOverDialog.setCancelable(false);
 		gameOverDialog.setPositiveButton(getString(R.string.exit),
