@@ -18,13 +18,15 @@ import java.util.ArrayList;
 /**
  * Created by tzach on 5/25/13.
  */
-public class ActivityNewMain extends SherlockFragmentActivity implements FragmentSingleGames.FragmentSingleGamesListener{
+public class ActivityNewMain extends SherlockFragmentActivity implements FragmentSingleGames.FragmentSingleGamesListener,
+        FragmentAdmin.FragmentAdminListener{
 
     private ViewPager mViewPager;
     private TabsAdapter mTabsAdapter;
     private Intent mCurrentGame;
     private int mCurrentUserId;
     private int mLastLevel;
+    private UpdateManager mUpdateManager;
 
 
     @Override
@@ -40,6 +42,7 @@ public class ActivityNewMain extends SherlockFragmentActivity implements Fragmen
 
         mLastLevel = 1;
         mCurrentUserId = -2;
+        mUpdateManager = new UpdateManager(this);
 
 
     }
@@ -90,6 +93,37 @@ public class ActivityNewMain extends SherlockFragmentActivity implements Fragmen
         Intent intent = new Intent(this, ActivityShowCategoryForGame.class);
         startActivityForResult(intent, REQUEST_CODE_START_GAME_CATEGORIES);
 
+    }
+
+    @Override
+    public void onUpdateDatabaseClicked() {
+        mUpdateManager.updateQuestions(false);
+    }
+
+    @Override
+    public void onSendSuggestionClicked() {
+        sendSuggestion();
+    }
+
+
+    private void sendSuggestion() {
+        Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        emailIntent.setType("plain/text");
+        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL,
+                new String[] { "tzach.solomon@gmail.com" });
+        emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT,
+                "Suggestion for Trivia");
+
+        startActivity(Intent.createChooser(emailIntent,
+                getString(R.string.send_suggestion_in_)));
+
+    }
+
+    @Override
+    public void onSendQuestionClicked() {
+        Intent intent = new Intent(this,
+                ActivitySuggestQuestion.class);
+        startActivity(intent);
     }
 
     public static class TabsAdapter extends FragmentPagerAdapter implements
