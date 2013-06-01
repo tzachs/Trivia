@@ -120,7 +120,7 @@ public class ActivityTriviaNew extends SherlockFragmentActivity implements Fragm
         extras.putInt(EXTRA_GAME_TYPE,
                 GAMETYPE_LEVELS);
         if (mSharedPreferences.getBoolean("checkBoxPreferenceStartGameFromLastLevelPlayed",true)){
-            mLastLevel = mSharedPreferences.getInt("lastLevelPlayed",1);
+            mLastLevel = Integer.valueOf(mSharedPreferences.getString("lastLevelPlayed","1"));
         }else{
             mLastLevel = 1;
         }
