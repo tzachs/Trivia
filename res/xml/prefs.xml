@@ -2,173 +2,171 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <PreferenceScreen
-        android:key="preferenceScreenUI"
-        android:summary="@string/advanced_ui_language_settings"
-        android:title="@string/ui" >
+            android:key="preferenceScreenUI"
+            android:summary="@string/advanced_ui_language_settings"
+            android:title="@string/ui" >
         <PreferenceCategory
-            android:key="preferenceCategoryGenerlUI"
-            android:title="@string/general_ui" >
+                android:key="preferenceCategoryGenerlUI"
+                android:title="@string/general_ui" >
             <ListPreference
-                android:defaultValue="iw"
-                android:entries="@array/strinArrayLanguagesText"
-                android:entryValues="@array/integerArrayLanguagesValues"
-                android:key="listPreferenceLanguages"
-                android:summary="@string/ui_language"
-                android:title="@string/language" />
+                    android:defaultValue="iw"
+                    android:entries="@array/strinArrayLanguagesText"
+                    android:entryValues="@array/integerArrayLanguagesValues"
+                    android:key="listPreferenceLanguages"
+                    android:summary="@string/ui_language"
+                    android:title="@string/language" />
 
             <CheckBoxPreference
-                android:defaultValue="false"
-                android:key="checkBoxPreferenceRevereseInHebrew"
-                android:summary="@string/checkBoxPreferenceRevereseInHebrewSummary"
-                android:title="@string/checkBoxPreferenceRevereseInHebrewTitle" />
+                    android:defaultValue="false"
+                    android:key="checkBoxPreferenceRevereseInHebrew"
+                    android:summary="@string/checkBoxPreferenceRevereseInHebrewSummary"
+                    android:title="@string/checkBoxPreferenceRevereseInHebrewTitle" />
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen
-        android:key="prefernceScreenGameRelated"
-        android:summary="@string/game_settings_such_as_questions_languages_question_time_show_report_error_etc_"
-        android:title="@string/game_related" >
+            android:key="prefernceScreenGameRelated"
+            android:summary="@string/game_settings_such_as_questions_languages_question_time_show_report_error_etc_"
+            android:title="@string/game_related" >
         <PreferenceCategory
-            android:key="preferenceScreenGameRelated"
-            android:title="@string/preferenceCategoryGameRelatedTitle" >
+                android:key="preferenceScreenGameRelated"
+                android:title="@string/preferenceCategoryGameRelatedTitle" >
             <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="checkBoxPreferenceQuestionLanguageHebrew"
-                android:summary="@string/show_hebrew_questions"
-                android:title="@string/show_hebrew_questions" />
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="checkBoxPreferenceQuestionLanguageEnglish"
-                android:summary="@string/show_english_questions"
-                android:title="@string/show_english_questions" />
-            <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="checkBoxPreferenceShowCorrectAnswer"
-                android:summary="@string/checkBoxPreferenceShowCorrectAnswerSummary"
-                android:title="@string/checkBoxPreferenceShowCorrectAnswerText" />
-
-            <EditTextPreference
-                android:defaultValue="10"
-                android:inputType="number"
-                android:key="editTextPreferenceCountDownTimer"
-                android:summary="@string/editTextPreferenceCountDownTimerSummary"
-                android:title="@string/editTextPreferenceCountDownTimerTitle" />
-            <EditTextPreference
-                android:defaultValue="1000"
-                android:inputType="number"
-                android:key="editTextPreferenceDelayBetweenQuestions"
-                android:summary="@string/editTextPreferenceDelayBetweenQuestionsSummary"
-                android:title="@string/editTextPreferenceDelayBetweenQuestionsTitle" />
+                    android:defaultValue="true"
+                    android:key="checkBoxPreferenceQuestionLanguageHebrew"
+                    android:summary="@string/show_hebrew_questions"
+                    android:title="@string/show_hebrew_questions" />
 
             <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="checkBoxPreferencePreferNewQuestions"
-                android:summary="@string/checkBoxPreferencePreferNewQuestionsSummary"
-                android:title="@string/checkBoxPreferencePreferNewQuestionsTitle" />
+                    android:defaultValue="true"
+                    android:key="checkBoxPreferenceShowCorrectAnswer"
+                    android:summary="@string/checkBoxPreferenceShowCorrectAnswerSummary"
+                    android:title="@string/checkBoxPreferenceShowCorrectAnswerText" />
+
+            <EditTextPreference
+                    android:defaultValue="10"
+                    android:inputType="number"
+                    android:key="editTextPreferenceCountDownTimer"
+                    android:summary="@string/editTextPreferenceCountDownTimerSummary"
+                    android:title="@string/editTextPreferenceCountDownTimerTitle" />
+            <EditTextPreference
+                    android:defaultValue="1000"
+                    android:inputType="number"
+                    android:key="editTextPreferenceDelayBetweenQuestions"
+                    android:summary="@string/editTextPreferenceDelayBetweenQuestionsSummary"
+                    android:title="@string/editTextPreferenceDelayBetweenQuestionsTitle" />
+
             <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="checkBoxPreferenceShowReportQuestion"
-                android:summary="@string/checkBoxPreferenceShowReportQuestionSummary"
-                android:title="@string/checkBoxPreferenceShowReportQuestionTitle" />
+                    android:defaultValue="true"
+                    android:key="checkBoxPreferencePreferNewQuestions"
+                    android:summary="@string/checkBoxPreferencePreferNewQuestionsSummary"
+                    android:title="@string/checkBoxPreferencePreferNewQuestionsTitle" />
+            <CheckBoxPreference
+                    android:defaultValue="true"
+                    android:key="checkBoxPreferenceShowReportQuestion"
+                    android:summary="@string/checkBoxPreferenceShowReportQuestionSummary"
+                    android:title="@string/checkBoxPreferenceShowReportQuestionTitle" />
         </PreferenceCategory>
         <PreferenceCategory
-            android:key="preferenceCategoryShowInstructions"
-            android:title="@string/game_instructions" >
+                android:key="preferenceCategoryShowInstructions"
+                android:title="@string/game_instructions" >
             <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="checkBoxPreferenceShowHelpNewGame"
-                android:title="@string/show_help_new_game" />
+                    android:defaultValue="true"
+                    android:key="checkBoxPreferenceShowHelpNewGame"
+                    android:title="@string/show_help_new_game_title"
+                    android:summary="@string/show_help_new_game_summary"
+                    />
             <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="checkBoxPreferenceShowHelpCategories"
-                android:summary="@string/show_instruction_for_categories_game"
-                android:title="@string/show_categories_game_instructions" />
+                    android:defaultValue="true"
+                    android:key="checkBoxPreferenceShowHelpCategories"
+                    android:summary="@string/show_help_categories_game_summary"
+                    android:title="@string/show_help_categories_game_title" />
             <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="checkBoxPreferenceShowHelpAllQuestions"
-                android:summary="@string/show_help_all_questions"
-                android:title="@string/show_help_all_questions" />
+                    android:defaultValue="true"
+                    android:key="checkBoxPreferenceShowHelpAllQuestions"
+                    android:summary="@string/show_help_all_questions_summary"
+                    android:title="@string/show_help_all_questions_title" />
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen
-        android:key="preferenceScreenDatabase"
-        android:title="@string/database" >
+            android:key="preferenceScreenDatabase"
+            android:title="@string/database" >
         <PreferenceCategory
-            android:key="preferenceCategoryDatabaseServer"
-            android:title="@string/preferenceCategoryDatabaseServerTitle" >
+                android:key="preferenceCategoryDatabaseServer"
+                android:title="@string/preferenceCategoryDatabaseServerTitle" >
             <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="checkBoxPreferenceUploadCorrectWrongUserStat"
-                android:summary="@string/checkBoxPreferenceUploadCorrectWrongUserStatSummary"
-                android:title="@string/checkBoxPreferenceUploadCorrectWrongUserStatTitle" />
+                    android:defaultValue="true"
+                    android:key="checkBoxPreferenceUploadCorrectWrongUserStat"
+                    android:summary="@string/checkBoxPreferenceUploadCorrectWrongUserStatSummary"
+                    android:title="@string/checkBoxPreferenceUploadCorrectWrongUserStatTitle" />
             <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="checkBoxPreferenceCheckUpdateOnStartup"
-                android:summary="@string/checkBoxPreferenceCheckUpdateOnStartupSummary"
-                android:title="@string/checkBoxPreferenceCheckUpdateOnStartupTitle" />
+                    android:defaultValue="true"
+                    android:key="checkBoxPreferenceCheckUpdateOnStartup"
+                    android:summary="@string/checkBoxPreferenceCheckUpdateOnStartupSummary"
+                    android:title="@string/checkBoxPreferenceCheckUpdateOnStartupTitle" />
         </PreferenceCategory>
     </PreferenceScreen>
     <PreferenceScreen
-        android:key="prefernceScreenNetwork"
-        android:summary="@string/advanced_network_settings_such_as_server_ip_network_prefered_allowed_methods_etc"
-        android:title="@string/network" >
+            android:key="prefernceScreenNetwork"
+            android:summary="@string/advanced_network_settings_such_as_server_ip_network_prefered_allowed_methods_etc"
+            android:title="@string/network" >
         <PreferenceCategory
-            android:key="preferenceCategoryDatabaseServerAdvanced"
-            android:title="@string/preferenceCategoryDatabaseServerAdvancedTitle" >
+                android:key="preferenceCategoryDatabaseServerAdvanced"
+                android:title="@string/preferenceCategoryDatabaseServerAdvancedTitle" >
             <EditTextPreference
-                android:defaultValue="http://tzachs.no-ip.biz/websrv/trivia/index.php"
-                android:key="editTextPreferencePrimaryServerIP"
-                android:summary="@string/editTextPreferencePrimaryServerIPSummary"
-                android:title="@string/editTextPreferencePrimaryServerIPTitle" />
+                    android:defaultValue="http://tzachs.no-ip.biz/websrv/trivia/index.php"
+                    android:key="editTextPreferencePrimaryServerIP"
+                    android:summary="@string/editTextPreferencePrimaryServerIPSummary"
+                    android:title="@string/editTextPreferencePrimaryServerIPTitle" />
 
             <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="checkBoxPreferenceAllowUpdateWifi"
-                android:summary="@string/checkBoxPreferenceAllowUpdateWifiSummary"
-                android:title="@string/checkBoxPreferenceAllowUpdateWifiTitle" />
+                    android:defaultValue="true"
+                    android:key="checkBoxPreferenceAllowUpdateWifi"
+                    android:summary="@string/checkBoxPreferenceAllowUpdateWifiSummary"
+                    android:title="@string/checkBoxPreferenceAllowUpdateWifiTitle" />
             <CheckBoxPreference
-                android:defaultValue="true"
-                android:key="checkBoxPreferenceAllowUpdateMobileNetwork"
-                android:summary="@string/checkBoxPreferenceAllowUpdateMobileNetworkSummary"
-                android:title="@string/checkBoxPreferenceAllowUpdateMobileNetworkTitle" />
+                    android:defaultValue="true"
+                    android:key="checkBoxPreferenceAllowUpdateMobileNetwork"
+                    android:summary="@string/checkBoxPreferenceAllowUpdateMobileNetworkSummary"
+                    android:title="@string/checkBoxPreferenceAllowUpdateMobileNetworkTitle" />
             <CheckBoxPreference
-                android:defaultValue="true"
-                android:enabled="true"
-                android:key="checkBoxPreferenceAllowUpdateMobileNetwork3G"
-                android:summary="@string/checkBoxPreferenceAllowUpdateMobileNetwork3GSummary"
-                android:title="@string/checkBoxPreferenceAllowUpdateMobileNetwork3GTitle" />
+                    android:defaultValue="true"
+                    android:enabled="true"
+                    android:key="checkBoxPreferenceAllowUpdateMobileNetwork3G"
+                    android:summary="@string/checkBoxPreferenceAllowUpdateMobileNetwork3GSummary"
+                    android:title="@string/checkBoxPreferenceAllowUpdateMobileNetwork3GTitle" />
             <CheckBoxPreference
-                android:defaultValue="false"
-                android:enabled="false"
-                android:key="checkBoxPreferenceAllowUpdateMobileNetworkRoaming"
-                android:summary="@string/checkBoxPreferenceAllowUpdateMobileNetworkRoamingSummary"
-                android:title="@string/checkBoxPreferenceAllowUpdateMobileNetworkRoamingTitle" />
+                    android:defaultValue="false"
+                    android:enabled="false"
+                    android:key="checkBoxPreferenceAllowUpdateMobileNetworkRoaming"
+                    android:summary="@string/checkBoxPreferenceAllowUpdateMobileNetworkRoamingSummary"
+                    android:title="@string/checkBoxPreferenceAllowUpdateMobileNetworkRoamingTitle" />
         </PreferenceCategory>
     </PreferenceScreen>
 
     <CheckBoxPreference
-        android:defaultValue="true"
-        android:key="checkBoxPreferencePlayGameSounds"
-        android:summary="@string/play_in_game_sounds"
-        android:title="@string/play_game_sounds" />
+            android:defaultValue="true"
+            android:key="checkBoxPreferencePlayGameSounds"
+            android:summary="@string/play_in_game_sounds"
+            android:title="@string/play_game_sounds" />
     <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="showFirstTimeConfiguration"
-        android:title="@string/show_first_time_configuration"
-        android:summary="show_first_time_configuration_summary"  
-        />
+            android:defaultValue="false"
+            android:key="showFirstTimeConfiguration"
+            android:title="@string/show_first_time_configuration"
+            android:summary="@string/show_first_time_configuration"
+            />
 
     <PreferenceCategory android:key="invisible" >
--
+        -
         <EditTextPreference
-            android:defaultValue="1"
-            android:key="showConfigWizard" />
-        
+                android:defaultValue="1"
+                android:key="showConfigWizard" />
+
         <EditTextPreference
-            android:defaultValue="0"
-            android:key="showWhatsNew" />
+                android:defaultValue="0"
+                android:key="showWhatsNew" />
         <EditTextPreference
-            android:defaultValue="-2"
-            android:key="defaultUserId" />
+                android:defaultValue="-2"
+                android:key="defaultUserId" />
     </PreferenceCategory>
 
 </PreferenceScreen>

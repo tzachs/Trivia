@@ -116,8 +116,12 @@
     <string name="howToPlayNewGame2">2. תשובה לא נכונה מוריד 1 חיים</string>
     <string name="howToPlayNewGame3">3. המשחק נגמר כאשר החיים מגיעים ל0 או כאשר ענית על כל השאלות</string>
     <string name="howToPlayNewGameTitle">משחק חדש</string>
-    <string name="show_help_new_game">הראה הוראות עבור משחק חדש</string>
-    <string name="show_help_all_questions">הראה הוראות עבור משחק כל השאלות</string>
+    <string name="show_help_new_game_title">הוראות משחק חדש</string>
+    <string name="show_help_new_game_summary">הראה הוראות לפני משחק חדש</string>
+    <string name="show_help_categories_game_summary">הראה הוראות לפני משחק קטגוריות</string>
+    <string name="show_help_categories_game_title">הוראות משחק קטגוריות</string>
+    <string name="show_help_all_questions_title">הוראות משחק כל השאלות</string>
+    <string name="show_help_all_questions_summary">הראה הוראות לפני משחק כל השאלות</string>
     <string name="checkBoxPreferenceRevereseInHebrewTitle">הפוך בעברית</string>
     <string name="checkBoxPreferenceRevereseInHebrewSummary">הפוך סדר מספרים בעברית</string>
     <string name="checkBoxShowConfigurationWizardText">הראה אשף הגדרות בהתחלה</string>
@@ -137,8 +141,7 @@
     <string name="textViewQuestionLanguageDetailsText">בחר את השפה בה יוצגו השאלות. עלייך לבחור לפחות אחת</string>
     <string name="show_hebrew_questions">הראה שאלות בעברית</string>
     <string name="show_english_questions">הראה שאלות באנגלית</string>
-    <string name="show_instruction_for_categories_game">הראה הוראות עבור משחק  נושאים</string>
-    <string name="show_categories_game_instructions"> הוראות עבור משחק נושאים</string>
+
     <string name="close">סגור</string>
     <string name="database_deleted">מאגר נתונים נמחק</string>
     <string name="play_in_game_sounds">נגן צלילים במהלך המשחק</string>
@@ -225,5 +228,7 @@
     <string name="single_games">משחק ליחיד</string>
     <string name="admin">הגדרות</string>
     <string name="howManyTimesQuestionBeenAsked">נשאלה כבר # פעמים</string>
+    <string name="advancedPreferences">הגדרות מתקדמות</string>
+
 
 </resources>

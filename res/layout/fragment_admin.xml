@@ -31,7 +31,7 @@
     <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="More preferences"
+            android:text="@string/advancedPreferences"
             android:id="@+id/buttonShowPreferences"
             />
 </LinearLayout>
