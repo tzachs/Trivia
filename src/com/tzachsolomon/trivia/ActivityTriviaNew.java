@@ -385,17 +385,72 @@ public class ActivityTriviaNew extends SherlockFragmentActivity implements Fragm
 
     @Override
     public void onCategoriesUpdated(int i_UpdateFrom) {
+        switch (i_UpdateFrom) {
+            case TriviaDbEngine.TYPE_UPDATE_FROM_INTERNET:
+                Toast.makeText(
+                        this,
+                        getString(R.string.finished_updating_categories_from_internet),
+                        Toast.LENGTH_LONG).show();
+                break;
+            case TriviaDbEngine.TYPE_UPDATE_FROM_XML_FILE:
+
+                Toast.makeText(
+                        this,
+                        getString(R.string.finished_importing_categories_from_initial_file),
+                        Toast.LENGTH_LONG).show();
+                //mButtonsLockedDueToImportFromXML = false;
+                mProgressDialog.dismiss();
+
+                //showUserRegister();
+
+                break;
+
+            default:
+                break;
+        }
 
     }
 
     @Override
     public void onCheckIfCategoriesUpdateAvailablePost(Bundle result) {
+        boolean silentMode = mUpdateManager.getSilentMode();
+        int numberOfNewCategories = 0;
+        int numberOfUpdatedCategories = 0;
+
+        if (result != null) {
+            numberOfNewCategories = result.getInt("newCategories");
+            numberOfUpdatedCategories = result.getInt("updatedCategories");
+        }
+
+        if ((numberOfNewCategories + numberOfUpdatedCategories) > 0) {
+            StringBuilder message = new StringBuilder();
+
+            message.append(R.string.there_are_);
+            message.append(numberOfNewCategories);
+            message.append(" new categories and ");
+            message.append(numberOfNewCategories);
+            message.append(" updated categories");
+
+            mAlertDialogBuilderUpdate.setMessage(mStringParser
+                    .reverseNumbersInStringHebrew(message.toString()));
+
+            if (mDialogUpdate == null) {
+                mDialogUpdate = mAlertDialogBuilderUpdate.show();
+            } else if (mDialogUpdate.isShowing() == false) {
+                mDialogUpdate.show();
+            }
+
+        } else if (silentMode == false) {
+            Toast.makeText(this,
+                    getString(R.string.no_update_available), Toast.LENGTH_SHORT)
+                    .show();
+        }
 
     }
 
     @Override
     public void onUpdateCategoriesPostponed() {
-
+        mUpdateCategoriesLater = true;
     }
 
     public static class TabsAdapter extends FragmentPagerAdapter implements
