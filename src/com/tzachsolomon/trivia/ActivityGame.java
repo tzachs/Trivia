@@ -117,12 +117,13 @@ public class ActivityGame extends Activity implements OnClickListener,
 	private TextSwitcher textSwitcherTime;
 
 	private JSONHandler mJSONHandler;
+    private TextView textViewHowManyTimesQuestionsBeenAsked;
 
-	@Override
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		//
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.game);
+		setContentView(R.layout.activity_game_new);
 
 		m_SharedPreferences = PreferenceManager
 				.getDefaultSharedPreferences(getBaseContext());
@@ -497,6 +498,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 		// setting question difficulty
 		textViewQuestionLevel.setText(Integer.toString(mCurrentQuestion
 				.getQuestionLevel()));
+        textViewHowManyTimesQuestionsBeenAsked.setText(Integer.toString(mCurrentQuestion.getQuestionTimesPlayed()));
 
 		// randomize answer places (indices)
 		mCurrentQuestion.randomizeAnswerPlaces(m_Random);
@@ -671,6 +673,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 		textViewLivesLeftValue = (TextView) findViewById(R.id.textViewLivesLeftValue);
 		textViewTimesPlayedTitle = (TextView) findViewById(R.id.textViewTimesPlayedTitle);
 		textViewGameScoreText = (TextView) findViewById(R.id.textViewGameScoreText);
+        textViewHowManyTimesQuestionsBeenAsked = (TextView)findViewById(R.id.textViewHowManyTimesQuestionsBeenAsked);
 
 		textSwitcherTime = (TextSwitcher) findViewById(R.id.textViewTime);
 
@@ -857,7 +860,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 				m_TriviaDb.incUserCorrectCounter(mCurrentQuestion
 						.getQuestionId());
 
-				// if all questions game, increment lives
+				// if all questions activity_game.xml, increment lives
 				incAllQuestionsLives();
 
 				addScore();
@@ -902,7 +905,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 		//
 		int addScore = 0;
 		int questionLevel = mCurrentQuestion.getQuestionLevel() * 10;
-		// adding game score according to question level ( difficulty)
+		// adding activity_game.xml score according to question level ( difficulty)
 		addScore += questionLevel;
 
 		// adding time bonus

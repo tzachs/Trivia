@@ -95,7 +95,7 @@
     <string name="buttonSendSuggestionText">שלח הצעה</string>
     <string name="textViewAboutText">משחק הטריוויה נוצר כפרוייקט למידה, מקווה כי תהנו</string>
     <string name="textViewAboutVersionText">"גירסא: "</string>
-    <string name="textViewLivesLeftText">"חיים שנותרו: "</string>
+    <string name="textViewLivesLeftText">"חיים שנותרו"</string>
     <string name="delete_database_">למחוק מאגר נתונים?</string>
     <string name="are_you_sure_you_want_to_delete_the_database_">האם אתה בטוח שברצונך למחוק את המאגר נתונים?</string>
     <string name="yes">כן</string>
@@ -145,7 +145,7 @@
     <string name="play_game_sounds">נגן צלילי משחק</string>
     <string name="textViewTimesPlayedTitleText">פעמים שנשאלה </string>
     <string name="buttonManageUsersText">נהל משתמשים</string>
-    <string name="textViewGameScoreLabel">תוצאה: </string>
+    <string name="textViewGameScoreLabel">תוצאה</string>
     <string name="pass">עבור</string>
     <string name="number_sign">#</string>
     <string name="user">שם</string>
@@ -224,5 +224,6 @@
     <string name="database">מאגר נתונים</string>
     <string name="single_games">משחק ליחיד</string>
     <string name="admin">הגדרות</string>
+    <string name="howManyTimesQuestionBeenAsked">נשאלה כבר # פעמים</string>
 
 </resources>
