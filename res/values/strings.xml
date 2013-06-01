@@ -229,6 +229,6 @@
     <string name="admin">הגדרות</string>
     <string name="howManyTimesQuestionBeenAsked">נשאלה כבר # פעמים</string>
     <string name="advancedPreferences">הגדרות מתקדמות</string>
-
+    <string name="finishedAllQuestions">כל הכבוד, ענית על כל השאלות!</string>
 
 </resources>

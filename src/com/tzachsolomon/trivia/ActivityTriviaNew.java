@@ -119,6 +119,12 @@ public class ActivityTriviaNew extends SherlockFragmentActivity implements Fragm
         Bundle extras = new Bundle();
         extras.putInt(EXTRA_GAME_TYPE,
                 GAMETYPE_LEVELS);
+        if (mSharedPreferences.getBoolean("checkBoxPreferenceStartGameFromLastLevelPlayed",true)){
+            mLastLevel = mSharedPreferences.getInt("lastLevelPlayed",1);
+        }else{
+            mLastLevel = 1;
+        }
+
         extras.putInt(EXTRA_GAME_START_LEVEL, mLastLevel);
         startNewGame(extras);
     }
@@ -126,6 +132,7 @@ public class ActivityTriviaNew extends SherlockFragmentActivity implements Fragm
     @Override
     public void onNewGameAllQuestionsClicked() {
         Bundle extras = new Bundle();
+
 
         extras.putInt(EXTRA_GAME_TYPE,
                 GAMETYPE_ALL_QUESTIONS);

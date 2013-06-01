@@ -118,6 +118,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 
 	private JSONHandler mJSONHandler;
     private TextView textViewHowManyTimesQuestionsBeenAsked;
+    private boolean mRestartLivesEachLevel;
 
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -248,7 +249,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 						.getIntArray(EXTRA_GAME_CATEGORIES);
 			}
 
-			mCurrentLevel = 0;
+			mCurrentLevel = mExtras.getInt("EXTRA_GAME_START_LEVEL");
 			mNumberOfLevels = 10;
 			mMaxNumberOfQuestionInLevel = 10;
 			mMaxWrongAnswersAllowed = 3;
@@ -274,6 +275,11 @@ public class ActivityGame extends Activity implements OnClickListener,
 	private void startNewRoundGameLevels() {
 
 		mResumeClock = false;
+        if (mRestartLivesEachLevel){
+            mCurrentWrongAnswersCounter = 0;
+            textViewLivesLeftValue.setText(""
+                    + (mMaxWrongAnswersAllowed - mCurrentWrongAnswersCounter));
+        }
 
 		mCurrentLevel++;
 
@@ -322,10 +328,18 @@ public class ActivityGame extends Activity implements OnClickListener,
 
 			alertDialog.show();
 
-		} else {
+		} else if (mGameOver){
 			Toast.makeText(this, getString(R.string.levels_game_over),
 					Toast.LENGTH_SHORT).show();
-		}
+
+		} else {
+            Toast.makeText(this, getString(R.string.finishedAllQuestions),
+                    Toast.LENGTH_SHORT).show();
+            mCurrentLevel = 1;
+
+        }
+
+        m_SharedPreferences.edit().putInt("lastLevelPlayed",mCurrentLevel).commit();
 	}
 
 	private void startGameAllQuestions() {
@@ -577,6 +591,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 				"checkBoxPreferenceRevereseInHebrew", false);
 		mShowCorrectAnswer = m_SharedPreferences.getBoolean(
 				"checkBoxPreferenceShowCorrectAnswer", true);
+        mRestartLivesEachLevel = m_SharedPreferences.getBoolean("checkBoxPreferenceRestartLivesEachLevel", true);
 
 		initializeQuestionsLanguages();
 
@@ -591,6 +606,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 	private void initializeGameSettings() {
 		mResumeClock = false;
 		mGameOver = false;
+
 
 		// m_Random = new Random(1);
 		m_Random = new Random(System.currentTimeMillis());
@@ -1001,6 +1017,7 @@ public class ActivityGame extends Activity implements OnClickListener,
 					Toast.LENGTH_LONG).show();
 			break;
 
+            case GAMETYPE_CATEGORIES:
 		case GAMETYPE_LEVELS:
 			startNewRoundGameLevels();
 			break;

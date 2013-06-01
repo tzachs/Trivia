@@ -31,11 +31,15 @@
                 android:key="preferenceScreenGameRelated"
                 android:title="@string/preferenceCategoryGameRelatedTitle" >
             <CheckBoxPreference
-                    android:defaultValue="true"
-                    android:key="checkBoxPreferenceQuestionLanguageHebrew"
-                    android:summary="@string/show_hebrew_questions"
-                    android:title="@string/show_hebrew_questions" />
-
+                android:defaultValue="true"
+                android:key="checkBoxPreferenceRestartLivesEachLevel"
+                android:title="אפס חיים כל שלב"
+                android:summary="אם מופעל מאפס את החיים שירדו בתחילת כל שלב"/>
+            <CheckBoxPreference
+                android:defaultValue="true"
+                android:key="checkBoxPreferenceStartGameFromLastLevelPlayed"
+                android:title="התחל משלב אחרון ששוחק"
+                android:summary="התחל את המשחק מהשלב האחרון ששוחק"/>
             <CheckBoxPreference
                     android:defaultValue="true"
                     android:key="checkBoxPreferenceShowCorrectAnswer"
@@ -156,7 +160,11 @@
             />
 
     <PreferenceCategory android:key="invisible" >
-        -
+
+        <EditTextPreference
+                android:defaultValue="1"
+                android:key="lastLevelPlayed" />
+
         <EditTextPreference
                 android:defaultValue="1"
                 android:key="showConfigWizard" />
