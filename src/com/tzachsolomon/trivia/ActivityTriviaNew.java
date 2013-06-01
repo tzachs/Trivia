@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.ActionBar.Tab;
+import com.actionbarsherlock.view.MenuItem;
 
 import java.util.ArrayList;
 
@@ -100,8 +101,9 @@ public class ActivityTriviaNew extends SherlockFragmentActivity implements Fragm
 //                "checkBoxPrefShowTitle", true);
         boolean showTitle = false;
         actionBar.setDisplayHomeAsUpEnabled(showTitle);
+        actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.setDisplayShowTitleEnabled(showTitle);
+        actionBar.setDisplayShowTitleEnabled(true);
 
         actionBar.removeAllTabs();
 
@@ -324,6 +326,25 @@ public class ActivityTriviaNew extends SherlockFragmentActivity implements Fragm
                 break;
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean ret = false;
+        switch (item.getItemId()){
+            case android.R.id.home:
+                showAbout();
+                ret = true;
+            break;
+
+        }
+        return ret;
+    }
+
+    private void showAbout() {
+
+        Intent intent = new Intent(this, ActivityAbout.class);
+        startActivity(intent);
     }
 
     private void lockButtonOnImportFromXMLFile() {
