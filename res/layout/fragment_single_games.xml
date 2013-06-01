@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
@@ -9,6 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/buttonNewGameSimpleText"
+        android:layout_above="@id/buttonNewGameAllQuestions"
         android:id="@+id/buttonNewGameSimple"
         />
 
@@ -16,6 +17,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/buttonNewGameAllQuestionsText"
+        android:layout_centerInParent="true"
         android:id="@+id/buttonNewGameAllQuestions"
         />
 
@@ -23,7 +25,8 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/buttonNewGameCategoriesText"
+        android:layout_below="@id/buttonNewGameAllQuestions"
         android:id="@+id/buttonNewGameCategories"
         />
 
-</LinearLayout>
+</RelativeLayout>

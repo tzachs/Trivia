@@ -16,13 +16,16 @@ public class FragmentAdmin extends SherlockFragment implements View.OnClickListe
     private Button buttonSendSuggestion;
     private Button buttonUpdateDatabase;
     private Button buttonSendQuestion;
+    private Button buttonShowPreferences;
     private FragmentAdminListener mFragmentAdminListener;
+
 
 
     public interface FragmentAdminListener {
         public void onUpdateDatabaseClicked();
         public void onSendSuggestionClicked();
         public void onSendQuestionClicked();
+        public void onShowPreferencesClicked();
     }
 
     @Override
@@ -50,10 +53,12 @@ public class FragmentAdmin extends SherlockFragment implements View.OnClickListe
         buttonSendSuggestion = (Button)view.findViewById(R.id.buttonSendSuggestion);
         buttonUpdateDatabase = (Button)view.findViewById(R.id.buttonUpdateDatabase);
         buttonSendQuestion = (Button)view.findViewById(R.id.buttonSendQuestion);
+        buttonShowPreferences = (Button)view.findViewById(R.id.buttonShowPreferences);
 
         buttonSendQuestion.setOnClickListener(this);
         buttonSendSuggestion.setOnClickListener(this);
         buttonUpdateDatabase.setOnClickListener(this);
+        buttonShowPreferences.setOnClickListener(this);
     }
 
 
@@ -69,8 +74,15 @@ public class FragmentAdmin extends SherlockFragment implements View.OnClickListe
             case R.id.buttonUpdateDatabase:
                 buttonUpdateDatabase_Clicked();
                 break;
+            case R.id.buttonShowPreferences:
+                buttonShowPreferences_Clicked();
+                break;
 
         }
+    }
+
+    private void buttonShowPreferences_Clicked() {
+        mFragmentAdminListener.onShowPreferencesClicked();
     }
 
     private void buttonUpdateDatabase_Clicked() {

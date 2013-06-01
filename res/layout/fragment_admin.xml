@@ -27,4 +27,11 @@
             android:text="@string/suggest_a_question"
             android:id="@+id/buttonSendQuestion"
             />
+
+    <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="More preferences"
+            android:id="@+id/buttonShowPreferences"
+            />
 </LinearLayout>
