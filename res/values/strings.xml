@@ -230,5 +230,7 @@
     <string name="howManyTimesQuestionBeenAsked">נשאלה כבר # פעמים</string>
     <string name="advancedPreferences">הגדרות מתקדמות</string>
     <string name="finishedAllQuestions">כל הכבוד, ענית על כל השאלות!</string>
+    <string name="score_and_achivments">תוצאות והשגים</string>
+    <string name="google_play_connected">מחובר בעזרת GOOGLE</string>
 
 </resources>

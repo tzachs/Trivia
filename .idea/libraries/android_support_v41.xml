@@ -1,7 +1,7 @@
 <component name="libraryTable">
   <library name="android-support-v41">
     <CLASSES>
-      <root url="jar://$USER_HOME$/android-libs/ActionBarSherlock/library/libs/android-support-v4.jar!/" />
+      <root url="jar://$USER_HOME$/android-libs/android-samples-master/BaseGameUtils/libs/android-support-v4.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

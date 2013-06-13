@@ -15,7 +15,6 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.widget.SlidingDrawer;
 import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.app.ActionBar;
@@ -27,8 +26,9 @@ import java.util.ArrayList;
 /**
  * Created by tzach on 5/25/13.
  */
-public class ActivityTriviaNew extends SherlockFragmentActivity implements FragmentSingleGames.FragmentSingleGamesListener,
-        FragmentAdmin.FragmentAdminListener, UpdateManager.QuestionsListener, UpdateManager.CategoriesListener {
+public class ActivityTriviaNew extends BaseGameActivity implements FragmentSingleGames.FragmentSingleGamesListener,
+        FragmentAdmin.FragmentAdminListener, UpdateManager.QuestionsListener, UpdateManager.CategoriesListener,
+        FragmentAchievementsAndScores.Listener{
 
     private ViewPager mViewPager;
     private TabsAdapter mTabsAdapter;
@@ -48,11 +48,14 @@ public class ActivityTriviaNew extends SherlockFragmentActivity implements Fragm
 
     private int mLaterRegisterUserCounter;
     private boolean mUpdateCategoriesLater;
+    private FragmentAchievementsAndScores fragmentRefAchivevementAndScores;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        enableDebugLog(true,"mytag1");
 
         mViewPager = new ViewPager(this);
         mViewPager.setId(R.id.pager);
@@ -110,7 +113,9 @@ public class ActivityTriviaNew extends SherlockFragmentActivity implements Fragm
         mTabsAdapter = new TabsAdapter(this, mViewPager);
 
         mTabsAdapter.addTab(actionBar.newTab().setText(getString(R.string.single_games)),FragmentSingleGames.class,null);
+        mTabsAdapter.addTab(actionBar.newTab().setText(getString(R.string.score_and_achivments)),FragmentAchievementsAndScores.class,null);
         mTabsAdapter.addTab(actionBar.newTab().setText(getString(R.string.admin)),FragmentAdmin.class,null);
+
 
     }
 
@@ -460,6 +465,33 @@ public class ActivityTriviaNew extends SherlockFragmentActivity implements Fragm
         mUpdateCategoriesLater = true;
     }
 
+    @Override
+    public void onButtonSignInClicked() {
+        beginUserInitiatedSignIn();
+    }
+
+    @Override
+    public void onButtonSignOutClicked() {
+        signOut();
+        fragmentRefAchivevementAndScores.setSignInVisible(true);
+    }
+
+    @Override
+    public void onButtonShowScoreLeadersClicked() {
+
+    }
+
+    @Override
+    public void onButtonShowAchievements() {
+        startActivityForResult(getGamesClient().getAchievementsIntent(), GameHelper.RC_UNUSED );
+
+    }
+
+    public void setFragmentRefAchivevementAndScores(FragmentAchievementsAndScores fragmentRefAchivevementAndScores) {
+        this.fragmentRefAchivevementAndScores = fragmentRefAchivevementAndScores;
+    }
+
+
     public static class TabsAdapter extends FragmentPagerAdapter implements
             ActionBar.TabListener, ViewPager.OnPageChangeListener {
         private final Context mContext;
@@ -552,6 +584,7 @@ public class ActivityTriviaNew extends SherlockFragmentActivity implements Fragm
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         //
+        super.onActivityResult(requestCode,resultCode,data);
         switch (requestCode) {
 //            case REQUEST_CODE_BACK_FROM_ACTIVITY_WIZARD_SETUP:
 //                mFirstTimeStartingDoNotTryToUpdate = false;
@@ -582,4 +615,20 @@ public class ActivityTriviaNew extends SherlockFragmentActivity implements Fragm
     }
 
 
+    @Override
+    public void onSignInFailed() {
+        fragmentRefAchivevementAndScores.setSignInVisible(true);
+    }
+
+    @Override
+    public void onSignInSucceeded() {
+        fragmentRefAchivevementAndScores.setSignInVisible(false);
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
 }
