@@ -46,7 +46,7 @@ public class FragmentAchievementsAndScores extends SherlockFragment implements V
             throw new ClassCastException("Activity " + activity.toString() + " must implement class FragmentAchievementsAndScores.Listener");
         }
 
-        ((ActivityTriviaNew)activity).setFragmentRefAchivevementAndScores(this);
+        ((ActivityTriviaNew)activity).setFragmentAchievementsAndScores(this);
     }
 
     @Override

@@ -68,6 +68,8 @@ public abstract class CountDownTimerWithPause {
 
     private boolean mPaused = false;
 
+    long mTimePassed;
+
     /**
      * @param millisInFuture The number of millis in the future from the call
      *   to {@link #start()} until the countdown is done and {@link #onFinish()}
@@ -88,6 +90,7 @@ public abstract class CountDownTimerWithPause {
     public final void cancel() {
         mHandler.removeMessages(MSG);
         mCancelled = true;
+        calcTimePassed();
     }
 
     /**
@@ -112,6 +115,7 @@ public abstract class CountDownTimerWithPause {
     public long pause() {
         mPauseTime = mStopTimeInFuture - SystemClock.elapsedRealtime();
         mPaused = true;
+        calcTimePassed();
         return mPauseTime;
     }
     
@@ -123,6 +127,13 @@ public abstract class CountDownTimerWithPause {
         mPaused = false;
         mHandler.sendMessage(mHandler.obtainMessage(MSG));
         return mPauseTime;
+    }
+
+    private void calcTimePassed() {
+        mTimePassed =  mStopTimeInFuture - SystemClock.elapsedRealtime();
+        if ( mTimePassed < 0){
+            mTimePassed = 0;
+        }
     }
 
     /**
@@ -174,4 +185,9 @@ public abstract class CountDownTimerWithPause {
             }
         }
     };
+
+    public double timePassed() {
+
+        return mTimePassed;
+    }
 }

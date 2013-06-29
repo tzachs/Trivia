@@ -50,7 +50,7 @@ public class UpdateManager implements DatabaseUpdateListener,
 	private long mLastUserQuestionsUpdate;
 	private long mLastUserCategoriesUpdate;
 
-	public UpdateManager(Context i_Context) {
+    public UpdateManager(Context i_Context) {
 
 		mContext = i_Context;
 
@@ -108,7 +108,11 @@ public class UpdateManager implements DatabaseUpdateListener,
 
 	}
 
-	public class AsyncTaskUpdateCorrectWrongAsync extends
+    public void setUpdateType(int updateType) {
+        this.mUpdateType = updateType;
+    }
+
+    public class AsyncTaskUpdateCorrectWrongAsync extends
 			AsyncTask<Void, Integer, String> {
 
 		boolean isInternetAvailable;

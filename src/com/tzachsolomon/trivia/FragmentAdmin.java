@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragment;
 
 /**
@@ -17,8 +18,9 @@ public class FragmentAdmin extends SherlockFragment implements View.OnClickListe
     private Button buttonUpdateDatabase;
     private Button buttonSendQuestion;
     private Button buttonShowPreferences;
+    private Button buttonDeleteDatabase;
     private FragmentAdminListener mFragmentAdminListener;
-
+    private TriviaDbEngine mTriviaDb;
 
 
     public interface FragmentAdminListener {
@@ -26,6 +28,8 @@ public class FragmentAdmin extends SherlockFragment implements View.OnClickListe
         public void onSendSuggestionClicked();
         public void onSendQuestionClicked();
         public void onShowPreferencesClicked();
+
+        public void onDeleteDatabase();
     }
 
     @Override
@@ -36,8 +40,9 @@ public class FragmentAdmin extends SherlockFragment implements View.OnClickListe
 
         }catch (ClassCastException e){
             throw new ClassCastException("activity " + activity.toString() + " must implement FragmentAdminListener");
-
         }
+
+        mTriviaDb = new TriviaDbEngine(activity);
     }
 
     @Override
@@ -54,17 +59,23 @@ public class FragmentAdmin extends SherlockFragment implements View.OnClickListe
         buttonUpdateDatabase = (Button)view.findViewById(R.id.buttonUpdateDatabase);
         buttonSendQuestion = (Button)view.findViewById(R.id.buttonSendQuestion);
         buttonShowPreferences = (Button)view.findViewById(R.id.buttonShowPreferences);
+        buttonDeleteDatabase = (Button)view.findViewById(R.id.buttonDeleteDatabase);
 
         buttonSendQuestion.setOnClickListener(this);
         buttonSendSuggestion.setOnClickListener(this);
         buttonUpdateDatabase.setOnClickListener(this);
         buttonShowPreferences.setOnClickListener(this);
+        buttonDeleteDatabase.setOnClickListener(this);
     }
 
 
     @Override
     public void onClick(View view) {
+
         switch (view.getId()){
+            case R.id.buttonDeleteDatabase:
+                buttonDeleteDatabase_Clicked();
+                break;
             case R.id.buttonSendSuggestion:
                 buttonSendSuggestion_Clicked();
                 break;
@@ -79,6 +90,13 @@ public class FragmentAdmin extends SherlockFragment implements View.OnClickListe
                 break;
 
         }
+    }
+
+    private void buttonDeleteDatabase_Clicked() {
+        mTriviaDb.deleteDatabase();
+
+        mFragmentAdminListener.onDeleteDatabase();
+
     }
 
     private void buttonShowPreferences_Clicked() {

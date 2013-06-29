@@ -5,13 +5,11 @@ import static com.tzachsolomon.trivia.ClassCommonUtils.*;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.ViewPager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -48,7 +46,10 @@ public class ActivityTriviaNew extends BaseGameActivity implements FragmentSingl
 
     private int mLaterRegisterUserCounter;
     private boolean mUpdateCategoriesLater;
-    private FragmentAchievementsAndScores fragmentRefAchivevementAndScores;
+    private FragmentAchievementsAndScores fragmentAchievementsAndScores;
+    private TriviaDbEngine mTriviaDb;
+    private FragmentSingleGames fragmentSingleGames;
+
 
 
     @Override
@@ -71,9 +72,8 @@ public class ActivityTriviaNew extends BaseGameActivity implements FragmentSingl
         initVariables();
         initializeDialogs();
 
-
-
     }
+
 
     private void initVariables() {
 
@@ -92,6 +92,8 @@ public class ActivityTriviaNew extends BaseGameActivity implements FragmentSingl
         mLaterRegisterUserCounter = 0;
         mUpdateQuestionsLater = false;
         mLaterUpdateQuestionsCounter = 5;
+
+        mTriviaDb = new TriviaDbEngine(this);
     }
 
     private void initializeActionBar() {
@@ -115,8 +117,6 @@ public class ActivityTriviaNew extends BaseGameActivity implements FragmentSingl
         mTabsAdapter.addTab(actionBar.newTab().setText(getString(R.string.single_games)),FragmentSingleGames.class,null);
         mTabsAdapter.addTab(actionBar.newTab().setText(getString(R.string.score_and_achivments)),FragmentAchievementsAndScores.class,null);
         mTabsAdapter.addTab(actionBar.newTab().setText(getString(R.string.admin)),FragmentAdmin.class,null);
-
-
     }
 
     @Override
@@ -188,6 +188,17 @@ public class ActivityTriviaNew extends BaseGameActivity implements FragmentSingl
         Intent pref = new Intent(this, ActivityPrefs.class);
 
         startActivityForResult(pref, REQUEST_CODE_BACK_FROM_PREFERENCES);
+    }
+
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+    }
+
+    @Override
+    public void onDeleteDatabase() {
+        Toast.makeText(this,getString(R.string.database_deleted),Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -271,6 +282,7 @@ public class ActivityTriviaNew extends BaseGameActivity implements FragmentSingl
                 });
 
         mAlertDialogBuilderUpdate = new AlertDialog.Builder(this);
+        mAlertDialogBuilderUpdate.setTitle("עדכן שאלות");
         mAlertDialogBuilderUpdate.setCancelable(false);
 
         mAlertDialogBuilderUpdate.setPositiveButton(getString(R.string.update),
@@ -347,7 +359,7 @@ public class ActivityTriviaNew extends BaseGameActivity implements FragmentSingl
             case android.R.id.home:
                 showAbout();
                 ret = true;
-            break;
+                break;
 
         }
         return ret;
@@ -468,27 +480,44 @@ public class ActivityTriviaNew extends BaseGameActivity implements FragmentSingl
     @Override
     public void onButtonSignInClicked() {
         beginUserInitiatedSignIn();
+
     }
+
+
 
     @Override
     public void onButtonSignOutClicked() {
         signOut();
-        fragmentRefAchivevementAndScores.setSignInVisible(true);
+        fragmentAchievementsAndScores.setSignInVisible(true);
     }
 
     @Override
     public void onButtonShowScoreLeadersClicked() {
 
+
+        if ( getGamesClient().isConnected()){
+            startActivityForResult(getGamesClient().getLeaderboardIntent(getString(R.string.game_levels_leadersboard)), ClassCommonUtils.REQUEST_LEADERBOARD);
+        } else{
+            Toast.makeText(this,"אנא לחץ על כפתור התחבר", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
     public void onButtonShowAchievements() {
+        if ( getGamesClient().isConnected()){
         startActivityForResult(getGamesClient().getAchievementsIntent(), GameHelper.RC_UNUSED );
+        } else{
+            Toast.makeText(this,"אנא לחץ על כפתור התחבר", Toast.LENGTH_LONG).show();
+        }
 
     }
 
-    public void setFragmentRefAchivevementAndScores(FragmentAchievementsAndScores fragmentRefAchivevementAndScores) {
-        this.fragmentRefAchivevementAndScores = fragmentRefAchivevementAndScores;
+    public void setFragmentAchievementsAndScores(FragmentAchievementsAndScores fragmentAchievementsAndScores) {
+        this.fragmentAchievementsAndScores = fragmentAchievementsAndScores;
+    }
+
+    public void setFragmentReferenceSingleGames(FragmentSingleGames fragmentSingleGames) {
+        this.fragmentSingleGames = fragmentSingleGames;
     }
 
 
@@ -575,10 +604,17 @@ public class ActivityTriviaNew extends BaseGameActivity implements FragmentSingl
     }
 
     private void startNewGame(Bundle extras){
-        mCurrentGame = new Intent(this, ActivityGame.class);
-        mCurrentGame.putExtra(EXTRA_GAME_USER_ID, mCurrentUserId);
-        mCurrentGame.putExtras(extras);
-        startActivity(mCurrentGame);
+
+
+        if ( mTriviaDb.isEmptyQuestions()){
+            mAlertDialogBuilderUpdate.setMessage("לא נמצאו שאלות במאגר.");
+            showUpdateDialog();
+        }else{
+            mCurrentGame = new Intent(this, ActivityGame.class);
+            mCurrentGame.putExtra(EXTRA_GAME_USER_ID, mCurrentUserId);
+            mCurrentGame.putExtras(extras);
+            startActivity(mCurrentGame);
+        }
     }
 
     @Override
@@ -615,16 +651,47 @@ public class ActivityTriviaNew extends BaseGameActivity implements FragmentSingl
     }
 
 
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (mTriviaDb.isEmptyQuestions() ){
+
+            mUpdateManager.setUpdateType(JSONHandler.TYPE_UPDATE_QUESTIONS);
+            showUpdateDialog();
+            if ( fragmentSingleGames != null){
+                fragmentSingleGames.disableGamesButtons();
+            }
+
+        }
+
+
+    }
+
+
+    private void showUpdateDialog() {
+
+        if (mDialogUpdate == null) {
+            mDialogUpdate = mAlertDialogBuilderUpdate.show();
+        } else if (mDialogUpdate.isShowing() == false) {
+            mDialogUpdate.show();
+        }
+
+    }
+
     @Override
     public void onSignInFailed() {
-        fragmentRefAchivevementAndScores.setSignInVisible(true);
+        fragmentAchievementsAndScores.setSignInVisible(true);
     }
 
     @Override
     public void onSignInSucceeded() {
-        fragmentRefAchivevementAndScores.setSignInVisible(false);
+
+        fragmentAchievementsAndScores.setSignInVisible(false);
 
     }
+
 
     @Override
     protected void onStart() {

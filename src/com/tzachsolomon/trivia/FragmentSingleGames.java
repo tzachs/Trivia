@@ -18,6 +18,11 @@ public class FragmentSingleGames extends SherlockFragment implements View.OnClic
     private Button buttonNewGameCategories;
     private FragmentSingleGamesListener mFragmentSingleGamesListener;
 
+    public void disableGamesButtons() {
+        buttonNewGameCategories.setEnabled(false);
+        buttonNewGameSimple.setEnabled(false);
+        buttonNewGameAllQuestions.setEnabled(false);
+    }
 
 
     public interface FragmentSingleGamesListener {
@@ -34,12 +39,14 @@ public class FragmentSingleGames extends SherlockFragment implements View.OnClic
         }catch (ClassCastException e){
             throw new ClassCastException(activity.toString() + " must implement FragmentSingleGamesListener");
         }
+
+        ((ActivityTriviaNew)activity).setFragmentReferenceSingleGames(this);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_single_games,null);
-        
+
         initializeVariables(view);
 
         return view;

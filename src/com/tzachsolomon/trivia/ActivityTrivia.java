@@ -69,7 +69,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private int mCurrentUserId;
 
 	private boolean mFirstTimeStartingDoNotTryToUpdate;
-	private TriviaDbEngine mTrivaDbEngine;
+	private TriviaDbEngine mTriviaDbEngine;
 	private TextView textViewCurrentUser;
 
 	private boolean mButtonsLockedDueToImportFromXML;
@@ -279,7 +279,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 	private void showWizardSetup() {
 		//
-		mTrivaDbEngine.openForFirstTime();
+		mTriviaDbEngine.openForFirstTime();
 		buttonWizardSetup_Clicked();
 
 	}
@@ -294,7 +294,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 	private void setUser() {
 		if (mCurrentUserId > 0) {
 
-			String username = mTrivaDbEngine.getUsername(mCurrentUserId);
+			String username = mTriviaDbEngine.getUsername(mCurrentUserId);
 			textViewCurrentUser.setText(getString(R.string.current_user_is_)
 					+ username);
 		}
@@ -373,7 +373,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 		mStringParser = new StringParser(mSharedPreferences);
 
 		mProgressDialog = new ProgressDialog(this);
-		mTrivaDbEngine = new TriviaDbEngine(this);
+		mTriviaDbEngine = new TriviaDbEngine(this);
 		mUpdateManager = new UpdateManager(this);
 		mUpdateManager.setCategoriesListener(this);
 		mUpdateManager.setQuestionsListener(this);
@@ -531,7 +531,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 			AlertDialog.Builder alert = new AlertDialog.Builder(this);
 			alert.setTitle(getString(R.string.defaut_user));
 			alert.setMessage(getString(R.string.use_user_)
-					+ mTrivaDbEngine.getUsername(mCurrentUserId)
+					+ mTriviaDbEngine.getUsername(mCurrentUserId)
 					+ getString(R.string._as_default_));
 			alert.setPositiveButton(getString(R.string.yes),
 					new DialogInterface.OnClickListener() {
@@ -561,7 +561,7 @@ public class ActivityTrivia extends Activity implements OnClickListener,
 
 	private void showUserRegister() {
 		//
-		if (mTrivaDbEngine.isUsersEmpty()) {
+		if (mTriviaDbEngine.isUsersEmpty()) {
 			if (mLaterRegisterUser) {
 				mLaterRegisterUserCounter++;
 

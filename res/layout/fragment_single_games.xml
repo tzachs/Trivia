@@ -19,6 +19,7 @@
         android:text="@string/buttonNewGameAllQuestionsText"
         android:layout_centerInParent="true"
         android:id="@+id/buttonNewGameAllQuestions"
+        android:visibility="invisible"
         />
 
     <Button
@@ -27,6 +28,7 @@
         android:text="@string/buttonNewGameCategoriesText"
         android:layout_below="@id/buttonNewGameAllQuestions"
         android:id="@+id/buttonNewGameCategories"
+        android:visibility="invisible"
         />
 
 </RelativeLayout>

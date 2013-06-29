@@ -287,11 +287,10 @@ public class TriviaDbEngine {
 		return ret;
 	}
 
-	public Questions getQuestionsEnabled(boolean i_SortByNewQuestionsFirst,
-			int[] i_QuestionLanguages) {
+	public Questions getQuestionsEnabled(boolean i_SortByNewQuestionsFirst) {
 		//
 		return getQuestionsByLevelAndCategories(-2, i_SortByNewQuestionsFirst,
-				null, i_QuestionLanguages);
+				null);
 	}
 
 	public ContentValues[] getPrimaryCategories() {
@@ -348,16 +347,15 @@ public class TriviaDbEngine {
 	}
 
 	public Questions getQuestionsByLevel(int i_Level,
-			boolean i_SortByNewQuestionsFirst, int[] i_QuestionsLanguages) {
+			boolean i_SortByNewQuestionsFirst) {
 		//
 
 		return getQuestionsByLevelAndCategories(i_Level,
-				i_SortByNewQuestionsFirst, null, i_QuestionsLanguages);
+				i_SortByNewQuestionsFirst, null);
 	}
 
 	public Questions getQuestionsByLevelAndCategories(int i_Level,
-			boolean i_SortByNewQuestionsFirst, int[] i_Categories,
-			int[] i_QuestionLanguages) {
+			boolean i_SortByNewQuestionsFirst, int[] i_Categories) {
 		//
 		Questions ret;
 		StringBuilder orderBy = new StringBuilder();
@@ -422,23 +420,6 @@ public class TriviaDbEngine {
 
 		}
 
-		// checking if to add language filter
-		if (i_QuestionLanguages != null) {
-
-			where.append(" AND (");
-			for (i = 0, length = i_QuestionLanguages.length - 1; i < length; i++) {
-				where.append(KEY_LANGUAGE);
-				where.append(" = ");
-				where.append(i_QuestionLanguages[i]);
-				where.append(" OR ");
-			}
-			where.append(KEY_LANGUAGE);
-			where.append(" = ");
-			where.append(i_QuestionLanguages[i]);
-			where.append(" ) ");
-
-		}
-
 		// Log.i(TAG, where.toString());
 
 		// ordering by
@@ -479,7 +460,7 @@ public class TriviaDbEngine {
 
 	}
 
-	public boolean isEmpty() {
+	public boolean isEmptyQuestions() {
 		//
 		boolean ret = true;
 		// the column KEY_ANSWER1 doesn't matter, Just need to check if there

@@ -508,7 +508,11 @@ public class JSONHandler {
 				if (allowUpdateMobile) {
 					// checking if user wants only to allow 3g connection
 					if (allowOnlyUpdate3G) {
-						if ((netSubType == TelephonyManager.NETWORK_TYPE_UMTS || netSubType == TelephonyManager.NETWORK_TYPE_HSDPA)) {
+						if ((netSubType == TelephonyManager.NETWORK_TYPE_UMTS
+                                || netSubType == TelephonyManager.NETWORK_TYPE_HSDPA
+                                || netSubType == TelephonyManager.NETWORK_TYPE_HSPA
+                                || netSubType == TelephonyManager.NETWORK_TYPE_HSPAP
+                        )) {
 							ret = info.isConnected();
 							if (!ret) {
 								i_DetailedResult

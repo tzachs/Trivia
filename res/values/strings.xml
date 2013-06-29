@@ -1,4 +1,16 @@
 <resources>
+    <string name='game_levels_level_01_no_faults'>CgkIwtaelIkREAIQAQ</string>
+    <string name='game_levels_level_02_no_faults'>CgkIwtaelIkREAIQAg</string>
+    <string name='game_levels_level_03_no_faults'>CgkIwtaelIkREAIQBA</string>
+    <string name='game_levels_level_04_no_faults'>CgkIwtaelIkREAIQBg</string>
+    <string name='game_levels_level_05_no_faults'>CgkIwtaelIkREAIQBw</string>
+    <string name='game_levels_level_06_no_faults'>CgkIwtaelIkREAIQCQ</string>
+    <string name='game_levels_level_07_no_faults'>CgkIwtaelIkREAIQCg</string>
+    <string name='game_levels_level_08_no_faults'>CgkIwtaelIkREAIQCw</string>
+    <string name='game_levels_level_09_no_faults'>CgkIwtaelIkREAIQDA</string>
+    <string name='game_levels_level_10_no_faults'>CgkIwtaelIkREAIQDg</string>
+
+    <string name="game_levels_leadersboard">CgkIwtaelIkREAIQDw</string>
 
     <string name="app_name">"טריוויה"</string>
     <string name="buttonNewGameAllQuestionsText">"כל השאלות"</string>
