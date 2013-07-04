@@ -58,6 +58,9 @@ public class GameHelper implements GooglePlayServicesClient.ConnectionCallbacks,
 
         /** Called when sign-in succeeds. */
         void onSignInSucceeded();
+
+        /** Called when starting the app the and the user did't requst to sign on **/
+        void onStartUserNotSignedOn();
     }
 
     /**
@@ -302,6 +305,8 @@ public class GameHelper implements GooglePlayServicesClient.ConnectionCallbacks,
             // automatically. If the user wants to sign in, they will click
             // the sign-in button, at which point we will try to sign in.
             debugLog("onStart: not signing in because user specifically signed out.");
+            mListener.onStartUserNotSignedOn();
+
         } else {
             // Attempt to connect the clients.
             debugLog("onStart: connecting clients.");

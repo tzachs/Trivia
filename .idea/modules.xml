@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$USER_HOME$/android-libs/ActionBarSherlock/library/ActionSherlockBar.iml" filepath="$USER_HOME$/android-libs/ActionBarSherlock/library/ActionSherlockBar.iml" />
       <module fileurl="file://$PROJECT_DIR$/Trivia.iml" filepath="$PROJECT_DIR$/Trivia.iml" />
-      <module fileurl="file://$USER_HOME$/android-libs/facebook-android-sdk/facebook/facebook.iml" filepath="$USER_HOME$/android-libs/facebook-android-sdk/facebook/facebook.iml" />
       <module fileurl="file://$APPLICATION_HOME_DIR$/sdk/extras/google/google_play_services/libproject/google-play-services_lib/google-play-services_lib.iml" filepath="$APPLICATION_HOME_DIR$/sdk/extras/google/google_play_services/libproject/google-play-services_lib/google-play-services_lib.iml" />
     </modules>
   </component>

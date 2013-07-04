@@ -692,10 +692,20 @@ public class ActivityTriviaNew extends BaseGameActivity implements FragmentSingl
 
     }
 
+    @Override
+    public void onStartUserNotSignedOn() {
+        if ( !getGamesClient().isConnected()){
+            Toast.makeText(this,getString(R.string.user_isnt_signed_warning),Toast.LENGTH_LONG).show();
+        }
+
+    }
+
 
     @Override
     protected void onStart() {
         super.onStart();
+
+
 
     }
 }

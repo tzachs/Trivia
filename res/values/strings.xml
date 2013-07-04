@@ -179,11 +179,11 @@
     <string name="register_you_user">Register you User</string>
     <string name="register_a_user_in_order_to_publish_scores_get_updates_publish_questions_tbd_and_more">רשום משתמש על מנת להנות ממשחק נגד אחרים (עדיין לא יושם) , שליחת שאלות וכדומה</string>
     <string name="send_suggestion_in_">שלח הצעה ב</string>
-    <string name="finished_importing_questions_from_internet">עדכון שאלות מאינטרנט הסתיים</string>
+    <string name="finished_importing_questions_from_internet">עדכון שאלות מהשרת הסתיים</string>
     <string name="finished_importing_questions_from_initial_file">ייבוא שאלות מקובץ אתחול הסתיים</string>
     <string name="importing_categories_from_initial_file">החל תהליך ייבוא קטגוריוות מקובץ אתחול</string>
     <string name="thank_you_for_making_social_trivia_better_">תודה רבה על תרומתך על טריוויה חברתית :)</string>
-    <string name="finished_updating_categories_from_internet">עדכון קטגוריות מאינטרנט הסתיים</string>
+    <string name="finished_updating_categories_from_internet">עדכון קטגוריות מהשרת הסתיים</string>
     <string name="finished_importing_categories_from_initial_file">הסתיים יבוא קטגוריות מקובץ אתחול</string>
     <string name="registering_a_user_gives_you_the_ability_to_publish_scores_play_against_other_players_etc">רישום משתמש יאפשר לך לפרסם תוצאות, משחק נגד אחרים (עדיין לא יושם) , שליחת הצעות לשאלות ועוד</string>
     <string name="register_user">רשום משתמש</string>
@@ -218,11 +218,9 @@
     <string name="category">קטגוריות</string>
     <string name="soviet">סובייטי</string>
     <string name="all">הכול</string>
-<string name="login_to_facebook">התחבר לFacebook</string>
+    <string name="login_to_facebook">התחבר לFacebook</string>
     <string name="or_use_your_facebook_account_and_press_the_login_button_">או התחבר בעזרת חשבון הFacebook</string>
-    <string name="downloding_game_scores">מוריד תוצאות משחקים</string>
-    <string name="downloading_game_scores_from_server">מוריד תוצאות משחקים מהשרת</string>
-    <string name="game_score_wasn_t_sent_sicne_the_user_isn_t_registered_or_login">תוצאה לא נשלחה מכיוון שהמשתמש אינו רשום או מחובר</string>
+
     <string name="there_are_">"ישנם "</string>
     <string name="_new_categories_and_">" נושאים חדשים ו "</string>
     <string name="_updated_categories">" עדכונים לנושאים קיימים "</string>
@@ -244,5 +242,10 @@
     <string name="finishedAllQuestions">כל הכבוד, ענית על כל השאלות!</string>
     <string name="score_and_achivments">תוצאות והשגים</string>
     <string name="google_play_connected">מחובר בעזרת GOOGLE</string>
+    <string name="googlePlaySignIn">התחבר</string>
+    <string name="googlePlaySignOut">התנתק</string>
+    <string name="googlePlayAchievements">הישגים</string>
+    <string name="googlePlayScoreboardLeaders">תוצאות</string>
+    <string name="user_isnt_signed_warning">משתמש אינו מחובר! התחבר על מנת לשלוח תוצאות ולזכות בהישגים</string>
 
 </resources>

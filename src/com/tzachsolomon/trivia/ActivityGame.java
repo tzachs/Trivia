@@ -511,6 +511,11 @@ public class ActivityGame extends BaseGameActivity implements OnClickListener,
 
     }
 
+    @Override
+    public void onStartUserNotSignedOn() {
+
+    }
+
     public class StartNewQuestionAsync extends AsyncTask<Integer, Void, Void> {
 
         @Override

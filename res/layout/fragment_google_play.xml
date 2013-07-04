@@ -9,26 +9,26 @@
         android:id="@+id/buttonSignIn"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="ההתחבר"
+        android:text="@string/googlePlaySignIn"
         />
     <Button
         android:id="@+id/buttonSignOut"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="התנתק"
+        android:text="@string/googlePlaySignOut"
         android:visibility="invisible"
         />
     <Button
         android:id="@+id/buttonShowAchievements"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="הישגים"
+        android:text="@string/googlePlayAchievements"
         />
     <Button
         android:id="@+id/buttonShowLeaderBoards"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="תוצאות"
+        android:text="@string/googlePlayScoreboardLeaders"
         />
 
 
