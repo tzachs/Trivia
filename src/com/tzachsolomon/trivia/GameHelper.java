@@ -647,6 +647,9 @@ public class GameHelper implements GooglePlayServicesClient.ConnectionCallbacks,
             // to
             // sign in.
             debugLog("onConnectionFailed: since user didn't initiate sign-in, failing now.");
+            if ( mListener != null){
+                mListener.onStartUserNotSignedOn();
+            }
             mConnectionResult = result;
             if (mListener != null) {
                 mListener.onSignInFailed();
