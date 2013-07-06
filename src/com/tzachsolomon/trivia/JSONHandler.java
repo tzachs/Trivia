@@ -1030,7 +1030,7 @@ public class JSONHandler {
 
 		mServerUrl = mSharedPreferences.getString(
 				"editTextPreferencePrimaryServerIP",
-				"http://23.23.238.181/index.php");
+				"http://tzachs.no-ip.biz/websrv/trivia/index.php");
 	}
 
 	public class AsyncTaskUserRegister extends
