@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
@@ -68,7 +68,7 @@
         android:layout_alignParentTop="true"
         android:gravity="center_vertical"
         android:text="@string/textViewTimesPlayedTitleText"
-        android:visibility="gone" />
+        />
 
     <TextView
         android:id="@+id/textViewTimeTitle"
@@ -119,7 +119,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
             android:gravity="center_vertical|center_horizontal"
-            android:text="@string/textViewQuestionText" />
+            android:text="@string/textViewQuestionText"
+            android:textSize="50dp"
+            android:textAppearance="?android:textAppearanceLarge"/>
 
         <Button
             android:id="@+id/buttonAnswer1"

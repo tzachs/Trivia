@@ -14,7 +14,7 @@
 
     <string name="app_name">"טריוויה"</string>
     <string name="buttonNewGameAllQuestionsText">"כל השאלות"</string>
-    <string name="textViewQuestionText">""</string>
+    <string name="textViewQuestionText">שאלה</string>
     <string name="buttonAnswer1">""</string>
     <string name="buttonUpdateDatabaseText">"עדכן מאגר שאלות"</string>
     <string name="textViewTimeTitleText">"זמן"</string>
