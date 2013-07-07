@@ -38,6 +38,7 @@ public class ActivityTriviaNew extends BaseGameActivity implements FragmentSingl
     private ProgressDialog mProgressDialog;
     private AlertDialog.Builder mAlertDialogBuilderUpdate;
     private Dialog mDialogUpdate;
+    private Dialog mDialogRegister;
     private SharedPreferences mSharedPreferences;
     private StringParser mStringParser;
     private boolean mUpdateQuestionsLater;
@@ -259,8 +260,9 @@ public class ActivityTriviaNew extends BaseGameActivity implements FragmentSingl
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //
-                //buttonManagerUsers_Clicked();
+
+                mTabsAdapter.setTabPage(1);
+
 
             }
 
@@ -505,7 +507,7 @@ public class ActivityTriviaNew extends BaseGameActivity implements FragmentSingl
     @Override
     public void onButtonShowAchievements() {
         if ( getGamesClient().isConnected()){
-        startActivityForResult(getGamesClient().getAchievementsIntent(), GameHelper.RC_UNUSED );
+            startActivityForResult(getGamesClient().getAchievementsIntent(), GameHelper.RC_UNUSED );
         } else{
             Toast.makeText(this,"אנא לחץ על כפתור התחבר", Toast.LENGTH_LONG).show();
         }
@@ -692,10 +694,28 @@ public class ActivityTriviaNew extends BaseGameActivity implements FragmentSingl
 
     }
 
+    private void showRegisterDialog(){
+
+        if ( !mLaterRegisterUser){
+            if (mDialogRegister == null) {
+                mDialogRegister = mAlertDialogBuilderRegisterUser.show();
+            } else if (mDialogRegister.isShowing() == false) {
+                mDialogRegister.show();
+            }
+        } else{
+            mLaterRegisterUserCounter++;
+            if (mLaterRegisterUserCounter == 5){
+                mLaterRegisterUserCounter = 0;
+                mLaterRegisterUser = false;
+            }
+        }
+
+    }
+
     @Override
     public void onStartUserNotSignedOn() {
         if ( !getGamesClient().isConnected()){
-            Toast.makeText(this,getString(R.string.user_isnt_signed_warning),Toast.LENGTH_LONG).show();
+            showRegisterDialog();
         }
 
     }

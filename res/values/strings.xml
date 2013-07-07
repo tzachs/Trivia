@@ -159,7 +159,6 @@
     <string name="play_in_game_sounds">נגן צלילים במהלך המשחק</string>
     <string name="play_game_sounds">נגן צלילי משחק</string>
     <string name="textViewTimesPlayedTitleText">פעמים שנשאלה </string>
-    <string name="buttonManageUsersText">נהל משתמשים</string>
     <string name="textViewGameScoreLabel">תוצאה</string>
     <string name="pass">עבור</string>
     <string name="number_sign">#</string>
@@ -169,14 +168,8 @@
     <string name="date">תאריך</string>
     <string name="register">הרשם</string>
     <string name="login">התחבר</string>
-    <string name="fill_in_username">אנא הכנס שם משתמש</string>
-    <string name="fill_in_password">אנא הכנס סיסמא</string>
     <string name="send">שלח</string>
-    <string name="fill_in_email">אנא הכנס אימייל</string>
-    <string name="high_scores">תוצאות הכי טובות</string>
-    <string name="current_user_is_">"שם משתמש מחובר:  "</string>
-    <string name="time_is_up_">Time is up!</string>
-    <string name="register_you_user">Register you User</string>
+
     <string name="register_a_user_in_order_to_publish_scores_get_updates_publish_questions_tbd_and_more">רשום משתמש על מנת להנות ממשחק נגד אחרים (עדיין לא יושם) , שליחת שאלות וכדומה</string>
     <string name="send_suggestion_in_">שלח הצעה ב</string>
     <string name="finished_importing_questions_from_internet">עדכון שאלות מהשרת הסתיים</string>
