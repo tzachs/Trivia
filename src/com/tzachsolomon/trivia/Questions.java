@@ -57,7 +57,7 @@ public class Questions {
 
 	}
 
-	public int getNumberOfQustions() {
+	public int getNumberOfQuestions() {
 		//
 		return mQuestions.size();
 	}

@@ -45,7 +45,9 @@ public abstract class ClassGame  {
                       int numberOfQuestionsInEachLevel,
                       int numberOfLevels,
                       boolean restartLivesInEachLevel,
-                       TriviaDbEngine triviaDb){
+                       TriviaDbEngine triviaDb,
+                       int totalTimeForEachQuestion
+    ){
         mGameScore = 0;
         mLastAddedScore = 0;
         mMaxNumberOfLives = numberOfLives;
@@ -59,7 +61,7 @@ public abstract class ClassGame  {
         mCurrentNumberOfLives = -1;
 
         mTimerInterval = 1000;
-        mTimerTotalTime = 10000;
+        mTimerTotalTime = totalTimeForEachQuestion;
 
         mCountdownTimer = new MyCountdownTimer(mTimerTotalTime,mTimerInterval);
 

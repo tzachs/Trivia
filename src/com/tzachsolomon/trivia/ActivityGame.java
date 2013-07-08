@@ -209,7 +209,14 @@ public class ActivityGame extends BaseGameActivity implements OnClickListener,
             case GAMETYPE_CATEGORIES:
                 break;
             case GAMETYPE_LEVELS:
-                mCurrentGame = new ClassGameLevels(mCurrentGameType,3, 10,10,mRestartLivesEachLevel, mTriviaDb);
+                mCurrentGame = new ClassGameLevels(mCurrentGameType,
+                        3,
+                        10,
+                        10,
+                        mRestartLivesEachLevel,
+                        mTriviaDb,
+                        mTimeToAnswerQuestion
+                );
 
                 break;
 

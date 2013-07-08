@@ -9,8 +9,16 @@ public class ClassGameLevels extends ClassGame implements MyCountdownTimer.Liste
                            int numberOfQuestionsInEachLevel,
                            int numberOfLevels,
                            boolean restartLivesInEachLevel,
-                           TriviaDbEngine triviaDb){
-        super(gameType,numberOfLives, numberOfQuestionsInEachLevel,numberOfLevels,restartLivesInEachLevel, triviaDb);
+                           TriviaDbEngine triviaDb,
+                           int totalTimeForEachQuestion){
+        super(gameType,
+                numberOfLives,
+                numberOfQuestionsInEachLevel,
+                numberOfLevels,
+                restartLivesInEachLevel,
+                triviaDb,
+                totalTimeForEachQuestion
+        );
 
         mCountdownTimer.setListener(this);
     }
@@ -67,12 +75,12 @@ public class ClassGameLevels extends ClassGame implements MyCountdownTimer.Liste
         mCurrentQuestionIndex = -1;
         mCurrentLevel++;
 
-
         if (mRestartLivesInEachLevel){
             mCurrentNumberOfLives = mMaxNumberOfLives;
         }
 
         mQuestions = mTriviaDb.getQuestionsByLevel(mCurrentLevel,true);
+        mQuestions.shuffle(true);
 
         nextQuestion();
     }
