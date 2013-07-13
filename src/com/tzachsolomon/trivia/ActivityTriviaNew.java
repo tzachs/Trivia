@@ -724,7 +724,7 @@ public class ActivityTriviaNew extends BaseGameActivity implements FragmentSingl
     @Override
     protected void onStart() {
         super.onStart();
-
+        mUpdateManager.updateQuestions(true);
 
 
     }
