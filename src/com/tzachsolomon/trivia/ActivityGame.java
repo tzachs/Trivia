@@ -21,10 +21,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.Button;
-import android.widget.TextSwitcher;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.*;
 import android.widget.ViewSwitcher.ViewFactory;
 
 public class ActivityGame extends BaseGameActivity implements OnClickListener,
@@ -91,6 +88,7 @@ public class ActivityGame extends BaseGameActivity implements OnClickListener,
     private Question mCurrentQuestion;
     private int mDelayBetweenQuestions;
     private boolean mResumeClock;
+    private ImageButton imageButtonSound;
 
 
     @Override
@@ -125,6 +123,19 @@ public class ActivityGame extends BaseGameActivity implements OnClickListener,
 
         mSoundEnabled = m_SharedPreferences.getBoolean(
                 "checkBoxPreferencePlayGameSounds", true);
+
+
+        imageButtonSound = (ImageButton)findViewById(R.id.imageButtonSound);
+
+        imageButtonSound.setOnClickListener(this);
+
+
+        // setting the correct image according to the state
+        // since we change the state in the imageButtonSound_Clicked than we do the NOT before calling
+        // imageButtonSound_Clicked;
+        mSoundEnabled = !mSoundEnabled;
+        imageButtonSound_Clicked();
+
 
         mStringParser = new StringParser(m_SharedPreferences);
         mReverseNumbersInQuestions = m_SharedPreferences.getBoolean(
@@ -313,12 +324,15 @@ public class ActivityGame extends BaseGameActivity implements OnClickListener,
 
         // m_Random = new Random(1);
         m_Random = new Random(System.currentTimeMillis());
-        mTimeToAnswerQuestion = 10;
+
 
         try {
             mTimeToAnswerQuestion = Integer.parseInt(m_SharedPreferences
                     .getString("editTextPreferenceCountDownTimer", "10"));
+            mTimeToAnswerQuestion*=1000;
+
         } catch (ClassCastException e) {
+            mTimeToAnswerQuestion = 10000;
             Log.e(TAG, e.getMessage().toString());
         }
         try {
@@ -384,6 +398,9 @@ public class ActivityGame extends BaseGameActivity implements OnClickListener,
 
         switch (v.getId()) {
 
+            case R.id.imageButtonSound:
+                imageButtonSound_Clicked();
+                break;
             case R.id.buttonPassQuestion:
                 buttonPassQuestion_Clicked();
                 break;
@@ -411,6 +428,19 @@ public class ActivityGame extends BaseGameActivity implements OnClickListener,
             default:
                 break;
         }
+
+    }
+
+    private void imageButtonSound_Clicked() {
+        mSoundEnabled = !mSoundEnabled;
+        if (mSoundEnabled){
+            imageButtonSound.setBackgroundResource(R.drawable.ic_audio_vol);
+        }else{
+            imageButtonSound.setBackgroundResource(R.drawable.ic_audio_vol_mute);
+        }
+
+        // save to property
+        m_SharedPreferences.edit().putBoolean("checkBoxPreferencePlayGameSounds",mSoundEnabled).commit();
 
     }
 
